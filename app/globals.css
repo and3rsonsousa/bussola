@@ -4,16 +4,16 @@
 
 @font-face {
 	font-family: "Compasso Light";
-	src: url("/compasso/compasso-light-webfont.woff2") format("woff2"),
-		url("/compasso/compasso-light-webfont.woff") format("woff");
+	src: url("/compasso/compasso-light-webfont.woff2?url") format("woff2"),
+		url("/compasso/compasso-light-webfont.woff?url") format("woff");
 	font-weight: 300;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "Compasso Semibold";
-	src: url("/compasso/compasso-semibold-webfont.woff2") format("woff2"),
-		url("/compasso/compasso-semibold-webfont.woff") format("woff");
+	src: url("/compasso/compasso-semibold-webfont.woff2?url") format("woff2"),
+		url("/compasso/compasso-semibold-webfont.woff?url") format("woff");
 	font-weight: 600;
 	font-style: normal;
 }
