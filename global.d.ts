@@ -1,6 +1,6 @@
-import { Session, SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "database";
-import { DateRange } from "react-day-picker";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { Database } from "database";
+import type { DateRange } from "react-day-picker";
 
 declare global {
 	type OutletContextType = {
@@ -20,8 +20,8 @@ declare global {
 		people: People;
 		categories: Category[];
 		states: State[];
-		session: Session;
-		user: Person;
+		person: Person;
+		user: User;
 		priorities: Priority[];
 	};
 

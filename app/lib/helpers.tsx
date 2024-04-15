@@ -40,22 +40,17 @@ export function ShortText({
 	return (
 		<div
 			className={cn(
-				`text-center font-bold uppercase leading-none tracking-wide`,
+				`text-center text-[10px] font-extrabold uppercase leading-none tracking-wide`,
 				className
 			)}
 		>
-			{length > 4 ? (
-				<div className="scale-[0.65]">
+			{length >= 4 ? (
+				<>
 					<div> {text.substring(0, Math.ceil(length / 2))} </div>
 					<div> {text.substring(Math.ceil(length / 2))} </div>
-				</div>
-			) : length === 4 ? (
-				<div className="scale-[0.75]">
-					<div> {text.substring(0, Math.ceil(length / 2))} </div>
-					<div> {text.substring(Math.ceil(length / 2))} </div>
-				</div>
+				</>
 			) : (
-				<div className="scale-[0.75]">{text}</div>
+				<div>{text}</div>
 			)}
 		</div>
 	);

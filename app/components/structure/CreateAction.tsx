@@ -32,7 +32,7 @@ export default function CreateAction({
 	date?: Date;
 	mode?: "fixed" | "day" | "button";
 }) {
-	const { categories, states, clients, people, session } = useMatches()[1]
+	const { categories, states, clients, people, user } = useMatches()[1]
 		.data as DashboardDataType;
 	const client = (useMatches()[2].data as DashboardClientType).client;
 	const [open, setOpen] = useState(false);
@@ -52,10 +52,10 @@ export default function CreateAction({
 		client_id: client ? client.id : undefined,
 		date: newDate,
 		description: "",
-		responsibles: [session.user.id],
+		responsibles: [user.id],
 		state_id: 1,
 		title: "",
-		user_id: session.user.id,
+		user_id: user.id,
 	};
 
 	const [action, setAction] = useState<RawAction>(cleanAction);
@@ -109,7 +109,7 @@ export default function CreateAction({
 
 				{/* Título */}
 				<div
-					className="mb-1 w-full bg-transparent text-2xl font-medium outline-none placeholder:text-gray-500"
+					className="mb-1 w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-gray-500"
 					onBlur={(e) =>
 						setAction({
 							...action,

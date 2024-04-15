@@ -7,10 +7,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const { supabase } = SupabaseServerClient({ request });
 
 	const {
-		data: { session },
-	} = await supabase.auth.getSession();
+		data: { user },
+	} = await supabase.auth.getUser();
 
-	if (!session) {
+	if (!user) {
 		return redirect("/login");
 	}
 
@@ -37,8 +37,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			.order("order", { ascending: true }),
 	]);
 
-	const user = people?.find(
-		(person) => person.user_id === session.user.id
+	const person = people?.find(
+		(person) => person.user_id === user.id
 	) as Person;
 
 	return json(
@@ -49,7 +49,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			user,
 			states,
 			priorities,
-			session,
+			person,
 		} as DashboardDataType,
 		200
 	);

@@ -154,7 +154,7 @@ export default function DashboardIndex() {
 				{lateActions?.length ? (
 					<div className="mb-4">
 						<div className="flex justify-between py-8">
-							<h2 className="text-3xl font-medium tracking-tight">
+							<h2 className="text-3xl font-semibold tracking-tight">
 								Atrasados ({lateActions?.length})
 							</h2>
 						</div>
@@ -173,7 +173,7 @@ export default function DashboardIndex() {
 				) : null}
 				{/* Clientes - Parceiros - Contas */}
 				<div className="mb-8 mt-4">
-					<h4 className="mb-4 text-xl font-medium">Contas</h4>
+					<h4 className="mb-4 text-xl font-semibold">Contas</h4>
 					<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
 						{clients.map((client) => (
 							<Link
@@ -186,7 +186,7 @@ export default function DashboardIndex() {
 									size="lg"
 									className="mx-auto"
 								/>
-								{/* <div className="absolute w-full -translate-y-4 overflow-hidden  text-center text-[10px] font-medium uppercase leading-tight opacity-100 transition duration-500 group-hover:translate-y-2 group-hover:opacity-100">
+								{/* <div className="absolute w-full -translate-y-4 overflow-hidden  text-center text-[10px] font-semibold uppercase leading-tight opacity-100 transition duration-500 group-hover:translate-y-2 group-hover:opacity-100">
                   {client.title}
                 </div> */}
 							</Link>
@@ -197,7 +197,7 @@ export default function DashboardIndex() {
 				{todayActions?.length ? (
 					<div className="mb-8">
 						<div className="flex justify-between py-8">
-							<h2 className="text-3xl font-medium tracking-tight">
+							<h2 className="text-3xl font-semibold tracking-tight">
 								Hoje ({todayActions?.length})
 							</h2>
 							<div>
@@ -232,7 +232,7 @@ export default function DashboardIndex() {
 												<div
 													className={`size-4 rounded-full border-4 border-${state.slug}`}
 												></div>
-												<h4 className="font-medium">
+												<h4 className="font-semibold">
 													{state.title}
 												</h4>
 											</div>
@@ -279,7 +279,7 @@ export default function DashboardIndex() {
 													className="flex min-h-10 gap-2 border-t py-2"
 												>
 													<div
-														className={`text-xs font-medium ${
+														className={`text-xs font-semibold ${
 															hourActions.length ===
 															0
 																? "opacity-15"
@@ -329,7 +329,7 @@ export default function DashboardIndex() {
 				{tomorrowActions?.length ? (
 					<div className="mb-8">
 						<div className="flex justify-between py-2">
-							<h2 className="text-xl font-medium">
+							<h2 className="text-xl font-semibold">
 								Amanhã ({tomorrowActions?.length})
 							</h2>
 						</div>
@@ -360,7 +360,7 @@ export default function DashboardIndex() {
 
 				<div className="mb-8">
 					<div className="flex justify-between pb-4 pt-8">
-						<h2 className="text-3xl font-medium tracking-tight">
+						<h2 className="text-3xl font-semibold tracking-tight">
 							Semana
 						</h2>
 					</div>
@@ -410,13 +410,13 @@ export default function DashboardIndex() {
 
 				<div className="mb-8">
 					<div className="flex justify-between pb-4 pt-8">
-						<h2 className="text-3xl font-medium tracking-tight">
+						<h2 className="text-3xl font-semibold tracking-tight">
 							Próximas Ações ({notFinishedActions?.length})
 						</h2>
 					</div>
 					{/* Nesse Mês */}
 					<>
-						<h4 className="pb-4 text-xl font-medium tracking-tight">
+						<h4 className="pb-4 text-xl font-semibold tracking-tight">
 							Nesse Mês
 						</h4>
 
@@ -436,7 +436,7 @@ export default function DashboardIndex() {
 					</>
 
 					<>
-						<h4 className="py-4 text-xl font-medium tracking-tight">
+						<h4 className="py-4 text-xl font-semibold tracking-tight">
 							<span className="capitalize">
 								{format(addMonths(new Date(), 1), "MMMM", {
 									locale: ptBR,

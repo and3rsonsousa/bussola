@@ -17,6 +17,29 @@
 	font-weight: 600;
 	font-style: normal;
 }
+@font-face {
+	font-family: "Compasso";
+	src: url("/compasso/compasso-bold-webfont.woff2?url") format("woff2"),
+		url("/compasso/compasso-bold-webfont.woff?url") format("woff");
+	font-weight: 700;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Compasso";
+	src: url("/compasso/compasso-extrabold-webfont.woff2?url") format("woff2"),
+		url("/compasso/compasso-extrabold-webfont.woff?url") format("woff");
+	font-weight: 800;
+	font-style: normal;
+}
+@font-face {
+	font-family: "Compasso";
+	src: url("/compasso/compasso-black-webfont.woff2?url") format("woff2"),
+		url("/compasso/compasso-black-webfont.woff?url") format("woff");
+	font-weight: 900;
+	font-style: normal;
+}
+/*
+VIOLET
 
 @layer base {
 	:root {
@@ -64,6 +87,54 @@
 		--ring: 263.4 70% 50.4%;
 	}
 }
+*/
+
+@layer base {
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 240 10% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+		--primary: 240 5.9% 10%;
+		--primary-foreground: 0 0% 98%;
+		--secondary: 240 4.8% 95.9%;
+		--secondary-foreground: 240 5.9% 10%;
+		--muted: 240 4.8% 95.9%;
+		--muted-foreground: 240 3.8% 46.1%;
+		--accent: 240 4.8% 95.9%;
+		--accent-foreground: 240 5.9% 10%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 240 5.9% 90%;
+		--input: 240 5.9% 90%;
+		--ring: 240 5.9% 10%;
+		--radius: 0.75rem;
+	}
+
+	.dark {
+		--background: 240 10% 3.9%;
+		--foreground: 0 0% 98%;
+		--card: 240 10% 3.9%;
+		--card-foreground: 0 0% 98%;
+		--popover: 240 10% 3.9%;
+		--popover-foreground: 0 0% 98%;
+		--primary: 0 0% 98%;
+		--primary-foreground: 240 5.9% 10%;
+		--secondary: 240 3.7% 15.9%;
+		--secondary-foreground: 0 0% 98%;
+		--muted: 240 3.7% 15.9%;
+		--muted-foreground: 240 5% 64.9%;
+		--accent: 240 3.7% 15.9%;
+		--accent-foreground: 0 0% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 240 3.7% 15.9%;
+		--input: 240 3.7% 15.9%;
+		--ring: 240 4.9% 83.9%;
+	}
+}
 
 @layer base {
 	* {
@@ -76,4 +147,142 @@
 
 body {
 	font-family: "Compasso";
+}
+
+.bg-idea {
+	@apply bg-idea-500 text-idea-100;
+}
+.bg-do {
+	@apply bg-do-600 text-do-100;
+}
+.bg-doing {
+	@apply bg-doing-500 text-doing-100;
+}
+.bg-review {
+	@apply bg-review-500 text-review-100;
+}
+.bg-done {
+	@apply bg-done-500 text-done-100;
+}
+.bg-finished {
+	@apply bg-finished-500 text-finished-100;
+}
+
+.border-idea {
+	@apply border-idea-500;
+}
+.border-do {
+	@apply border-do-600;
+}
+.border-doing {
+	@apply border-doing-500;
+}
+.border-review {
+	@apply border-review-500;
+}
+.border-done {
+	@apply border-done-500;
+}
+.border-finished {
+	@apply border-finished-500;
+}
+
+.stroke-idea {
+	@apply stroke-idea-500;
+}
+.stroke-do {
+	@apply stroke-do-500;
+}
+.stroke-doing {
+	@apply stroke-doing-500;
+}
+.stroke-review {
+	@apply stroke-review-500;
+}
+.stroke-done {
+	@apply stroke-done-500;
+}
+.stroke-finished {
+	@apply stroke-finished-600;
+}
+
+.border-post {
+	@apply border-post-500;
+}
+.border-video {
+	@apply border-video-600;
+}
+.border-stories {
+	@apply border-stories-500;
+}
+.border-todo {
+	@apply border-todo-500;
+}
+.border-dev {
+	@apply border-dev-500;
+}
+.border-print {
+	@apply border-print-500;
+}
+.border-meeting {
+	@apply border-meeting-500;
+}
+.border-finance {
+	@apply border-finance-500;
+}
+.border-design {
+	@apply border-design-500;
+}
+.border-ads {
+	@apply border-ads-500;
+}
+
+.scrollbars {
+	@apply h-full overflow-hidden overflow-y-auto pr-1;
+	scrollbars-gutter: stable;
+}
+
+.scrollbars::-webkit-scrollbar {
+	@apply mr-4 block w-2;
+}
+.scrollbars-thin::-webkit-scrollbar {
+	@apply mr-4 block w-1;
+}
+.scrollbars::-webkit-scrollbar-button {
+	@apply hidden;
+}
+
+.scrollbars::-webkit-scrollbar-track {
+	@apply mr-4 bg-transparent;
+}
+.scrollbars::-webkit-scrollbar-track-piece {
+	@apply mr-4 bg-transparent;
+}
+.scrollbars::-webkit-scrollbar-thumb {
+	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/25;
+}
+
+.scrollbars-horizontal {
+	@apply h-full overflow-hidden overflow-x-auto pb-1;
+	scrollbars-gutter: stable;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar {
+	@apply mb-4 block h-2;
+}
+.scrollbars-horizontal-thin::-webkit-scrollbar {
+	@apply mb-4 block h-1;
+}
+.scrollbars-horizontal::-webkit-scrollbar-button {
+	@apply hidden;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar-track {
+	@apply mb-4 bg-transparent;
+}
+.scrollbars-horizontal::-webkit-scrollbar-track-piece {
+	@apply mr-4 bg-transparent;
+}
+.scrollbars-horizontal::-webkit-scrollbar-thumb {
+	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/25;
 }

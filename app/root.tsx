@@ -33,7 +33,7 @@ export function Layout() {
 	);
 
 	return (
-		<html lang="pt-br">
+		<html lang="pt-br" className="dark">
 			<head>
 				<meta charSet="utf-8" />
 				<meta

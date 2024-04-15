@@ -40,14 +40,14 @@ export default function Login() {
 				)}
 				<form className="" method="post">
 					<Label className="mb-4 block w-full">
-						<span className="mb-2 block w-full font-medium">
+						<span className="mb-2 block w-full font-semibold">
 							E-mail
 						</span>
 
 						<Input name="email" />
 					</Label>
 					<Label className="mb-4 block w-full">
-						<span className="mb-2 block w-full font-medium">
+						<span className="mb-2 block w-full font-semibold">
 							Senha
 						</span>
 
