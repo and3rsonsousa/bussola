@@ -17,7 +17,7 @@ export default function Header() {
 	const navigation = useNavigation();
 	const navigate = useNavigate();
 
-	const { clients, user } = matches[1].data as DashboardDataType;
+	const { clients } = matches[1].data as DashboardDataType;
 	const { client } = matches[1].params;
 
 	const fetchers = useFetchers();
