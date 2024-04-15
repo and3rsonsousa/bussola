@@ -6,7 +6,7 @@
 	font-family: "Compasso Light";
 	src: url("/compasso/compasso-light-webfont.woff2") format("woff2"),
 		url("/compasso/compasso-light-webfont.woff") format("woff");
-	font-weight: normal;
+	font-weight: 300;
 	font-style: normal;
 }
 
@@ -14,7 +14,7 @@
 	font-family: "Compasso Semibold";
 	src: url("/compasso/compasso-semibold-webfont.woff2") format("woff2"),
 		url("/compasso/compasso-semibold-webfont.woff") format("woff");
-	font-weight: normal;
+	font-weight: 600;
 	font-style: normal;
 }
 
