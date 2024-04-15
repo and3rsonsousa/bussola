@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @font-face {
-	font-family: "Compasso Light";
+	font-family: "Compasso";
 	src: url("/compasso/compasso-light-webfont.woff2?url") format("woff2"),
 		url("/compasso/compasso-light-webfont.woff?url") format("woff");
 	font-weight: 300;
@@ -11,7 +11,7 @@
 }
 
 @font-face {
-	font-family: "Compasso Semibold";
+	font-family: "Compasso";
 	src: url("/compasso/compasso-semibold-webfont.woff2?url") format("woff2"),
 		url("/compasso/compasso-semibold-webfont.woff?url") format("woff");
 	font-weight: 600;

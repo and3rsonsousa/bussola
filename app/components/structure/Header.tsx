@@ -5,6 +5,12 @@ import {
 	useNavigate,
 	useNavigation,
 } from "@remix-run/react";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export default function Header() {
 	const matches = useMatches();
@@ -33,32 +39,31 @@ export default function Header() {
 				)}
 			</div>
 			<div className="flex items-center justify-end gap-2 text-sm font-medium">
-				<MenuTrigger>
-					<Button size={"sm"} variant={"ghost"}>
+				<DropdownMenu>
+					<DropdownMenuTrigger>
 						{client
 							? clients.find(
 									(currentClient) =>
 										currentClient.slug === client
 							  )?.title
 							: "Parceiros"}
-					</Button>
-					<Popover>
-						<Menu
-							className="outline-none"
-							onAction={(key) => {
-								navigate(`/dashboard/${key}`);
-							}}
-						>
-							{clients.map((client) => (
-								<MenuItem key={client.id} id={client.slug}>
-									{client.title}
-								</MenuItem>
-							))}
-						</Menu>
-					</Popover>
-				</MenuTrigger>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						{clients.map((client) => (
+							<DropdownMenuItem
+								onSelect={() =>
+									navigate(`/dashboard/${client.slug}`)
+								}
+								key={client.id}
+								id={client.slug}
+							>
+								{client.title}
+							</DropdownMenuItem>
+						))}
+					</DropdownMenuContent>
+				</DropdownMenu>
 
-				<MenuTrigger>
+				{/* <MenuTrigger>
 					<Button variant={"ghost"} size={"icon-sm"}>
 						<div className="size-6 overflow-hidden rounded-full">
 							<img src={user.image} alt={user.name} />
@@ -97,7 +102,7 @@ export default function Header() {
 							</MenuItem>
 						</Menu>
 					</Popover>
-				</MenuTrigger>
+				</MenuTrigger> */}
 
 				{/* 
             <DropdownMenuItem
