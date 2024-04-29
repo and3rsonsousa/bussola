@@ -62,6 +62,7 @@ export function ActionLine({
 	const [isHover, setHover] = useState(false);
 	const navigate = useNavigate();
 	const submit = useSubmit();
+	const state = states.find((state) => state.id === Number(action.state_id));
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -84,15 +85,11 @@ export function ActionLine({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action @ relative flex w-full select-none items-center gap-2 overflow-hidden rounded border-l-4 px-2 py-1 text-sm font-semibold shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs ${
+					className={`group/action relative flex w-full select-none items-center gap-2 overflow-hidden rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
 						edit
-							? "bg-gray-950 text-gray-200"
+							? "text-white"
 							: "cursor-text bg-gray-900 hover:bg-gray-800 hover:text-gray-200"
-					} border-${
-						states.find(
-							(state) => state.id === Number(action.state_id)
-						)?.slug
-					}`}
+					} border-${state?.slug}`}
 					onClick={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
@@ -132,7 +129,7 @@ export function ActionLine({
 										category.id === action.category_id
 								)?.slug
 							}
-							className="size-3 shrink-0 text-gray-500"
+							className="size-3 shrink-0 opacity-25"
 						/>
 					)}
 
@@ -207,7 +204,7 @@ export function ActionLine({
 					{/* </div> */}
 
 					{date && (
-						<div className=" shrink grow-0 whitespace-nowrap text-right text-xs text-gray-500 md:text-[10px]">
+						<div className=" shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
 							{formatActionDatetime({
 								date: action.date,
 								dateFormat: date.dateFormat,
@@ -286,7 +283,7 @@ export function ActionBlock({
 						<ShortcutActions action={action} />
 					) : null}
 					{/* Title */}
-					<div className="relative -ml-2 text-lg font-semibold leading-tight">
+					<div className="relative -ml-2 text-lg font-medium leading-tight">
 						{edit ? (
 							<Form
 								method="POST"
@@ -457,7 +454,7 @@ export function ActionGrid({
 					{isHover ? <ShortcutActions action={action} /> : null}
 					<div></div>
 					<div
-						className={`line-clamp-4 py-4 text-center font-semibold transition group-hover/action:text-gray-300 ${
+						className={`line-clamp-4 py-4 text-center font-medium transition group-hover/action:text-gray-300 ${
 							action.title.length > 30
 								? "text-sm leading-tight"
 								: action.title.length > 18 ||

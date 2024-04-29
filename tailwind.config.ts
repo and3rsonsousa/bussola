@@ -72,6 +72,10 @@ const config = {
 				finance: colors.emerald,
 				design: colors.rose,
 				ads: colors.sky,
+
+				success: colors.lime,
+				alert: colors.yellow,
+				error: colors.rose,
 			},
 			borderRadius: {
 				lg: "var(--radius)",

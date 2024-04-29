@@ -35,7 +35,7 @@ export default function Header() {
 					<div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-b-primary/50"></div>
 				)}
 			</div>
-			<div className="flex items-center justify-end gap-2 text-sm font-semibold">
+			<div className="flex items-center justify-end gap-2 text-sm font-bold">
 				<DropdownMenu>
 					<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-lg px-2 py-1 mr-2">
 						{client

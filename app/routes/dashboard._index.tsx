@@ -1,9 +1,9 @@
+import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import {
+	json,
 	type LoaderFunctionArgs,
 	type MetaFunction,
-	json,
 } from "@vercel/remix";
-import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import {
 	addDays,
 	addMonths,
@@ -13,8 +13,6 @@ import {
 	endOfWeek,
 	format,
 	isSameDay,
-	isSameMonth,
-	isThisMonth,
 	startOfDay,
 	startOfMonth,
 	startOfWeek,
@@ -24,6 +22,7 @@ import { CalendarClock, KanbanIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
+import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
@@ -32,7 +31,6 @@ import {
 	AvatarClient,
 	getActionsForThisDay,
 	getDelayedActions,
-	getNotFinishedActions,
 	sortActions,
 	useIDsToRemove,
 	usePendingActions,
@@ -65,8 +63,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: "Dashboard / Ruller" },
-		{ name: "description", content: "Welcome to Ruller!" },
+		{ title: "Bússola" },
+		{
+			name: "description",
+			content:
+				"Gerencie os aspectos principais dos seus projetos nessa página.",
+		},
 	];
 };
 
@@ -105,7 +107,7 @@ export default function DashboardIndex() {
 		actions,
 		date: addDays(new Date(), 1),
 	});
-	const notFinishedActions = getNotFinishedActions({ actions });
+	// const notFinishedActions = getNotFinishedActions({ actions });
 
 	useEffect(() => {
 		if (draggedAction) {
@@ -139,7 +141,7 @@ export default function DashboardIndex() {
 		<div className="overflow-hidden">
 			<div className="scrollbars mt-16 px-4 md:px-8">
 				<Progress
-					className={"mt-4"}
+					className={"fixed z-50 w-full top-0 right-0"}
 					values={states.map((state) => ({
 						id: state.id,
 						title: state.title,
@@ -154,9 +156,14 @@ export default function DashboardIndex() {
 				{lateActions?.length ? (
 					<div className="mb-4">
 						<div className="flex justify-between py-8">
-							<h2 className="text-3xl font-semibold tracking-tight">
-								Atrasados ({lateActions?.length})
-							</h2>
+							<div className="flex relative">
+								<h2 className="text-3xl font-black text-gray-100 uppercase tracking-tighter">
+									Atrasados
+								</h2>
+								<div className="bg-primary rounded absolute -right-8 p-1 text-xs font-bold ">
+									{lateActions?.length}
+								</div>
+							</div>
 						</div>
 
 						<ListOfActions
@@ -173,7 +180,9 @@ export default function DashboardIndex() {
 				) : null}
 				{/* Clientes - Parceiros - Contas */}
 				<div className="mb-8 mt-4">
-					<h4 className="mb-4 text-xl font-semibold">Contas</h4>
+					<h4 className="mb-4 text-xl text-center font-bold">
+						Parceiros
+					</h4>
 					<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
 						{clients.map((client) => (
 							<Link
@@ -186,9 +195,14 @@ export default function DashboardIndex() {
 									size="lg"
 									className="mx-auto"
 								/>
-								{/* <div className="absolute w-full -translate-y-4 overflow-hidden  text-center text-[10px] font-semibold uppercase leading-tight opacity-100 transition duration-500 group-hover:translate-y-2 group-hover:opacity-100">
-                  {client.title}
-                </div> */}
+								<Badge
+									value={
+										lateActions.filter(
+											(action) =>
+												action.client_id === client.id
+										).length
+									}
+								/>
 							</Link>
 						))}
 					</div>
@@ -197,9 +211,14 @@ export default function DashboardIndex() {
 				{todayActions?.length ? (
 					<div className="mb-8">
 						<div className="flex justify-between py-8">
-							<h2 className="text-3xl font-semibold tracking-tight">
-								Hoje ({todayActions?.length})
-							</h2>
+							<div className="relative flex">
+								<h2 className="text-3xl font-black text-gray-100 uppercase tracking-tighter">
+									Hoje
+								</h2>
+								<div className="bg-primary rounded absolute -right-8 p-1 text-xs font-bold ">
+									{todayActions?.length}
+								</div>
+							</div>
 							<div>
 								<Button
 									variant="ghost"
@@ -232,7 +251,7 @@ export default function DashboardIndex() {
 												<div
 													className={`size-4 rounded-full border-4 border-${state.slug}`}
 												></div>
-												<h4 className="font-semibold">
+												<h4 className="font-bold">
 													{state.title}
 												</h4>
 											</div>
@@ -279,7 +298,7 @@ export default function DashboardIndex() {
 													className="flex min-h-10 gap-2 border-t py-2"
 												>
 													<div
-														className={`text-xs font-semibold ${
+														className={`text-xs font-bold ${
 															hourActions.length ===
 															0
 																? "opacity-15"
@@ -329,7 +348,7 @@ export default function DashboardIndex() {
 				{tomorrowActions?.length ? (
 					<div className="mb-8">
 						<div className="flex justify-between py-2">
-							<h2 className="text-xl font-semibold">
+							<h2 className="text-xl font-bold">
 								Amanhã ({tomorrowActions?.length})
 							</h2>
 						</div>
@@ -360,7 +379,7 @@ export default function DashboardIndex() {
 
 				<div className="mb-8">
 					<div className="flex justify-between pb-4 pt-8">
-						<h2 className="text-3xl font-semibold tracking-tight">
+						<h2 className="text-3xl font-bold tracking-tight">
 							Semana
 						</h2>
 					</div>
@@ -383,7 +402,7 @@ export default function DashboardIndex() {
 									e.currentTarget.classList.add("dragover");
 								}}
 							>
-								<div className="overflow-hidden text-ellipsis text-nowrap font-semibold capitalize tracking-tight">
+								<div className="overflow-hidden text-ellipsis text-nowrap font-bold capitalize tracking-tight">
 									{format(day, "EEEE ", { locale: ptBR })}{" "}
 								</div>
 								<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -408,63 +427,6 @@ export default function DashboardIndex() {
 					</div>
 				</div>
 
-				<div className="mb-8">
-					<div className="flex justify-between pb-4 pt-8">
-						<h2 className="text-3xl font-semibold tracking-tight">
-							Próximas Ações ({notFinishedActions?.length})
-						</h2>
-					</div>
-					{/* Nesse Mês */}
-					<>
-						<h4 className="pb-4 text-xl font-semibold tracking-tight">
-							Nesse Mês
-						</h4>
-
-						<ListOfActions
-							categories={categories}
-							priorities={priorities}
-							states={states}
-							actions={notFinishedActions.filter((action) =>
-								isThisMonth(action.date)
-							)}
-							showCategory={true}
-							columns={3}
-							date={{ dateFormat: 2, timeFormat: 1 }}
-							clients={clients}
-							isFoldable={true}
-						/>
-					</>
-
-					<>
-						<h4 className="py-4 text-xl font-semibold tracking-tight">
-							<span className="capitalize">
-								{format(addMonths(new Date(), 1), "MMMM", {
-									locale: ptBR,
-								})}
-							</span>
-							{format(addMonths(new Date(), 1), " 'de' yyyy", {
-								locale: ptBR,
-							})}
-						</h4>
-
-						<ListOfActions
-							categories={categories}
-							priorities={priorities}
-							states={states}
-							actions={notFinishedActions.filter((action) =>
-								isSameMonth(
-									action.date,
-									addMonths(new Date(), 1)
-								)
-							)}
-							showCategory={true}
-							columns={3}
-							date={{ dateFormat: 2, timeFormat: 1 }}
-							clients={clients}
-							isFoldable={true}
-						/>
-					</>
-				</div>
 				{/* </ScrollArea> */}
 			</div>
 		</div>

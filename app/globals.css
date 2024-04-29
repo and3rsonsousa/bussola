@@ -4,43 +4,14 @@
 
 @font-face {
 	font-family: "Compasso";
-	src: url("/compasso/compasso-light-webfont.woff2?url") format("woff2"),
-		url("/compasso/compasso-light-webfont.woff?url") format("woff");
-	font-weight: 300;
-	font-style: normal;
+	src: url("/compasso/compasso-vf.woff2?url") format("woff2");
+	font-weight: 100 900;
+	font-display: swap;
 }
 
-@font-face {
-	font-family: "Compasso";
-	src: url("/compasso/compasso-semibold-webfont.woff2?url") format("woff2"),
-		url("/compasso/compasso-semibold-webfont.woff?url") format("woff");
-	font-weight: 600;
-	font-style: normal;
-}
-@font-face {
-	font-family: "Compasso";
-	src: url("/compasso/compasso-bold-webfont.woff2?url") format("woff2"),
-		url("/compasso/compasso-bold-webfont.woff?url") format("woff");
-	font-weight: 700;
-	font-style: normal;
-}
-@font-face {
-	font-family: "Compasso";
-	src: url("/compasso/compasso-extrabold-webfont.woff2?url") format("woff2"),
-		url("/compasso/compasso-extrabold-webfont.woff?url") format("woff");
-	font-weight: 800;
-	font-style: normal;
-}
-@font-face {
-	font-family: "Compasso";
-	src: url("/compasso/compasso-black-webfont.woff2?url") format("woff2"),
-		url("/compasso/compasso-black-webfont.woff?url") format("woff");
-	font-weight: 900;
-	font-style: normal;
-}
 /*
 VIOLET
-
+*/
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -87,7 +58,8 @@ VIOLET
 		--ring: 263.4 70% 50.4%;
 	}
 }
-*/
+
+/*
 
 @layer base {
 	:root {
@@ -135,7 +107,7 @@ VIOLET
 		--ring: 240 4.9% 83.9%;
 	}
 }
-
+*/
 @layer base {
 	* {
 		@apply border-border;
@@ -166,6 +138,25 @@ body {
 }
 .bg-finished {
 	@apply bg-finished-500 text-finished-100;
+}
+
+.hover-bg-idea {
+	@apply hover:bg-idea-700;
+}
+.hover-bg-do {
+	@apply hover:bg-do-700;
+}
+.hover-bg-doing {
+	@apply hover:bg-doing-700;
+}
+.hover-bg-review {
+	@apply hover:bg-review-700;
+}
+.hover-bg-done {
+	@apply hover:bg-done-700;
+}
+.hover-bg-finished {
+	@apply hover:bg-finished-700;
 }
 
 .border-idea {
@@ -285,4 +276,32 @@ body {
 }
 .scrollbars-horizontal::-webkit-scrollbar-thumb {
 	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/25;
+}
+
+.bg-content {
+	@apply border border-gray-300/25 bg-gray-300/5 outline-black/10 backdrop-blur-2xl;
+}
+
+.bg-item {
+	@apply px-3 py-1 text-xs font-medium;
+}
+
+.bg-select-item {
+	@apply px-3 py-1 pr-8 text-xs font-light;
+}
+
+.debug-1 {
+	@apply border border-red-500;
+}
+.debug-2 {
+	@apply border border-yellow-500;
+}
+.debug-3 {
+	@apply border border-green-500;
+}
+.debug-4 {
+	@apply border border-sky-500;
+}
+.debug-5 {
+	@apply border border-pink-500;
 }
