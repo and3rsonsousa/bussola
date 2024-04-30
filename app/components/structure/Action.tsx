@@ -283,7 +283,7 @@ export function ActionBlock({
 						<ShortcutActions action={action} />
 					) : null}
 					{/* Title */}
-					<div className="relative -ml-2 font-medium leading-tight">
+					<div className="relative font-semibold text-lg leading-tighter">
 						{edit ? (
 							<Form
 								method="POST"
@@ -311,7 +311,7 @@ export function ActionBlock({
 									ref={inputRef}
 									type="text"
 									defaultValue={action.title}
-									className={`rounded-md bg-transparent px-2 py-1 outline-none`}
+									className={`rounded-md bg-transparent outline-none`}
 									onBlur={() => {
 										if (
 											inputRef.current?.value !==
@@ -332,7 +332,7 @@ export function ActionBlock({
 						) : (
 							<button
 								ref={buttonRef}
-								className={`block w-full overflow-hidden text-ellipsis text-nowrap rounded-md px-2 py-1 text-left outline-none`}
+								className={`block w-full overflow-hidden text-ellipsis text-nowrap rounded-md text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
 										setEdit(true);
