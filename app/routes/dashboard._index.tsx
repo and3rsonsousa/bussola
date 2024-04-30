@@ -157,12 +157,13 @@ export default function DashboardIndex() {
 					<div className="mb-4">
 						<div className="flex justify-between py-8">
 							<div className="flex relative">
-								<h2 className="text-3xl font-black text-gray-100 uppercase tracking-tighter">
+								<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
 									Atrasados
 								</h2>
-								<div className="bg-primary rounded absolute -right-8 p-1 text-xs font-bold ">
-									{lateActions?.length}
-								</div>
+								<Badge
+									value={lateActions?.length}
+									className="-translate-y-1 translate-x-8"
+								/>
 							</div>
 						</div>
 
@@ -202,6 +203,8 @@ export default function DashboardIndex() {
 												action.client_id === client.id
 										).length
 									}
+									isDynamic
+									className="-translate-y-2 translate-x-2"
 								/>
 							</Link>
 						))}
@@ -212,12 +215,13 @@ export default function DashboardIndex() {
 					<div className="mb-8">
 						<div className="flex justify-between py-8">
 							<div className="relative flex">
-								<h2 className="text-3xl font-black text-gray-100 uppercase tracking-tighter">
+								<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
 									Hoje
 								</h2>
-								<div className="bg-primary rounded absolute -right-8 p-1 text-xs font-bold ">
-									{todayActions?.length}
-								</div>
+								<Badge
+									value={todayActions?.length}
+									className="-translate-y-1 translate-x-8"
+								/>
 							</div>
 							<div>
 								<Button
@@ -276,7 +280,7 @@ export default function DashboardIndex() {
 								</div>
 							</div>
 						) : (
-							<div className="gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+							<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
 								{[
 									[0, 1, 2, 3, 4, 5],
 									[6, 7, 8, 9, 10, 11],
@@ -347,26 +351,26 @@ export default function DashboardIndex() {
 				{/* Ações de Amanhã */}
 				{tomorrowActions?.length ? (
 					<div className="mb-8">
-						<div className="flex justify-between py-2">
-							<h2 className="text-xl font-bold">
-								Amanhã ({tomorrowActions?.length})
-							</h2>
+						<div className="inline-flex relative pb-4">
+							<h2 className="text-xl font-bold">Amanhã</h2>
+							<Badge
+								value={tomorrowActions?.length}
+								className="translate-x-8 -translate-y-1"
+							/>
 						</div>
 
-						{tomorrowActions ? (
-							<ListOfActions
-								categories={categories}
-								priorities={priorities}
-								states={states}
-								actions={tomorrowActions}
-								clients={clients}
-								columns={2}
-								date={{
-									dateFormat: 0,
-									timeFormat: 1,
-								}}
-							/>
-						) : null}
+						<ListOfActions
+							categories={categories}
+							priorities={priorities}
+							states={states}
+							actions={tomorrowActions}
+							clients={clients}
+							columns={6}
+							date={{
+								dateFormat: 0,
+								timeFormat: 1,
+							}}
+						/>
 					</div>
 				) : (
 					<div className="grid place-content-center p-8 text-xl">
@@ -377,8 +381,8 @@ export default function DashboardIndex() {
 					</div>
 				)}
 
-				<div className="mb-8">
-					<div className="flex justify-between pb-4 pt-8">
+				<div className="mb-8 pt-8">
+					<div className="pb-4">
 						<h2 className="text-3xl font-bold tracking-tight">
 							Semana
 						</h2>

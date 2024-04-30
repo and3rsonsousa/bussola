@@ -1,6 +1,6 @@
 import {
-	LoaderFunctionArgs,
-	MetaFunction,
+	type LoaderFunctionArgs,
+	type MetaFunction,
 	json,
 	redirect,
 } from "@vercel/remix";
@@ -57,7 +57,7 @@ export default function Client() {
 						className="flex items-center gap-4 "
 					>
 						<AvatarClient client={client} size="lg" />
-						<div className="text-2xl font-medium tracking-tight">
+						<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
 							<div>{client?.title}</div>
 							<Progress
 								total={actions.length}

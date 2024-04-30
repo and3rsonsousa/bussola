@@ -1,4 +1,8 @@
-import { LoaderFunctionArgs, MetaFunction, json } from "@vercel/remix";
+import {
+	type LoaderFunctionArgs,
+	type MetaFunction,
+	json,
+} from "@vercel/remix";
 import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
