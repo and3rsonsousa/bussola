@@ -260,9 +260,7 @@ export default function CreateAction({
 											<div
 												className={`h-2 w-2 rounded-full border-2 border-${state.slug}`}
 											></div>
-											<div className="text-xs">
-												{state.title}
-											</div>
+											<div>{state.title}</div>
 										</div>
 									</SelectItem>
 								))}
@@ -320,18 +318,16 @@ export default function CreateAction({
 											});
 										}}
 									>
-										<div className="flex gap-2">
+										<div className="flex items-center gap-2">
 											<Avatar
 												key={person.id}
-												className="h-4 w-4"
+												className="size-5"
 											>
 												<AvatarImage
 													src={person.image}
 												/>
 											</Avatar>
-											<div className="text-xs">
-												{person.name}
-											</div>
+											<div>{person.name}</div>
 										</div>
 									</DropdownMenuCheckboxItem>
 								))}

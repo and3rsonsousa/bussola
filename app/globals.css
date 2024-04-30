@@ -334,7 +334,7 @@ body {
 }
 
 .bg-content {
-	@apply border border-gray-300/25 bg-gray-300/5 outline-black/10 backdrop-blur-2xl;
+	@apply border border-gray-300/15 bg-gray-300/5 outline-black/10 backdrop-blur-lg;
 }
 
 .bg-item {
@@ -342,7 +342,7 @@ body {
 }
 
 .bg-select-item {
-	@apply font-light px-4;
+	@apply font-normal pl-8 pr-4;
 }
 
 .debug-1 {
