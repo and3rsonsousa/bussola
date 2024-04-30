@@ -298,8 +298,9 @@ body {
 .scrollbars::-webkit-scrollbar-track-piece {
 	@apply mr-4 bg-transparent;
 }
+
 .scrollbars::-webkit-scrollbar-thumb {
-	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/25;
+	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
 }
 
 .scrollbars-horizontal {
@@ -324,7 +325,12 @@ body {
 	@apply mr-4 bg-transparent;
 }
 .scrollbars-horizontal::-webkit-scrollbar-thumb {
-	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/25;
+	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar-thumb,
+.scrollbars::-webkit-scrollbar-thumb {
+	@apply bg-gray-500/25;
 }
 
 .bg-content {
@@ -336,7 +342,7 @@ body {
 }
 
 .bg-select-item {
-	@apply px-3 py-1 pr-8 text-xs font-light;
+	@apply font-light px-4;
 }
 
 .debug-1 {

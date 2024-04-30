@@ -263,14 +263,14 @@ export function ActionBlock({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`highlight-soft group/action flex w-full flex-col justify-between gap-2 overflow-hidden rounded border-l-4 px-4 py-2 text-sm transition @container border-${
+					className={`group/action relative flex w-full flex-col justify-between gap-2 overflow-hidden rounded focus-within:ring-2 ring-primary border-l-4 px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container border-${
 						states.find(
 							(state) => state.id === Number(action.state_id)
 						)?.slug
 					} ${
 						edit
 							? "bg-gray-800 text-gray-200"
-							: "border-white/20 bg-gray-900 from-white/5 hover:bg-gradient-to-b hover:text-gray-200"
+							: "border-white/20 bg-gray-900 hover:bg-gradient-to-b from-gray-800  hover:text-gray-100"
 					}`}
 					onMouseEnter={() => {
 						setHover(true);
@@ -283,7 +283,7 @@ export function ActionBlock({
 						<ShortcutActions action={action} />
 					) : null}
 					{/* Title */}
-					<div className="relative -ml-2 text-lg font-medium leading-tight">
+					<div className="relative -ml-2 font-medium leading-tight">
 						{edit ? (
 							<Form
 								method="POST"
@@ -311,7 +311,7 @@ export function ActionBlock({
 									ref={inputRef}
 									type="text"
 									defaultValue={action.title}
-									className={`rounded-md bg-background px-2 py-1 outline-none ring-1 ring-gray-700`}
+									className={`rounded-md bg-transparent px-2 py-1 outline-none`}
 									onBlur={() => {
 										if (
 											inputRef.current?.value !==
@@ -332,12 +332,12 @@ export function ActionBlock({
 						) : (
 							<button
 								ref={buttonRef}
-								className={`block w-full overflow-hidden text-ellipsis text-nowrap rounded-md px-2 py-1 text-left outline-none ring-primary focus:ring-2`}
+								className={`block w-full overflow-hidden text-ellipsis text-nowrap rounded-md px-2 py-1 text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
 										setEdit(true);
 									});
-									inputRef.current?.select();
+									inputRef.current?.focus();
 								}}
 							>
 								{action.title}
@@ -370,7 +370,7 @@ export function ActionBlock({
 								</div>
 							) : null}
 						</div>
-						<div className="whitespace-nowrap text-right text-sm text-gray-500 md:text-xs">
+						<div className="whitespace-nowrap font-medium text-right text-sm text-gray-500 md:text-xs">
 							<span className="@[200px]:hidden">
 								{formatActionDatetime({
 									date: action.date,
@@ -597,7 +597,7 @@ export function BlockOfActions({
 }) {
 	return (
 		<div
-			className={`grid h-full ${
+			className={`grid ${
 				!max
 					? "sm:grid-cols-3 md:grid-cols-4"
 					: max === 2
@@ -965,20 +965,20 @@ function ContextMenuItems({
 				// onSelect={() => navigate(`/dashboard/action/${action.id}`)}
 			>
 				<Link
-					className="bg-item flex items-center gap-2 focus:bg-primary"
+					className="bg-item flex items-center gap-2"
 					to={`/dashboard/action/${action.id}`}
 				>
 					<PencilLineIcon className="h-3 w-3" />
 					<span>Editar</span>
 				</Link>
 			</ContextMenuItem>
-			<ContextMenuItem className="bg-item flex items-center gap-2 focus:bg-primary">
+			<ContextMenuItem className="bg-item flex items-center gap-2">
 				<CopyIcon className="h-3 w-3" />
 				<span>Duplicar</span>
 			</ContextMenuItem>
 			{/* Adiar */}
 			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2 focus:bg-primary">
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
 					<TimerIcon className="h-3 w-3" />
 					<span>Adiar</span>
 				</ContextMenuSubTrigger>
@@ -1045,7 +1045,7 @@ function ContextMenuItems({
 								{group.periods.map((period) => (
 									<ContextMenuItem
 										key={`period-${period.time}`}
-										className="bg-item flex items-center gap-2 focus:bg-primary"
+										className="bg-item flex items-center gap-2"
 										onSelect={() => {
 											const date = format(
 												period.time,
@@ -1068,14 +1068,14 @@ function ContextMenuItems({
 				</ContextMenuPortal>
 			</ContextMenuSub>
 			{/* Deletar */}
-			<ContextMenuItem className="bg-item flex items-center gap-2 focus:bg-primary">
+			<ContextMenuItem className="bg-item flex items-center gap-2">
 				<TrashIcon className="h-3 w-3" />
 				<span>Deletar</span>
 			</ContextMenuItem>
 			<ContextMenuSeparator className="bg-gray-300/20 " />
 			{/* Prioridade */}
 			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2 focus:bg-primary">
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
 					<Icons
 						id={
 							priorities.find(
@@ -1120,7 +1120,7 @@ function ContextMenuItems({
 			</ContextMenuSub>
 			{/* Categoria */}
 			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2 focus:bg-primary">
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
 					<Icons
 						id={
 							categories.find(
@@ -1161,7 +1161,7 @@ function ContextMenuItems({
 			</ContextMenuSub>
 			{/* States */}
 			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2 focus:bg-primary">
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
 					<div
 						className={`h-2 w-2 rounded-full border-2 border-${
 							states.find(
@@ -1182,7 +1182,7 @@ function ContextMenuItems({
 						{states.map((state) => (
 							<ContextMenuItem
 								key={state.id}
-								className="bg-item flex items-center gap-2 focus:bg-primary"
+								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
 										...action,

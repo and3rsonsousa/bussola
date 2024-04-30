@@ -48,7 +48,7 @@ export default function Header() {
 					<DropdownMenuContent className="bg-content">
 						{clients.map((client) => (
 							<DropdownMenuItem
-								className="bg-item focus:bg-primary"
+								className="bg-item"
 								onSelect={() =>
 									navigate(`/dashboard/${client.slug}`)
 								}

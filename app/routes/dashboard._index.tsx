@@ -24,6 +24,7 @@ import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
+import Kanban from "~/components/structure/Kanban";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { INTENTS } from "~/lib/constants";
@@ -77,7 +78,7 @@ export default function DashboardIndex() {
 	const matches = useMatches();
 	const submit = useSubmit();
 	const [draggedAction, setDraggedAction] = useState<Action>();
-	const [todayView, setTodayView] = useState<"kanban" | "hours">("hours");
+	const [todayView, setTodayView] = useState<"kanban" | "hours">("kanban");
 
 	invariant(actions);
 
@@ -244,41 +245,7 @@ export default function DashboardIndex() {
 							</div>
 						</div>
 						{todayView === "kanban" ? (
-							<div className="scrollbars-horizontal scrollbars-horizontal ">
-								<div className="flex w-full gap-4 pb-4">
-									{states.map((state) => (
-										<div
-											className="min-w-72"
-											key={state.id}
-										>
-											<div className="mb-2 flex items-center gap-2">
-												<div
-													className={`size-4 rounded-full border-4 border-${state.slug}`}
-												></div>
-												<h4 className="font-bold">
-													{state.title}
-												</h4>
-											</div>
-											<ListOfActions
-												categories={categories}
-												priorities={priorities}
-												states={states}
-												clients={clients}
-												showCategory={true}
-												date={{
-													dateFormat: 0,
-													timeFormat: 1,
-												}}
-												actions={todayActions.filter(
-													(action) =>
-														action.state_id ===
-														state.id
-												)}
-											/>
-										</div>
-									))}
-								</div>
-							</div>
+							<Kanban actions={todayActions} />
 						) : (
 							<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
 								{[

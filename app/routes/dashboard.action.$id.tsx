@@ -291,7 +291,7 @@ export default function ActionPage() {
 								{categories.map((category) => (
 									<DropdownMenuItem
 										key={category.id}
-										className="bg-item flex items-center gap-2 focus:bg-primary"
+										className="bg-item flex items-center gap-2"
 										textValue={category.title}
 										onSelect={() =>
 											setAction({
@@ -329,7 +329,7 @@ export default function ActionPage() {
 								{states.map((state) => (
 									<DropdownMenuItem
 										key={state.id}
-										className="bg-item flex items-center gap-2 focus:bg-primary"
+										className="bg-item flex items-center gap-2"
 										textValue={state.title}
 										onSelect={() =>
 											setAction({
@@ -362,7 +362,7 @@ export default function ActionPage() {
 								{priorities.map((priority) => (
 									<DropdownMenuItem
 										key={priority.id}
-										className="bg-item flex items-center gap-2 focus:bg-primary"
+										className="bg-item flex items-center gap-2"
 										textValue={priority.title}
 										onSelect={() =>
 											setAction({

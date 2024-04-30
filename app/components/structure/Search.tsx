@@ -96,7 +96,7 @@ export default function Search() {
 								<Collection items={section.items}>
 									{(item) => (
 										<ListBoxItem
-											className="block w-full rounded-sm px-4 py-2 text-sm text-gray-400 transition focus:bg-primary focus:text-primary-foreground"
+											className="block w-full rounded-sm px-4 py-2 text-sm text-gray-400 transition"
 											key={item.id}
 											href={item.href}
 										>
