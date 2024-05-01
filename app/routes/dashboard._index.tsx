@@ -64,11 +64,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: "Bússola" },
+		{ title: "ʙússoʟa - Domine, Crie e Conquiste." },
 		{
 			name: "description",
 			content:
-				"Gerencie os aspectos principais dos seus projetos nessa página.",
+				"Aplicativo de Gestão de Projetos Criado e Mantido pela Agência Canivete. ",
 		},
 	];
 };
@@ -140,7 +140,7 @@ export default function DashboardIndex() {
 
 	return (
 		<div className="overflow-hidden">
-			<div className="scrollbars mt-16 px-4 md:px-8">
+			<div className="scrollbars mt-16 pb-16 px-4 md:px-8">
 				<Progress
 					className={"fixed z-50 w-full top-0 right-0"}
 					values={states.map((state) => ({
@@ -180,71 +180,89 @@ export default function DashboardIndex() {
 						/>
 					</div>
 				) : null}
-				{/* Clientes - Parceiros - Contas */}
+				{/* Parceiros */}
 				<div className="mb-8 mt-4">
 					<h4 className="mb-4 text-xl text-center font-bold">
 						Parceiros
 					</h4>
-					<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
-						{partners.map((partner) => (
-							<Link
-								to={`/dashboard/${partner.slug}`}
-								key={partner.id}
-								className="group relative"
-							>
-								<AvatarPartner
-									partner={partner}
-									size="lg"
-									className="mx-auto"
-								/>
-								<Badge
-									value={
-										lateActions.filter(
-											(action) =>
-												action.partner_id === partner.id
-										).length
-									}
-									isDynamic
-									className="-translate-y-2 translate-x-2"
-								/>
-							</Link>
-						))}
-					</div>
-				</div>
-				{/* Ações de Hoje */}
-				{todayActions?.length ? (
-					<div className="mb-8">
-						<div className="flex justify-between py-8">
-							<div className="relative flex">
-								<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-									Hoje
-								</h2>
-								<Badge
-									value={todayActions?.length}
-									className="-translate-y-1 translate-x-8"
-								/>
-							</div>
-							<div>
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => {
-										setTodayView(() =>
-											todayView === "hours"
-												? "kanban"
-												: "hours"
-										);
-									}}
+					{partners.length > 0 ? (
+						<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
+							{partners.map((partner) => (
+								<Link
+									to={`/dashboard/${partner.slug}`}
+									key={partner.id}
+									className="group relative"
 								>
-									{todayView === "kanban" ? (
-										<KanbanIcon className="w-6" />
-									) : (
-										<CalendarClock className="w-6" />
-									)}
-								</Button>
+									<AvatarPartner
+										partner={partner}
+										size="lg"
+										className="mx-auto"
+									/>
+									<Badge
+										value={
+											lateActions.filter(
+												(action) =>
+													action.partner_id ===
+													partner.id
+											).length
+										}
+										isDynamic
+										className="-translate-y-2 translate-x-2"
+									/>
+								</Link>
+							))}
+						</div>
+					) : (
+						<div className="p-4 grid place-content-center text-center">
+							<div className="text-4xl text-error-600 tracking-tighter font-semibold mb-2">
+								Nenhum{" "}
+								<span className="font-extrabold">PARCEIRO</span>{" "}
+								está designado para você.
+							</div>
+							<div className="text-lg tracking-tight font-normal">
+								Fale com o seu Head para viabilizar o seu acesso
+								<br />
+								aos parceiros da empresa que você deve ter
+								acesso.
 							</div>
 						</div>
-						{todayView === "kanban" ? (
+					)}
+				</div>
+				{/* Ações de Hoje */}
+
+				<div className="mb-8">
+					<div className="flex justify-between py-8">
+						<div className="relative flex">
+							<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
+								Hoje
+							</h2>
+							<Badge
+								value={todayActions?.length}
+								className="-translate-y-1 translate-x-8"
+							/>
+						</div>
+						<div>
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => {
+									setTodayView(() =>
+										todayView === "hours"
+											? "kanban"
+											: "hours"
+									);
+								}}
+							>
+								{todayView === "kanban" ? (
+									<KanbanIcon className="w-6" />
+								) : (
+									<CalendarClock className="w-6" />
+								)}
+							</Button>
+						</div>
+					</div>
+					{todayActions?.length ? (
+						todayView === "kanban" ? (
 							<Kanban actions={todayActions} />
 						) : (
 							<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
@@ -305,18 +323,18 @@ export default function DashboardIndex() {
 									</div>
 								))}
 							</div>
-						)}
-					</div>
-				) : (
-					<div className="grid place-content-center p-8 text-xl">
-						<div className="space-y-4 rounded-xl bg-gray-900 p-8 text-center">
-							<div className="font-semibold">
-								Nenhuma ação para hoje
+						)
+					) : (
+						<div className="grid place-content-center p-8 text-xl">
+							<div className="space-y-4 rounded-xl bg-gray-900 p-8 text-center">
+								<div className="font-semibold">
+									Nenhuma ação para hoje
+								</div>
+								<CreateAction mode="button" />
 							</div>
-							<CreateAction mode="button" />
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 				{/* Ações de Amanhã */}
 				{tomorrowActions?.length ? (
 					<div className="mb-8">
@@ -355,9 +373,9 @@ export default function DashboardIndex() {
 					</div>
 				)}
 
-				<div className="mb-8 pt-8">
+				<div className="pt-8">
 					<div className="pb-4">
-						<h2 className="text-3xl font-bold tracking-tight">
+						<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
 							Semana
 						</h2>
 					</div>
@@ -367,6 +385,7 @@ export default function DashboardIndex() {
 							end: endOfWeek(new Date()),
 						}).map((day) => (
 							<div
+								className="group pb-8"
 								key={day.getDate()}
 								data-date={format(day, "yyyy-MM-dd")}
 								onDragOver={(e) => {
@@ -380,14 +399,18 @@ export default function DashboardIndex() {
 									e.currentTarget.classList.add("dragover");
 								}}
 							>
+								{/* Dia */}
 								<div className="overflow-hidden text-ellipsis text-nowrap font-bold capitalize tracking-tight">
 									{format(day, "EEEE ", { locale: ptBR })}{" "}
 								</div>
+								{/* Data */}
 								<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
 									{format(day, "d 'de' MMMM", {
 										locale: ptBR,
 									})}
 								</div>
+								{/* Lista de Ações do dia */}
+
 								<ListOfActions
 									categories={categories}
 									priorities={priorities}
@@ -400,12 +423,13 @@ export default function DashboardIndex() {
 									showCategory={true}
 									onDrag={setDraggedAction}
 								/>
+								<div className="mt-4 transition text-center group-hover:opacity-100 opacity-0">
+									<CreateAction mode="day" date={day} />
+								</div>
 							</div>
 						))}
 					</div>
 				</div>
-
-				{/* </ScrollArea> */}
 			</div>
 		</div>
 	);

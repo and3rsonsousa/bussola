@@ -59,7 +59,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	return [
 		{
-			title: `${data?.action?.title} / ʀᴜʟeʀ`,
+			title: `${data?.action?.title} / ʙússoʟa`,
 		},
 	];
 };

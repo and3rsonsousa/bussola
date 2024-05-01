@@ -517,7 +517,7 @@ export function ListOfActions({
 }) {
 	const foldCount = columns * 4;
 	const [fold, setFold] = useState(isFoldable ? foldCount : undefined);
-	return (
+	return actions && actions.length > 0 ? (
 		<>
 			<div
 				className={`min-h-full ${
@@ -574,7 +574,7 @@ export function ListOfActions({
 				</div>
 			) : null}
 		</>
-	);
+	) : null;
 }
 
 export function BlockOfActions({

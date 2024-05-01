@@ -30,11 +30,13 @@ export default function CreateAction({
 	mode,
 }: {
 	date?: Date;
-	mode?: "fixed" | "day" | "button";
+	mode?: "fixed" | "day" | "button" | "plus";
 }) {
 	const { categories, states, partners, people, user } = useMatches()[1]
 		.data as DashboardDataType;
 	const partner = (useMatches()[2].data as DashboardPartnerType).partner;
+	console.log({ partner });
+
 	const [open, setOpen] = useState(false);
 	const submit = useSubmit();
 	const { toast } = useToast();
@@ -81,9 +83,9 @@ export default function CreateAction({
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				{mode === "day" ? (
-					<div className="absolute inset-0 z-0 flex cursor-pointer justify-end pt-4 md:pr-2 md:pt-2">
-						<PlusIcon className="h-4 w-4 text-gray-500" />
-					</div>
+					<Button size={"sm"} variant={"secondary"}>
+						<PlusIcon className="size-4" />
+					</Button>
 				) : mode === "button" ? (
 					<Button>
 						Criar uma nova ação

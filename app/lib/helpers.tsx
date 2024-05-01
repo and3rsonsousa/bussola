@@ -19,7 +19,7 @@ import {
 	XIcon,
 } from "lucide-react";
 import { type CSSProperties } from "react";
-import { Avatar, AvatarFallback } from "~/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
 	FINISHED_ID,
 	INTENTS,
@@ -101,6 +101,53 @@ export function AvatarPartner({
 		</Avatar>
 	);
 }
+export const AvatarPerson = ({
+	person,
+	className,
+	size = "sm",
+	group,
+}: {
+	person: Person;
+	className?: string;
+	size?: "xs" | "sm" | "md" | "lg";
+	group?: boolean;
+}) => {
+	return (
+		<Avatar
+			key={person.id}
+			className={cn([
+				size === "xs"
+					? "h-4 w-4"
+					: size === "sm"
+					? "h-6 w-6"
+					: size === "md"
+					? "h-8 w-8"
+					: "h-12 w-12",
+				group ? "border-l-2 border-background" : "",
+				className,
+			])}
+		>
+			{person.image ? (
+				<AvatarImage src={person.image} />
+			) : (
+				<AvatarFallback
+					className={cn(
+						size === "xs"
+							? "text-[6px]"
+							: size === "sm"
+							? "text-[10px]"
+							: size === "md"
+							? "text-[14px]"
+							: "text-[20px]",
+						"font-semibold"
+					)}
+				>{`${person.name.split(" ")[0][0]}${
+					person.name.split(" ")[1][0]
+				}`}</AvatarFallback>
+			)}
+		</Avatar>
+	);
+};
 
 export function sortActions(
 	actions?: Action[] | null,

@@ -14,10 +14,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (intent === INTENTS.createAction) {
 		const actionToInsert = {
 			id: id.toString(),
-			category_id: Number(values["category_id"]),
-			state_id: Number(values["state_id"]),
-			partner_id: Number(values["partner_id"]),
-			date: values["date"].toString(),
+			created_at: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
+			updated_at: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
+			category_id: values["category_id"].toString(),
+			state_id: values["state_id"].toString(),
+			partner_id: values["partner_id"].toString(),
+			date: values["date"].toString() + "-03:00:00",
 			description: values["description"].toString(),
 			title: values["title"].toString(),
 			responsibles: values["responsibles"].toString().split(","),
@@ -43,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 					responsibles: values["responsibles"].toString().split(","),
 					updated_at: format(
 						Date.now(),
-						"yyyy-MM-dd'T'HH:mm:ss'+03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
 					),
 				})
 				.eq("id", id);
@@ -55,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 					...values,
 					updated_at: format(
 						Date.now(),
-						"yyyy-MM-dd'T'HH:mm:ss'+03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
 					),
 				})
 				.eq("id", id);

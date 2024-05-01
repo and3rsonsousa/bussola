@@ -95,43 +95,51 @@ export default function Header() {
 						>
 							Sair
 						</DropdownMenuItem>
-						<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
-						<DropdownMenuItem
-							className="bg-item"
-							id="partners"
-							onSelect={() =>
-								navigate("/dashboard/admin/partners")
-							}
-						>
-							Parceiros
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className="bg-item"
-							id="new-partner"
-							onSelect={() =>
-								navigate("/dashboard/admin/partners/new")
-							}
-						>
-							Novo parceiro
-						</DropdownMenuItem>
+						{person.admin && (
+							<>
+								<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+								<DropdownMenuItem
+									className="bg-item"
+									id="partners"
+									onSelect={() =>
+										navigate("/dashboard/admin/partners")
+									}
+								>
+									Parceiros
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="bg-item"
+									id="new-partner"
+									onSelect={() =>
+										navigate(
+											"/dashboard/admin/partners/new"
+										)
+									}
+								>
+									Novo parceiro
+								</DropdownMenuItem>
 
-						<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
-						<DropdownMenuItem
-							className="bg-item"
-							id="users"
-							onSelect={() => navigate("/dashboard/admin/users/")}
-						>
-							Usuários
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className="bg-item"
-							id="new-user"
-							onSelect={() =>
-								navigate("/dashboard/admin/users/new")
-							}
-						>
-							Novo usuário
-						</DropdownMenuItem>
+								<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+								<DropdownMenuItem
+									className="bg-item"
+									id="users"
+									onSelect={() =>
+										navigate("/dashboard/admin/users/")
+									}
+								>
+									Usuários
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className="bg-item"
+									id="new-user"
+									onSelect={() =>
+										navigate("/dashboard/admin/users/new")
+									}
+								>
+									Novo usuário
+								</DropdownMenuItem>
+							</>
+						)}
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>

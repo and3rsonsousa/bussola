@@ -1,5 +1,9 @@
-import { type ActionFunctionArgs, redirect } from "@vercel/remix";
 import { useActionData } from "@remix-run/react";
+import {
+	type MetaFunction,
+	redirect,
+	type ActionFunctionArgs,
+} from "@vercel/remix";
 import { AlertCircleIcon, LogInIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -22,6 +26,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	} else {
 		return { errors: { email: "Verifique o email ou a senha usada." } };
 	}
+};
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: "ʙússoʟa - Domine, Crie e Conquiste." },
+		{
+			name: "description",
+			content:
+				"Aplicativo de Gestão de Projetos Criado e Mantido pela Agência Canivete. ",
+		},
+	];
 };
 
 export default function Login() {

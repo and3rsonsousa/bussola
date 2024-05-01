@@ -1,19 +1,17 @@
 /* eslint-disable jsx-a11y/no-autofocus */
+import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
 import {
-	type ActionFunctionArgs,
-	type LoaderFunctionArgs,
 	json,
 	redirect,
+	type ActionFunctionArgs,
+	type LoaderFunctionArgs,
 } from "@vercel/remix";
-import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import { Checkbox } from "~/components/ui/checkbox";
+import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { AvatarPartner } from "~/lib/helpers";
+import { AvatarPartner, AvatarPerson } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { Button } from "~/components/ui/button";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { supabase, headers } = await createClient(request);
@@ -46,7 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		slug: String(formData.get("slug")),
 		bg: String(formData.get("bg")),
 		fg: String(formData.get("fg")),
-		user_ids: String(formData.getAll("user_id")).split(","),
+		users_ids: String(formData.getAll("users_id")).split(","),
 	};
 
 	const { error } = await supabase.from("partners").update(data).eq("id", id);
@@ -68,7 +66,7 @@ export default function AdminPartners() {
 
 	return (
 		<div className="overflow-hidden">
-			<ScrollArea className="h-full w-full">
+			<div className="scrollbars">
 				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<div
@@ -105,26 +103,34 @@ export default function AdminPartners() {
 						</div>
 						<div className="mb-4">
 							<Label className="mb-2 block">Usuários</Label>
-
-							{people.map((person) => (
-								<div
-									key={person.id}
-									className="mb-2 flex gap-4"
-								>
-									<Checkbox
-										value={person.user_id}
-										name="user_id"
-										defaultChecked={
-											partner.user_ids.indexOf(
-												person.user_id
-											) >= 0
-										}
+							<div className="flex gap-4 items-center">
+								{people.map((person) => (
+									<label
+										key={person.id}
+										className={`mb-2 flex items-center relative`}
 									>
-										{person.name}
-									</Checkbox>
-									<Label>{person.name}</Label>
-								</div>
-							))}
+										<input
+											type="checkbox"
+											value={person.user_id}
+											name="user_id"
+											className={`peer opacity-0 absolute`}
+											defaultChecked={
+												partner.users_ids.indexOf(
+													person.user_id
+												) >= 0
+											}
+										/>
+										<div
+											className={`ring-offset-background transition rounded-full ring-primary ring-offset-2 peer-checked:ring-2`}
+										>
+											<AvatarPerson
+												person={person}
+												size="lg"
+											/>
+										</div>
+									</label>
+								))}
+							</div>
 						</div>
 						<div className="mb-4">
 							<Label className="mb-2 block">
@@ -150,10 +156,8 @@ export default function AdminPartners() {
 							<Button type="submit">Adicionar</Button>
 						</div>
 					</Form>
-
-					<pre>{JSON.stringify(partner, undefined, 2)}</pre>
 				</div>
-			</ScrollArea>
+			</div>
 		</div>
 	);
 }

@@ -26,7 +26,7 @@ export type Database = {
         }
         Insert: {
           category_id: string
-          created_at?: string
+          created_at: string
           date: string
           description?: string | null
           id?: string
@@ -35,7 +35,7 @@ export type Database = {
           responsibles: string[]
           state_id: string
           title: string
-          updated_at?: string
+          updated_at: string
           user_id?: string
         }
         Update: {
@@ -149,6 +149,7 @@ export type Database = {
       }
       people: {
         Row: {
+          admin: boolean
           created_at: string
           email: string | null
           id: string
@@ -158,6 +159,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          admin?: boolean
           created_at?: string
           email?: string | null
           id?: string
@@ -167,6 +169,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          admin?: boolean
           created_at?: string
           email?: string | null
           id?: string
