@@ -45,25 +45,25 @@ import {
 	useIDsToRemove,
 	usePendingActions,
 } from "~/lib/helpers";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	let date = new URL(request.url).searchParams.get("date");
 
 	date ||= format(new Date(), "yyyy-MM-dd");
 
-	const { headers, supabase } = SupabaseServerClient({ request });
+	const { headers, supabase } = createClient(request);
 
-	const { data: client } = await supabase
-		.from("clients")
+	const { data: partner } = await supabase
+		.from("partners")
 		.select("*")
-		.eq("slug", params["client"] as string)
+		.eq("slug", params["partner"] as string)
 		.single();
 
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.eq("client_id", client!.id)
+		.eq("partner_id", partner!.id)
 		.gte(
 			"date",
 			format(
@@ -76,12 +76,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 			format(endOfWeek(endOfMonth(parseISO(date))), "yyyy-MM-dd HH:mm:ss")
 		);
 
-	return json({ actions, client }, { headers });
+	return json({ actions, partner }, { headers });
 };
 
-export default function Client() {
+export default function Partner() {
 	let { actions } = useLoaderData<typeof loader>();
-	const { client } = useLoaderData<typeof loader>();
+	const { partner } = useLoaderData<typeof loader>();
 	const [searchParams] = useSearchParams();
 
 	const matches = useMatches();
@@ -91,7 +91,7 @@ export default function Client() {
 	const [stateFilter, setStateFilter] = useState<State>();
 	const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
 
-	invariant(client);
+	invariant(partner);
 	invariant(actions);
 
 	const { categories, priorities, states, person, people } = matches[1]
@@ -221,7 +221,7 @@ export default function Client() {
 										>
 											<Link
 												to={`/dashboard/${
-													client.slug
+													partner.slug
 												}/?date=${format(
 													new Date().setMonth(
 														month.getMonth()
@@ -240,7 +240,7 @@ export default function Client() {
 						</div>
 						<Button size="icon" variant="ghost" asChild>
 							<Link
-								to={`/dashboard/${client?.slug}?date=${format(
+								to={`/dashboard/${partner?.slug}?date=${format(
 									subMonths(currentDate, 1),
 									"yyyy-MM-dd"
 								)}`}
@@ -250,7 +250,7 @@ export default function Client() {
 						</Button>
 						<Button size="icon" variant="ghost" asChild>
 							<Link
-								to={`/dashboard/${client?.slug}?date=${format(
+								to={`/dashboard/${partner?.slug}?date=${format(
 									addMonths(currentDate, 1),
 									"yyyy-MM-dd"
 								)}`}
@@ -448,7 +448,7 @@ export default function Client() {
 						currentDate={currentDate}
 						day={day}
 						setDraggedAction={setDraggedAction}
-						client={client}
+						partner={partner}
 						person={person}
 						people={people}
 					/>
@@ -465,7 +465,7 @@ export const CalendarDay = ({
 	priorities,
 	states,
 	setDraggedAction,
-	client,
+	partner,
 	person,
 }: {
 	day: { date: Date; actions?: Action[] };
@@ -473,7 +473,7 @@ export const CalendarDay = ({
 	categories: Category[];
 	priorities: Priority[];
 	states: State[];
-	client: Client;
+	partner: Partner;
 	person: Person;
 	people: Person[];
 	setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
@@ -498,7 +498,7 @@ export const CalendarDay = ({
 
 	const newAction = {
 		category_id: POST_ID,
-		client_id: client.id,
+		partner_id: partner.id,
 		date: format(
 			(() => {
 				const date = day.date;

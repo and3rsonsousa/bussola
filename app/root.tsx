@@ -4,20 +4,18 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-	useLoaderData,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 import { json } from "@vercel/remix";
 
 import "./globals.css";
-import { createBrowserClient } from "@supabase/ssr";
 
 export async function loader() {
 	return json(
 		{
 			env: {
 				SUPABASE_URL: process.env.SUPABASE_URL!,
-				SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
+				SUPABASE_KEY: process.env.SUPABASE_KEY!,
 			},
 		},
 		200
@@ -25,12 +23,9 @@ export async function loader() {
 }
 
 export function Layout() {
-	const { env } = useLoaderData<typeof loader>();
+	// const { env } = useLoaderData<typeof loader>();
 
-	const supabase = createBrowserClient(
-		env.SUPABASE_URL,
-		env.SUPABASE_ANON_KEY
-	);
+	// const supabase = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_KEY);
 
 	return (
 		<html lang="pt-br" className="dark">
@@ -45,7 +40,7 @@ export function Layout() {
 				<Links />
 			</head>
 			<body className="dark">
-				<Outlet context={{ supabase }} />
+				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
 				<Analytics />

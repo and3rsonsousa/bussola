@@ -7,7 +7,7 @@ export default function Search() {
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState("");
 	const matches = useMatches();
-	const clients = (matches[1].data as DashboardDataType).clients;
+	const partners = (matches[1].data as DashboardDataType).partners;
 
 	const [sections, setSections] = useState<
 		Array<{
@@ -17,10 +17,10 @@ export default function Search() {
 	>([
 		{
 			name: "Parceiros",
-			items: clients.map((client) => ({
-				id: client.id,
-				title: client.title,
-				href: `/dashboard/${client.slug}`,
+			items: partners.map((partner) => ({
+				id: partner.id,
+				title: partner.title,
+				href: `/dashboard/${partner.slug}`,
 			})),
 		},
 		{
@@ -30,13 +30,10 @@ export default function Search() {
 	]);
 
 	const { env } = matches[0].data as {
-		env: { SUPABASE_URL: string; SUPABASE_ANON_KEY: string };
+		env: { SUPABASE_URL: string; SUPABASE_KEY: string };
 	};
 
-	const supabase = createBrowserClient(
-		env.SUPABASE_URL,
-		env.SUPABASE_ANON_KEY
-	);
+	const supabase = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_KEY);
 
 	useEffect(() => {
 		const keyDown = (event: KeyboardEvent) => {

@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import CreateAction from "./CreateAction";
+// import CreateAction from "./CreateAction";
 import Header from "./Header";
 
 // import Search from "./Search";
@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 			<div className="flex h-full flex-col overflow-hidden">
 				{children}
 			</div>
-			<CreateAction />
+			{/* <CreateAction /> */}
 			{/* <Search /> */}
 		</div>
 	);

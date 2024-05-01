@@ -1,10 +1,10 @@
 import { type ActionFunctionArgs, json } from "@vercel/remix";
 import { format } from "date-fns";
 import { INTENTS, PRIORITIES } from "~/lib/constants";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-	const { headers, supabase } = SupabaseServerClient({ request });
+	const { headers, supabase } = createClient(request);
 
 	const formData = await request.formData();
 	const { intent, id, ...values } = Object.fromEntries(formData.entries());
@@ -16,7 +16,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			id: id.toString(),
 			category_id: Number(values["category_id"]),
 			state_id: Number(values["state_id"]),
-			client_id: Number(values["client_id"]),
+			partner_id: Number(values["partner_id"]),
 			date: values["date"].toString(),
 			description: values["description"].toString(),
 			title: values["title"].toString(),

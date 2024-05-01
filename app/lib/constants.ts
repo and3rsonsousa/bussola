@@ -1,16 +1,18 @@
-export const FINISHED_ID = 6
-export const POST_ID = 1
-export const VIDEO_ID = 2
+export const IDEA_ID = "f73e601e-182f-45c1-be2d-98c171113580";
+export const FINISHED_ID = "dfa8b782-54af-46ef-befe-28dc0417276e";
+
+export const POST_ID = "3ad13902-b636-4253-9111-e836b4716abf";
+export const VIDEO_ID = "4f5c76ee-6fe3-4855-ad5d-91af1c825b6d";
 
 export const PRIORITIES = {
-  low: "71ace4d4-1be4-4454-a0b5-267122bad349",
-  medium: "af6ceef7-7c70-44c9-b187-ee9d376c15c1",
-  high: "7aa2ccbb-be3c-4c40-b0ad-a207de76c5ff",
-}
+	low: "dabbe247-b69c-4442-9916-a5181c9ef224",
+	medium: "29025dcc-3cb3-441d-94a1-3412982febab",
+	high: "da6e4714-3e6a-46b6-9614-865f6b2f417e",
+};
 
 export const INTENTS = {
-  createAction: "actions-create",
-  updateAction: "action-update",
-  deleteAction: "action-delete",
-  duplicateAction: "action-duplicate",
-}
+	createAction: "actions-create",
+	updateAction: "action-update",
+	deleteAction: "action-delete",
+	duplicateAction: "action-duplicate",
+};

@@ -4,8 +4,9 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { AvatarClient, Icons } from "~/lib/helpers";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { IDEA_ID, INTENTS, POST_ID } from "~/lib/constants";
+import { AvatarPartner, Icons } from "~/lib/helpers";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
@@ -22,7 +23,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { INTENTS } from "~/lib/constants";
 import { useToast } from "../ui/use-toast";
 
 export default function CreateAction({
@@ -32,9 +32,9 @@ export default function CreateAction({
 	date?: Date;
 	mode?: "fixed" | "day" | "button";
 }) {
-	const { categories, states, clients, people, user } = useMatches()[1]
+	const { categories, states, partners, people, user } = useMatches()[1]
 		.data as DashboardDataType;
-	const client = (useMatches()[2].data as DashboardClientType).client;
+	const partner = (useMatches()[2].data as DashboardPartnerType).partner;
 	const [open, setOpen] = useState(false);
 	const submit = useSubmit();
 	const { toast } = useToast();
@@ -48,12 +48,12 @@ export default function CreateAction({
 	}
 
 	const cleanAction = {
-		category_id: 1,
-		client_id: client ? client.id : undefined,
+		category_id: POST_ID,
+		partner_id: partner ? partner.id : undefined,
 		date: newDate,
 		description: "",
 		responsibles: [user.id],
-		state_id: 1,
+		state_id: IDEA_ID,
 		title: "",
 		user_id: user.id,
 	};
@@ -155,32 +155,32 @@ export default function CreateAction({
 				<hr className="-mx-4 mb-4 mt-2 border-gray-300/20 md:-mx-6" />
 				<div className="flex flex-wrap justify-center gap-2 md:flex-nowrap md:justify-between">
 					<div className="flex w-full items-center justify-between gap-1">
-						{/* Clientes */}
-						{/* {JSON.stringify(client)} */}
+						{/* Partneres */}
+						{/* {JSON.stringify(partner)} */}
 						<Select
-							value={action.client_id?.toString()}
+							value={action.partner_id?.toString()}
 							onValueChange={(value) => {
 								setAction({
 									...action,
-									client_id: Number(value),
+									partner_id: value,
 								});
 							}}
 						>
 							<SelectTrigger
 								className={`border-none bg-transparent focus:ring-offset-0 ${
-									action.client_id
+									action.partner_id
 										? "-ml-1 p-1 pl-2"
 										: "px-2 py-1"
 								}`}
 							>
-								{action.client_id ? (
-									<AvatarClient
-										client={
-											clients.find(
-												(client) =>
-													client.id ===
-													action.client_id
-											) as Client
+								{action.partner_id ? (
+									<AvatarPartner
+										partner={
+											partners.find(
+												(partner) =>
+													partner.id ===
+													action.partner_id
+											) as Partner
 										}
 									/>
 								) : (
@@ -188,13 +188,13 @@ export default function CreateAction({
 								)}
 							</SelectTrigger>
 							<SelectContent className="bg-content">
-								{clients.map((client) => (
+								{partners.map((partner) => (
 									<SelectItem
-										key={client.id}
-										value={client.id.toString()}
+										key={partner.id}
+										value={partner.id.toString()}
 										className="bg-select-item"
 									>
-										{client.title}
+										{partner.title}
 									</SelectItem>
 								))}
 							</SelectContent>
@@ -205,7 +205,7 @@ export default function CreateAction({
 							onValueChange={(value) =>
 								setAction({
 									...action,
-									category_id: Number(value),
+									category_id: value,
 								})
 							}
 						>
@@ -238,7 +238,7 @@ export default function CreateAction({
 							onValueChange={(value) =>
 								setAction({
 									...action,
-									state_id: Number(value),
+									state_id: value,
 								})
 							}
 						>
@@ -278,7 +278,17 @@ export default function CreateAction({
 											key={person.id}
 											className="-ml-1 h-6 w-6 border-l-2 border-background"
 										>
-											<AvatarImage src={person.image} />
+											{person.image ? (
+												<AvatarImage
+													src={person.image}
+												/>
+											) : (
+												<AvatarFallback>{`${
+													person.name.split(" ")[0][0]
+												}${
+													person.name.split(" ")[1][0]
+												}`}</AvatarFallback>
+											)}
 										</Avatar>
 									))}
 								</button>
@@ -323,9 +333,21 @@ export default function CreateAction({
 												key={person.id}
 												className="size-5"
 											>
-												<AvatarImage
-													src={person.image}
-												/>
+												{person.image ? (
+													<AvatarImage
+														src={person.image}
+													/>
+												) : (
+													<AvatarFallback>{`${
+														person.name.split(
+															" "
+														)[0][0]
+													}${
+														person.name.split(
+															" "
+														)[1][0]
+													}`}</AvatarFallback>
+												)}
 											</Avatar>
 											<div>{person.name}</div>
 										</div>
@@ -477,11 +499,11 @@ export default function CreateAction({
 									});
 									return false;
 								}
-								if (!action.client_id) {
+								if (!action.partner_id) {
 									toast({
 										variant: "destructive",
 										description:
-											"Selecione o cliente dessa ação.",
+											"Selecione o partnere dessa ação.",
 									});
 								} else {
 									submit(

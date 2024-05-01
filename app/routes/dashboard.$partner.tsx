@@ -9,22 +9,22 @@ import { CalendarDaysIcon, Grid3X3Icon, ListTodoIcon } from "lucide-react";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { AvatarClient } from "~/lib/helpers";
+import { AvatarPartner } from "~/lib/helpers";
 
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-	const { headers, supabase } = SupabaseServerClient({ request });
+	const { headers, supabase } = createClient(request);
 
-	const { data: client } = await supabase
-		.from("clients")
+	const { data: partner } = await supabase
+		.from("partners")
 		.select("*")
-		.eq("slug", params["client"] as string)
+		.eq("slug", params["partner"] as string)
 		.single();
 
-	if (client) {
+	if (partner) {
 		return json(
-			{ client, instagram: request.url.indexOf("/instagram") },
+			{ partner, instagram: request.url.indexOf("/instagram") },
 			{ headers }
 		);
 	} else {
@@ -35,13 +35,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	return [
 		{
-			title: data?.client?.title,
+			title: data?.partner?.title,
 		},
 	];
 };
 
-export default function Client() {
-	const { client } = useLoaderData<typeof loader>();
+export default function Partner() {
+	const { partner } = useLoaderData<typeof loader>();
 	const matches = useMatches();
 
 	const { states } = matches[1].data as DashboardDataType;
@@ -53,12 +53,12 @@ export default function Client() {
 				<div className="pt-16"></div>
 				<div className="flex justify-between pt-2">
 					<Link
-						to={`/dashboard/${client.slug}`}
+						to={`/dashboard/${partner.slug}`}
 						className="flex items-center gap-4 "
 					>
-						<AvatarClient client={client} size="lg" />
+						<AvatarPartner partner={partner} size="lg" />
 						<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
-							<div>{client?.title}</div>
+							<div>{partner?.title}</div>
 							<Progress
 								total={actions.length}
 								values={states
@@ -82,7 +82,7 @@ export default function Client() {
 							variant="ghost"
 							className="flex gap-2 font-medium"
 						>
-							<Link to={`/dashboard/${client?.slug}/`}>
+							<Link to={`/dashboard/${partner?.slug}/`}>
 								<CalendarDaysIcon className="h-4 w-4" />
 								<div className="hidden md:block">
 									Calendário
@@ -95,7 +95,7 @@ export default function Client() {
 							variant="ghost"
 							className="flex gap-2 font-medium"
 						>
-							<Link to={`/dashboard/${client?.slug}/instagram`}>
+							<Link to={`/dashboard/${partner?.slug}/instagram`}>
 								<Grid3X3Icon className="h-4 w-4" />
 								<div className="hidden md:block">Instagram</div>
 							</Link>
@@ -106,7 +106,7 @@ export default function Client() {
 							variant="ghost"
 							className="flex gap-2 font-medium"
 						>
-							<Link to={`/dashboard/${client?.slug}/actions`}>
+							<Link to={`/dashboard/${partner?.slug}/actions`}>
 								<ListTodoIcon className="h-4 w-4" />
 								<div className="hidden md:block">Ações</div>
 							</Link>

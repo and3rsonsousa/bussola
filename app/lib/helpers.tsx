@@ -56,13 +56,13 @@ export function ShortText({
 	);
 }
 
-export function AvatarClient({
-	client,
+export function AvatarPartner({
+	partner,
 	size = "sm",
 	style,
 	className,
 }: {
-	client: Client;
+	partner: Partner;
 	size?: "xs" | "sm" | "md" | "lg";
 	style?: CSSProperties;
 	className?: string;
@@ -83,12 +83,12 @@ export function AvatarClient({
 		>
 			<AvatarFallback
 				style={{
-					backgroundColor: client.bgColor || "#999",
-					color: client.fgColor || "#333",
+					backgroundColor: partner.bg || "#778",
+					color: partner.fg || "#dde",
 				}}
 			>
 				<ShortText
-					text={size === "xs" ? client.short[0] : client.short}
+					text={size === "xs" ? partner.short[0] : partner.short}
 					className={
 						size === "sm"
 							? "scale-[0.7]"
@@ -139,7 +139,7 @@ export function getDelayedActions({
 		? actions.filter(
 				(action) =>
 					isBefore(parseISO(action.date), new Date()) &&
-					Number(action.state_id) !== FINISHED_ID &&
+					action.state_id !== FINISHED_ID &&
 					(priority ? action.priority_id === priority : true)
 		  )
 		: [];
@@ -195,7 +195,7 @@ export function getInstagramActions({
 	return actions
 		? actions
 				.filter((action) =>
-					[POST_ID, VIDEO_ID].includes(Number(action.category_id))
+					[POST_ID, VIDEO_ID].includes(action.category_id)
 				)
 				.sort(
 					(a, b) =>
@@ -260,15 +260,15 @@ export const Icons = ({
 
 export function convertToAction(data: { [key: string]: unknown }): Action {
 	const action: Action = {
-		category_id: Number(data["category_id"]),
-		client_id: Number(data["client_id"]),
+		category_id: String(data["category_id"]),
+		partner_id: String(data["partner_id"]),
 		created_at: String(data["created_at"]),
 		date: String(data["date"]),
 		description: String(data["description"]),
 		id: String(data["id"]),
 		priority_id: String(data["priority_id"]),
 		responsibles: String(data["responsibles"]).split(","),
-		state_id: Number(data["state_id"]),
+		state_id: String(data["state_id"]),
 		title: String(data["title"]),
 		updated_at: String(data["updated_at"]),
 		user_id: String(data["user_id"]),
@@ -304,9 +304,9 @@ export function usePendingActions() {
 				id: String(fetcher.formData?.get("id")),
 				title: String(fetcher.formData?.get("title")),
 				description: String(fetcher.formData?.get("description")),
-				client_id: Number(fetcher.formData?.get("client_id")),
-				category_id: Number(fetcher.formData?.get("category_id")),
-				state_id: Number(fetcher.formData?.get("state_id")),
+				partner_id: String(fetcher.formData?.get("partner_id")),
+				category_id: String(fetcher.formData?.get("category_id")),
+				state_id: String(fetcher.formData?.get("state_id")),
 				user_id: String(fetcher.formData?.get("user_id")),
 				date: String(fetcher.formData?.get("date")),
 				responsibles: String(

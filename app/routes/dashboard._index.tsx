@@ -29,17 +29,17 @@ import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { INTENTS } from "~/lib/constants";
 import {
-	AvatarClient,
+	AvatarPartner,
 	getActionsForThisDay,
 	getDelayedActions,
 	sortActions,
 	useIDsToRemove,
 	usePendingActions,
 } from "~/lib/helpers";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const { headers, supabase } = SupabaseServerClient({ request });
+	const { headers, supabase } = createClient(request);
 
 	const { data: actions } = await supabase
 		.from("actions")
@@ -82,7 +82,7 @@ export default function DashboardIndex() {
 
 	invariant(actions);
 
-	const { categories, priorities, states, clients } = matches[1]
+	const { categories, priorities, states, partners } = matches[1]
 		.data as DashboardDataType;
 
 	const pendingActions = usePendingActions();
@@ -176,7 +176,7 @@ export default function DashboardIndex() {
 							showCategory={true}
 							columns={6}
 							date={{ dateFormat: 1 }}
-							clients={clients}
+							partners={partners}
 						/>
 					</div>
 				) : null}
@@ -186,14 +186,14 @@ export default function DashboardIndex() {
 						Parceiros
 					</h4>
 					<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
-						{clients.map((client) => (
+						{partners.map((partner) => (
 							<Link
-								to={`/dashboard/${client.slug}`}
-								key={client.id}
+								to={`/dashboard/${partner.slug}`}
+								key={partner.id}
 								className="group relative"
 							>
-								<AvatarClient
-									client={client}
+								<AvatarPartner
+									partner={partner}
 									size="lg"
 									className="mx-auto"
 								/>
@@ -201,7 +201,7 @@ export default function DashboardIndex() {
 									value={
 										lateActions.filter(
 											(action) =>
-												action.client_id === client.id
+												action.partner_id === partner.id
 										).length
 									}
 									isDynamic
@@ -291,7 +291,7 @@ export default function DashboardIndex() {
 																hourActions
 															}
 															showCategory={true}
-															clients={clients}
+															partners={partners}
 															columns={1}
 															date={{
 																dateFormat: 0,
@@ -310,7 +310,9 @@ export default function DashboardIndex() {
 				) : (
 					<div className="grid place-content-center p-8 text-xl">
 						<div className="space-y-4 rounded-xl bg-gray-900 p-8 text-center">
-							<div>Nenhuma ação para hoje</div>
+							<div className="font-semibold">
+								Nenhuma ação para hoje
+							</div>
 							<CreateAction mode="button" />
 						</div>
 					</div>
@@ -331,7 +333,7 @@ export default function DashboardIndex() {
 							priorities={priorities}
 							states={states}
 							actions={tomorrowActions}
-							clients={clients}
+							partners={partners}
 							columns={6}
 							date={{
 								dateFormat: 0,
@@ -342,8 +344,13 @@ export default function DashboardIndex() {
 				) : (
 					<div className="grid place-content-center p-8 text-xl">
 						<div className="space-y-4 rounded-lg bg-gray-900 p-8 text-center">
-							<div>Nenhuma ação para hoje</div>
-							<CreateAction mode="button" />
+							<div className="font-semibold">
+								Nenhuma ação para amanhã
+							</div>
+							<CreateAction
+								date={addDays(new Date(), 1)}
+								mode="button"
+							/>
 						</div>
 					</div>
 				)}
@@ -388,7 +395,7 @@ export default function DashboardIndex() {
 									actions={actions?.filter((action) =>
 										isSameDay(action.date, day)
 									)}
-									clients={clients}
+									partners={partners}
 									date={{ timeFormat: 1 }}
 									showCategory={true}
 									onDrag={setDraggedAction}

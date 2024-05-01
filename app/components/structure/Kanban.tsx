@@ -3,7 +3,7 @@ import { BlockOfActions } from "./Action";
 
 export default function Kanban({ actions }: { actions: Action[] }) {
 	const matches = useMatches();
-	const { categories, priorities, states, clients } = matches[1]
+	const { categories, priorities, states, partners } = matches[1]
 		.data as DashboardDataType;
 
 	return (
@@ -26,7 +26,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 									categories={categories}
 									priorities={priorities}
 									states={states}
-									clients={clients}
+									partners={partners}
 									max={1}
 									actions={actions.filter(
 										(action) => action.state_id === state.id

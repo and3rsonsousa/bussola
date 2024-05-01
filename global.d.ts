@@ -7,16 +7,16 @@ declare global {
 		supabase: SupabaseClient;
 	};
 
-	type Client = Database["public"]["Tables"]["clients"]["Row"];
+	type Partner = Database["public"]["Tables"]["partners"]["Row"];
 	type Person = Database["public"]["Tables"]["people"]["Row"];
 	type People = Person[];
 	type Category = Database["public"]["Tables"]["categories"]["Row"];
 	type State = Database["public"]["Tables"]["states"]["Row"];
-	type Priority = Database["public"]["Tables"]["priority"]["Row"];
+	type Priority = Database["public"]["Tables"]["priorities"]["Row"];
 	type Action = Database["public"]["Tables"]["actions"]["Row"];
 
 	type DashboardDataType = {
-		clients: Client[];
+		partners: Partner[];
 		people: People;
 		categories: Category[];
 		states: State[];
@@ -25,32 +25,32 @@ declare global {
 		priorities: Priority[];
 	};
 
-	type DashboardClientType = {
+	type DashboardPartnerType = {
 		actions: Action[];
-		client: Client;
+		partner: Partner;
 		range: DateRange;
 	};
 
-	type DashboardClientCalendarType = {
+	type DashboardPartnerCalendarType = {
 		isMonth: boolean;
 		actions: Action[];
-		client: Client;
+		partner: Partner;
 		range: DateRange;
 	};
 
 	type RawAction = {
 		title: string;
 		description: string;
-		client_id?: number;
-		category_id: number;
-		state_id: number;
+		partner_id?: string;
+		category_id: string;
+		state_id: string;
 		date: Date;
 		user_id: string;
 		responsibles: string[];
 	};
 
 	type GenericItem = {
-		id: string | number;
+		id: string;
 		slug: string;
 		title: string;
 		href?: string;

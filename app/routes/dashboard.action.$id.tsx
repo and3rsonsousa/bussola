@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { Avatar, AvatarImage } from "~/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import {
@@ -38,11 +38,11 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { INTENTS } from "~/lib/constants";
-import { AvatarClient, Icons } from "~/lib/helpers";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { AvatarPartner, Icons } from "~/lib/helpers";
+import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-	const { headers, supabase } = SupabaseServerClient({ request });
+	const { headers, supabase } = createClient(request);
 	const { id } = params;
 
 	if (!id) throw new Error("$id não foi definido");
@@ -69,12 +69,12 @@ export default function ActionPage() {
 	const [action, setAction] = useState(baseAction as Action);
 	const submit = useSubmit();
 
-	const { categories, clients, people, priorities, states } = useMatches()[1]
+	const { categories, partners, people, priorities, states } = useMatches()[1]
 		.data as DashboardDataType;
 
-	const client = clients.find(
-		(client) => client.id === action.client_id
-	) as Client;
+	const partner = partners.find(
+		(partner) => partner.id === action.partner_id
+	) as Partner;
 	const category = categories.find(
 		(category) => category.id === action.category_id
 	) as Category;
@@ -108,18 +108,18 @@ export default function ActionPage() {
 			<div className="pt-16"></div>
 			<div className="flex shrink grow-0 items-center justify-between p-4 text-sm">
 				<div className="flex items-center gap-2 ">
-					<AvatarClient
-						client={client}
+					<AvatarPartner
+						partner={partner}
 						style={{
-							viewTransitionName: "avatar-client",
+							viewTransitionName: "avatar-partner",
 						}}
 					/>
 					<div>
 						<Link
-							to={`/dashboard/${client.slug}`}
+							to={`/dashboard/${partner.slug}`}
 							className="font-extrabold uppercase tracking-wider text-gray-300 transition hover:text-gray-200"
 						>
-							{client.title}
+							{partner.title}
 						</Link>
 						<div className="text-[11px] leading-none tracking-wide text-gray-500">
 							{format(
@@ -144,17 +144,17 @@ export default function ActionPage() {
 				</div>
 				<div className="flex items-center gap-2">
 					<Button asChild size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${client.slug}/actions`}>
+						<Link to={`/dashboard/${partner.slug}/actions`}>
 							<ListTodoIcon className="h-4 w-4" />
 						</Link>
 					</Button>
 					<Button size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${client.slug}/instagram`}>
+						<Link to={`/dashboard/${partner.slug}/instagram`}>
 							<Grid3X3Icon className="h-4 w-4" />
 						</Link>
 					</Button>
 					<Button size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${client.slug}/calendar`}>
+						<Link to={`/dashboard/${partner.slug}/calendar`}>
 							<CalendarDaysIcon className="h-4 w-4" />
 						</Link>
 					</Button>
@@ -233,44 +233,42 @@ export default function ActionPage() {
 					/>
 				</div>
 				<div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
-					{/* Clientes */}
+					{/* Partneres */}
 					<div>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-								<AvatarClient client={client} size="lg" />
+								<AvatarPartner partner={partner} size="lg" />
 								{/* <span className="font-medium">
-									{client.title}
+									{partner.title}
 								</span> */}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
-								{clients.map((client) => (
+								{partners.map((partner) => (
 									<DropdownMenuItem
-										key={client.id}
+										key={partner.id}
 										className="bg-item flex items-center gap-2"
-										textValue={client.title}
+										textValue={partner.title}
 										onSelect={async () => {
 											if (
-												client.id !== action.client_id
+												partner.id !== action.partner_id
 											) {
 												await handleActions({
 													id: action.id,
 													intent: INTENTS.updateAction,
-													client_id: Number(
-														client.id
+													partner_id: Number(
+														partner.id
 													),
 												});
 
 												setAction({
 													...action,
-													client_id: Number(
-														client.id
-													),
+													partner_id: partner.id,
 												});
 											}
 										}}
 									>
-										<AvatarClient client={client} />
-										<span>{client.title}</span>
+										<AvatarPartner partner={partner} />
+										<span>{partner.title}</span>
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuContent>
@@ -296,9 +294,7 @@ export default function ActionPage() {
 										onSelect={() =>
 											setAction({
 												...action,
-												category_id: Number(
-													category.id
-												),
+												category_id: category.id,
 											})
 										}
 									>
@@ -334,7 +330,7 @@ export default function ActionPage() {
 										onSelect={() =>
 											setAction({
 												...action,
-												state_id: Number(state.id),
+												state_id: state.id,
 											})
 										}
 									>
@@ -392,7 +388,17 @@ export default function ActionPage() {
 											key={person.id}
 											className="-ml-1 h-8 w-8 border-l-2 border-background"
 										>
-											<AvatarImage src={person.image} />
+											{person.image ? (
+												<AvatarImage
+													src={person.image}
+												/>
+											) : (
+												<AvatarFallback>{`${
+													person.name.split(" ")[0][0]
+												}${
+													person.name.split(" ")[1][0]
+												}`}</AvatarFallback>
+											)}
 										</Avatar>
 									))}
 								</div>
@@ -437,7 +443,17 @@ export default function ActionPage() {
 											key={person.id}
 											className="h-4 w-4"
 										>
-											<AvatarImage src={person.image} />
+											{person.image ? (
+												<AvatarImage
+													src={person.image}
+												/>
+											) : (
+												<AvatarFallback>{`${
+													person.name.split(" ")[0][0]
+												}${
+													person.name.split(" ")[1][0]
+												}`}</AvatarFallback>
+											)}
 										</Avatar>
 										<span>{person.name}</span>
 									</DropdownMenuCheckboxItem>

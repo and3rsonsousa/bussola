@@ -1,10 +1,10 @@
-import { LoaderFunctionArgs, redirect } from "@vercel/remix"
-import { SupabaseServerClient } from "~/lib/supabase"
+import { type LoaderFunctionArgs, redirect } from "@vercel/remix";
+import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { supabase, headers } = SupabaseServerClient({ request })
+	const { supabase, headers } = createClient(request);
 
-  await supabase.auth.signOut()
+	await supabase.auth.signOut();
 
-  return redirect("/", { headers })
-}
+	return redirect("/", { headers });
+};

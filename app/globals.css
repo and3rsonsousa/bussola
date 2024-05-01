@@ -338,7 +338,7 @@ body {
 }
 
 .bg-item {
-	@apply font-normal px-4;
+	@apply font-light px-4;
 }
 
 .bg-select-item {

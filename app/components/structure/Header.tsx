@@ -12,14 +12,15 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Header() {
 	const matches = useMatches();
 	const navigation = useNavigation();
 	const navigate = useNavigate();
 
-	const { clients, person } = matches[1].data as DashboardDataType;
-	const { client } = matches[1].params;
+	const { partners, person } = matches[1].data as DashboardDataType;
+	const { partner } = matches[1].params;
 
 	const fetchers = useFetchers();
 
@@ -35,27 +36,27 @@ export default function Header() {
 					<div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-b-primary/50"></div>
 				)}
 			</div>
-			<div className="flex items-center justify-end gap-2 text-sm font-bold">
+			<div className="flex items-center justify-end gap-2 text-sm font-medium">
 				<DropdownMenu>
 					<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-lg px-2 py-1 mr-2">
-						{client
-							? clients.find(
-									(currentClient) =>
-										currentClient.slug === client
+						{partner
+							? partners.find(
+									(currentPartner) =>
+										currentPartner.slug === partner
 							  )?.title
 							: "Parceiros"}
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="bg-content">
-						{clients.map((client) => (
+						{partners.map((partner) => (
 							<DropdownMenuItem
 								className="bg-item"
 								onSelect={() =>
-									navigate(`/dashboard/${client.slug}`)
+									navigate(`/dashboard/${partner.slug}`)
 								}
-								key={client.id}
-								id={client.slug}
+								key={partner.id}
+								id={partner.slug}
 							>
-								{client.title}
+								{partner.title}
 							</DropdownMenuItem>
 						))}
 					</DropdownMenuContent>
@@ -63,19 +64,32 @@ export default function Header() {
 
 				<DropdownMenu>
 					<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-full p-1 -mr-1">
-						<div className="size-6 overflow-hidden rounded-full">
-							<img src={person.image} alt={person.name} />
-						</div>
+						<Avatar
+							key={person.id}
+							className="size-8 border-l-2 border-background"
+						>
+							{person.image ? (
+								<AvatarImage src={person.image} />
+							) : (
+								<AvatarFallback>{`${
+									person.name.split(" ")[0][0]
+								}${
+									person.name.split(" ")[1][0]
+								}`}</AvatarFallback>
+							)}
+						</Avatar>
 					</DropdownMenuTrigger>
 
 					<DropdownMenuContent>
 						<DropdownMenuItem
+							className="bg-item"
 							id="account"
 							onSelect={() => navigate("/dashboard/account")}
 						>
 							Minha Conta
 						</DropdownMenuItem>
 						<DropdownMenuItem
+							className="bg-item"
 							id="logout"
 							onSelect={() => navigate("/logout")}
 						>
@@ -83,17 +97,19 @@ export default function Header() {
 						</DropdownMenuItem>
 						<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
 						<DropdownMenuItem
+							className="bg-item"
 							id="partners"
 							onSelect={() =>
-								navigate("/dashboard/admin/clients")
+								navigate("/dashboard/admin/partners")
 							}
 						>
 							Parceiros
 						</DropdownMenuItem>
 						<DropdownMenuItem
+							className="bg-item"
 							id="new-partner"
 							onSelect={() =>
-								navigate("/dashboard/admin/clients/new")
+								navigate("/dashboard/admin/partners/new")
 							}
 						>
 							Novo parceiro
@@ -101,12 +117,14 @@ export default function Header() {
 
 						<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
 						<DropdownMenuItem
+							className="bg-item"
 							id="users"
 							onSelect={() => navigate("/dashboard/admin/users/")}
 						>
 							Usuários
 						</DropdownMenuItem>
 						<DropdownMenuItem
+							className="bg-item"
 							id="new-user"
 							onSelect={() =>
 								navigate("/dashboard/admin/users/new")

@@ -6,11 +6,11 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 import { Button } from "~/components/ui/button";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-	const { supabase } = SupabaseServerClient({ request });
+	const { supabase } = createClient(request);
 
 	const formData = await request.formData();
 
@@ -18,19 +18,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		title: String(formData.get("title")),
 		short: String(formData.get("short")),
 		slug: String(formData.get("slug")),
-		bgColor: String(formData.get("bgColor")),
-		fgColor: String(formData.get("fgColor")),
+		bg: String(formData.get("bg")),
+		fg: String(formData.get("fg")),
 		user_ids: String(formData.getAll("user_id")).split(","),
 	};
 
-	const { data: client, error } = await supabase
-		.from("clients")
+	const { data: partner, error } = await supabase
+		.from("partners")
 		.insert(data)
 		.select()
 		.single();
 
-	if (client) {
-		return redirect(`/dashboard/${client.slug}`);
+	if (partner) {
+		return redirect(`/dashboard/${partner.slug}`);
 	} else {
 		console.log(error);
 	}
@@ -38,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	return { ok: true };
 };
 
-export default function NewClients() {
+export default function NewPartners() {
 	const matches = useMatches();
 
 	const { people } = matches[1].data as DashboardDataType;
@@ -49,7 +49,7 @@ export default function NewClients() {
 				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<div className="gap-2 rounded py-4 text-center text-2xl font-medium">
-						Novo cliente
+						Novo partnere
 					</div>
 					<Form className="mx-auto max-w-md" method="post">
 						<div className="mb-4">
@@ -93,7 +93,7 @@ export default function NewClients() {
 							</Label>
 							<Input
 								defaultValue={"#ffffff"}
-								name="bgColor"
+								name="bg"
 								type="color"
 							/>
 						</div>
@@ -103,7 +103,7 @@ export default function NewClients() {
 							</Label>
 							<Input
 								defaultValue={"#000000"}
-								name="fgColor"
+								name="fg"
 								type="color"
 							/>
 						</div>

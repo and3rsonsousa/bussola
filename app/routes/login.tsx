@@ -4,23 +4,21 @@ import { AlertCircleIcon, LogInIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const formData = await request.formData();
 	const email = formData.get("email") as string;
 	const password = formData.get("password") as string;
 
-	const { supabase, headers } = await SupabaseServerClient({ request });
+	const { supabase, headers } = await createClient(request);
 
 	const {
 		data: { user },
 	} = await supabase.auth.signInWithPassword({ email, password });
 
 	if (user) {
-		return redirect("/dashboard", {
-			headers,
-		});
+		return redirect("/dashboard", { headers });
 	} else {
 		return { errors: { email: "Verifique o email ou a senha usada." } };
 	}
@@ -33,21 +31,21 @@ export default function Login() {
 			<div className="w-full p-8 sm:w-80">
 				<img src="logo.png" alt="" className="mb-8 h-6 w-auto" />
 				{actionData && (
-					<div className="my-8 flex gap-4 rounded-lg bg-rose-900 p-4 leading-none text-orange-100">
-						<AlertCircleIcon className="h-8 w-8" />
+					<div className="my-8 flex gap-4 rounded-lg bg-error-600 p-4 leading-none text-error-50 items-center">
+						<AlertCircleIcon className="size-10" />
 						<div>{actionData.errors.email}</div>
 					</div>
 				)}
 				<form className="" method="post">
 					<Label className="mb-4 block w-full">
-						<span className="mb-2 block w-full font-bold">
+						<span className="mb-2 block w-full font-medium">
 							E-mail
 						</span>
 
 						<Input name="email" />
 					</Label>
 					<Label className="mb-4 block w-full">
-						<span className="mb-2 block w-full font-bold">
+						<span className="mb-2 block w-full font-medium">
 							Senha
 						</span>
 

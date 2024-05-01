@@ -1,10 +1,10 @@
 import { type LoaderFunctionArgs, json, redirect } from "@vercel/remix";
 import { Outlet } from "@remix-run/react";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { createClient } from "~/lib/supabase";
 import Layout from "~/components/structure/Layout";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	const { supabase } = SupabaseServerClient({ request });
+	const { supabase } = createClient(request);
 
 	const {
 		data: { user },
@@ -15,24 +15,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	}
 
 	const [
-		{ data: clients },
+		{ data: partners },
 		{ data: people },
 		{ data: categories },
 		{ data: states },
 		{ data: priorities },
 	] = await Promise.all([
 		supabase
-			.from("clients")
+			.from("partners")
 			.select("*")
+			.contains("users_ids", [user.id])
 			.order("title", { ascending: true }),
 		supabase.from("people").select("*").order("name", { ascending: true }),
 		supabase
 			.from("categories")
 			.select("*")
-			.order("priority", { ascending: true }),
+			.order("order", { ascending: true }),
 		supabase.from("states").select("*").order("order", { ascending: true }),
 		supabase
-			.from("priority")
+			.from("priorities")
 			.select("*")
 			.order("order", { ascending: true }),
 	]);
@@ -43,7 +44,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 	return json(
 		{
-			clients,
+			partners,
 			people,
 			categories,
 			user,

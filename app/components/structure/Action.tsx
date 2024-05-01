@@ -24,7 +24,7 @@ import {
 import { Fragment, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { FINISHED_ID, INTENTS, PRIORITIES } from "~/lib/constants";
-import { AvatarClient, Icons } from "~/lib/helpers";
+import { AvatarPartner, Icons } from "~/lib/helpers";
 import { cn } from "~/lib/utils";
 import {
 	ContextMenu,
@@ -45,7 +45,7 @@ export function ActionLine({
 	states,
 	priorities,
 	showCategory,
-	client,
+	partner,
 	date,
 	onDrag,
 }: {
@@ -54,7 +54,7 @@ export function ActionLine({
 	states: State[];
 	priorities: Priority[];
 	showCategory?: boolean;
-	client?: Client;
+	partner?: Partner;
 	date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
 	onDrag?: (action: Action) => void;
 }) {
@@ -62,7 +62,7 @@ export function ActionLine({
 	const [isHover, setHover] = useState(false);
 	const navigate = useNavigate();
 	const submit = useSubmit();
-	const state = states.find((state) => state.id === Number(action.state_id));
+	const state = states.find((state) => state.id === action.state_id);
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -118,8 +118,12 @@ export function ActionLine({
 						<ShortcutActions action={action} />
 					) : null}
 
-					{client && (
-						<AvatarClient size="xs" client={client} className="" />
+					{partner && (
+						<AvatarPartner
+							size="xs"
+							partner={partner}
+							className=""
+						/>
 					)}
 					{showCategory && (
 						<Icons
@@ -231,13 +235,13 @@ export function ActionBlock({
 	categories,
 	priorities,
 	states,
-	client,
+	partner,
 }: {
 	action: Action;
 	categories: Category[];
 	priorities: Priority[];
 	states: State[];
-	client?: Client;
+	partner?: Partner;
 }) {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -264,9 +268,8 @@ export function ActionBlock({
 				<div
 					title={action.title}
 					className={`group/action relative flex w-full flex-col justify-between gap-2 overflow-hidden rounded focus-within:ring-2 ring-primary border-l-4 px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container border-${
-						states.find(
-							(state) => state.id === Number(action.state_id)
-						)?.slug
+						states.find((state) => state.id === action.state_id)
+							?.slug
 					} ${
 						edit
 							? "bg-gray-800 text-gray-200"
@@ -347,14 +350,16 @@ export function ActionBlock({
 					<div className="flex items-center justify-between text-gray-400">
 						<div className="flex items-center gap-2">
 							{/* Cliente */}
-							{client ? <AvatarClient client={client} /> : null}
+							{partner ? (
+								<AvatarPartner partner={partner} />
+							) : null}
 							<div>
 								<Icons
 									id={
 										categories.find(
 											(category) =>
 												category.id ===
-												Number(action.category_id)
+												action.category_id
 										)?.slug
 									}
 									className="w-4"
@@ -441,7 +446,7 @@ export function ActionGrid({
 		<ContextMenu>
 			<ContextMenuTrigger>
 				<div
-					className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5  p-4 text-gray-500 hover:bg-gradient-to-b ${cn(
+					className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5 p-2 text-gray-500 hover:bg-gradient-to-b ${cn(
 						classNames
 					)} ${
 						action.state_id === FINISHED_ID
@@ -454,14 +459,7 @@ export function ActionGrid({
 					{isHover ? <ShortcutActions action={action} /> : null}
 					<div></div>
 					<div
-						className={`line-clamp-4 py-4 text-center font-medium transition group-hover/action:text-gray-300 ${
-							action.title.length > 30
-								? "text-sm leading-tight"
-								: action.title.length > 18 ||
-								  action.title.indexOf(" ") === -1
-								? "text-lg leading-[1.15] tracking-tight"
-								: "text-2xl leading-none tracking-tight"
-						}`}
+						className={`line-clamp-2 py-4 text-gray-400 text-center transition group-hover/action:text-gray-300 font-bold tracking-tighter leading-none overflow-hidden`}
 					>
 						{action.title}
 					</div>
@@ -469,8 +467,7 @@ export function ActionGrid({
 						<div
 							className={`h-2 w-2 rounded-full bg-${
 								states.find(
-									(state) =>
-										state.id === Number(action.state_id)
+									(state) => state.id === action.state_id
 								)?.slug
 							}`}
 						></div>
@@ -500,7 +497,7 @@ export function ListOfActions({
 	categories,
 	states,
 	priorities,
-	clients,
+	partners,
 	showCategory,
 	date,
 	columns = 1,
@@ -511,7 +508,7 @@ export function ListOfActions({
 	categories: Category[];
 	states: State[];
 	priorities: Priority[];
-	clients?: Client[];
+	partners?: Partner[];
 	showCategory?: boolean;
 	date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
 	columns?: 1 | 2 | 3 | 6;
@@ -541,11 +538,11 @@ export function ListOfActions({
 						states={states}
 						priorities={priorities}
 						showCategory={showCategory}
-						client={
-							clients
-								? clients.find(
-										(client) =>
-											client.id === action.client_id
+						partner={
+							partners
+								? partners.find(
+										(partner) =>
+											partner.id === action.partner_id
 								  )
 								: undefined
 						}
@@ -585,14 +582,14 @@ export function BlockOfActions({
 	categories,
 	states,
 	priorities,
-	clients,
+	partners,
 	max,
 }: {
 	actions?: Action[] | null;
 	categories: Category[];
 	states: State[];
 	priorities: Priority[];
-	clients: Client[];
+	partners: Partner[];
 	max?: 1 | 2;
 }) {
 	return (
@@ -612,10 +609,11 @@ export function BlockOfActions({
 					states={states}
 					key={action.id}
 					priorities={priorities}
-					client={
-						clients
-							? clients.find(
-									(client) => client.id === action.client_id
+					partner={
+						partners
+							? partners.find(
+									(partner) =>
+										partner.id === action.partner_id
 							  )
 							: undefined
 					}
@@ -1132,8 +1130,7 @@ function ContextMenuItems({
 					<span>
 						{
 							categories.find(
-								(category) =>
-									category.id === Number(action.category_id)
+								(category) => category.id === action.category_id
 							)?.title
 						}
 					</span>
@@ -1164,16 +1161,14 @@ function ContextMenuItems({
 				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
 					<div
 						className={`h-2 w-2 rounded-full border-2 border-${
-							states.find(
-								(state) => state.id === Number(action.state_id)
-							)?.slug
+							states.find((state) => state.id === action.state_id)
+								?.slug
 						}`}
 					></div>
 					<span>
 						{
-							states.find(
-								(state) => state.id === Number(action.state_id)
-							)?.title
+							states.find((state) => state.id === action.state_id)
+								?.title
 						}
 					</span>
 				</ContextMenuSubTrigger>
@@ -1203,3 +1198,12 @@ function ContextMenuItems({
 		</ContextMenuContent>
 	);
 }
+
+// ${
+// 	action.title.length > 30
+// 		? "text-sm leading-tight"
+// 		: action.title.length > 18 ||
+// 			action.title.indexOf(" ") === -1
+// 		? "text-lg leading-[1.15] tracking-tight"
+// 		: "text-2xl leading-none tracking-tight"
+// }

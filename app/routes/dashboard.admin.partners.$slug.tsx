@@ -11,30 +11,30 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { AvatarClient } from "~/lib/helpers";
-import { SupabaseServerClient } from "~/lib/supabase";
+import { AvatarPartner } from "~/lib/helpers";
+import { createClient } from "~/lib/supabase";
 import { Button } from "~/components/ui/button";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-	const { supabase, headers } = await SupabaseServerClient({ request });
+	const { supabase, headers } = await createClient(request);
 
 	const slug = params["slug"];
 
 	invariant(slug);
 
-	const { data: client } = await supabase
-		.from("clients")
+	const { data: partner } = await supabase
+		.from("partners")
 		.select("*")
 		.eq("slug", slug)
 		.single();
 
-	if (!client) throw redirect("/dashboard/admin/clients");
+	if (!partner) throw redirect("/dashboard/admin/partners");
 
-	return json({ client, headers });
+	return json({ partner, headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-	const { supabase } = SupabaseServerClient({ request });
+	const { supabase } = createClient(request);
 
 	const formData = await request.formData();
 
@@ -44,26 +44,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		title: String(formData.get("title")),
 		short: String(formData.get("short")),
 		slug: String(formData.get("slug")),
-		bgColor: String(formData.get("bgColor")),
-		fgColor: String(formData.get("fgColor")),
+		bg: String(formData.get("bg")),
+		fg: String(formData.get("fg")),
 		user_ids: String(formData.getAll("user_id")).split(","),
 	};
 
-	const { error } = await supabase.from("clients").update(data).eq("id", id);
+	const { error } = await supabase.from("partners").update(data).eq("id", id);
 
 	if (error) {
 		console.log(error);
 	} else {
-		return redirect(`/dashboard/admin/clients`);
+		return redirect(`/dashboard/admin/partners`);
 	}
 
 	return { ok: true };
 };
 
-export default function AdminClients() {
+export default function AdminPartners() {
 	const matches = useMatches();
 
-	const { client } = useLoaderData<typeof loader>();
+	const { partner } = useLoaderData<typeof loader>();
 	const { people } = matches[1].data as DashboardDataType;
 
 	return (
@@ -73,22 +73,22 @@ export default function AdminClients() {
 				<div className="px-4 md:px-8">
 					<div
 						className="flex items-center gap-2 rounded py-4 font-medium "
-						key={client.id}
+						key={partner.id}
 					>
-						<AvatarClient client={client} size="lg" />
+						<AvatarPartner partner={partner} size="lg" />
 						<Link
-							to={`/dashboard/${client.slug}`}
+							to={`/dashboard/${partner.slug}`}
 							className="text-2xl"
 						>
-							{client.title}
+							{partner.title}
 						</Link>
 					</div>
 					<Form className="mx-auto max-w-md" method="post">
-						<input type="hidden" value={client.id} name="id" />
+						<input type="hidden" value={partner.id} name="id" />
 						<div className="mb-4">
 							<Label className="mb-2 block">Nome</Label>
 							<Input
-								defaultValue={client.title}
+								defaultValue={partner.title}
 								name="title"
 								type="text"
 								tabIndex={0}
@@ -97,11 +97,11 @@ export default function AdminClients() {
 						</div>
 						<div className="mb-4">
 							<Label className="mb-2 block">Slug</Label>
-							<Input defaultValue={client.slug} name="slug" />
+							<Input defaultValue={partner.slug} name="slug" />
 						</div>
 						<div className="mb-4">
 							<Label className="mb-2 block">Short</Label>
-							<Input defaultValue={client.short} name="short" />
+							<Input defaultValue={partner.short} name="short" />
 						</div>
 						<div className="mb-4">
 							<Label className="mb-2 block">Usuários</Label>
@@ -115,7 +115,7 @@ export default function AdminClients() {
 										value={person.user_id}
 										name="user_id"
 										defaultChecked={
-											client.user_ids.indexOf(
+											partner.user_ids.indexOf(
 												person.user_id
 											) >= 0
 										}
@@ -131,8 +131,8 @@ export default function AdminClients() {
 								Background Color
 							</Label>
 							<Input
-								defaultValue={client.bgColor}
-								name="bgColor"
+								defaultValue={partner.bg}
+								name="bg"
 								type="color"
 							/>
 						</div>
@@ -141,8 +141,8 @@ export default function AdminClients() {
 								Foreground Color
 							</Label>
 							<Input
-								defaultValue={client.fgColor}
-								name="fgColor"
+								defaultValue={partner.fg}
+								name="fg"
 								type="color"
 							/>
 						</div>
@@ -151,7 +151,7 @@ export default function AdminClients() {
 						</div>
 					</Form>
 
-					<pre>{JSON.stringify(client, undefined, 2)}</pre>
+					<pre>{JSON.stringify(partner, undefined, 2)}</pre>
 				</div>
 			</ScrollArea>
 		</div>
