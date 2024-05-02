@@ -1,9 +1,9 @@
+import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import {
+	json,
 	type LoaderFunctionArgs,
 	type MetaFunction,
-	json,
 } from "@vercel/remix";
-import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import {
@@ -38,7 +37,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { INTENTS } from "~/lib/constants";
-import { AvatarPartner, Icons } from "~/lib/helpers";
+import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -384,22 +383,12 @@ export default function ActionPage() {
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
 								<div className="flex rounded-full bg-gray-900 p-2 pl-3">
 									{responsibles.map((person) => (
-										<Avatar
+										<AvatarPerson
+											person={person}
 											key={person.id}
-											className="-ml-1 h-8 w-8 border-l-2 border-background"
-										>
-											{person.image ? (
-												<AvatarImage
-													src={person.image}
-												/>
-											) : (
-												<AvatarFallback>{`${
-													person.name.split(" ")[0][0]
-												}${
-													person.name.split(" ")[1][0]
-												}`}</AvatarFallback>
-											)}
-										</Avatar>
+											group
+											size="md"
+										/>
 									))}
 								</div>
 							</DropdownMenuTrigger>
@@ -439,22 +428,7 @@ export default function ActionPage() {
 											});
 										}}
 									>
-										<Avatar
-											key={person.id}
-											className="h-4 w-4"
-										>
-											{person.image ? (
-												<AvatarImage
-													src={person.image}
-												/>
-											) : (
-												<AvatarFallback>{`${
-													person.name.split(" ")[0][0]
-												}${
-													person.name.split(" ")[1][0]
-												}`}</AvatarFallback>
-											)}
-										</Avatar>
+										<AvatarPerson person={person} />
 										<span>{person.name}</span>
 									</DropdownMenuCheckboxItem>
 								))}
