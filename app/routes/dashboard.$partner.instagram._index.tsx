@@ -31,7 +31,7 @@ export default function Actions() {
 
 	return (
 		<div className="md:flex gap-8 overflow-hidden">
-			<div className="mt-2 md:w-1/2">
+			<div className="mt-2 md:w-1/2 xl:w-full">
 				<div className="mb-8">
 					<div className="flex justify-between py-2">
 						<h2 className="mb-2 text-xl font-medium">
@@ -46,16 +46,9 @@ export default function Actions() {
 						actions={instagramActions}
 						partners={partners}
 					/>
-					{/* <ListOfActions
-            categories={categories}
-            priorities={priorities}
-            states={states}
-            actions={instagramActions}
-            showCategory
-          /> */}
 				</div>
 			</div>
-			<div className="mt-4 md:w-1/2">
+			<div className="mt-4 md:w-1/2 xl:max-w-xl">
 				<GridOfActions
 					categories={categories}
 					priorities={priorities}

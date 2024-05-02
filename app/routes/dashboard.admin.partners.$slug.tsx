@@ -38,8 +38,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	const id = String(formData.get("id"));
 
-	// console.log(formData.getAll("users"));
-
 	const data = {
 		title: String(formData.get("title")),
 		short: String(formData.get("short")),
@@ -48,8 +46,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		fg: String(formData.get("fg")),
 		users_ids: String(formData.getAll("users_ids")).split(","),
 	};
-
-	console.log({ data });
 
 	const { error } = await supabase.from("partners").update(data).eq("id", id);
 

@@ -11,10 +11,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	if (!intent) throw new Error("No intent was defined");
 
-	console.log("OK");
-
-	console.log(intent, id, values);
-
 	if (intent === INTENTS.createAction) {
 		const actionToInsert = {
 			id: id.toString(),

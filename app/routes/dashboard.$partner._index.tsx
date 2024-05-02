@@ -38,7 +38,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { CATEGORIES, INTENTS, PRIORITIES } from "~/lib/constants";
+import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
 	Icons,
 	sortActions,
@@ -512,7 +512,7 @@ export const CalendarDay = ({
 		priority_id: PRIORITIES.medium,
 		responsibles: [person.user_id],
 		user_id: person.user_id,
-		state_id: 1,
+		state_id: STATES.ideia,
 	};
 
 	return (
