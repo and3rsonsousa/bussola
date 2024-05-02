@@ -1,4 +1,10 @@
-import { Form, Link, useNavigate, useSubmit } from "@remix-run/react";
+import {
+	Form,
+	Link,
+	useMatches,
+	useNavigate,
+	useSubmit,
+} from "@remix-run/react";
 import {
 	addDays,
 	addHours,
@@ -35,7 +41,12 @@ import {
 	ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
-import { AvatarPartner, Icons } from "~/lib/helpers";
+import {
+	AvatarPartner,
+	AvatarPerson,
+	Icons,
+	getResponsibles,
+} from "~/lib/helpers";
 import { cn } from "~/lib/utils";
 import { Toggle } from "../ui/toggle";
 
@@ -64,22 +75,8 @@ export function ActionLine({
 	const submit = useSubmit();
 	const state = states.find((state) => state.id === action.state_id);
 
-	// const matches = useMatches();
-	// const { people, user } = matches[1].data as DashboardDataType;
-
-	// <div className="absolute flex -top-1 z-10 right-2">
-	// 					{getResponsibles(people, partner?.users_ids).map(
-	// 						(person) =>
-	// 							person.user_id !== user.id ? (
-	// 								<AvatarPerson
-	// 									person={person}
-	// 									size="xs"
-	// 									key={person.id}
-	// 									group
-	// 								/>
-	// 							) : null
-	// 					)}
-	// 				</div>
+	const matches = useMatches();
+	const { people, user } = matches[1].data as DashboardDataType;
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -222,7 +219,20 @@ export function ActionLine({
 							</button>
 						)}
 					</div>
-					{/* </div> */}
+
+					<div className="flex">
+						{getResponsibles(people, action.responsibles).map(
+							(person, index) =>
+								person.user_id !== user.id && index < 3 ? (
+									<AvatarPerson
+										person={person}
+										size="xs"
+										key={person.id}
+										group
+									/>
+								) : null
+						)}
+					</div>
 
 					{date && (
 						<div className=" shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
