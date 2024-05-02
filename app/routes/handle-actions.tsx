@@ -11,6 +11,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	if (!intent) throw new Error("No intent was defined");
 
+	console.log("OK");
+
+	console.log(intent, id, values);
+
 	if (intent === INTENTS.createAction) {
 		const actionToInsert = {
 			id: id.toString(),
@@ -43,10 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				.update({
 					...values,
 					responsibles: values["responsibles"].toString().split(","),
-					updated_at: format(
-						Date.now(),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
-					),
+					updated_at: format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss"),
 				})
 				.eq("id", id);
 			return { data, error };
@@ -55,10 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				.from("actions")
 				.update({
 					...values,
-					updated_at: format(
-						Date.now(),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
-					),
+					updated_at: format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss"),
 				})
 				.eq("id", id);
 

@@ -38,14 +38,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	const id = String(formData.get("id"));
 
+	// console.log(formData.getAll("users"));
+
 	const data = {
 		title: String(formData.get("title")),
 		short: String(formData.get("short")),
 		slug: String(formData.get("slug")),
 		bg: String(formData.get("bg")),
 		fg: String(formData.get("fg")),
-		users_ids: String(formData.getAll("users_id")).split(","),
+		users_ids: String(formData.getAll("users_ids")).split(","),
 	};
+
+	console.log({ data });
 
 	const { error } = await supabase.from("partners").update(data).eq("id", id);
 
@@ -70,7 +74,7 @@ export default function AdminPartners() {
 				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<div
-						className="flex items-center gap-2 rounded py-4 font-medium "
+						className="flex items-center gap-2 rounded py-4 font-extrabold tracking-tighter text-gray-100"
 						key={partner.id}
 					>
 						<AvatarPartner partner={partner} size="lg" />
@@ -112,7 +116,7 @@ export default function AdminPartners() {
 										<input
 											type="checkbox"
 											value={person.user_id}
-											name="user_id"
+											name="users_ids"
 											className={`peer opacity-0 absolute`}
 											defaultChecked={
 												partner.users_ids.indexOf(
@@ -132,28 +136,30 @@ export default function AdminPartners() {
 								))}
 							</div>
 						</div>
-						<div className="mb-4">
-							<Label className="mb-2 block">
-								Background Color
-							</Label>
-							<Input
-								defaultValue={partner.bg}
-								name="bg"
-								type="color"
-							/>
-						</div>
-						<div className="mb-4">
-							<Label className="mb-2 block">
-								Foreground Color
-							</Label>
-							<Input
-								defaultValue={partner.fg}
-								name="fg"
-								type="color"
-							/>
+						<div className="md:flex gap-2">
+							<div className="mb-4 w-full">
+								<Label className="mb-2 block">
+									Background Color
+								</Label>
+								<Input
+									defaultValue={partner.bg}
+									name="bg"
+									type="color"
+								/>
+							</div>
+							<div className="mb-4 w-full">
+								<Label className="mb-2 block">
+									Foreground Color
+								</Label>
+								<Input
+									defaultValue={partner.fg}
+									name="fg"
+									type="color"
+								/>
+							</div>
 						</div>
 						<div className="mb-4 text-right">
-							<Button type="submit">Adicionar</Button>
+							<Button type="submit">Atualizar</Button>
 						</div>
 					</Form>
 				</div>

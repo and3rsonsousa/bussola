@@ -20,13 +20,7 @@ import {
 } from "lucide-react";
 import { type CSSProperties } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import {
-	FINISHED_ID,
-	INTENTS,
-	POST_ID,
-	PRIORITIES,
-	VIDEO_ID,
-} from "./constants";
+import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "./constants";
 import { cn } from "./utils";
 
 export function ShortText({
@@ -123,7 +117,7 @@ export const AvatarPerson = ({
 					: size === "md"
 					? "h-8 w-8"
 					: "h-12 w-12",
-				group ? "border-l-2 border-background" : "",
+				group ? "-ml-1" : "",
 				className,
 			])}
 		>
@@ -186,7 +180,7 @@ export function getDelayedActions({
 		? actions.filter(
 				(action) =>
 					isBefore(parseISO(action.date), new Date()) &&
-					action.state_id !== FINISHED_ID &&
+					action.state_id !== STATES.finish &&
 					(priority ? action.priority_id === priority : true)
 		  )
 		: [];
@@ -203,7 +197,7 @@ export function getNotFinishedActions({
 		? actions.filter(
 				(action) =>
 					isAfter(parseISO(action.date), new Date()) &&
-					action.state_id !== FINISHED_ID
+					action.state_id !== STATES.finish
 		  )
 		: [];
 }
@@ -213,7 +207,7 @@ export function getUrgentActions(actions: Action[] | null) {
 		? actions.filter(
 				(action) =>
 					action.priority_id === PRIORITIES.high &&
-					action.state_id !== FINISHED_ID
+					action.state_id !== STATES.finish
 		  )
 		: [];
 }
@@ -242,7 +236,9 @@ export function getInstagramActions({
 	return actions
 		? actions
 				.filter((action) =>
-					[POST_ID, VIDEO_ID].includes(action.category_id)
+					[CATEGORIES.post, CATEGORIES.video].includes(
+						action.category_id
+					)
 				)
 				.sort(
 					(a, b) =>
@@ -366,4 +362,10 @@ export function usePendingActions() {
 
 			return { ...action };
 		});
+}
+
+export function getResponsibles(people: Person[], users_ids?: string[] | null) {
+	return people.filter((person) =>
+		users_ids?.find((user) => person.user_id === user)
+	);
 }

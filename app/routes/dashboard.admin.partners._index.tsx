@@ -1,7 +1,7 @@
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import { Trash2Icon } from "lucide-react";
-import { AvatarPartner } from "~/lib/helpers";
+import { AvatarPartner, AvatarPerson, getResponsibles } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -16,23 +16,45 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function AdminPartners() {
+	const matches = useMatches();
+
 	const { partners } = useLoaderData<typeof loader>();
+
+	const { people } = matches[1].data as DashboardDataType;
+
 	return (
 		<div className="overflow-hidden">
 			<div className="scrollbars px-2">
 				<div className="pt-16"></div>
-				<div className="grid py-4 sm:grid-cols-2 lg:grid-cols-3">
-					{partners?.map((partner) => (
+				<div className="grid py-4 items-center sm:grid-cols-2 lg:grid-cols-3">
+					{partners?.map((partner: Partner) => (
 						<Link
 							to={`/dashboard/admin/partners/${partner.slug}`}
-							className="group flex items-center justify-between  rounded-xl px-6 py-4 font-semibold tracking-tight transition hover:bg-gray-900 hover:text-gray-100 focus-within:ring-2 ring-primary"
+							className="group flex justify-between  rounded-xl px-6 py-4 tracking-tight transition hover:bg-gray-900 hover:text-gray-100 focus-within:ring-2 ring-primary"
 							key={partner.id}
 							tabIndex={-1}
 						>
-							<div className="flex items-center gap-4">
+							<div className="flex gap-4">
 								<AvatarPartner partner={partner} size="lg" />
-								<div className="text-2xl leading-none outline-none">
-									{partner.title}
+								<div>
+									<div className="text-2xl font-bold leading-none outline-none">
+										{partner.title}
+									</div>
+									<div className="text-xs tracking-wide text-gray-500 font-medium">
+										{partner.slug}
+									</div>
+									<div className="flex mt-2">
+										{getResponsibles(
+											people,
+											partner.users_ids
+										).map((person) => (
+											<AvatarPerson
+												key={person.id}
+												person={person}
+												group
+											/>
+										))}
+									</div>
 								</div>
 							</div>
 							<Form>

@@ -4,8 +4,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IDEA_ID, INTENTS, POST_ID } from "~/lib/constants";
-import { AvatarPartner, Icons } from "~/lib/helpers";
+import { CATEGORIES, INTENTS, STATES } from "~/lib/constants";
+import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -35,7 +35,6 @@ export default function CreateAction({
 	const { categories, states, partners, people, user } = useMatches()[1]
 		.data as DashboardDataType;
 	const partner = (useMatches()[2].data as DashboardPartnerType).partner;
-	console.log({ partner });
 
 	const [open, setOpen] = useState(false);
 	const submit = useSubmit();
@@ -50,12 +49,12 @@ export default function CreateAction({
 	}
 
 	const cleanAction = {
-		category_id: POST_ID,
+		category_id: CATEGORIES.post,
 		partner_id: partner ? partner.id : undefined,
 		date: newDate,
 		description: "",
 		responsibles: [user.id],
-		state_id: IDEA_ID,
+		state_id: STATES.ideia,
 		title: "",
 		user_id: user.id,
 	};
@@ -331,26 +330,7 @@ export default function CreateAction({
 										}}
 									>
 										<div className="flex items-center gap-2">
-											<Avatar
-												key={person.id}
-												className="size-5"
-											>
-												{person.image ? (
-													<AvatarImage
-														src={person.image}
-													/>
-												) : (
-													<AvatarFallback>{`${
-														person.name.split(
-															" "
-														)[0][0]
-													}${
-														person.name.split(
-															" "
-														)[1][0]
-													}`}</AvatarFallback>
-												)}
-											</Avatar>
+											<AvatarPerson person={person} />
 											<div>{person.name}</div>
 										</div>
 									</DropdownMenuCheckboxItem>

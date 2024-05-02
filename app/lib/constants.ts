@@ -1,8 +1,23 @@
-export const IDEA_ID = "f73e601e-182f-45c1-be2d-98c171113580";
-export const FINISHED_ID = "dfa8b782-54af-46ef-befe-28dc0417276e";
-
-export const POST_ID = "3ad13902-b636-4253-9111-e836b4716abf";
-export const VIDEO_ID = "4f5c76ee-6fe3-4855-ad5d-91af1c825b6d";
+export const STATES = {
+	ideia: "f73e601e-182f-45c1-be2d-98c171113580",
+	do: "270b6ac6-fe97-425e-a37a-8273dd973eb9",
+	doing: "cd2fe746-4ce3-4daa-98b3-bcf3682c1449",
+	review: "ae2ea416-e182-4e8a-973a-31102da9d457",
+	done: "8c72a9d5-848f-477c-ac88-bf35cbea0f7c",
+	finish: "dfa8b782-54af-46ef-befe-28dc0417276e",
+};
+export const CATEGORIES = {
+	todo: "1c2b1ccd-2a88-4f56-a1ce-83efbfaf8c25",
+	post: "3ad13902-b636-4253-9111-e836b4716abf",
+	video: "4f5c76ee-6fe3-4855-ad5d-91af1c825b6d",
+	stories: "d4b57ba3-c895-4f1c-a6dd-fd13d501fc77",
+	dev: "8aec1ddf-d2fc-4fb9-bec6-b17a7e37d30a",
+	print: "4dfd0afa-572a-45fc-9d89-54a91dab63e6",
+	meeting: "f72c07e0-c7d5-43f2-a3be-e848920375ce",
+	finance: "90a96044-146d-49a2-988d-4f99d6fa59c9",
+	design: "46c11cf4-e7bf-4ba4-bb8b-09f1582fdd00",
+	ads: "3b809865-b187-41d3-9f05-96bff1040b8c",
+};
 
 export const PRIORITIES = {
 	low: "dabbe247-b69c-4442-9916-a5181c9ef224",

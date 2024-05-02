@@ -336,16 +336,18 @@ export default function DashboardIndex() {
 					)}
 				</div>
 				{/* Ações de Amanhã */}
-				{tomorrowActions?.length ? (
-					<div className="mb-8">
-						<div className="inline-flex relative pb-4">
-							<h2 className="text-xl font-bold">Amanhã</h2>
-							<Badge
-								value={tomorrowActions?.length}
-								className="translate-x-8 -translate-y-1"
-							/>
-						</div>
 
+				<div className="mb-8">
+					<div className="inline-flex relative pb-4">
+						<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
+							Amanhã
+						</h2>
+						<Badge
+							value={tomorrowActions?.length}
+							className="translate-x-8 -translate-y-1"
+						/>
+					</div>
+					{tomorrowActions?.length ? (
 						<ListOfActions
 							categories={categories}
 							priorities={priorities}
@@ -358,20 +360,20 @@ export default function DashboardIndex() {
 								timeFormat: 1,
 							}}
 						/>
-					</div>
-				) : (
-					<div className="grid place-content-center p-8 text-xl">
-						<div className="space-y-4 rounded-lg bg-gray-900 p-8 text-center">
-							<div className="font-semibold">
-								Nenhuma ação para amanhã
+					) : (
+						<div className="grid place-content-center p-8 text-xl">
+							<div className="space-y-4 rounded-lg bg-gray-900 p-8 text-center">
+								<div className="font-semibold">
+									Nenhuma ação para amanhã
+								</div>
+								<CreateAction
+									date={addDays(new Date(), 1)}
+									mode="button"
+								/>
 							</div>
-							<CreateAction
-								date={addDays(new Date(), 1)}
-								mode="button"
-							/>
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 
 				<div className="pt-8">
 					<div className="pb-4">

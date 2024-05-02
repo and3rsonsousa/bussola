@@ -2,6 +2,7 @@ import { Form, Link, useLoaderData } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import { Trash2Icon } from "lucide-react";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { AvatarPerson } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -23,19 +24,16 @@ export default function AdminPartners() {
 				<div className="pt-16"></div>
 				<div className="grid py-4 sm:grid-cols-2 lg:grid-cols-3">
 					{people?.map((person: Person) => (
-						<div
-							className="group flex items-center justify-between  rounded-xl px-6 py-4 font-medium   hover:bg-gray-900"
+						<Link
+							className="group transition flex items-center gap-4 rounded-xl px-6 py-4  hover:bg-gray-900"
 							key={person.id}
+							to={`/dashboard/admin/users/${person.id}`}
 						>
-							<div className="flex items-center gap-2">
-								{/* <AvatarPartner partner={person} size="lg" /> */}
-								<Link
-									to={`/dashboard/admin/users/${person.id}`}
-									className="text-2xl"
-								>
-									{person.name}
-								</Link>
+							<AvatarPerson person={person} size="lg" />
+							<div className="text-2xl tracking-tighter font-bold">
+								{person.name}
 							</div>
+
 							<Form>
 								<input
 									name="id"
@@ -46,7 +44,7 @@ export default function AdminPartners() {
 									<Trash2Icon className="h-6 w-6 opacity-75" />
 								</button>
 							</Form>
-						</div>
+						</Link>
 					))}
 				</div>
 			</ScrollArea>

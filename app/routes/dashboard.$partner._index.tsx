@@ -7,7 +7,7 @@ import {
 	useSearchParams,
 	useSubmit,
 } from "@remix-run/react";
-import { type LoaderFunctionArgs, json } from "@vercel/remix";
+import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import {
 	addMonths,
 	eachDayOfInterval,
@@ -38,7 +38,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { INTENTS, POST_ID, PRIORITIES } from "~/lib/constants";
+import { CATEGORIES, INTENTS, PRIORITIES } from "~/lib/constants";
 import {
 	Icons,
 	sortActions,
@@ -497,7 +497,7 @@ export const CalendarDay = ({
 	}
 
 	const newAction = {
-		category_id: POST_ID,
+		category_id: CATEGORIES.post,
 		partner_id: partner.id,
 		date: format(
 			(() => {

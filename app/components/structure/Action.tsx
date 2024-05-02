@@ -23,9 +23,6 @@ import {
 } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { FINISHED_ID, INTENTS, PRIORITIES } from "~/lib/constants";
-import { AvatarPartner, Icons } from "~/lib/helpers";
-import { cn } from "~/lib/utils";
 import {
 	ContextMenu,
 	ContextMenuContent,
@@ -37,6 +34,9 @@ import {
 	ContextMenuSubTrigger,
 	ContextMenuTrigger,
 } from "~/components/ui/context-menu";
+import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
+import { AvatarPartner, Icons } from "~/lib/helpers";
+import { cn } from "~/lib/utils";
 import { Toggle } from "../ui/toggle";
 
 export function ActionLine({
@@ -64,6 +64,23 @@ export function ActionLine({
 	const submit = useSubmit();
 	const state = states.find((state) => state.id === action.state_id);
 
+	// const matches = useMatches();
+	// const { people, user } = matches[1].data as DashboardDataType;
+
+	// <div className="absolute flex -top-1 z-10 right-2">
+	// 					{getResponsibles(people, partner?.users_ids).map(
+	// 						(person) =>
+	// 							person.user_id !== user.id ? (
+	// 								<AvatarPerson
+	// 									person={person}
+	// 									size="xs"
+	// 									key={person.id}
+	// 									group
+	// 								/>
+	// 							) : null
+	// 					)}
+	// 				</div>
+
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -85,7 +102,7 @@ export function ActionLine({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action relative flex w-full select-none items-center gap-2 overflow-hidden rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
+					className={`group/action relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
 						edit
 							? "text-white"
 							: "cursor-text bg-gray-900 hover:bg-gray-800 hover:text-gray-200"
@@ -449,7 +466,7 @@ export function ActionGrid({
 					className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5 p-2 text-gray-500 hover:bg-gradient-to-b ${cn(
 						classNames
 					)} ${
-						action.state_id === FINISHED_ID
+						action.state_id === STATES.finish
 							? " bg-gray-900/50 "
 							: "highlight-soft bg-gray-800"
 					}`}
@@ -684,25 +701,27 @@ function ShortcutActions({ action }: { action: Action }) {
 				["i", "f", "z", "a", "t", "c"].find((k) => k === key) &&
 				!event.shiftKey
 			) {
-				let state_id = 0;
+				let state_id = STATES.do;
 				if (key === "i") {
-					state_id = 1;
+					state_id = STATES.ideia;
 				}
 				if (key === "f") {
-					state_id = 2;
+					state_id = STATES.do;
 				}
 				if (key === "z") {
-					state_id = 3;
+					state_id = STATES.doing;
 				}
 				if (key === "a") {
-					state_id = 4;
+					state_id = STATES.review;
 				}
 				if (key === "t") {
-					state_id = 5;
+					state_id = STATES.done;
 				}
 				if (key === "c") {
-					state_id = 6;
+					state_id = STATES.finish;
 				}
+
+				console.log({ action });
 
 				handleActions({
 					intent: INTENTS.updateAction,
@@ -725,36 +744,36 @@ function ShortcutActions({ action }: { action: Action }) {
 				].find((k) => k === code) &&
 				event.altKey
 			) {
-				let category_id = 0;
+				let category_id = CATEGORIES.post;
 				if (code === "KeyT") {
-					category_id = 4;
+					category_id = CATEGORIES.todo;
 				}
 				if (code === "KeyP") {
-					category_id = 1;
+					category_id = CATEGORIES.post;
 				}
 				if (code === "KeyV") {
-					category_id = 2;
+					category_id = CATEGORIES.video;
 				}
 				if (code === "KeyS") {
-					category_id = 3;
+					category_id = CATEGORIES.stories;
 				}
 				if (code === "KeyC") {
-					category_id = 8;
+					category_id = CATEGORIES.dev;
 				}
 				if (code === "KeyI") {
-					category_id = 6;
+					category_id = CATEGORIES.print;
 				}
 				if (code === "KeyR") {
-					category_id = 7;
+					category_id = CATEGORIES.meeting;
 				}
 				if (code === "KeyF") {
-					category_id = 5;
+					category_id = CATEGORIES.finance;
 				}
 				if (code === "KeyD") {
-					category_id = 9;
+					category_id = CATEGORIES.design;
 				}
 				if (code === "KeyA") {
-					category_id = 10;
+					category_id = CATEGORIES.ads;
 				}
 
 				handleActions({
