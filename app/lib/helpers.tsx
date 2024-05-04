@@ -135,9 +135,9 @@ export const AvatarPerson = ({
 							: "text-[20px]",
 						"font-semibold"
 					)}
-				>{`${person.name.split(" ")[0][0]}${
-					person.name.split(" ")[1][0]
-				}`}</AvatarFallback>
+				>
+					{person.initials?.toUpperCase()}
+				</AvatarFallback>
 			)}
 		</Avatar>
 	);

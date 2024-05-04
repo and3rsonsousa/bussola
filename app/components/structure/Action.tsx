@@ -31,6 +31,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
 	ContextMenu,
+	ContextMenuCheckboxItem,
 	ContextMenuContent,
 	ContextMenuItem,
 	ContextMenuPortal,
@@ -76,7 +77,7 @@ export function ActionLine({
 	const state = states.find((state) => state.id === action.state_id);
 
 	const matches = useMatches();
-	const { people, user } = matches[1].data as DashboardDataType;
+	const { people } = matches[1].data as DashboardDataType;
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -222,15 +223,14 @@ export function ActionLine({
 
 					<div className="flex">
 						{getResponsibles(people, action.responsibles).map(
-							(person, index) =>
-								person.user_id !== user.id && index < 3 ? (
-									<AvatarPerson
-										person={person}
-										size="xs"
-										key={person.id}
-										group
-									/>
-								) : null
+							(person) => (
+								<AvatarPerson
+									person={person}
+									size="xs"
+									key={person.id}
+									group
+								/>
+							)
 						)}
 					</div>
 
@@ -246,13 +246,7 @@ export function ActionLine({
 					<div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 opacity-0 transition group-hover/action:opacity-100"></div>
 				</div>
 			</ContextMenuTrigger>
-			<ContextMenuItems
-				action={action}
-				categories={categories}
-				handleActions={handleActions}
-				states={states}
-				priorities={priorities}
-			/>
+			<ContextMenuItems action={action} handleActions={handleActions} />
 		</ContextMenu>
 	);
 }
@@ -265,8 +259,8 @@ export function ActionBlock({ action }: { action: Action }) {
 	const [isHover, setHover] = useState(false);
 
 	const matches = useMatches();
-	const { categories, priorities, states, partners, people, user } =
-		matches[1].data as DashboardDataType;
+	const { categories, states, partners, people } = matches[1]
+		.data as DashboardDataType;
 	const partner = partners.find(
 		(partner) => partner.id === action.partner_id
 	);
@@ -403,16 +397,14 @@ export function ActionBlock({ action }: { action: Action }) {
 								{getResponsibles(
 									people,
 									action.responsibles
-								).map((person, index) =>
-									person.user_id !== user.id && index < 3 ? (
-										<AvatarPerson
-											person={person}
-											size="sm"
-											key={person.id}
-											group
-										/>
-									) : null
-								)}
+								).map((person) => (
+									<AvatarPerson
+										person={person}
+										size="sm"
+										key={person.id}
+										group
+									/>
+								))}
 							</div>
 						</div>
 						<div className="whitespace-nowrap font-medium text-right text-sm text-gray-500 md:text-xs">
@@ -442,13 +434,7 @@ export function ActionBlock({ action }: { action: Action }) {
 					<div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div>
 				</div>
 			</ContextMenuTrigger>
-			<ContextMenuItems
-				action={action}
-				categories={categories}
-				handleActions={handleActions}
-				states={states}
-				priorities={priorities}
-			/>
+			<ContextMenuItems action={action} handleActions={handleActions} />
 		</ContextMenu>
 	);
 }
@@ -521,13 +507,7 @@ export function ActionGrid({
 					<div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div>
 				</div>
 			</ContextMenuTrigger>
-			<ContextMenuItems
-				action={action}
-				categories={categories}
-				handleActions={handleActions}
-				states={states}
-				priorities={priorities}
-			/>
+			<ContextMenuItems action={action} handleActions={handleActions} />
 		</ContextMenu>
 	);
 }
@@ -949,7 +929,7 @@ export function formatActionDatetime({
 			: ""
 	).concat(
 		timeFormat
-			? `${dateFormat ? (dateFormat === 4 ? " 'às' " : " - ") : ""}H'h'${
+			? `${dateFormat ? " 'às' " : ""}H'h'${
 					date.getMinutes() > 0 ? "m" : ""
 			  }`
 			: ""
@@ -962,43 +942,36 @@ export function formatActionDatetime({
 
 function ContextMenuItems({
 	action,
-	categories,
-	states,
-	priorities,
 	handleActions,
 }: {
 	action: Action;
-	categories: Category[];
-	states: State[];
-	priorities: Priority[];
 	handleActions: (data: {
 		[key: string]: string | number | null | string[];
 	}) => void;
 }) {
-	// const navigate = useNavigate()
+	const matches = useMatches();
+	const { people, states, categories, priorities } = matches[1]
+		.data as DashboardDataType;
 
 	return (
 		<ContextMenuContent className="bg-content">
-			<ContextMenuItem
-				asChild
-				// onSelect={() => navigate(`/dashboard/action/${action.id}`)}
-			>
+			<ContextMenuItem asChild>
 				<Link
 					className="bg-item flex items-center gap-2"
 					to={`/dashboard/action/${action.id}`}
 				>
-					<PencilLineIcon className="h-3 w-3" />
+					<PencilLineIcon className="size-3" />
 					<span>Editar</span>
 				</Link>
 			</ContextMenuItem>
 			<ContextMenuItem className="bg-item flex items-center gap-2">
-				<CopyIcon className="h-3 w-3" />
+				<CopyIcon className="size-3" />
 				<span>Duplicar</span>
 			</ContextMenuItem>
 			{/* Adiar */}
 			<ContextMenuSub>
 				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
-					<TimerIcon className="h-3 w-3" />
+					<TimerIcon className="size-3" />
 					<span>Adiar</span>
 				</ContextMenuSubTrigger>
 				<ContextMenuPortal>
@@ -1088,10 +1061,155 @@ function ContextMenuItems({
 			</ContextMenuSub>
 			{/* Deletar */}
 			<ContextMenuItem className="bg-item flex items-center gap-2">
-				<TrashIcon className="h-3 w-3" />
+				<TrashIcon className="size-3" />
 				<span>Deletar</span>
 			</ContextMenuItem>
 			<ContextMenuSeparator className="bg-gray-300/20 " />
+			{/* States */}
+			<ContextMenuSub>
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
+					<div
+						className={`size-3 rounded-full border-2 border-${
+							states.find((state) => state.id === action.state_id)
+								?.slug
+						}`}
+					></div>
+					<span>
+						{
+							states.find((state) => state.id === action.state_id)
+								?.title
+						}
+					</span>
+				</ContextMenuSubTrigger>
+				<ContextMenuPortal>
+					<ContextMenuSubContent className="bg-content">
+						{states.map((state) => (
+							<ContextMenuItem
+								key={state.id}
+								className="bg-item flex items-center gap-2"
+								onSelect={() => {
+									handleActions({
+										...action,
+										state_id: state.id,
+										intent: INTENTS.updateAction,
+									});
+								}}
+							>
+								<div
+									className={`size-3 rounded-full border-2 border-${state?.slug}`}
+								></div>
+								<span>{state.title}</span>
+							</ContextMenuItem>
+						))}
+					</ContextMenuSubContent>
+				</ContextMenuPortal>
+			</ContextMenuSub>
+
+			{/* Categoria */}
+			<ContextMenuSub>
+				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
+					<Icons
+						id={
+							categories.find(
+								(category) => category.id === action.category_id
+							)?.slug
+						}
+						className="size-3"
+					/>
+					<span>
+						{
+							categories.find(
+								(category) => category.id === action.category_id
+							)?.title
+						}
+					</span>
+				</ContextMenuSubTrigger>
+				<ContextMenuPortal>
+					<ContextMenuSubContent className="bg-content">
+						{categories.map((category) => (
+							<ContextMenuItem
+								key={category.id}
+								className="bg-item flex items-center gap-2"
+								onSelect={() => {
+									handleActions({
+										...action,
+										category_id: category.id,
+										intent: INTENTS.updateAction,
+									});
+								}}
+							>
+								<Icons id={category.slug} className="size-3" />
+								{category.title}
+							</ContextMenuItem>
+						))}
+					</ContextMenuSubContent>
+				</ContextMenuPortal>
+			</ContextMenuSub>
+			{/* Responsibles - Responsáveis  */}
+			<ContextMenuSub>
+				<ContextMenuSubTrigger className="bg-item">
+					<div className="flex items-center">
+						{getResponsibles(people, action.responsibles).map(
+							(person) => (
+								<AvatarPerson
+									person={person}
+									size="sm"
+									key={person.id}
+									group
+								/>
+							)
+						)}
+					</div>
+				</ContextMenuSubTrigger>
+				<ContextMenuPortal>
+					<ContextMenuSubContent className="bg-content">
+						{people.map((person) => (
+							<ContextMenuCheckboxItem
+								checked={
+									action.responsibles?.find(
+										(user_id) => user_id === person.user_id
+									)
+										? true
+										: false
+								}
+								key={person.id}
+								className="bg-select-item flex items-center gap-2"
+								onCheckedChange={(e) => {
+									let r = action.responsibles || [person.id];
+									flushSync(() => {
+										if (e) {
+											r = action.responsibles
+												? [
+														...action.responsibles,
+														person.user_id,
+												  ]
+												: [person.user_id];
+										} else {
+											r = action.responsibles
+												? action.responsibles.filter(
+														(user_id) =>
+															user_id !==
+															person.user_id
+												  )
+												: [person.user_id];
+										}
+									});
+
+									handleActions({
+										...action,
+										responsibles: r.join(","),
+
+										intent: INTENTS.updateAction,
+									});
+								}}
+							>
+								<AvatarPerson person={person} size="sm" />
+								{`${person.name} ${person.surname}`}
+							</ContextMenuCheckboxItem>
+						))}
+					</ContextMenuSubContent>
+				</ContextMenuPortal>
+			</ContextMenuSub>
 			{/* Prioridade */}
 			<ContextMenuSub>
 				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
@@ -1101,7 +1219,7 @@ function ContextMenuItems({
 								(priority) => priority.id === action.priority_id
 							)?.slug
 						}
-						className="h-3 w-3"
+						className="size-3"
 						type="priority"
 					/>
 					<span>
@@ -1129,88 +1247,9 @@ function ContextMenuItems({
 								<Icons
 									id={priority.slug}
 									type="priority"
-									className="h-3 w-3"
+									className="size-3"
 								/>
 								{priority.title}
-							</ContextMenuItem>
-						))}
-					</ContextMenuSubContent>
-				</ContextMenuPortal>
-			</ContextMenuSub>
-			{/* Categoria */}
-			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
-					<Icons
-						id={
-							categories.find(
-								(category) => category.id === action.category_id
-							)?.slug
-						}
-						className="h-3 w-3"
-					/>
-					<span>
-						{
-							categories.find(
-								(category) => category.id === action.category_id
-							)?.title
-						}
-					</span>
-				</ContextMenuSubTrigger>
-				<ContextMenuPortal>
-					<ContextMenuSubContent className="bg-content">
-						{categories.map((category) => (
-							<ContextMenuItem
-								key={category.id}
-								className="bg-item flex items-center gap-2"
-								onSelect={() => {
-									handleActions({
-										...action,
-										category_id: category.id,
-										intent: INTENTS.updateAction,
-									});
-								}}
-							>
-								<Icons id={category.slug} className="h-3 w-3" />
-								{category.title}
-							</ContextMenuItem>
-						))}
-					</ContextMenuSubContent>
-				</ContextMenuPortal>
-			</ContextMenuSub>
-			{/* States */}
-			<ContextMenuSub>
-				<ContextMenuSubTrigger className="bg-item flex items-center gap-2">
-					<div
-						className={`h-2 w-2 rounded-full border-2 border-${
-							states.find((state) => state.id === action.state_id)
-								?.slug
-						}`}
-					></div>
-					<span>
-						{
-							states.find((state) => state.id === action.state_id)
-								?.title
-						}
-					</span>
-				</ContextMenuSubTrigger>
-				<ContextMenuPortal>
-					<ContextMenuSubContent className="bg-content">
-						{states.map((state) => (
-							<ContextMenuItem
-								key={state.id}
-								className="bg-item flex items-center gap-2"
-								onSelect={() => {
-									handleActions({
-										...action,
-										state_id: state.id,
-										intent: INTENTS.updateAction,
-									});
-								}}
-							>
-								<div
-									className={`h-2 w-2 rounded-full border-2 border-${state?.slug}`}
-								></div>
-								<span>{state.title}</span>
 							</ContextMenuItem>
 						))}
 					</ContextMenuSubContent>

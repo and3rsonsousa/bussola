@@ -85,6 +85,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		const data = await supabase.from("actions").delete().eq("id", id);
 
 		return { data };
+	} else if (intent === INTENTS.updatePerson) {
+		console.log("OK");
+
+		if (!id) throw new Error("No id was provided");
+		const { data, error } = await supabase
+			.from("people")
+			.update({
+				...values,
+			})
+			.eq("id", id);
+
+		if (error) console.log({ error });
+
+		return { data, error };
 	}
 
 	return {};

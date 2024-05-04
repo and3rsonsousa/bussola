@@ -115,9 +115,13 @@ export default function AdminPartners() {
 											name="users_ids"
 											className={`peer opacity-0 absolute`}
 											defaultChecked={
-												partner.users_ids.indexOf(
-													person.user_id
-												) >= 0
+												partner.users_ids?.find(
+													(user_id) =>
+														person.user_id ===
+														user_id
+												)
+													? true
+													: false
 											}
 										/>
 										<div

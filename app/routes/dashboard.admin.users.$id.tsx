@@ -1,0 +1,268 @@
+/* eslint-disable jsx-a11y/no-autofocus */
+import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
+import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { useState } from "react";
+import { flushSync } from "react-dom";
+import invariant from "tiny-invariant";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
+import { INTENTS } from "~/lib/constants";
+import { AvatarPartner, AvatarPerson } from "~/lib/helpers";
+import { createClient } from "~/lib/supabase";
+
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+	const { supabase, headers } = await createClient(request);
+
+	const id = params["id"];
+
+	invariant(id);
+
+	const { data: person } = await supabase
+		.from("people")
+		.select("*")
+		.eq("id", id)
+		.single();
+
+	if (!person) throw redirect("/dashboard/admin/users");
+
+	return json({ person, headers });
+};
+
+// export const action = async ({ request }: ActionFunctionArgs) => {
+// 	const { supabase } = createClient(request);
+
+// 	const formData = await request.formData();
+
+// 	const id = String(formData.get("id"));
+
+// 	const data = {
+// 		name: String(formData.get("name")),
+// 		surname: String(formData.get("surname")),
+// 		short: String(formData.get("short")),
+// 		initials: String(formData.get("initials")),
+// 		admin: Boolean(formData.get("admin")),
+// 	};
+
+// const partners_id = String(formData.getAll("partner_id")).split(",");
+
+// const { data: partners } = await supabase.from("partners").select();
+
+// const promisses = partners?.map(partner => partners_id.findIndex(p => p === partner.id) ?
+// //
+//  :
+// //  )
+
+// console.log({ data, partners_id, promisses });
+
+// const { error } = await supabase.from("partners").update(data).eq("id", id);
+
+// if (error) {
+// 	console.log(error);
+// } else {
+// 	return redirect(`/dashboard/admin/partners`);
+// }
+
+// 	return { ok: true };
+// };
+
+export default function AdminPartners() {
+	const matches = useMatches();
+
+	const { person } = useLoaderData<typeof loader>();
+	const { partners } = matches[1].data as DashboardDataType;
+
+	const [isAdmin, setIsAdmin] = useState(person.admin);
+
+	const submit = useSubmit();
+
+	function handleActions(data: {
+		[key: string]: string | number | null | string[] | boolean;
+	}) {
+		submit(
+			{ ...data },
+			{
+				action: "/handle-actions",
+				method: "post",
+				navigate: false,
+			}
+		);
+	}
+
+	return (
+		<div className="overflow-hidden">
+			<div className="scrollbars">
+				<div className="pt-16"></div>
+				<div className="px-4 md:px-8">
+					<h2 className="py-4 text-3xl font-extrabold tracking-tighter text-gray-100">
+						<Link to={"/dashboard/admin/users"}>Usuários</Link>
+					</h2>
+					<div className="mx-auto max-w-md">
+						<div
+							className="flex items-center gap-2 py-4"
+							key={person.id}
+						>
+							<AvatarPerson person={person} size="lg" />
+							<div className="font-extrabold text-lg tracking-tighter text-gray-100">
+								{`${person.name} ${person.surname}`}
+							</div>
+						</div>
+						<input type="hidden" value={person.id} name="id" />
+						<div className="mb-4 gap-2 md:flex">
+							<div className="w-full">
+								<Label className="mb-2 block">Nome</Label>
+								<Input
+									defaultValue={person.name}
+									name="name"
+									type="text"
+									tabIndex={0}
+									autoFocus
+									onBlur={(e) => {
+										if (
+											person.name !==
+											e.currentTarget.value
+										)
+											handleActions({
+												id: person.id,
+												intent: INTENTS.updatePerson,
+												name: String(
+													e.currentTarget.value
+												),
+											});
+									}}
+								/>
+							</div>
+							<div className="w-full">
+								<Label className="mb-2 block">Sobrenome</Label>
+								<Input
+									defaultValue={person.surname || ""}
+									name="surname"
+									type="text"
+									tabIndex={0}
+									autoFocus
+									onBlur={(e) => {
+										if (
+											person.surname !==
+											e.currentTarget.value
+										)
+											handleActions({
+												id: person.id,
+												intent: INTENTS.updatePerson,
+												surname: String(
+													e.currentTarget.value
+												),
+											});
+									}}
+								/>
+							</div>
+						</div>
+						<div className="flex gap-2 mb-4">
+							<div className="w-full">
+								<Label className="mb-2 block">Iniciais</Label>
+								<Input
+									maxLength={2}
+									defaultValue={person.initials || ""}
+									name="initials"
+									onBlur={(e) => {
+										if (
+											person.initials !==
+											e.currentTarget.value
+										)
+											handleActions({
+												id: person.id,
+												intent: INTENTS.updatePerson,
+												initials: String(
+													e.currentTarget.value
+												),
+											});
+									}}
+								/>
+							</div>
+							<div className="w-full">
+								<Label className="mb-2 block">Abreviação</Label>
+								<Input
+									maxLength={6}
+									defaultValue={person.short || ""}
+									name="short"
+									onBlur={(e) => {
+										if (
+											person.short !==
+											e.currentTarget.value
+										)
+											handleActions({
+												id: person.id,
+												intent: INTENTS.updatePerson,
+												short: String(
+													e.currentTarget.value
+												),
+											});
+									}}
+								/>
+							</div>
+						</div>
+						<div className="mb-4">
+							<Label className="mb-2 block">É Admin?</Label>
+							<Switch
+								checked={isAdmin}
+								onCheckedChange={(e) => {
+									flushSync(() => {
+										setIsAdmin(e);
+									});
+
+									handleActions({
+										id: person.id,
+										intent: INTENTS.updatePerson,
+										admin: e,
+									});
+								}}
+								name="admin"
+							/>
+						</div>
+						<div className="mb-4">
+							<Label className="mb-1 block">Parceiros</Label>
+							<div className="text-xs uppercase tracking-wider font-medium text-gray-500 mb-4">
+								Para mudar os parceiros que o usuário tem
+								acesso, veja a página de cada parceiro
+							</div>
+							<div className="grid md:grid-cols-2 gap-2 items-center">
+								{partners.map((partner) => (
+									<label
+										key={partner.id}
+										className={`mb-2 flex gap-4 items-center relative`}
+									>
+										<input
+											type="checkbox"
+											value={partner.id}
+											name="partner_id"
+											className={`peer opacity-0 absolute`}
+											defaultChecked={
+												partner.users_ids
+													? partner.users_ids.indexOf(
+															person.user_id
+													  ) >= 0
+													: false
+											}
+											disabled
+										/>
+										<div
+											className={`ring-offset-background transition rounded-full ring-primary ring-offset-2 peer-checked:ring-2`}
+										>
+											<AvatarPartner
+												partner={partner}
+												size="md"
+											/>
+										</div>
+
+										<div className="text-sm font-medium peer-checked:text-gray-100">
+											{partner.title}
+										</div>
+									</label>
+								))}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}

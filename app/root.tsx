@@ -23,10 +23,6 @@ export async function loader() {
 }
 
 export function Layout() {
-	// const { env } = useLoaderData<typeof loader>();
-
-	// const supabase = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_KEY);
-
 	return (
 		<html lang="pt-br" className="dark">
 			<head>

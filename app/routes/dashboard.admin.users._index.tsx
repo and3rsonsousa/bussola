@@ -31,7 +31,7 @@ export default function AdminPartners() {
 						>
 							<AvatarPerson person={person} size="lg" />
 							<div className="text-2xl tracking-tighter font-bold">
-								{person.name}
+								{`${person.name} ${person.surname}`}
 							</div>
 
 							<Form>
