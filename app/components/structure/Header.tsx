@@ -5,7 +5,16 @@ import {
 	useNavigate,
 	useNavigation,
 } from "@remix-run/react";
-import { HelpCircle, LogOutIcon, User2Icon } from "lucide-react";
+import {
+	PlusIcon,
+	HandshakeIcon,
+	HelpCircle,
+	LogOutIcon,
+	User2Icon,
+	Users2Icon,
+	PlusCircleIcon,
+	PlusIcon,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
 	DropdownMenu,
@@ -116,7 +125,8 @@ export default function Header() {
 										navigate("/dashboard/admin/partners")
 									}
 								>
-									Parceiros
+									<HandshakeIcon className="size-4 opacity-50" />
+									<div>Parceiros</div>
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="bg-item"
@@ -127,7 +137,8 @@ export default function Header() {
 										)
 									}
 								>
-									Novo parceiro
+									<PlusIcon className="size-4 opacity-50" />
+									<div>Novo parceiro</div>
 								</DropdownMenuItem>
 
 								<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
@@ -138,7 +149,8 @@ export default function Header() {
 										navigate("/dashboard/admin/users/")
 									}
 								>
-									Usuários
+									<Users2Icon className="size-4 opacity-50" />
+									<div>Usuários</div>
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="bg-item"
@@ -147,7 +159,8 @@ export default function Header() {
 										navigate("/dashboard/admin/users/new")
 									}
 								>
-									Novo usuário
+									<PlusIcon className="size-4 opacity-50" />
+									<div>Novo usuário</div>
 								</DropdownMenuItem>
 							</>
 						)}
