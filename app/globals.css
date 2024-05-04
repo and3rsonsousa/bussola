@@ -338,7 +338,7 @@ body {
 }
 
 .bg-item {
-	@apply font-light px-4;
+	@apply font-light px-4 flex gap-2;
 }
 
 .bg-select-item {

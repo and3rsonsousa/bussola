@@ -5,6 +5,8 @@ import {
 	useNavigate,
 	useNavigation,
 } from "@remix-run/react";
+import { HelpCircle, LogOutIcon, User2Icon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,7 +14,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Header() {
 	const matches = useMatches();
@@ -86,14 +87,24 @@ export default function Header() {
 							id="account"
 							onSelect={() => navigate("/dashboard/account")}
 						>
-							Minha Conta
+							<User2Icon className="size-4 opacity-50" />
+							<div>Minha Conta</div>
 						</DropdownMenuItem>
 						<DropdownMenuItem
 							className="bg-item"
-							id="logout"
+							id="account"
+							onSelect={() => navigate("/dashboard/help")}
+						>
+							<HelpCircle className="size-4 opacity-50" />
+							<div>Ajuda</div>
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							className="bg-item"
+							id="ajuda"
 							onSelect={() => navigate("/logout")}
 						>
-							Sair
+							<LogOutIcon className="size-4 opacity-50" />
+							<div>Sair</div>
 						</DropdownMenuItem>
 						{person.admin && (
 							<>
