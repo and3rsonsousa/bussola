@@ -829,7 +829,7 @@ function ShortcutActions({ action }: { action: Action }) {
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 1)
 							: addHours(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -842,7 +842,7 @@ function ShortcutActions({ action }: { action: Action }) {
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 2)
 							: addHours(action.date, 2),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -855,7 +855,7 @@ function ShortcutActions({ action }: { action: Action }) {
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 3)
 							: addHours(action.date, 3),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -866,7 +866,7 @@ function ShortcutActions({ action }: { action: Action }) {
 					intent: INTENTS.updateAction,
 					date: format(
 						addMinutes(new Date(), 30),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -877,7 +877,7 @@ function ShortcutActions({ action }: { action: Action }) {
 					intent: INTENTS.updateAction,
 					date: format(
 						addDays(new Date(), 1),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -891,7 +891,7 @@ function ShortcutActions({ action }: { action: Action }) {
 						isBefore(action.date, new Date())
 							? addWeeks(new Date(), 1)
 							: addWeeks(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -904,7 +904,7 @@ function ShortcutActions({ action }: { action: Action }) {
 						isBefore(action.date, new Date())
 							? addMonths(new Date(), 1)
 							: addMonths(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+						"yyyy-MM-dd'T'HH:mm:ss"
 					),
 				});
 			}
@@ -1077,7 +1077,7 @@ function ContextMenuItems({
 										onSelect={() => {
 											const date = format(
 												period.time,
-												"yyyy-MM-dd'T'HH:mm:ss'-03:00:00'"
+												"yyyy-MM-dd'T'HH:mm:ss"
 											);
 
 											handleActions({

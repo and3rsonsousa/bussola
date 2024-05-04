@@ -19,7 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			category_id: values["category_id"].toString(),
 			state_id: values["state_id"].toString(),
 			partner_id: values["partner_id"].toString(),
-			date: values["date"].toString() + "-03:00:00",
+			date: values["date"].toString(),
 			description: values["description"].toString(),
 			title: values["title"].toString(),
 			responsibles: values["responsibles"].toString().split(","),
