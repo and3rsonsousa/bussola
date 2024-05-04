@@ -257,24 +257,19 @@ export function ActionLine({
 	);
 }
 
-export function ActionBlock({
-	action,
-	categories,
-	priorities,
-	states,
-	partner,
-}: {
-	action: Action;
-	categories: Category[];
-	priorities: Priority[];
-	states: State[];
-	partner?: Partner;
-}) {
+export function ActionBlock({ action }: { action: Action }) {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const submit = useSubmit();
 	const [edit, setEdit] = useState(false);
 	const [isHover, setHover] = useState(false);
+
+	const matches = useMatches();
+	const { categories, priorities, states, partners, people, user } =
+		matches[1].data as DashboardDataType;
+	const partner = partners.find(
+		(partner) => partner.id === action.partner_id
+	);
 
 	function handleActions(data: {
 		[key: string]: string | number | null | string[];
@@ -341,7 +336,7 @@ export function ActionBlock({
 									ref={inputRef}
 									type="text"
 									defaultValue={action.title}
-									className={`rounded-md bg-transparent outline-none`}
+									className={`w-full overflow-hidden bg-transparent outline-none`}
 									onBlur={() => {
 										if (
 											inputRef.current?.value !==
@@ -362,7 +357,7 @@ export function ActionBlock({
 						) : (
 							<button
 								ref={buttonRef}
-								className={`block w-full overflow-hidden text-ellipsis text-nowrap rounded-md text-left outline-none`}
+								className={`block w-full overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
 										setEdit(true);
@@ -380,6 +375,7 @@ export function ActionBlock({
 							{partner ? (
 								<AvatarPartner partner={partner} />
 							) : null}
+							{/* Category - Categoria */}
 							<div>
 								<Icons
 									id={
@@ -392,6 +388,7 @@ export function ActionBlock({
 									className="w-4"
 								/>
 							</div>
+							{/* Priority - Prioridade */}
 							{action.priority_id === PRIORITIES.high ? (
 								<div>
 									<Icons
@@ -401,6 +398,22 @@ export function ActionBlock({
 									/>
 								</div>
 							) : null}
+							{/* Responsibles -  Responsáveis */}
+							<div className="flex">
+								{getResponsibles(
+									people,
+									action.responsibles
+								).map((person, index) =>
+									person.user_id !== user.id && index < 3 ? (
+										<AvatarPerson
+											person={person}
+											size="sm"
+											key={person.id}
+											group
+										/>
+									) : null
+								)}
+							</div>
 						</div>
 						<div className="whitespace-nowrap font-medium text-right text-sm text-gray-500 md:text-xs">
 							<span className="@[200px]:hidden">
@@ -606,17 +619,9 @@ export function ListOfActions({
 
 export function BlockOfActions({
 	actions,
-	categories,
-	states,
-	priorities,
-	partners,
 	max,
 }: {
 	actions?: Action[] | null;
-	categories: Category[];
-	states: State[];
-	priorities: Priority[];
-	partners: Partner[];
 	max?: 1 | 2;
 }) {
 	return (
@@ -630,21 +635,7 @@ export function BlockOfActions({
 			} gap-2`}
 		>
 			{actions?.map((action) => (
-				<ActionBlock
-					action={action}
-					categories={categories}
-					states={states}
-					key={action.id}
-					priorities={priorities}
-					partner={
-						partners
-							? partners.find(
-									(partner) =>
-										partner.id === action.partner_id
-							  )
-							: undefined
-					}
-				/>
+				<ActionBlock action={action} key={action.id} />
 			))}
 		</div>
 	);

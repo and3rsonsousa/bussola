@@ -6,14 +6,12 @@ import {
 	useNavigation,
 } from "@remix-run/react";
 import {
-	PlusIcon,
 	HandshakeIcon,
 	HelpCircle,
 	LogOutIcon,
+	PlusIcon,
 	User2Icon,
 	Users2Icon,
-	PlusCircleIcon,
-	PlusIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
