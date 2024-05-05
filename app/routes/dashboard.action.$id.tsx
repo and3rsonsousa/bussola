@@ -124,6 +124,7 @@ export default function ActionPage() {
 				<div className="flex items-center gap-2 ">
 					<AvatarPartner
 						partner={partner}
+						size="md"
 						style={{
 							viewTransitionName: "avatar-partner",
 						}}
@@ -214,7 +215,7 @@ export default function ActionPage() {
 					</div>
 				</div>
 				<div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
-					{/* Partneres */}
+					{/* Partners */}
 					<div>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">

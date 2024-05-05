@@ -1,5 +1,9 @@
+import BulletList from "@tiptap/extension-bullet-list";
 import Highlight from "@tiptap/extension-highlight";
+import Superscrit from "@tiptap/extension-superscript";
+import Subscript from "@tiptap/extension-subscript";
 import {
+	BubbleMenu,
 	EditorProvider,
 	FloatingMenu,
 	useCurrentEditor,
@@ -8,6 +12,7 @@ import {
 import StarterKit from "@tiptap/starter-kit";
 import {
 	BoldIcon,
+	EraserIcon,
 	Heading1Icon,
 	Heading2Icon,
 	Heading3Icon,
@@ -16,7 +21,6 @@ import {
 	HighlighterIcon,
 	ItalicIcon,
 	ListIcon,
-	PilcrowIcon,
 	StrikethroughIcon,
 	SubscriptIcon,
 	SuperscriptIcon,
@@ -30,65 +34,43 @@ export default function Tiptap({
 	content: Content;
 	onBlur: (text: string) => void;
 }) {
-	const extensions = [StarterKit, Highlight.configure({ multicolor: true })];
+	const extensions = [
+		StarterKit,
+		Highlight.configure({ multicolor: true }),
+		BulletList,
+		Superscrit,
+		Subscript,
+	];
 
 	return (
 		<EditorProvider
 			onBlur={({ editor }) => onBlur(editor.getHTML())}
 			extensions={extensions}
 			content={content}
-			slotBefore={<TiptapBubbleMenu />}
+			slotBefore={<Menu />}
 		>
 			<TiptapFloatingMenu />
+			<BubbleMenu className="max-w-44 p-1 border rounded-lg backdrop-blur-lg bg-background/50">
+				<Menu short={true} />
+			</BubbleMenu>
 		</EditorProvider>
 	);
 }
 
 const TiptapFloatingMenu = () => {
-	const { editor } = useCurrentEditor();
-
 	return (
-		<FloatingMenu>
-			<div className="border border-border/50 bg-gray-900/50 backdrop-blur-lg rounded-lg">
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.toggleHeading({ level: 1 })}
-				>
-					<Heading1Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.toggleHeading({ level: 2 })}
-				>
-					<Heading2Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.toggleHeading({ level: 3 })}
-				>
-					<Heading3Icon className="size-4" />
-				</Button>
-
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.toggleBulletList()}
-				>
-					<ListIcon className="size-4" />
-				</Button>
-			</div>
+		<FloatingMenu className="backdrop-blur-lg border bg-background/50 rounded-lg p-1">
+			<Menu short={true} />
 		</FloatingMenu>
 	);
 };
 
-const TiptapBubbleMenu = () => {
+export const Menu = ({ short }: { short?: boolean }) => {
 	const { editor } = useCurrentEditor();
 
 	return (
-		<div className="flex gap-4 flex-wrap">
+		<div className={`${short ? "max-w-auto" : "gap-x-4"} flex  flex-wrap`}>
+			{/* Formating */}
 			<div className="flex">
 				<Button
 					variant={editor?.isActive("bold") ? "default" : "ghost"}
@@ -110,6 +92,29 @@ const TiptapBubbleMenu = () => {
 					onClick={() => editor?.chain().focus().toggleStrike().run()}
 				>
 					<StrikethroughIcon className="size-4" />
+				</Button>
+			</div>
+			{/* Hightlight and Clean */}
+			<div className="flex">
+				<Button
+					title="Destacar texto"
+					className="size-8 p-0 grid place-content-center"
+					variant={
+						editor?.isActive("highlight") ? "default" : "ghost"
+					}
+					onClick={() =>
+						editor?.chain().focus().toggleHighlight().run()
+					}
+				>
+					<HighlighterIcon className="size-4 " />
+				</Button>
+				<Button
+					className="size-8 p-0 grid place-content-center"
+					variant={"ghost"}
+					onClick={() => editor?.commands.clearNodes()}
+					title="Limpar Formatação"
+				>
+					<EraserIcon className="size-4" />
 				</Button>
 			</div>
 			{/* Headings */}
@@ -205,44 +210,31 @@ const TiptapBubbleMenu = () => {
 				<Button
 					className="size-8 p-0 grid place-content-center"
 					variant={"ghost"}
-					onClick={() => editor?.commands.setParagraph()}
-				>
-					<PilcrowIcon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.setParagraph()}
+					onClick={() => editor?.commands.toggleBulletList()}
 				>
 					<ListIcon className="size-4" />
 				</Button>
 				<Button
 					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.setParagraph()}
+					variant={
+						editor?.isActive("subscript") ? "default" : "ghost"
+					}
+					onClick={() =>
+						editor?.chain().focus().toggleSubscript().run()
+					}
 				>
 					<SubscriptIcon className="size-4" />
 				</Button>
 				<Button
 					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.setParagraph()}
-				>
-					<SuperscriptIcon className="size-4" />
-				</Button>
-			</div>
-
-			<div className="flex">
-				<Button
-					className="size-8 p-0 grid place-content-center"
 					variant={
-						editor?.isActive("highlight") ? "default" : "ghost"
+						editor?.isActive("superscript") ? "default" : "ghost"
 					}
 					onClick={() =>
-						editor?.chain().focus().toggleHighlight().run()
+						editor?.chain().focus().toggleSuperscript().run()
 					}
 				>
-					<HighlighterIcon className="size-4 " />
+					<SuperscriptIcon className="size-4" />
 				</Button>
 			</div>
 		</div>
