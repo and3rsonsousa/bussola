@@ -100,7 +100,7 @@ export function ActionLine({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
+					className={`group/action @container relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
 						edit
 							? "text-white"
 							: "cursor-text bg-gray-900 hover:bg-gray-800 hover:text-gray-200"
@@ -148,7 +148,7 @@ export function ActionLine({
 										category.id === action.category_id
 								)?.slug
 							}
-							className="size-3 shrink-0 opacity-25"
+							className="size-3 shrink-0 opacity-25 @[120px]:block hidden"
 						/>
 					)}
 
@@ -221,7 +221,7 @@ export function ActionLine({
 						)}
 					</div>
 
-					<div className="flex">
+					<div className="@[120px]:flex hidden">
 						{getResponsibles(people, action.responsibles).map(
 							(person) => (
 								<AvatarPerson
@@ -235,7 +235,7 @@ export function ActionLine({
 					</div>
 
 					{date && (
-						<div className=" shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
+						<div className="@[120px]:block hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
 							{formatActionDatetime({
 								date: action.date,
 								dateFormat: date.dateFormat,
@@ -243,7 +243,7 @@ export function ActionLine({
 							})}
 						</div>
 					)}
-					<div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 opacity-0 transition group-hover/action:opacity-100"></div>
+					{/* <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 opacity-0 transition group-hover/action:opacity-100"></div> */}
 				</div>
 			</ContextMenuTrigger>
 			<ContextMenuItems action={action} handleActions={handleActions} />
@@ -514,10 +514,6 @@ export function ActionGrid({
 
 export function ListOfActions({
 	actions,
-	categories,
-	states,
-	priorities,
-	partners,
 	showCategory,
 	date,
 	columns = 1,
@@ -525,22 +521,22 @@ export function ListOfActions({
 	isFoldable,
 }: {
 	actions?: Action[] | null;
-	categories: Category[];
-	states: State[];
-	priorities: Priority[];
-	partners?: Partner[];
 	showCategory?: boolean;
 	date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
 	columns?: 1 | 2 | 3 | 6;
 	onDrag?: (action: Action) => void;
 	isFoldable?: boolean;
 }) {
+	const matches = useMatches();
+	const { states, categories, priorities, partners } = matches[1]
+		.data as DashboardDataType;
+
 	const foldCount = columns * 4;
 	const [fold, setFold] = useState(isFoldable ? foldCount : undefined);
 	return actions && actions.length > 0 ? (
 		<>
 			<div
-				className={`min-h-full ${
+				className={`${
 					columns === 1
 						? "flex flex-col"
 						: columns === 2

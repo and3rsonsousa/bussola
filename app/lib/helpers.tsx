@@ -217,7 +217,7 @@ export function getActionsForThisDay({
 	date,
 }: {
 	actions?: Action[] | null;
-	date?: Date;
+	date?: Date | null;
 }) {
 	const currentDate = date || new Date();
 

@@ -82,8 +82,7 @@ export default function DashboardIndex() {
 
 	invariant(actions);
 
-	const { categories, priorities, states, partners } = matches[1]
-		.data as DashboardDataType;
+	const { states, partners } = matches[1].data as DashboardDataType;
 
 	const pendingActions = usePendingActions();
 	const idsToRemove = useIDsToRemove();
@@ -169,14 +168,10 @@ export default function DashboardIndex() {
 						</div>
 
 						<ListOfActions
-							categories={categories}
-							priorities={priorities}
-							states={states}
 							actions={lateActions}
 							showCategory={true}
 							columns={6}
 							date={{ dateFormat: 1 }}
-							partners={partners}
 						/>
 					</div>
 				) : null}
@@ -298,18 +293,10 @@ export default function DashboardIndex() {
 													</div>
 													<div className="w-full">
 														<ListOfActions
-															categories={
-																categories
-															}
-															priorities={
-																priorities
-															}
-															states={states}
 															actions={
 																hourActions
 															}
 															showCategory={true}
-															partners={partners}
 															columns={1}
 															date={{
 																dateFormat: 0,
@@ -349,11 +336,8 @@ export default function DashboardIndex() {
 					</div>
 					{tomorrowActions?.length ? (
 						<ListOfActions
-							categories={categories}
-							priorities={priorities}
-							states={states}
+							showCategory
 							actions={tomorrowActions}
-							partners={partners}
 							columns={6}
 							date={{
 								dateFormat: 0,
@@ -412,15 +396,10 @@ export default function DashboardIndex() {
 									})}
 								</div>
 								{/* Lista de Ações do dia */}
-
 								<ListOfActions
-									categories={categories}
-									priorities={priorities}
-									states={states}
 									actions={actions?.filter((action) =>
 										isSameDay(action.date, day)
 									)}
-									partners={partners}
 									date={{ timeFormat: 1 }}
 									showCategory={true}
 									onDrag={setDraggedAction}

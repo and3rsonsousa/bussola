@@ -574,10 +574,6 @@ export default function ActionPage() {
 					</div>
 				</div>
 			</div>
-			{/* <pre className="text-xs leading-relaxed text-gray-600">
-				
-				{JSON.stringify(action, undefined, 2)}
-			</pre> */}
 		</div>
 	);
 }
