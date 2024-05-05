@@ -11,7 +11,7 @@ export default function Progress(props: {
 	className?: string;
 }) {
 	return (
-		<div className={cn("h-1 overflow-hidden", props.className)}>
+		<div className={cn("h-1 overflow-hidden rounded-md", props.className)}>
 			<div
 				className={cn(
 					"flex h-20 w-[120%] -translate-x-[10%] mx-auto overflow-hidden rounded-full bg-muted blur-md -translate-y-8"
@@ -31,7 +31,7 @@ export default function Progress(props: {
 								)}
 							></div>
 						);
-					}
+					} else return null;
 				})}
 			</div>
 		</div>
