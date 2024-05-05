@@ -69,101 +69,106 @@ export default function Header() {
 						))}
 					</DropdownMenuContent>
 				</DropdownMenu>
+				{person && (
+					<DropdownMenu>
+						<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-full p-1 -mr-1">
+							<Avatar
+								key={person.id}
+								className="size-8 border-l-2 border-background"
+							>
+								{person.image ? (
+									<AvatarImage src={person.image} />
+								) : (
+									<AvatarFallback>{`${
+										person.name.split(" ")[0][0]
+									}${
+										person.name.split(" ")[1][0]
+									}`}</AvatarFallback>
+								)}
+							</Avatar>
+						</DropdownMenuTrigger>
 
-				<DropdownMenu>
-					<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-full p-1 -mr-1">
-						<Avatar
-							key={person.id}
-							className="size-8 border-l-2 border-background"
-						>
-							{person.image ? (
-								<AvatarImage src={person.image} />
-							) : (
-								<AvatarFallback>{`${
-									person.name.split(" ")[0][0]
-								}${
-									person.name.split(" ")[1][0]
-								}`}</AvatarFallback>
+						<DropdownMenuContent>
+							<DropdownMenuItem
+								className="bg-item"
+								id="account"
+								onSelect={() => navigate("/dashboard/account")}
+							>
+								<User2Icon className="size-4 opacity-50" />
+								<div>Minha Conta</div>
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className="bg-item"
+								id="account"
+								onSelect={() => navigate("/dashboard/help")}
+							>
+								<HelpCircle className="size-4 opacity-50" />
+								<div>Ajuda</div>
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className="bg-item"
+								id="ajuda"
+								onSelect={() => navigate("/logout")}
+							>
+								<LogOutIcon className="size-4 opacity-50" />
+								<div>Sair</div>
+							</DropdownMenuItem>
+							{person.admin && (
+								<>
+									<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+									<DropdownMenuItem
+										className="bg-item"
+										id="partners"
+										onSelect={() =>
+											navigate(
+												"/dashboard/admin/partners"
+											)
+										}
+									>
+										<HandshakeIcon className="size-4 opacity-50" />
+										<div>Parceiros</div>
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className="bg-item"
+										id="new-partner"
+										onSelect={() =>
+											navigate(
+												"/dashboard/admin/partners/new"
+											)
+										}
+									>
+										<PlusIcon className="size-4 opacity-50" />
+										<div>Novo parceiro</div>
+									</DropdownMenuItem>
+
+									<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+									<DropdownMenuItem
+										className="bg-item"
+										id="users"
+										onSelect={() =>
+											navigate("/dashboard/admin/users/")
+										}
+									>
+										<Users2Icon className="size-4 opacity-50" />
+										<div>Usuários</div>
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className="bg-item"
+										id="new-user"
+										onSelect={() =>
+											navigate(
+												"/dashboard/admin/users/new"
+											)
+										}
+									>
+										<PlusIcon className="size-4 opacity-50" />
+										<div>Novo usuário</div>
+									</DropdownMenuItem>
+								</>
 							)}
-						</Avatar>
-					</DropdownMenuTrigger>
-
-					<DropdownMenuContent>
-						<DropdownMenuItem
-							className="bg-item"
-							id="account"
-							onSelect={() => navigate("/dashboard/account")}
-						>
-							<User2Icon className="size-4 opacity-50" />
-							<div>Minha Conta</div>
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className="bg-item"
-							id="account"
-							onSelect={() => navigate("/dashboard/help")}
-						>
-							<HelpCircle className="size-4 opacity-50" />
-							<div>Ajuda</div>
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className="bg-item"
-							id="ajuda"
-							onSelect={() => navigate("/logout")}
-						>
-							<LogOutIcon className="size-4 opacity-50" />
-							<div>Sair</div>
-						</DropdownMenuItem>
-						{person.admin && (
-							<>
-								<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
-								<DropdownMenuItem
-									className="bg-item"
-									id="partners"
-									onSelect={() =>
-										navigate("/dashboard/admin/partners")
-									}
-								>
-									<HandshakeIcon className="size-4 opacity-50" />
-									<div>Parceiros</div>
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="bg-item"
-									id="new-partner"
-									onSelect={() =>
-										navigate(
-											"/dashboard/admin/partners/new"
-										)
-									}
-								>
-									<PlusIcon className="size-4 opacity-50" />
-									<div>Novo parceiro</div>
-								</DropdownMenuItem>
-
-								<DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
-								<DropdownMenuItem
-									className="bg-item"
-									id="users"
-									onSelect={() =>
-										navigate("/dashboard/admin/users/")
-									}
-								>
-									<Users2Icon className="size-4 opacity-50" />
-									<div>Usuários</div>
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className="bg-item"
-									id="new-user"
-									onSelect={() =>
-										navigate("/dashboard/admin/users/new")
-									}
-								>
-									<PlusIcon className="size-4 opacity-50" />
-									<div>Novo usuário</div>
-								</DropdownMenuItem>
-							</>
-						)}
-					</DropdownMenuContent>
-				</DropdownMenu>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				)}
 			</div>
 
 			<div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r  from-transparent via-gray-700"></div>

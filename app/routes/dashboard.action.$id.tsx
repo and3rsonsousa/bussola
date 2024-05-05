@@ -1,4 +1,11 @@
-import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
+import {
+	Link,
+	useFetchers,
+	useLoaderData,
+	useMatches,
+	useNavigation,
+	useSubmit,
+} from "@remix-run/react";
 import {
 	json,
 	type LoaderFunctionArgs,
@@ -14,6 +21,7 @@ import {
 	ListTodoIcon,
 } from "lucide-react";
 import { useState } from "react";
+import Tiptap from "~/components/structure/Tiptap";
 
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
@@ -102,6 +110,13 @@ export default function ActionPage() {
 		);
 	};
 
+	const navigation = useNavigation();
+	const fetchers = useFetchers();
+
+	const isWorking =
+		navigation.state !== "idle" ||
+		fetchers.filter((f) => f.formData).length > 0;
+
 	return (
 		<div className="mx-auto flex h-full w-full max-w-xl flex-col overflow-hidden">
 			<div className="pt-16"></div>
@@ -188,48 +203,15 @@ export default function ActionPage() {
 					<div className="mb-2 flex items-center gap-4 text-xs font-medium uppercase tracking-wider">
 						<div>Descrição</div>
 					</div>
-					{/* <textarea
-            name="description"
-            id="description"
-            className="scrollbars shrink grow bg-transparent text-xl font-normal leading-normal outline-none transition"
-            rows={10}
-            onBlur={(e) =>
-              setAction({
-                ...action,
-                description: e.currentTarget.innerHTML,
-              })
-            }
-          >
-            {action?.description}
-          </textarea> */}
-					<div
-						id="description"
-						contentEditable="true"
-						dangerouslySetInnerHTML={{
-							__html: action?.description as string,
-						}}
-						onBlur={(e) =>
-							setAction({
-								...action,
-								description: e.currentTarget.innerHTML,
-							})
-						}
-						className="scrollbars shrink grow bg-transparent text-xl font-normal leading-normal outline-none transition"
-						onPaste={(e) => {
-							e.stopPropagation();
-							e.preventDefault();
-							const text = e.clipboardData.getData("text/plain");
-							const range = window.getSelection()?.getRangeAt(0);
-							range?.insertNode(document.createTextNode(text));
 
-							// setAction({
-							//   ...action,
-							//   description: action.description?.concat(
-							//     e.clipboardData.getData("text")
-							//   ) as string,
-							// })
-						}}
-					/>
+					<div className="scrollbars">
+						<Tiptap
+							content={action.description}
+							onBlur={(text) => {
+								setAction({ ...action, description: text });
+							}}
+						/>
+					</div>
 				</div>
 				<div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
 					{/* Partneres */}
@@ -568,8 +550,13 @@ export default function ActionPage() {
 									intent: INTENTS.updateAction,
 								});
 							}}
+							disabled={isWorking}
 						>
-							Atualizar
+							{isWorking ? (
+								<div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
+							) : (
+								"Atualizar"
+							)}
 						</Button>
 					</div>
 				</div>

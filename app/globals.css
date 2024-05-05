@@ -360,3 +360,39 @@ body {
 .debug-5 {
 	@apply border border-pink-500;
 }
+
+.tiptap {
+	@apply outline-none text-lg font-normal tracking-tight text-gray-300;
+}
+
+.tiptap > * + * {
+	@apply mb-2;
+}
+
+.tiptap h1 {
+	@apply text-4xl font-bold tracking-tight text-gray-100;
+}
+.tiptap h2 {
+	@apply text-2xl font-bold tracking-tight text-gray-100;
+}
+.tiptap h3 {
+	@apply text-xl font-bold uppercase tracking-wide text-gray-100;
+}
+.tiptap h4 {
+	@apply text-xl font-bold tracking-tight text-gray-100;
+}
+.tiptap h5 {
+	@apply text-base font-bold tracking-wider uppercase text-gray-100;
+}
+
+.tiptap ul,
+ol {
+	padding: 0 2rem;
+}
+
+.tiptap ul {
+	list-style: disc;
+}
+.tiptap ol {
+	list-style: decimal;
+}
