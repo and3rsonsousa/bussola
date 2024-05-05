@@ -53,9 +53,6 @@ import { Toggle } from "../ui/toggle";
 
 export function ActionLine({
 	action,
-	categories,
-	states,
-	priorities,
 	showCategory,
 	partner,
 	date,
@@ -74,10 +71,11 @@ export function ActionLine({
 	const [isHover, setHover] = useState(false);
 	const navigate = useNavigate();
 	const submit = useSubmit();
-	const state = states.find((state) => state.id === action.state_id);
-
 	const matches = useMatches();
-	const { people } = matches[1].data as DashboardDataType;
+
+	const { people, states, categories } = matches[1].data as DashboardDataType;
+
+	const state = states.find((state) => state.id === action.state_id);
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -251,6 +249,10 @@ export function ActionLine({
 	);
 }
 
+export function ActionRow({ action }: { action: Action }) {
+	return;
+}
+
 export function ActionBlock({ action }: { action: Action }) {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -283,7 +285,7 @@ export function ActionBlock({ action }: { action: Action }) {
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action relative flex w-full flex-col justify-between gap-2 overflow-hidden rounded focus-within:ring-2 ring-primary border-l-4 px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container border-${
+					className={`group/action relative flex flex-col justify-between gap-2 overflow-hidden rounded focus-within:ring-2 ring-primary border-l-4 px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container border-${
 						states.find((state) => state.id === action.state_id)
 							?.slug
 					} ${
@@ -601,18 +603,20 @@ export function BlockOfActions({
 	max?: 1 | 2;
 }) {
 	return (
-		<div
-			className={`grid ${
-				!max
-					? "sm:grid-cols-3 md:grid-cols-4"
-					: max === 2
-					? "grid-cols-2"
-					: ""
-			} gap-2`}
-		>
-			{actions?.map((action) => (
-				<ActionBlock action={action} key={action.id} />
-			))}
+		<div className="@container">
+			<div
+				className={`grid ${
+					!max
+						? "@[500px]:grid-cols-2 @[750px]:grid-cols-3 @[1000px]:grid-cols-4"
+						: max === 2
+						? "grid-cols-2"
+						: ""
+				} gap-2`}
+			>
+				{actions?.map((action) => (
+					<ActionBlock action={action} key={action.id} />
+				))}
+			</div>
 		</div>
 	);
 }

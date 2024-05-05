@@ -11,7 +11,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 				<div className="flex w-full pb-4">
 					{states.map((state) => (
 						<div
-							className="min-w-52 w-full max-h-[70vh] overflow-hidden"
+							className="min-w-72 w-full max-h-[70vh] overflow-hidden"
 							key={state.id}
 						>
 							<div className="mb-2 flex items-center gap-2 px-2">

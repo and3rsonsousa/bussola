@@ -100,7 +100,7 @@ export default function CreateAction({
 					</Button>
 				)}
 			</PopoverTrigger>
-			<PopoverContent className="bg-content w-[90dvw] sm:w-auto md:px-6">
+			<PopoverContent className="bg-content w-[90dvw] md:max-w-[500px] mr-4 md:px-6">
 				{/* <pre className="text-xs">
 					{JSON.stringify(cleanAction.date, undefined, 2)}
 				</pre>

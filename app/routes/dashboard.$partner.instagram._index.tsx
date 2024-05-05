@@ -24,7 +24,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function Actions() {
 	const matches = useMatches();
 	const { actions } = useLoaderData<typeof loader>() || {};
-	const { categories, priorities, states, partners } = matches[1]
+	const { categories, priorities, states } = matches[1]
 		.data as DashboardDataType;
 
 	const instagramActions = getInstagramActions({ actions });
@@ -39,13 +39,7 @@ export default function Actions() {
 						</h2>
 					</div>
 
-					<BlockOfActions
-						categories={categories}
-						priorities={priorities}
-						states={states}
-						actions={instagramActions}
-						partners={partners}
-					/>
+					<BlockOfActions actions={instagramActions} />
 				</div>
 			</div>
 			<div className="mt-4 md:w-1/2 xl:max-w-xl">
