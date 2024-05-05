@@ -100,7 +100,7 @@ export function ActionLine({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action @container relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2  md:text-xs ${
+					className={`group/action @container relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs ${
 						edit
 							? "text-white"
 							: "cursor-text bg-gray-900 hover:bg-gray-800 hover:text-gray-200"
@@ -148,7 +148,7 @@ export function ActionLine({
 										category.id === action.category_id
 								)?.slug
 							}
-							className="size-3 shrink-0 opacity-25 @[120px]:block hidden"
+							className="size-3 shrink-0 opacity-25 @[200px]:block hidden"
 						/>
 					)}
 
@@ -221,7 +221,7 @@ export function ActionLine({
 						)}
 					</div>
 
-					<div className="@[120px]:flex hidden">
+					<div className="@[200px]:flex hidden">
 						{getResponsibles(people, action.responsibles).map(
 							(person) => (
 								<AvatarPerson
@@ -235,7 +235,7 @@ export function ActionLine({
 					</div>
 
 					{date && (
-						<div className="@[120px]:block hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
+						<div className="@[200px]:block hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 md:text-[10px]">
 							{formatActionDatetime({
 								date: action.date,
 								dateFormat: date.dateFormat,
