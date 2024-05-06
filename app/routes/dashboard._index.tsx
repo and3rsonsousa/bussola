@@ -19,7 +19,7 @@ import {
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarClock, KanbanIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type SetStateAction, useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
@@ -114,24 +114,28 @@ export default function DashboardIndex() {
 			const day = document.querySelector(".dragover") as HTMLElement;
 			const date = day?.getAttribute("data-date") as string;
 
-			//
-			submit(
-				{
-					...draggedAction,
-					date: date?.concat(
-						`T${new Date(draggedAction.date).getHours()}:${new Date(
-							draggedAction.date
-						).getMinutes()}`
-					),
-					intent: INTENTS.updateAction,
-				},
-				{
-					action: "/handle-actions",
-					method: "POST",
-					navigate: false,
-					fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-				}
-			);
+			if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
+				//
+				submit(
+					{
+						...draggedAction,
+						date: date?.concat(
+							`T${new Date(
+								draggedAction.date
+							).getHours()}:${new Date(
+								draggedAction.date
+							).getMinutes()}`
+						),
+						intent: INTENTS.updateAction,
+					},
+					{
+						action: "/handle-actions",
+						method: "POST",
+						navigate: false,
+						fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
+					}
+				);
+			}
 			//reset
 			setDraggedAction(undefined);
 		}
@@ -223,8 +227,8 @@ export default function DashboardIndex() {
 						</div>
 					)}
 				</div>
-				{/* Ações de Hoje */}
 
+				{/* Ações de Hoje */}
 				<div className="mb-8">
 					<div className="flex justify-between py-8">
 						<div className="relative flex">
@@ -359,58 +363,75 @@ export default function DashboardIndex() {
 					)}
 				</div>
 
-				<div className="pt-8">
-					<div className="pb-4">
-						<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
-							Semana
-						</h2>
+				{/* Ações da Semana */}
+				<WeekView
+					actions={actions as Action[]}
+					setDraggedAction={setDraggedAction}
+				/>
+			</div>
+		</div>
+	);
+}
+
+export function WeekView({
+	actions,
+	setDraggedAction,
+}: {
+	actions: Action[];
+	setDraggedAction: React.Dispatch<SetStateAction<Action | undefined>>;
+}) {
+	return (
+		<div className="pt-8">
+			<div className="pb-4">
+				<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
+					Semana
+				</h2>
+			</div>
+			<div className="grid grid-cols-7 gap-2">
+				{eachDayOfInterval({
+					start: startOfWeek(new Date()),
+					end: endOfWeek(new Date()),
+				}).map((day) => (
+					<div
+						className="group pb-8"
+						key={day.getDate()}
+						data-date={format(day, "yyyy-MM-dd")}
+						onDragOver={(e) => {
+							e.stopPropagation();
+							e.preventDefault();
+							document
+								.querySelectorAll(".dragover")
+								.forEach((e) => e.classList.remove("dragover"));
+							e.currentTarget.classList.add("dragover");
+						}}
+					>
+						{/* Dia */}
+						<div
+							className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide"
+							style={{ fontStretch: "75%" }}
+						>
+							{format(day, "EEEE ", { locale: ptBR })}
+						</div>
+						{/* Data */}
+						<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
+							{format(day, "d 'de' MMMM", {
+								locale: ptBR,
+							})}
+						</div>
+						{/* Lista de Ações do dia */}
+						<ListOfActions
+							actions={actions?.filter((action) =>
+								isSameDay(action.date, day)
+							)}
+							date={{ timeFormat: 1 }}
+							showCategory={true}
+							onDrag={setDraggedAction}
+						/>
+						<div className="mt-4 transition text-center group-hover:opacity-100 opacity-0">
+							<CreateAction mode="day" date={day} />
+						</div>
 					</div>
-					<div className="grid grid-cols-7 gap-2">
-						{eachDayOfInterval({
-							start: startOfWeek(new Date()),
-							end: endOfWeek(new Date()),
-						}).map((day) => (
-							<div
-								className="group pb-8"
-								key={day.getDate()}
-								data-date={format(day, "yyyy-MM-dd")}
-								onDragOver={(e) => {
-									e.stopPropagation();
-									e.preventDefault();
-									document
-										.querySelectorAll(".dragover")
-										.forEach((e) =>
-											e.classList.remove("dragover")
-										);
-									e.currentTarget.classList.add("dragover");
-								}}
-							>
-								{/* Dia */}
-								<div className="overflow-hidden text-ellipsis text-nowrap font-bold capitalize tracking-tight">
-									{format(day, "EEEE ", { locale: ptBR })}{" "}
-								</div>
-								{/* Data */}
-								<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
-									{format(day, "d 'de' MMMM", {
-										locale: ptBR,
-									})}
-								</div>
-								{/* Lista de Ações do dia */}
-								<ListOfActions
-									actions={actions?.filter((action) =>
-										isSameDay(action.date, day)
-									)}
-									date={{ timeFormat: 1 }}
-									showCategory={true}
-									onDrag={setDraggedAction}
-								/>
-								<div className="mt-4 transition text-center group-hover:opacity-100 opacity-0">
-									<CreateAction mode="day" date={day} />
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
+				))}
 			</div>
 		</div>
 	);
