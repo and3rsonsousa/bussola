@@ -1,4 +1,10 @@
-import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
+import {
+	Link,
+	redirect,
+	useLoaderData,
+	useMatches,
+	useSubmit,
+} from "@remix-run/react";
 import {
 	json,
 	type LoaderFunctionArgs,
@@ -19,8 +25,7 @@ import {
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarClock, KanbanIcon } from "lucide-react";
-import { type SetStateAction, useEffect, useState } from "react";
-import invariant from "tiny-invariant";
+import { useEffect, useState, type SetStateAction } from "react";
 import { ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
@@ -41,9 +46,30 @@ import { createClient } from "~/lib/supabase";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const { headers, supabase } = createClient(request);
 
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user) {
+		return redirect("/login");
+	}
+
+	const { data: partners } = await supabase
+		.from("partners")
+		.select("id")
+		.contains("users_ids", [user.id])
+		.order("title", { ascending: true });
+
+	let partners_id = partners?.map((partner) => partner.id);
+
+	if (partners_id === undefined) {
+		partners_id = [];
+	}
+
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
+		.in("partner_id", partners_id)
 		.gte(
 			"date",
 			format(
@@ -80,7 +106,9 @@ export default function DashboardIndex() {
 	const [draggedAction, setDraggedAction] = useState<Action>();
 	const [todayView, setTodayView] = useState<"kanban" | "hours">("kanban");
 
-	invariant(actions);
+	if (!actions) {
+		actions = [];
+	}
 
 	const { states, partners } = matches[1].data as DashboardDataType;
 
