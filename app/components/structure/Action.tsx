@@ -293,7 +293,7 @@ export function ActionBlock({ action }: { action: Action }) {
 					} ${
 						edit
 							? "bg-gray-800 text-gray-200"
-							: "border-white/20 bg-gray-900 hover:bg-gradient-to-b from-gray-800  hover:text-gray-100"
+							: "border-white/20 bg-gray-900 hover:bg-gray-800  hover:text-gray-100"
 					}`}
 					onMouseEnter={() => {
 						setHover(true);
@@ -437,7 +437,7 @@ export function ActionBlock({ action }: { action: Action }) {
 							</span>
 						</div>
 					</div>
-					<div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div>
+					{/* <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div> */}
 				</div>
 			</ContextMenuTrigger>
 			<ContextMenuItems action={action} handleActions={handleActions} />
