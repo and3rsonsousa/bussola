@@ -10,7 +10,6 @@ import {
 	HelpCircle,
 	LogOutIcon,
 	PlusIcon,
-	User2Icon,
 	Users2Icon,
 } from "lucide-react";
 import { AvatarPerson } from "~/lib/helpers";
@@ -76,14 +75,14 @@ export default function Header() {
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent>
-							<DropdownMenuItem
+							{/* <DropdownMenuItem
 								className="bg-item"
 								id="account"
 								onSelect={() => navigate("/dashboard/account")}
 							>
 								<User2Icon className="size-4 opacity-50" />
 								<div>Minha Conta</div>
-							</DropdownMenuItem>
+							</DropdownMenuItem> */}
 							<DropdownMenuItem
 								className="bg-item"
 								id="account"
