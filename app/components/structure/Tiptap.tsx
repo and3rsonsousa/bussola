@@ -43,17 +43,19 @@ export default function Tiptap({
 	];
 
 	return (
-		<EditorProvider
-			onBlur={({ editor }) => onBlur(editor.getHTML())}
-			extensions={extensions}
-			content={content}
-			slotBefore={<Menu />}
-		>
-			<TiptapFloatingMenu />
-			<BubbleMenu className="max-w-44 p-1 border rounded-lg backdrop-blur-lg bg-background/50">
-				<Menu short={true} />
-			</BubbleMenu>
-		</EditorProvider>
+		<div className="editor-tiptap">
+			<EditorProvider
+				onBlur={({ editor }) => onBlur(editor.getHTML())}
+				extensions={extensions}
+				content={content}
+				slotBefore={<Menu />}
+			>
+				<TiptapFloatingMenu />
+				<BubbleMenu className="max-w-44 p-1 border rounded-lg backdrop-blur-lg bg-background/50">
+					<Menu short={true} />
+				</BubbleMenu>
+			</EditorProvider>
+		</div>
 	);
 }
 

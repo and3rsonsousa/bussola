@@ -361,11 +361,19 @@ body {
 	@apply border border-pink-500;
 }
 
-.tiptap {
-	@apply outline-none text-lg font-normal tracking-tight text-gray-300;
+.editor-tiptap {
+	@apply min-h-full flex flex-col;
 }
 
-.tiptap > * + * {
+.editor-tiptap > div:nth-child(2) {
+	@apply flex-1 shrink-0 flex flex-col;
+}
+
+.tiptap {
+	@apply outline-none text-lg font-normal tracking-tight text-gray-300 flex-1 shrink-0;
+}
+
+.tiptap > * {
 	@apply mb-2;
 }
 
