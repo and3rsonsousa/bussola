@@ -6,7 +6,6 @@ import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CATEGORIES, INTENTS, STATES } from "~/lib/constants";
 import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
@@ -275,22 +274,10 @@ export default function CreateAction({
 									tabIndex={0}
 								>
 									{responsibles.map((person) => (
-										<Avatar
+										<AvatarPerson
+											person={person}
 											key={person.id}
-											className="-ml-1 h-6 w-6 border-l-2 border-background"
-										>
-											{person.image ? (
-												<AvatarImage
-													src={person.image}
-												/>
-											) : (
-												<AvatarFallback>{`${
-													person.name.split(" ")[0][0]
-												}${
-													person.name.split(" ")[1][0]
-												}`}</AvatarFallback>
-											)}
-										</Avatar>
+										/>
 									))}
 								</button>
 							</DropdownMenuTrigger>

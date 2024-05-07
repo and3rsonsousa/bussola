@@ -60,7 +60,7 @@ const config = {
 				doing: colors.pink,
 				review: colors.purple,
 				done: colors.sky,
-				finished: colors.emerald,
+				finished: colors.green,
 
 				post: colors.orange,
 				video: colors.yellow,

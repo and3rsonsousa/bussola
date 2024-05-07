@@ -156,6 +156,7 @@ export function ActionLine({
 								ref={inputRef}
 								type="text"
 								name="title"
+								style={{ fontStretch: "90%" }}
 								defaultValue={action.title}
 								className="w-full bg-transparent outline-none"
 								onKeyDown={(event) => {
@@ -206,6 +207,7 @@ export function ActionLine({
 						) : (
 							<button
 								ref={buttonRef}
+								style={{ fontStretch: "90%" }}
 								className={`block w-full cursor-text overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
@@ -332,6 +334,7 @@ export function ActionBlock({ action }: { action: Action }) {
 									ref={inputRef}
 									type="text"
 									defaultValue={action.title}
+									style={{ fontStretch: "85%" }}
 									className={`w-full overflow-hidden bg-transparent outline-none`}
 									onBlur={() => {
 										if (
@@ -353,6 +356,7 @@ export function ActionBlock({ action }: { action: Action }) {
 						) : (
 							<button
 								ref={buttonRef}
+								style={{ fontStretch: "85%" }}
 								className={`block w-full overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
