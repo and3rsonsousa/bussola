@@ -46,6 +46,7 @@ import {
 	AvatarPartner,
 	AvatarPerson,
 	Icons,
+	amIResponsible,
 	getResponsibles,
 } from "~/lib/helpers";
 import { cn } from "~/lib/utils";
@@ -73,7 +74,7 @@ export function ActionLine({
 	const submit = useSubmit();
 	const matches = useMatches();
 
-	const { people, states, categories } = matches[1].data as DashboardDataType;
+	const { states, categories, person } = matches[1].data as DashboardDataType;
 
 	const state = states.find((state) => state.id === action.state_id);
 
@@ -222,16 +223,10 @@ export function ActionLine({
 					</div>
 
 					<div className="@[200px]:flex hidden">
-						{getResponsibles(people, action.responsibles).map(
-							(person) => (
-								<AvatarPerson
-									person={person}
-									size="xs"
-									key={person.id}
-									group
-								/>
-							)
-						)}
+						{amIResponsible(
+							action.responsibles,
+							person.user_id
+						) && <AvatarPerson person={person} size="xs" />}
 					</div>
 
 					{date && (
@@ -263,7 +258,7 @@ export function ActionBlock({ action }: { action: Action }) {
 	const [isHover, setHover] = useState(false);
 
 	const matches = useMatches();
-	const { categories, states, partners, people } = matches[1]
+	const { categories, states, partners, person } = matches[1]
 		.data as DashboardDataType;
 	const partner = partners.find(
 		(partner) => partner.id === action.partner_id
@@ -400,17 +395,16 @@ export function ActionBlock({ action }: { action: Action }) {
 							) : null}
 							{/* Responsibles -  Responsáveis */}
 							<div className="flex">
-								{getResponsibles(
-									people,
-									action.responsibles
-								).map((person) => (
+								{amIResponsible(
+									action.responsibles,
+									person.user_id
+								) && (
 									<AvatarPerson
 										person={person}
 										size="sm"
 										key={person.id}
-										group
 									/>
-								))}
+								)}
 							</div>
 						</div>
 						<div className="whitespace-nowrap font-medium text-right text-sm text-gray-500 md:text-xs">

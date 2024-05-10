@@ -369,3 +369,7 @@ export function getResponsibles(people: Person[], users_ids?: string[] | null) {
 		users_ids?.find((user) => person.user_id === user)
 	);
 }
+
+export function amIResponsible(responsibles: string[], user_id: string) {
+	return responsibles.findIndex((id) => id === user_id) >= 0;
+}
