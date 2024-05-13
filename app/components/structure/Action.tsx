@@ -222,6 +222,12 @@ export function ActionLine({
 						)}
 					</div>
 
+					<div>
+						{action.priority_id === PRIORITIES.high ? (
+							<Icons id="high" className="size-3 text-red-500" />
+						) : null}
+					</div>
+
 					<div className="@[200px]:flex hidden">
 						{amIResponsible(
 							action.responsibles,
