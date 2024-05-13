@@ -12,7 +12,6 @@ import {
 } from "@vercel/remix";
 import {
 	addDays,
-	addMonths,
 	eachDayOfInterval,
 	endOfDay,
 	endOfMonth,
@@ -87,7 +86,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		.lte(
 			"date",
 			format(
-				endOfDay(endOfWeek(endOfMonth(addMonths(new Date(), 1)))),
+				endOfDay(endOfWeek(endOfMonth(new Date()))),
 				"yyyy-MM-dd HH:mm:ss"
 			)
 		);
