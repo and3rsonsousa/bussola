@@ -29,7 +29,7 @@ export default function CreateAction({
 	mode,
 }: {
 	date?: Date;
-	mode?: "fixed" | "day" | "button" | "plus";
+	mode: "fixed" | "day" | "button" | "plus";
 }) {
 	const { categories, states, partners, people, user } = useMatches()[1]
 		.data as DashboardDataType;
@@ -76,6 +76,24 @@ export default function CreateAction({
 			setAction(cleanAction);
 		}
 	}, [open]);
+
+	useEffect(() => {
+		if (mode === "fixed") {
+			const keyDown = (event: KeyboardEvent) => {
+				if (
+					(event.metaKey || event.ctrlKey) &&
+					event.shiftKey &&
+					event.key === "a"
+				) {
+					event.preventDefault();
+					setOpen((open) => !open);
+				}
+			};
+
+			document.addEventListener("keydown", keyDown);
+			return () => document.removeEventListener("keydown", keyDown);
+		}
+	}, [mode]);
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
