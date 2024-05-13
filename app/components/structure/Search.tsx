@@ -1,18 +1,44 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import { useMatches } from "@remix-run/react";
+import { useMatches, useNavigate } from "@remix-run/react";
 import { createBrowserClient } from "@supabase/ssr";
+import { CommandLoading } from "cmdk";
 import { useEffect, useState } from "react";
+import { PRIORITIES } from "~/lib/constants";
+import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
+import {
+	CommandDialog,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "../ui/command";
 
 export default function Search() {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [value, setValue] = useState("");
+	const navigate = useNavigate();
 	const matches = useMatches();
-	const partners = (matches[1].data as DashboardDataType).partners;
+	const { partners, states, categories, people, priorities } = matches[1]
+		.data as DashboardDataType;
 
 	const [sections, setSections] = useState<
 		Array<{
 			name: string;
-			items: { id: string | number; title: string; href: string }[];
+			items: {
+				id: string | number;
+				title: string;
+				href: string;
+				options: string[];
+				obs?: {
+					state: State;
+					category: Category;
+					priority: Priority;
+					partner: Partner;
+					responsibles: Person[];
+				};
+			}[];
 		}>
 	>([
 		{
@@ -20,6 +46,7 @@ export default function Search() {
 			items: partners.map((partner) => ({
 				id: partner.id,
 				title: partner.title,
+				options: [partner.short, partner.slug],
 				href: `/dashboard/${partner.slug}`,
 			})),
 		},
@@ -37,75 +64,152 @@ export default function Search() {
 
 	useEffect(() => {
 		const keyDown = (event: KeyboardEvent) => {
-			if (event.metaKey && event.key === "k") {
-				setOpen(true);
+			if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+				event.preventDefault();
+				setOpen((open) => !open);
 			}
 		};
 
 		document.addEventListener("keydown", keyDown);
-
 		return () => document.removeEventListener("keydown", keyDown);
 	}, []);
 
 	useEffect(() => {
-		if (supabase) {
-			supabase
-				.from("actions")
-				.select("*")
-				.then((value) => {
-					const s = sections;
-					const actions = value.data
-						? value.data.map((action: Action) => ({
-								id: action.id,
-								title: action.title,
-								href: `/dashboard/action/${action.id}`,
-						  }))
-						: [];
-					s[1].items = actions;
-					setSections(s);
-				});
+		async function getActions() {
+			if (supabase && sections) {
+				setLoading(true);
+				supabase
+					.from("actions")
+					.select("*")
+					.in(
+						"partner_id",
+						partners.map((partner) => partner.id)
+					)
+					.then((value) => {
+						const s = sections;
+						const actions = value.data
+							? value.data.map((action: Action) => ({
+									id: action.id,
+									title: action.title,
+									href: `/dashboard/action/${action.id}`,
+									options: [
+										action.title,
+										action.description as string,
+									],
+									obs: {
+										state: states.find(
+											(state) =>
+												state.id === action.state_id
+										)!,
+										category: categories.find(
+											(category) =>
+												category.id ===
+												action.category_id
+										)!,
+										partner: partners.find(
+											(partner) =>
+												partner.id === action.partner_id
+										)!,
+										priority: priorities.find(
+											(priority) =>
+												priority.id ===
+												action.priority_id
+										)!,
+										responsibles: people.filter(
+											(person) =>
+												action.responsibles.findIndex(
+													(responsible_id) =>
+														responsible_id ===
+														person.user_id
+												) >= 0
+										),
+									},
+							  }))
+							: [];
+
+						s[1].items = actions;
+						setSections(() => s);
+						setLoading(false);
+					});
+			}
+			console.log({ sections });
 		}
+
+		getActions();
 	}, [supabase]);
 
 	return (
-		<Modal open={open} onOpenChange={setOpen}>
-			<ComboBox className="relative w-96 rounded-md" aria-label="Search">
-				<Input
-					className={`w-full rounded-md bg-background px-6 py-4 text-xl font-light antialiased outline-none ring-2 ring-primary  `}
-					value={value}
-					onChange={(event) => setValue(event.target.value)}
-					autoFocus={true}
-				/>
+		<CommandDialog open={open} onOpenChange={setOpen}>
+			<CommandInput
+				className={`text-xl font-light`}
+				value={value}
+				onValueChange={setValue}
+			/>
 
-				<Popover className="scrollbars scrollbars-thin  top-0 -mt-1 w-[--trigger-width] overflow-auto rounded-md bg-background/50 p-2 ring-1 ring-white/10 backdrop-blur-xl entering:animate-in entering:slide-out-to-bottom-2">
-					<ListBox
-						items={sections}
-						onAction={(key) => {
-							console.log({ key });
-						}}
-						selectionBehavior="toggle"
-					>
-						{(section) => (
-							<Section id={section.name}>
-								<Header className="px-4 py-2">
-									{section.name}
-								</Header>
-								<Collection items={section.items}>
-									{(item) => (
-										<ListBoxItem
-											className="block w-full rounded-sm px-4 py-2 text-sm text-gray-400 transition"
-											key={item.id}
-											href={item.href}
-										>
-											{item.title}
-										</ListBoxItem>
+			<CommandList className="scrollbars scrollbars-thin">
+				<CommandEmpty>No results Founds</CommandEmpty>
+				{loading && (
+					<CommandLoading>
+						<div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>{" "}
+					</CommandLoading>
+				)}
+				{sections.map((section, i) =>
+					section.items.length > 0 &&
+					(i === 1 ? value.length > 1 : true) ? (
+						<CommandGroup key={section.name} heading={section.name}>
+							{section.items.map((item, i) => (
+								<CommandItem
+									key={i}
+									value={[item.title, ...item.options].join(
+										" "
 									)}
-								</Collection>
-							</Section>
-						)}
-					</ListBox>
-				</Popover>
-			</ComboBox>
-		</Modal>
+									onSelect={() => {
+										navigate(item.href);
+										setOpen(false);
+									}}
+									className="overflow-hidden flex gap-8 justify-between"
+								>
+									<div className="line-clamp-1">
+										{item.title}
+									</div>
+									{item.obs ? (
+										<div className="flex gap-4 items-center">
+											{item.obs.priority.id ===
+											PRIORITIES.high ? (
+												<Icons
+													id="high"
+													className="text-error-500"
+												/>
+											) : null}
+											<div className="flex">
+												{item.obs.responsibles.map(
+													(responsible) => (
+														<AvatarPerson
+															person={responsible}
+															key={responsible.id}
+															group
+														/>
+													)
+												)}
+											</div>
+											<AvatarPartner
+												partner={item.obs.partner}
+											/>
+											<Icons
+												id={item.obs.category.slug}
+												className="opacity-50"
+											/>
+											<div
+												className={`border-4 rounded-full size-4 border-${item.obs.state.slug}`}
+											></div>
+										</div>
+									) : null}
+								</CommandItem>
+							))}
+						</CommandGroup>
+					) : null
+				)}
+			</CommandList>
+		</CommandDialog>
 	);
 }

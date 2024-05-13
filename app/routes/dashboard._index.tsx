@@ -24,7 +24,12 @@ import {
 	startOfWeek,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarClock, KanbanIcon } from "lucide-react";
+import {
+	CalendarClock,
+	KanbanIcon,
+	ListTodoIcon,
+	SignalIcon,
+} from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
 import { ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
@@ -35,6 +40,8 @@ import { Button } from "~/components/ui/button";
 import { INTENTS } from "~/lib/constants";
 import {
 	AvatarPartner,
+	getActionsByPriority,
+	getActionsByState,
 	getActionsForThisDay,
 	getDelayedActions,
 	sortActions,
@@ -186,26 +193,7 @@ export default function DashboardIndex() {
 				/>
 				{/* Ações em Atraso */}
 				{lateActions?.length ? (
-					<div className="mb-4">
-						<div className="flex justify-between py-8">
-							<div className="flex relative">
-								<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
-									Atrasados
-								</h2>
-								<Badge
-									value={lateActions?.length}
-									className="-translate-y-1 translate-x-8"
-								/>
-							</div>
-						</div>
-
-						<ListOfActions
-							actions={lateActions}
-							showCategory={true}
-							columns={6}
-							date={{ dateFormat: 1 }}
-						/>
-					</div>
+					<LateActions actions={lateActions} />
 				) : null}
 				{/* Parceiros */}
 				<div className="mb-8 mt-4">
@@ -461,6 +449,60 @@ export function WeekView({
 					</div>
 				))}
 			</div>
+		</div>
+	);
+}
+
+function LateActions({ actions }: { actions: Action[] }) {
+	const [view, setView] = useState<"state" | "priority" | "time">("state");
+	const [a, setA] = useState(actions);
+
+	useEffect(() => {
+		if (view === "priority") {
+			setA(getActionsByPriority(actions));
+		} else {
+			setA(getActionsByState(actions));
+		}
+	}, [view, actions]);
+
+	return (
+		<div className="mb-4">
+			<div className="flex justify-between py-8">
+				<div className="flex relative">
+					<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
+						Atrasados
+					</h2>
+					<Badge
+						value={a.length}
+						className="-translate-y-1 translate-x-8"
+					/>
+				</div>
+				<div>
+					<Button
+						variant={"ghost"}
+						onClick={() => {
+							if (view === "priority") {
+								setView("state");
+							} else {
+								setView("priority");
+							}
+						}}
+					>
+						{view === "priority" ? (
+							<SignalIcon className="size-4" />
+						) : (
+							<ListTodoIcon className="size-4" />
+						)}
+					</Button>
+				</div>
+			</div>
+
+			<ListOfActions
+				actions={a}
+				showCategory={true}
+				columns={6}
+				date={{ dateFormat: 1 }}
+			/>
 		</div>
 	);
 }

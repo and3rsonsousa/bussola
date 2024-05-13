@@ -212,6 +212,36 @@ export function getUrgentActions(actions: Action[] | null) {
 		: [];
 }
 
+export function getActionsByPriority(actions: Action[] | null) {
+	const la = actions
+		? actions.filter(
+				(action) =>
+					action.priority_id === PRIORITIES.low &&
+					action.state_id !== STATES.finish
+		  )
+		: [];
+	const ma = actions
+		? actions.filter(
+				(action) =>
+					action.priority_id === PRIORITIES.medium &&
+					action.state_id !== STATES.finish
+		  )
+		: [];
+	const ha = actions
+		? actions.filter(
+				(action) =>
+					action.priority_id === PRIORITIES.high &&
+					action.state_id !== STATES.finish
+		  )
+		: [];
+
+	return [...la, ...ma, ...ha];
+}
+
+export function getActionsByState(actions: Action[]) {
+	return actions?.sort((a, b) => Number(b.state_id) - Number(a.state_id));
+}
+
 export function getActionsForThisDay({
 	actions,
 	date,

@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 // import CreateAction from "./CreateAction";
 import Header from "./Header";
 import CreateAction from "./CreateAction";
+import Search from "./Search";
 
 // import Search from "./Search";
 
@@ -16,7 +17,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 				{children}
 			</div>
 			<CreateAction />
-			{/* <Search /> */}
+			<Search />
 		</div>
 	);
 }
