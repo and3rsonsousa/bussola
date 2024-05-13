@@ -46,7 +46,7 @@ export default function Search() {
 			items: partners.map((partner) => ({
 				id: partner.id,
 				title: partner.title,
-				options: [partner.short, partner.slug],
+				options: [partner.title, partner.short, partner.slug],
 				href: `/dashboard/${partner.slug}`,
 			})),
 		},
@@ -92,10 +92,7 @@ export default function Search() {
 									id: action.id,
 									title: action.title,
 									href: `/dashboard/action/${action.id}`,
-									options: [
-										action.title,
-										action.description as string,
-									],
+									options: [action.title, action.id],
 									obs: {
 										state: states.find(
 											(state) =>
@@ -132,7 +129,6 @@ export default function Search() {
 						setLoading(false);
 					});
 			}
-			console.log({ sections });
 		}
 
 		getActions();
@@ -150,7 +146,7 @@ export default function Search() {
 				<CommandEmpty>No results Founds</CommandEmpty>
 				{loading && (
 					<CommandLoading>
-						<div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>{" "}
+						<div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
 					</CommandLoading>
 				)}
 				{sections.map((section, i) =>
