@@ -15,7 +15,7 @@ import {
 } from "../ui/command";
 
 export default function Search() {
-	const [open, setOpen] = useState(true);
+	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [value, setValue] = useState("");
 	const navigate = useNavigate();
