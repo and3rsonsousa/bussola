@@ -1,6 +1,11 @@
 import { cn } from "~/lib/utils";
 
-export default function Progress(props: {
+export default function Progress({
+	values,
+	total,
+	className,
+	long,
+}: {
 	values: {
 		id: string | number;
 		title: string;
@@ -9,17 +14,19 @@ export default function Progress(props: {
 	}[];
 	total: number;
 	className?: string;
+	long?: boolean;
 }) {
 	return (
-		<div className={cn("h-1 overflow-hidden rounded-md", props.className)}>
+		<div className={cn("h-1 overflow-hidden rounded-md", className)}>
 			<div
-				className={cn(
-					"flex h-20 w-[120%] -translate-x-[10%] mx-auto overflow-hidden rounded-full bg-muted blur-md -translate-y-8"
-				)}
+				className={cn([
+					"flex h-20 w-[120%] -translate-x-[10%] mx-auto overflow-hidden rounded-full bg-muted -translate-y-8",
+					long ? "blur-lg" : "blur-[8px]",
+				])}
 			>
-				{props.values.map((item) => {
+				{values.map((item) => {
 					if (item.value) {
-						const percentage = (item.value / props.total) * 100;
+						const percentage = (item.value / total) * 100;
 
 						return (
 							<div
