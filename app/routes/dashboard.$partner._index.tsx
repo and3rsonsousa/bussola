@@ -143,26 +143,30 @@ export default function Partner() {
 			const day = document.querySelector(".dragover") as HTMLElement;
 			const date = day?.getAttribute("data-date") as string;
 
-			//
-			submit(
-				{
-					...draggedAction,
-					date: date?.concat(
-						`T${new Date(draggedAction.date).getHours()}:${new Date(
-							draggedAction.date
-						).getMinutes()}`
-					),
-					intent: INTENTS.updateAction,
-				},
-				{
-					action: "/handle-actions",
-					method: "POST",
-					navigate: false,
-					fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-				}
-			);
-			//reset
-			setDraggedAction(undefined);
+			if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
+				//
+				submit(
+					{
+						...draggedAction,
+						date: date?.concat(
+							`T${new Date(
+								draggedAction.date
+							).getHours()}:${new Date(
+								draggedAction.date
+							).getMinutes()}`
+						),
+						intent: INTENTS.updateAction,
+					},
+					{
+						action: "/handle-actions",
+						method: "POST",
+						navigate: false,
+						fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
+					}
+				);
+				//reset
+				setDraggedAction(undefined);
+			}
 		}
 	}, [draggedAction, submit]);
 
