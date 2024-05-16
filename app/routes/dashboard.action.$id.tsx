@@ -189,7 +189,7 @@ export default function ActionPage() {
 							title: e.currentTarget.innerText,
 						})
 					}
-					className="bg-transparent  text-5xl font-extrabold tracking-tighter outline-none transition"
+					className="bg-transparent line-clamp-3 text-5xl font-extrabold tracking-tighter outline-none transition"
 					onPaste={(e) => {
 						e.stopPropagation();
 						e.preventDefault();
@@ -220,9 +220,6 @@ export default function ActionPage() {
 						<DropdownMenu>
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
 								<AvatarPartner partner={partner} size="lg" />
-								{/* <span className="font-medium">
-									{partner.title}
-								</span> */}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
 								{partners.map((partner) => (
@@ -263,9 +260,6 @@ export default function ActionPage() {
 								<div className="grid h-12 w-12 place-content-center rounded-full bg-gray-900">
 									<Icons id={category.slug} />
 								</div>
-								{/* <span className="font-medium">
-									{category.title}
-								</span> */}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
 								{categories.map((category) => (

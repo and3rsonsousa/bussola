@@ -61,7 +61,7 @@ export default function Tiptap({
 
 const TiptapFloatingMenu = () => {
 	return (
-		<FloatingMenu className="backdrop-blur-lg border bg-background/50 rounded-lg p-1">
+		<FloatingMenu className="backdrop-blur-lg ml-4 border bg-background/50 rounded-lg p-1">
 			<Menu short={true} />
 		</FloatingMenu>
 	);
@@ -71,54 +71,73 @@ export const Menu = ({ short }: { short?: boolean }) => {
 	const { editor } = useCurrentEditor();
 
 	return (
-		<div className={`${short ? "max-w-auto" : "gap-x-4"} flex  flex-wrap`}>
+		<div className={`flex gap-4 flex-wrap`}>
 			{/* Formating */}
-			<div className="flex">
-				<Button
-					variant={editor?.isActive("bold") ? "default" : "ghost"}
-					onClick={() => editor?.chain().focus().toggleBold().run()}
-					className="size-8 p-0 grid place-content-center"
-				>
-					<BoldIcon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={editor?.isActive("italic") ? "default" : "ghost"}
-					onClick={() => editor?.chain().focus().toggleItalic().run()}
-				>
-					<ItalicIcon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={editor?.isActive("strike") ? "default" : "ghost"}
-					onClick={() => editor?.chain().focus().toggleStrike().run()}
-				>
-					<StrikethroughIcon className="size-4" />
-				</Button>
-			</div>
-			{/* Hightlight and Clean */}
-			<div className="flex">
-				<Button
-					title="Destacar texto"
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("highlight") ? "default" : "ghost"
-					}
-					onClick={() =>
-						editor?.chain().focus().toggleHighlight().run()
-					}
-				>
-					<HighlighterIcon className="size-4 " />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.clearNodes()}
-					title="Limpar Formatação"
-				>
-					<EraserIcon className="size-4" />
-				</Button>
-			</div>
+			{!short && (
+				<>
+					<div className="flex">
+						<Button
+							variant={
+								editor?.isActive("bold") ? "default" : "ghost"
+							}
+							onClick={() =>
+								editor?.chain().focus().toggleBold().run()
+							}
+							className="size-8 p-0 grid place-content-center"
+						>
+							<BoldIcon className="size-4" />
+						</Button>
+						<Button
+							className="size-8 p-0 grid place-content-center"
+							variant={
+								editor?.isActive("italic") ? "default" : "ghost"
+							}
+							onClick={() =>
+								editor?.chain().focus().toggleItalic().run()
+							}
+						>
+							<ItalicIcon className="size-4" />
+						</Button>
+						<Button
+							className="size-8 p-0 grid place-content-center"
+							variant={
+								editor?.isActive("strike") ? "default" : "ghost"
+							}
+							onClick={() =>
+								editor?.chain().focus().toggleStrike().run()
+							}
+						>
+							<StrikethroughIcon className="size-4" />
+						</Button>
+					</div>
+
+					{/* Hightlight and Clean */}
+					<div className="flex">
+						<Button
+							title="Destacar texto"
+							className="size-8 p-0 grid place-content-center"
+							variant={
+								editor?.isActive("highlight")
+									? "default"
+									: "ghost"
+							}
+							onClick={() =>
+								editor?.chain().focus().toggleHighlight().run()
+							}
+						>
+							<HighlighterIcon className="size-4 " />
+						</Button>
+						<Button
+							className="size-8 p-0 grid place-content-center"
+							variant={"ghost"}
+							onClick={() => editor?.commands.clearNodes()}
+							title="Limpar Formatação"
+						>
+							<EraserIcon className="size-4" />
+						</Button>
+					</div>
+				</>
+			)}
 			{/* Headings */}
 			<div className="flex">
 				<Button
@@ -216,28 +235,40 @@ export const Menu = ({ short }: { short?: boolean }) => {
 				>
 					<ListIcon className="size-4" />
 				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("subscript") ? "default" : "ghost"
-					}
-					onClick={() =>
-						editor?.chain().focus().toggleSubscript().run()
-					}
-				>
-					<SubscriptIcon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("superscript") ? "default" : "ghost"
-					}
-					onClick={() =>
-						editor?.chain().focus().toggleSuperscript().run()
-					}
-				>
-					<SuperscriptIcon className="size-4" />
-				</Button>
+				{!short && (
+					<>
+						<Button
+							className="size-8 p-0 grid place-content-center"
+							variant={
+								editor?.isActive("subscript")
+									? "default"
+									: "ghost"
+							}
+							onClick={() =>
+								editor?.chain().focus().toggleSubscript().run()
+							}
+						>
+							<SubscriptIcon className="size-4" />
+						</Button>
+						<Button
+							className="size-8 p-0 grid place-content-center"
+							variant={
+								editor?.isActive("superscript")
+									? "default"
+									: "ghost"
+							}
+							onClick={() =>
+								editor
+									?.chain()
+									.focus()
+									.toggleSuperscript()
+									.run()
+							}
+						>
+							<SuperscriptIcon className="size-4" />
+						</Button>
+					</>
+				)}
 			</div>
 		</div>
 	);
