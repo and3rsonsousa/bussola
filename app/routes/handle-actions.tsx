@@ -86,8 +86,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 		return { data };
 	} else if (intent === INTENTS.updatePerson) {
-		console.log("OK");
-
 		if (!id) throw new Error("No id was provided");
 		const { data, error } = await supabase
 			.from("people")

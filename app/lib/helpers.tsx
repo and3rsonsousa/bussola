@@ -243,7 +243,6 @@ export function getActionsByState(actions: Action[]) {
 	Object.entries(STATES).map(([, value]) => {
 		_sorted.push(actions.filter((action) => action.state_id === value));
 	});
-	console.log(_sorted.flat());
 
 	return _sorted.flat();
 }
