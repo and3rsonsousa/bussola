@@ -47,6 +47,7 @@ import {
 	AvatarPerson,
 	Icons,
 	amIResponsible,
+	getActionsByState,
 	getResponsibles,
 } from "~/lib/helpers";
 import { cn } from "~/lib/utils";
@@ -533,6 +534,7 @@ export function ListOfActions({
 	onDrag?: (action: Action) => void;
 	isFoldable?: boolean;
 }) {
+	actions = actions ? getActionsByState(actions) : [];
 	const matches = useMatches();
 	const { states, categories, priorities, partners } = matches[1]
 		.data as DashboardDataType;

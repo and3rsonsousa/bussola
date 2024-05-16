@@ -239,7 +239,13 @@ export function getActionsByPriority(actions: Action[] | null) {
 }
 
 export function getActionsByState(actions: Action[]) {
-	return actions?.sort((a, b) => Number(b.state_id) - Number(a.state_id));
+	let _sorted: Action[][] = [];
+	Object.entries(STATES).map(([, value]) => {
+		_sorted.push(actions.filter((action) => action.state_id === value));
+	});
+	console.log(_sorted.flat());
+
+	return _sorted.flat();
 }
 
 export function getActionsForThisDay({
