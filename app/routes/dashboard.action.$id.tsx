@@ -189,7 +189,7 @@ export default function ActionPage() {
 							title: e.currentTarget.innerText,
 						})
 					}
-					className="bg-transparent line-clamp-3 text-5xl font-extrabold tracking-tighter outline-none transition"
+					className="bg-transparent text-5xl font-extrabold tracking-tighter outline-none transition"
 					onPaste={(e) => {
 						e.stopPropagation();
 						e.preventDefault();
