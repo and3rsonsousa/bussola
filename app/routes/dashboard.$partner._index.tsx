@@ -64,30 +64,38 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		return redirect("/login");
 	}
 
-	const { data: partner } = await supabase
-		.from("partners")
+	const { data: person } = await supabase
+		.from("people")
 		.select("*")
-		.eq("slug", params["partner"] as string)
+		.eq("user_id", user.id)
 		.single();
 
-	const { data: actions } = await supabase
-		.from("actions")
-		.select("*")
-		.contains("responsibles", [user.id])
-		.gte(
-			"date",
-			format(
-				startOfWeek(startOfMonth(parseISO(date))),
-				"yyyy-MM-dd HH:mm:ss"
+	const [{ data: partner }, { data: actions }] = await Promise.all([
+		supabase
+			.from("partners")
+			.select("*")
+			.eq("slug", params["partner"] as string)
+			.single(),
+
+		supabase
+			.from("actions")
+			.select("*")
+			.contains("responsibles", person?.admin ? [] : [user.id])
+			.gte(
+				"date",
+				format(
+					startOfWeek(startOfMonth(parseISO(date))),
+					"yyyy-MM-dd HH:mm:ss"
+				)
 			)
-		)
-		.lte(
-			"date",
-			format(
-				endOfDay(endOfWeek(endOfMonth(parseISO(date)))),
-				"yyyy-MM-dd HH:mm:ss"
-			)
-		);
+			.lte(
+				"date",
+				format(
+					endOfDay(endOfWeek(endOfMonth(parseISO(date)))),
+					"yyyy-MM-dd HH:mm:ss"
+				)
+			),
+	]);
 
 	return json({ actions, partner }, { headers });
 };

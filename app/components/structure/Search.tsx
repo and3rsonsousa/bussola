@@ -83,10 +83,18 @@ export default function Search() {
 
 				if (user) {
 					setLoading(true);
+					const { data: person } = await supabase
+						.from("people")
+						.select("*")
+						.eq("user_id", user.id)
+						.single();
 					supabase
 						.from("actions")
 						.select("*")
-						.contains("responsibles", [user.id])
+						.contains(
+							"responsibles",
+							person?.admin ? [] : [user.id]
+						)
 						.then((value) => {
 							const s = sections;
 							const actions = value.data

@@ -58,10 +58,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		return redirect("/login");
 	}
 
+	const { data: person } = await supabase
+		.from("people")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.contains("responsibles", [user.id])
+		.contains("responsibles", person?.admin ? [] : [user.id])
 		.gte(
 			"date",
 			format(

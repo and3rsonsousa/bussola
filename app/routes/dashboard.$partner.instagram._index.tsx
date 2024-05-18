@@ -15,6 +15,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		return redirect("/login");
 	}
 
+	const { data: person } = await supabase
+		.from("people")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
 	const { data: partner } = await supabase
 		.from("partners")
 		.select("*")
@@ -24,7 +30,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.contains("responsibles", [user.id]);
+		.contains("responsibles", person?.admin ? [] : [user.id]);
 
 	return { actions, partner };
 };
