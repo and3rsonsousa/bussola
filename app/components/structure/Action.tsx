@@ -541,7 +541,7 @@ export function ListOfActions({
 
 	const foldCount = columns * 4;
 	const [fold, setFold] = useState(isFoldable ? foldCount : undefined);
-	return actions && actions.length > 0 ? (
+	return actions.length > 0 ? (
 		<>
 			<div
 				className={`${
@@ -562,14 +562,9 @@ export function ListOfActions({
 						states={states}
 						priorities={priorities}
 						showCategory={showCategory}
-						partner={
-							partners
-								? partners.find(
-										(partner) =>
-											partner.id === action.partner_id
-								  )
-								: undefined
-						}
+						partner={partners.find(
+							(partner) => partner.id === action.partner_id
+						)}
 						date={date}
 						onDrag={onDrag}
 					/>
@@ -579,9 +574,10 @@ export function ListOfActions({
 				<div className="p-4 text-center">
 					<Toggle
 						size={"sm"}
-						onChange={(isPressed) => {
+						onPressedChange={(isPressed) => {
 							setFold(isPressed ? undefined : foldCount);
 						}}
+						className="inline-flex gap-2"
 					>
 						{fold ? (
 							<>

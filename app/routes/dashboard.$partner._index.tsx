@@ -2,6 +2,7 @@
 import {
 	Form,
 	Link,
+	redirect,
 	useLoaderData,
 	useMatches,
 	useSearchParams,
@@ -12,6 +13,7 @@ import {
 	addMonths,
 	eachDayOfInterval,
 	eachMonthOfInterval,
+	endOfDay,
 	endOfMonth,
 	endOfWeek,
 	endOfYear,
@@ -54,6 +56,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 	const { headers, supabase } = createClient(request);
 
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user) {
+		return redirect("/login");
+	}
+
 	const { data: partner } = await supabase
 		.from("partners")
 		.select("*")
@@ -64,6 +74,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		.from("actions")
 		.select("*")
 		.eq("partner_id", partner!.id)
+		.contains("responsibles", [user.id])
 		.gte(
 			"date",
 			format(
@@ -73,7 +84,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		)
 		.lte(
 			"date",
-			format(endOfWeek(endOfMonth(parseISO(date))), "yyyy-MM-dd HH:mm:ss")
+			format(
+				endOfDay(endOfWeek(endOfMonth(parseISO(date)))),
+				"yyyy-MM-dd HH:mm:ss"
+			)
 		);
 
 	return json({ actions, partner }, { headers });
@@ -92,7 +106,6 @@ export default function Partner() {
 	const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
 
 	invariant(partner);
-	invariant(actions);
 
 	const { categories, priorities, states, person, people } = matches[1]
 		.data as DashboardDataType;
@@ -101,7 +114,7 @@ export default function Partner() {
 	const currentDate = parseISO(date);
 
 	const actionsMap = new Map<string, Action>(
-		actions.map((action) => [action.id, action])
+		actions?.map((action) => [action.id, action])
 	);
 
 	const days = eachDayOfInterval({

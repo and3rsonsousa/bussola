@@ -45,7 +45,7 @@ export default function Partner() {
 	const matches = useMatches();
 
 	const { states } = matches[1].data as DashboardDataType;
-	const { actions } = matches[3].data as { actions: Action[] };
+	const { actions } = matches[3].data as { actions: Action[] | null };
 
 	return (
 		<div className="flex flex-col overflow-y-hidden">
@@ -60,18 +60,15 @@ export default function Partner() {
 						<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
 							<div>{partner?.title}</div>
 							<Progress
-								total={actions.length}
-								values={states
-									// .filter((state) => state.id !== FINISHED_ID)
-									.map((state) => ({
-										id: state.id,
-										title: state.title,
-										value: actions?.filter(
-											(action) =>
-												action.state_id === state.id
-										).length,
-										color: `bg-${state.slug}`,
-									}))}
+								total={actions?.length || 1}
+								values={states.map((state) => ({
+									id: state.id,
+									title: state.title,
+									value: actions?.filter(
+										(action) => action.state_id === state.id
+									).length,
+									color: `bg-${state.slug}`,
+								}))}
 							/>
 						</div>
 					</Link>

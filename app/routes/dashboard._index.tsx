@@ -13,8 +13,6 @@ import {
 import {
 	addDays,
 	eachDayOfInterval,
-	endOfDay,
-	endOfMonth,
 	endOfWeek,
 	format,
 	isSameDay,
@@ -60,33 +58,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		return redirect("/login");
 	}
 
-	const { data: partners } = await supabase
-		.from("partners")
-		.select("id")
-		.contains("users_ids", [user.id])
-		.order("title", { ascending: true });
-
-	let partners_id = partners?.map((partner) => partner.id);
-
-	if (partners_id === undefined) {
-		partners_id = [];
-	}
-
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.in("partner_id", partners_id)
+		.contains("responsibles", [user.id])
 		.gte(
 			"date",
 			format(
 				startOfDay(startOfWeek(startOfMonth(new Date()))),
-				"yyyy-MM-dd HH:mm:ss"
-			)
-		)
-		.lte(
-			"date",
-			format(
-				endOfDay(endOfWeek(endOfMonth(new Date()))),
 				"yyyy-MM-dd HH:mm:ss"
 			)
 		);
@@ -141,7 +120,15 @@ export default function DashboardIndex() {
 		actions,
 		date: addDays(new Date(), 1),
 	});
-	// const notFinishedActions = getNotFinishedActions({ actions });
+	const weekActions = eachDayOfInterval({
+		start: startOfWeek(new Date()),
+		end: endOfWeek(new Date()),
+	}).map((day) => ({
+		date: day,
+		actions: actions?.filter((action) =>
+			isSameDay(action.date, day)
+		) as Action[],
+	}));
 
 	useEffect(() => {
 		if (draggedAction) {
@@ -245,39 +232,40 @@ export default function DashboardIndex() {
 				</div>
 
 				{/* Ações de Hoje */}
-				<div className="mb-8">
-					<div className="flex justify-between py-8">
-						<div className="relative flex">
-							<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-								Hoje
-							</h2>
-							<Badge
-								value={todayActions?.length}
-								className="-translate-y-1 translate-x-8"
-							/>
+				{todayActions?.length ? (
+					<div className="mb-8">
+						<div className="flex justify-between py-8">
+							<div className="relative flex">
+								<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
+									Hoje
+								</h2>
+								<Badge
+									value={todayActions?.length}
+									className="-translate-y-1 translate-x-8"
+								/>
+							</div>
+							<div>
+								<Button
+									variant="ghost"
+									size="icon"
+									onClick={() => {
+										setTodayView(() =>
+											todayView === "hours"
+												? "kanban"
+												: "hours"
+										);
+									}}
+								>
+									{todayView === "kanban" ? (
+										<KanbanIcon className="w-6" />
+									) : (
+										<CalendarClock className="w-6" />
+									)}
+								</Button>
+							</div>
 						</div>
-						<div>
-							<Button
-								variant="ghost"
-								size="icon"
-								onClick={() => {
-									setTodayView(() =>
-										todayView === "hours"
-											? "kanban"
-											: "hours"
-									);
-								}}
-							>
-								{todayView === "kanban" ? (
-									<KanbanIcon className="w-6" />
-								) : (
-									<CalendarClock className="w-6" />
-								)}
-							</Button>
-						</div>
-					</div>
-					{todayActions?.length ? (
-						todayView === "kanban" ? (
+
+						{todayView === "kanban" ? (
 							<Kanban actions={todayActions} />
 						) : (
 							<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
@@ -330,31 +318,22 @@ export default function DashboardIndex() {
 									</div>
 								))}
 							</div>
-						)
-					) : (
-						<div className="grid place-content-center p-8 text-xl">
-							<div className="space-y-4 rounded-xl bg-gray-900 p-8 text-center">
-								<div className="font-semibold">
-									Nenhuma ação para hoje
-								</div>
-								<CreateAction mode="button" />
-							</div>
-						</div>
-					)}
-				</div>
-				{/* Ações de Amanhã */}
-
-				<div className="mb-8">
-					<div className="inline-flex relative pb-4">
-						<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-							Amanhã
-						</h2>
-						<Badge
-							value={tomorrowActions?.length}
-							className="translate-x-8 -translate-y-1"
-						/>
+						)}
 					</div>
-					{tomorrowActions?.length ? (
+				) : null}
+				{/* Ações de Amanhã */}
+				{tomorrowActions?.length ? (
+					<div className="mb-8">
+						<div className="inline-flex relative pb-4">
+							<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
+								Amanhã
+							</h2>
+							<Badge
+								value={tomorrowActions?.length}
+								className="translate-x-8 -translate-y-1"
+							/>
+						</div>
+
 						<ListOfActions
 							showCategory
 							actions={tomorrowActions}
@@ -364,36 +343,42 @@ export default function DashboardIndex() {
 								timeFormat: 1,
 							}}
 						/>
-					) : (
-						<div className="grid place-content-center p-8 text-xl">
-							<div className="space-y-4 rounded-lg bg-gray-900 p-8 text-center">
-								<div className="font-semibold">
-									Nenhuma ação para amanhã
-								</div>
-								<CreateAction
-									date={addDays(new Date(), 1)}
-									mode="button"
-								/>
-							</div>
-						</div>
-					)}
-				</div>
+					</div>
+				) : null}
 
 				{/* Ações da Semana */}
-				<WeekView
-					actions={actions as Action[]}
-					setDraggedAction={setDraggedAction}
-				/>
+				{weekActions.reduce(
+					(acc, currentValue) => acc + currentValue.actions.length,
+					0
+				) ? (
+					<WeekView
+						weekActions={weekActions}
+						setDraggedAction={setDraggedAction}
+					/>
+				) : null}
+
+				<div className="mb-8">
+					<div className="inline-flex relative pb-4">
+						<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
+							Próximas Ações
+						</h2>
+						<Badge
+							value={actions?.length || 0}
+							className="translate-x-8 -translate-y-1"
+						/>
+					</div>
+					<ListOfActions actions={actions} columns={3} isFoldable />
+				</div>
 			</div>
 		</div>
 	);
 }
 
 export function WeekView({
-	actions,
+	weekActions,
 	setDraggedAction,
 }: {
-	actions: Action[];
+	weekActions: { date: Date; actions: Action[] }[];
 	setDraggedAction: React.Dispatch<SetStateAction<Action | undefined>>;
 }) {
 	return (
@@ -404,14 +389,11 @@ export function WeekView({
 				</h2>
 			</div>
 			<div className="grid grid-cols-7 gap-2">
-				{eachDayOfInterval({
-					start: startOfWeek(new Date()),
-					end: endOfWeek(new Date()),
-				}).map((day) => (
+				{weekActions.map(({ date, actions }) => (
 					<div
 						className="group pb-8"
-						key={day.getDate()}
-						data-date={format(day, "yyyy-MM-dd")}
+						key={date.getDate()}
+						data-date={format(date, "yyyy-MM-dd")}
 						onDragOver={(e) => {
 							e.stopPropagation();
 							e.preventDefault();
@@ -426,25 +408,23 @@ export function WeekView({
 							className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide"
 							style={{ fontStretch: "75%" }}
 						>
-							{format(day, "EEEE ", { locale: ptBR })}
+							{format(date, "EEEE ", { locale: ptBR })}
 						</div>
 						{/* Data */}
 						<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
-							{format(day, "d 'de' MMMM", {
+							{format(date, "d 'de' MMMM", {
 								locale: ptBR,
 							})}
 						</div>
 						{/* Lista de Ações do dia */}
 						<ListOfActions
-							actions={actions?.filter((action) =>
-								isSameDay(action.date, day)
-							)}
+							actions={actions}
 							date={{ timeFormat: 1 }}
 							showCategory={true}
 							onDrag={setDraggedAction}
 						/>
 						<div className="mt-4 transition text-center group-hover:opacity-100 opacity-0">
-							<CreateAction mode="day" date={day} />
+							<CreateAction mode="day" date={date} />
 						</div>
 					</div>
 				))}
