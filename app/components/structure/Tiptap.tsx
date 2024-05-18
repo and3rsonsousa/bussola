@@ -48,11 +48,11 @@ export default function Tiptap({
 				onBlur={({ editor }) => onBlur(editor.getHTML())}
 				extensions={extensions}
 				content={content}
-				slotBefore={<Menu />}
+				slotBefore={<Menu type={1} />}
 			>
 				<TiptapFloatingMenu />
-				<BubbleMenu className="max-w-44 p-1 border rounded-lg backdrop-blur-lg bg-background/50">
-					<Menu short={true} />
+				<BubbleMenu className="p-1 border rounded-lg backdrop-blur-lg bg-background/50">
+					<Menu type={3} />
 				</BubbleMenu>
 			</EditorProvider>
 		</div>
@@ -62,18 +62,21 @@ export default function Tiptap({
 const TiptapFloatingMenu = () => {
 	return (
 		<FloatingMenu className="backdrop-blur-lg ml-4 border bg-background/50 rounded-lg p-1">
-			<Menu short={true} />
+			<Menu type={2} />
 		</FloatingMenu>
 	);
 };
 
-export const Menu = ({ short }: { short?: boolean }) => {
+// 1 - fixo
+// 2 - Floating
+// 3 - Bubble
+export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
 	const { editor } = useCurrentEditor();
 
 	return (
 		<div className={`flex gap-4 flex-wrap`}>
 			{/* Formating */}
-			{!short && (
+			{type !== 2 && (
 				<>
 					<div className="flex">
 						<Button
@@ -139,103 +142,108 @@ export const Menu = ({ short }: { short?: boolean }) => {
 				</>
 			)}
 			{/* Headings */}
-			<div className="flex">
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("heading", { level: 1 })
-							? "default"
-							: "ghost"
-					}
-					onClick={() =>
-						editor
-							?.chain()
-							.focus()
-							.toggleHeading({ level: 1 })
-							.run()
-					}
-				>
-					<Heading1Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("heading", { level: 2 })
-							? "default"
-							: "ghost"
-					}
-					onClick={() =>
-						editor
-							?.chain()
-							.focus()
-							.toggleHeading({ level: 2 })
-							.run()
-					}
-				>
-					<Heading2Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("heading", { level: 3 })
-							? "default"
-							: "ghost"
-					}
-					onClick={() =>
-						editor
-							?.chain()
-							.focus()
-							.toggleHeading({ level: 3 })
-							.run()
-					}
-				>
-					<Heading3Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("heading", { level: 4 })
-							? "default"
-							: "ghost"
-					}
-					onClick={() =>
-						editor
-							?.chain()
-							.focus()
-							.toggleHeading({ level: 4 })
-							.run()
-					}
-				>
-					<Heading4Icon className="size-4" />
-				</Button>
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={
-						editor?.isActive("heading", { level: 5 })
-							? "default"
-							: "ghost"
-					}
-					onClick={() =>
-						editor
-							?.chain()
-							.focus()
-							.toggleHeading({ level: 5 })
-							.run()
-					}
-				>
-					<Heading5Icon className="size-4" />
-				</Button>
-			</div>
+			{type !== 3 && (
+				<div className="flex">
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={
+							editor?.isActive("heading", { level: 1 })
+								? "default"
+								: "ghost"
+						}
+						onClick={() =>
+							editor
+								?.chain()
+								.focus()
+								.toggleHeading({ level: 1 })
+								.run()
+						}
+					>
+						<Heading1Icon className="size-4" />
+					</Button>
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={
+							editor?.isActive("heading", { level: 2 })
+								? "default"
+								: "ghost"
+						}
+						onClick={() =>
+							editor
+								?.chain()
+								.focus()
+								.toggleHeading({ level: 2 })
+								.run()
+						}
+					>
+						<Heading2Icon className="size-4" />
+					</Button>
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={
+							editor?.isActive("heading", { level: 3 })
+								? "default"
+								: "ghost"
+						}
+						onClick={() =>
+							editor
+								?.chain()
+								.focus()
+								.toggleHeading({ level: 3 })
+								.run()
+						}
+					>
+						<Heading3Icon className="size-4" />
+					</Button>
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={
+							editor?.isActive("heading", { level: 4 })
+								? "default"
+								: "ghost"
+						}
+						onClick={() =>
+							editor
+								?.chain()
+								.focus()
+								.toggleHeading({ level: 4 })
+								.run()
+						}
+					>
+						<Heading4Icon className="size-4" />
+					</Button>
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={
+							editor?.isActive("heading", { level: 5 })
+								? "default"
+								: "ghost"
+						}
+						onClick={() =>
+							editor
+								?.chain()
+								.focus()
+								.toggleHeading({ level: 5 })
+								.run()
+						}
+					>
+						<Heading5Icon className="size-4" />
+					</Button>
+				</div>
+			)}
 			{/* Outros */}
 			<div className="flex">
-				<Button
-					className="size-8 p-0 grid place-content-center"
-					variant={"ghost"}
-					onClick={() => editor?.commands.toggleBulletList()}
-				>
-					<ListIcon className="size-4" />
-				</Button>
-				{!short && (
+				{type !== 3 && (
+					<Button
+						className="size-8 p-0 grid place-content-center"
+						variant={"ghost"}
+						onClick={() => editor?.commands.toggleBulletList()}
+					>
+						<ListIcon className="size-4" />
+					</Button>
+				)}
+
+				{type !== 2 && (
 					<>
 						<Button
 							className="size-8 p-0 grid place-content-center"
