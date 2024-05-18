@@ -1,11 +1,19 @@
-import { LoaderFunctionArgs } from "@vercel/remix";
-import { useLoaderData, useMatches } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs } from "@vercel/remix";
 import { ListOfActions } from "~/components/structure/Action";
 import { getDelayedActions, sortActions } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { supabase } = createClient(request);
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user) {
+		return redirect("/login");
+	}
 
 	const { data: partner } = await supabase
 		.from("partners")
@@ -16,16 +24,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.eq("partner_id", partner!.id);
+		.contains("responsibles", [user.id]);
 
 	return { actions, partner };
 };
 
 export default function Actions() {
-	const matches = useMatches();
 	const { actions } = useLoaderData<typeof loader>() || {};
-	const { categories, priorities, states, partners } = matches[1]
-		.data as DashboardDataType;
 
 	const lateActions = getDelayedActions({ actions: actions as Action[] });
 
@@ -40,13 +45,9 @@ export default function Actions() {
 					</div>
 
 					<ListOfActions
-						categories={categories}
-						priorities={priorities}
-						states={states}
 						actions={lateActions}
 						showCategory={true}
 						date={{ dateFormat: 1 }}
-						partners={partners}
 					/>
 				</div>
 			) : null}
@@ -57,13 +58,9 @@ export default function Actions() {
 				</h2>
 			</div>
 			<ListOfActions
-				categories={categories}
-				priorities={priorities}
-				states={states}
 				actions={sortActions(actions)}
 				showCategory={true}
 				date={{ dateFormat: 1 }}
-				partners={partners}
 			/>
 		</div>
 	);

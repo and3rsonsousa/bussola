@@ -73,7 +73,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.eq("partner_id", partner!.id)
 		.contains("responsibles", [user.id])
 		.gte(
 			"date",

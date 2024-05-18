@@ -77,57 +77,61 @@ export default function Search() {
 	useEffect(() => {
 		async function getActions() {
 			if (supabase && sections) {
-				setLoading(true);
-				supabase
-					.from("actions")
-					.select("*")
-					.in(
-						"partner_id",
-						partners.map((partner) => partner.id)
-					)
-					.then((value) => {
-						const s = sections;
-						const actions = value.data
-							? value.data.map((action: Action) => ({
-									id: action.id,
-									title: action.title,
-									href: `/dashboard/action/${action.id}`,
-									options: [action.title, action.id],
-									obs: {
-										state: states.find(
-											(state) =>
-												state.id === action.state_id
-										)!,
-										category: categories.find(
-											(category) =>
-												category.id ===
-												action.category_id
-										)!,
-										partner: partners.find(
-											(partner) =>
-												partner.id === action.partner_id
-										)!,
-										priority: priorities.find(
-											(priority) =>
-												priority.id ===
-												action.priority_id
-										)!,
-										responsibles: people.filter(
-											(person) =>
-												action.responsibles.findIndex(
-													(responsible_id) =>
-														responsible_id ===
-														person.user_id
-												) >= 0
-										),
-									},
-							  }))
-							: [];
+				const {
+					data: { user },
+				} = await supabase.auth.getUser();
 
-						s[1].items = actions;
-						setSections(() => s);
-						setLoading(false);
-					});
+				if (user) {
+					setLoading(true);
+					supabase
+						.from("actions")
+						.select("*")
+						.contains("responsibles", [user.id])
+						.then((value) => {
+							const s = sections;
+							const actions = value.data
+								? value.data.map((action: Action) => ({
+										id: action.id,
+										title: action.title,
+										href: `/dashboard/action/${action.id}`,
+										options: [action.title, action.id],
+										obs: {
+											state: states.find(
+												(state) =>
+													state.id === action.state_id
+											)!,
+											category: categories.find(
+												(category) =>
+													category.id ===
+													action.category_id
+											)!,
+											partner: partners.find(
+												(partner) =>
+													partner.id ===
+													action.partner_id
+											)!,
+											priority: priorities.find(
+												(priority) =>
+													priority.id ===
+													action.priority_id
+											)!,
+											responsibles: people.filter(
+												(person) =>
+													action.responsibles.findIndex(
+														(responsible_id) =>
+															responsible_id ===
+															person.user_id
+													) >= 0
+											),
+										},
+								  }))
+								: [];
+
+							s[1].items = actions;
+							setSections(() => s);
+							setLoading(false);
+						});
+				}
 			}
 		}
 

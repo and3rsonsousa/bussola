@@ -1,4 +1,4 @@
-import { useLoaderData, useMatches } from "@remix-run/react";
+import { redirect, useLoaderData, useMatches } from "@remix-run/react";
 import { type LoaderFunctionArgs } from "@vercel/remix";
 import { BlockOfActions, GridOfActions } from "~/components/structure/Action";
 import { getInstagramActions } from "~/lib/helpers";
@@ -6,6 +6,14 @@ import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { supabase } = createClient(request);
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user) {
+		return redirect("/login");
+	}
 
 	const { data: partner } = await supabase
 		.from("partners")
@@ -16,7 +24,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const { data: actions } = await supabase
 		.from("actions")
 		.select("*")
-		.eq("partner_id", partner!.id);
+		.contains("responsibles", [user.id]);
 
 	return { actions, partner };
 };
