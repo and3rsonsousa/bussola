@@ -41,7 +41,11 @@ export function ShortText({
 				`text-center text-[10px] font-extrabold uppercase leading-none tracking-wide`,
 				className
 			)}
-			style={{ fontStretch: "125%" }}
+			style={
+				text.length > 4
+					? { fontStretch: "100%" }
+					: { fontStretch: "125%" }
+			}
 		>
 			{length >= 4 ? (
 				<>
