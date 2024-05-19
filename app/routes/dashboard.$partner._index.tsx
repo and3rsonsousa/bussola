@@ -205,10 +205,7 @@ export default function Partner() {
 		<div className="lg:flex w-full gap-4 overflow-hidden">
 			<div className="scrollbars scrollbars-thin w-full h-1/2">
 				<div className="relative flex flex-col overflow-y-hidden">
-					<div
-						id="daysheader"
-						className="z-10 w-full bg-background/25 backdrop-blur-lg"
-					>
+					<div id="daysheader" className="w-full">
 						<div className="flex items-center justify-between py-2">
 							<div className="flex items-center gap-1 text-xl font-bold ">
 								<div className="mr-4">
