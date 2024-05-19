@@ -149,11 +149,7 @@ export default function DashboardIndex() {
 					{
 						...draggedAction,
 						date: date?.concat(
-							`T${new Date(
-								draggedAction.date
-							).getHours()}:${new Date(
-								draggedAction.date
-							).getMinutes()}`
+							`T${format(draggedAction.date, "HH:mm:ss")}`
 						),
 						intent: INTENTS.updateAction,
 					},

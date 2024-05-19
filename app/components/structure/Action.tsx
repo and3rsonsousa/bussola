@@ -467,19 +467,15 @@ export function ActionBlock({ action }: { action: Action }) {
 
 export function ActionGrid({
 	action,
-	states,
-	categories,
-	priorities,
 	classNames,
 }: {
 	action: Action;
-	states: State[];
-	categories: Category[];
-	priorities: Priority[];
 	classNames?: string;
 }) {
-	const [isHover, setHover] = useState(false);
 	const submit = useSubmit();
+	const matches = useMatches();
+	const [isHover, setHover] = useState(false);
+	const { states } = matches[1].data as DashboardDataType;
 
 	function handleActions(data: {
 		[key: string]: string | number | null | string[];
@@ -659,10 +655,7 @@ export function GridOfActions({
 				{actions?.map((action, index) => (
 					<ActionGrid
 						action={action}
-						categories={categories}
-						states={states}
 						key={action.id}
-						priorities={priorities}
 						classNames={
 							index === 0
 								? "rounded-tl-xl"
