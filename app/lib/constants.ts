@@ -17,7 +17,7 @@ export const CATEGORIES = {
 	finance: "90a96044-146d-49a2-988d-4f99d6fa59c9",
 	design: "46c11cf4-e7bf-4ba4-bb8b-09f1582fdd00",
 	ads: "3b809865-b187-41d3-9f05-96bff1040b8c",
-	socialmedia: "308aed8c-6a9e-412e-a12a-5d6848b75eb5",
+	sm: "308aed8c-6a9e-412e-a12a-5d6848b75eb5",
 };
 
 export const PRIORITIES = {

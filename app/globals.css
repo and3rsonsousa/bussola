@@ -265,7 +265,7 @@ body {
 	@apply border-print-500;
 }
 .border-meeting {
-	@apply border-meeting-500;
+	@apply border-meeting-700;
 }
 .border-finance {
 	@apply border-finance-500;
@@ -276,8 +276,48 @@ body {
 .border-ads {
 	@apply border-ads-500;
 }
-.border-socialmedia {
-	@apply border-socialmedia-500;
+.border-sm {
+	@apply border-sm-700;
+}
+.border-plan {
+	@apply border-plan-500;
+}
+
+.bg-post {
+	@apply bg-post-500;
+}
+.bg-video {
+	@apply bg-video-600;
+}
+.bg-stories {
+	@apply bg-stories-500;
+}
+.bg-todo {
+	@apply bg-todo-500;
+}
+.bg-dev {
+	@apply bg-dev-500;
+}
+.bg-print {
+	@apply bg-print-500;
+}
+.bg-meeting {
+	@apply bg-meeting-700;
+}
+.bg-finance {
+	@apply bg-finance-500;
+}
+.bg-design {
+	@apply bg-design-500;
+}
+.bg-ads {
+	@apply bg-ads-500;
+}
+.bg-sm {
+	@apply bg-sm-700;
+}
+.bg-plan {
+	@apply bg-plan-500;
 }
 
 .scrollbars {

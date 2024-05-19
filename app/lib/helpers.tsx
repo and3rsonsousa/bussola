@@ -18,6 +18,9 @@ import {
 	UsersIcon,
 	XIcon,
 	BadgeCheckIcon,
+	RouteIcon,
+	CircleDotDashedIcon,
+	CircleFadingPlusIcon,
 } from "lucide-react";
 import { type CSSProperties } from "react";
 import {
@@ -252,7 +255,7 @@ const iconsList: { [key: string]: LucideIcon } = {
 	//Category
 	post: ImageIcon,
 	video: PlayIcon,
-	stories: CircleDashedIcon,
+	stories: CircleFadingPlusIcon,
 	todo: ListChecksIcon,
 	finance: DollarSignIcon,
 	print: PrinterIcon,
@@ -260,7 +263,8 @@ const iconsList: { [key: string]: LucideIcon } = {
 	dev: Code2Icon,
 	design: PenToolIcon,
 	ads: MegaphoneIcon,
-	socialmedia: BadgeCheckIcon,
+	sm: BadgeCheckIcon,
+	plan: RouteIcon,
 	//Priority
 	low: SignalLowIcon,
 	mid: SignalMediumIcon,
@@ -277,7 +281,7 @@ export const Icons = ({
 	className?: string;
 	type?: "category" | "priority";
 }) => {
-	const View = iconsList[id as string] ?? XIcon;
+	const View = iconsList[id as string] ?? ComponentIcon;
 
 	return type === "category" ? (
 		<View className={cn(className)} />
