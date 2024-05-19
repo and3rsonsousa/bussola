@@ -72,6 +72,7 @@ const config = {
 				finance: colors.emerald,
 				design: colors.rose,
 				ads: colors.sky,
+				socialmedia: colors.fuchsia,
 
 				success: colors.lime,
 				alert: colors.yellow,

@@ -276,6 +276,9 @@ body {
 .border-ads {
 	@apply border-ads-500;
 }
+.border-socialmedia {
+	@apply border-socialmedia-500;
+}
 
 .scrollbars {
 	@apply h-full overflow-hidden overflow-y-auto pr-2;

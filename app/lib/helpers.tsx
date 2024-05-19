@@ -17,6 +17,7 @@ import {
 	SignalMediumIcon,
 	UsersIcon,
 	XIcon,
+	BadgeCheckIcon,
 } from "lucide-react";
 import { type CSSProperties } from "react";
 import {
@@ -184,30 +185,22 @@ export function getUrgentActions(actions: Action[] | null) {
 		: [];
 }
 
-export function getActionsByPriority(actions: Action[] | null) {
-	const la = actions
-		? actions.filter(
-				(action) =>
-					action.priority_id === PRIORITIES.low &&
-					action.state_id !== STATES.finish
-		  )
-		: [];
-	const ma = actions
-		? actions.filter(
-				(action) =>
-					action.priority_id === PRIORITIES.medium &&
-					action.state_id !== STATES.finish
-		  )
-		: [];
-	const ha = actions
-		? actions.filter(
-				(action) =>
-					action.priority_id === PRIORITIES.high &&
-					action.state_id !== STATES.finish
-		  )
-		: [];
-
-	return [...la, ...ma, ...ha];
+export function getActionsByPriority(actions?: Action[] | null) {
+	let sorted = actions?.sort((a, b) => {
+		return (
+			(PRIORITIES.low === a.priority_id
+				? 1
+				: PRIORITIES.medium === a.priority_id
+				? 2
+				: 3) -
+			(PRIORITIES.low === b.priority_id
+				? 1
+				: PRIORITIES.medium === b.priority_id
+				? 2
+				: 3)
+		);
+	});
+	return sorted || [];
 }
 
 export function getActionsByState(actions: Action[]) {
@@ -256,6 +249,7 @@ export function getInstagramActions({
 
 const iconsList: { [key: string]: LucideIcon } = {
 	all: ComponentIcon,
+	//Category
 	post: ImageIcon,
 	video: PlayIcon,
 	stories: CircleDashedIcon,
@@ -266,6 +260,8 @@ const iconsList: { [key: string]: LucideIcon } = {
 	dev: Code2Icon,
 	design: PenToolIcon,
 	ads: MegaphoneIcon,
+	socialmedia: BadgeCheckIcon,
+	//Priority
 	low: SignalLowIcon,
 	mid: SignalMediumIcon,
 	high: SignalIcon,
