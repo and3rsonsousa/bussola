@@ -48,38 +48,37 @@ export default function Partner() {
 	const { actions } = matches[3].data as { actions: Action[] | null };
 
 	return (
-		<div className="flex flex-col overflow-y-hidden">
-			<ScrollArea className="px-4 pb-4 md:px-8" id="scrollarea">
-				<div className="pt-16"></div>
-				<div className="flex justify-between pt-2">
-					<Link
-						to={`/dashboard/${partner.slug}`}
-						className="flex items-center gap-4 "
-					>
-						<Avatar
-							item={{
-								short: partner.short,
-								bg: partner.bg,
-								fg: partner.fg,
-							}}
-							size="lg"
+		<div className="flex flex-col px-4 md:px-8 overflow-y-hidden h-full">
+			<div className="pt-16"></div>
+			<div className="flex justify-between pt-2">
+				<Link
+					to={`/dashboard/${partner.slug}`}
+					className="flex items-center gap-4 "
+				>
+					<Avatar
+						item={{
+							short: partner.short,
+							bg: partner.bg,
+							fg: partner.fg,
+						}}
+						size="lg"
+					/>
+					<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
+						<div>{partner?.title}</div>
+						<Progress
+							total={actions?.length || 1}
+							values={states.map((state) => ({
+								id: state.id,
+								title: state.title,
+								value: actions?.filter(
+									(action) => action.state_id === state.id
+								).length,
+								color: `bg-${state.slug}`,
+							}))}
 						/>
-						<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
-							<div>{partner?.title}</div>
-							<Progress
-								total={actions?.length || 1}
-								values={states.map((state) => ({
-									id: state.id,
-									title: state.title,
-									value: actions?.filter(
-										(action) => action.state_id === state.id
-									).length,
-									color: `bg-${state.slug}`,
-								}))}
-							/>
-						</div>
-					</Link>
-					<div className="flex items-center gap-2">
+					</div>
+				</Link>
+				{/* <div className="flex items-center gap-2">
 						<Button
 							asChild
 							size="sm"
@@ -115,11 +114,10 @@ export default function Partner() {
 								<div className="hidden md:block">Ações</div>
 							</Link>
 						</Button>
-					</div>
-				</div>
+					</div> */}
+			</div>
 
-				<Outlet />
-			</ScrollArea>
+			<Outlet />
 		</div>
 	);
 }

@@ -654,7 +654,7 @@ export function GridOfActions({
 	priorities: Priority[];
 }) {
 	return (
-		<div className="scrollbars">
+		<div className="scrollbars scrollbars-thin">
 			<div className="grid h-full grid-cols-3 place-content-start gap-1">
 				{actions?.map((action, index) => (
 					<ActionGrid

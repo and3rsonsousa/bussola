@@ -31,7 +31,7 @@ import { ptBR } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { ActionLine } from "~/components/structure/Action";
+import { ActionLine, GridOfActions } from "~/components/structure/Action";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -43,6 +43,7 @@ import {
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
 	Icons,
+	getInstagramActions,
 	sortActions,
 	useIDsToRemove,
 	usePendingActions,
@@ -80,21 +81,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		.from("actions")
 		.select("*")
 		.eq("partner_id", partner!.id)
-		.contains("responsibles", person?.admin ? [] : [user.id])
-		.gte(
-			"date",
-			format(
-				startOfWeek(startOfMonth(parseISO(date))),
-				"yyyy-MM-dd HH:mm:ss"
-			)
-		)
-		.lte(
-			"date",
-			format(
-				endOfDay(endOfWeek(endOfMonth(parseISO(date)))),
-				"yyyy-MM-dd HH:mm:ss"
-			)
-		);
+		.contains("responsibles", person?.admin ? [] : [user.id]);
 
 	return json({ actions, partner }, { headers });
 };
@@ -140,6 +127,7 @@ export default function Partner() {
 	}
 
 	actions = sortActions(Array.from(actionsMap, ([, v]) => v));
+	const instagramActions = getInstagramActions({ actions });
 
 	const calendar = days.map((day) => {
 		return {
@@ -189,101 +177,107 @@ export default function Partner() {
 		}
 	}, [draggedAction, submit]);
 
-	useEffect(() => {
-		document
-			.querySelector("[data-radix-scroll-area-viewport]")!
-			.addEventListener("scroll", function (e: unknown) {
-				const header = document.querySelector("#daysheader");
-				const calendar = document.querySelector("#calendar");
-				const divider = document.querySelector("#divider");
-				if (
-					(e as React.UIEvent<HTMLElement>).currentTarget.scrollTop >
-					60
-				) {
-					header?.classList.add(
-						"fixed",
-						"top-[64px]",
-						"-ml-8",
-						"px-8"
-					);
-					calendar?.classList.add("mt-20");
-					divider?.classList.remove("hidden");
-				} else {
-					header?.classList.remove("fixed", "-ml-8", "px-8");
-					calendar?.classList.remove("mt-20");
-					divider?.classList.add("hidden");
-				}
-			});
-	}, []);
+	// useEffect(() => {
+	// 	document
+	// 		.querySelector("[data-radix-scroll-area-viewport]")!
+	// 		.addEventListener("scroll", function (e: unknown) {
+	// 			const header = document.querySelector("#daysheader");
+	// 			const calendar = document.querySelector("#calendar");
+	// 			const divider = document.querySelector("#divider");
+	// 			if (
+	// 				(e as React.UIEvent<HTMLElement>).currentTarget.scrollTop >
+	// 				60
+	// 			) {
+	// 				header?.classList.add(
+	// 					"fixed",
+	// 					"top-[64px]",
+	// 					"-ml-8",
+	// 					"px-8"
+	// 				);
+	// 				calendar?.classList.add("mt-20");
+	// 				divider?.classList.remove("hidden");
+	// 			} else {
+	// 				header?.classList.remove("fixed", "-ml-8", "px-8");
+	// 				calendar?.classList.remove("mt-20");
+	// 				divider?.classList.add("hidden");
+	// 			}
+	// 		});
+	// }, []);
 
 	return (
-		<div className="relative flex flex-col overflow-y-hidden">
-			<div
-				id="daysheader"
-				className="z-10 w-full bg-background/25 backdrop-blur-lg"
-			>
-				<div className="flex items-center justify-between py-2">
-					<div className="flex items-center gap-1 text-xl font-bold ">
-						<div className="mr-4">
-							<DropdownMenu>
-								<DropdownMenuTrigger className="capitalize outline-none">
-									{format(currentDate, "MMMM", {
-										locale: ptBR,
-									})}
-								</DropdownMenuTrigger>
-								<DropdownMenuContent className="bg-content">
-									{eachMonthOfInterval({
-										start: startOfYear(new Date()),
-										end: endOfYear(new Date()),
-									}).map((month) => (
-										<DropdownMenuItem
-											className="bg-item capitalize"
-											key={month.getMonth()}
-											onSelect={() => {}}
-											asChild
-										>
-											<Link
-												to={`/dashboard/${
-													partner.slug
-												}/?date=${format(
-													new Date().setMonth(
-														month.getMonth()
-													),
-													"yyyy-MM-'01'"
-												)}`}
-											>
-												{format(month, "MMMM", {
-													locale: ptBR,
-												})}
-											</Link>
-										</DropdownMenuItem>
-									))}
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</div>
-						<Button size="icon" variant="ghost" asChild>
-							<Link
-								to={`/dashboard/${partner?.slug}?date=${format(
-									subMonths(currentDate, 1),
-									"yyyy-MM-dd"
-								)}`}
-							>
-								<ChevronLeftIcon className="h-4 w-4" />
-							</Link>
-						</Button>
-						<Button size="icon" variant="ghost" asChild>
-							<Link
-								to={`/dashboard/${partner?.slug}?date=${format(
-									addMonths(currentDate, 1),
-									"yyyy-MM-dd"
-								)}`}
-							>
-								<ChevronRightIcon className="h-4 w-4" />
-							</Link>
-						</Button>
-					</div>
-					<div className="flex items-center gap-2 pr-1">
-						{/* <Toggle onPressedChange={() => setViewLike()}>
+		<div className="lg:flex w-full gap-4 overflow-hidden">
+			<div className="scrollbars scrollbars-thin w-full h-1/2">
+				<div className="relative flex flex-col overflow-y-hidden">
+					<div
+						id="daysheader"
+						className="z-10 w-full bg-background/25 backdrop-blur-lg"
+					>
+						<div className="flex items-center justify-between py-2">
+							<div className="flex items-center gap-1 text-xl font-bold ">
+								<div className="mr-4">
+									<DropdownMenu>
+										<DropdownMenuTrigger className="capitalize outline-none">
+											{format(currentDate, "MMMM", {
+												locale: ptBR,
+											})}
+										</DropdownMenuTrigger>
+										<DropdownMenuContent className="bg-content">
+											{eachMonthOfInterval({
+												start: startOfYear(new Date()),
+												end: endOfYear(new Date()),
+											}).map((month) => (
+												<DropdownMenuItem
+													className="bg-item capitalize"
+													key={month.getMonth()}
+													onSelect={() => {}}
+													asChild
+												>
+													<Link
+														to={`/dashboard/${
+															partner.slug
+														}/?date=${format(
+															new Date().setMonth(
+																month.getMonth()
+															),
+															"yyyy-MM-'01'"
+														)}`}
+													>
+														{format(month, "MMMM", {
+															locale: ptBR,
+														})}
+													</Link>
+												</DropdownMenuItem>
+											))}
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</div>
+								<Button size="icon" variant="ghost" asChild>
+									<Link
+										to={`/dashboard/${
+											partner?.slug
+										}?date=${format(
+											subMonths(currentDate, 1),
+											"yyyy-MM-dd"
+										)}`}
+									>
+										<ChevronLeftIcon className="h-4 w-4" />
+									</Link>
+								</Button>
+								<Button size="icon" variant="ghost" asChild>
+									<Link
+										to={`/dashboard/${
+											partner?.slug
+										}?date=${format(
+											addMonths(currentDate, 1),
+											"yyyy-MM-dd"
+										)}`}
+									>
+										<ChevronRightIcon className="h-4 w-4" />
+									</Link>
+								</Button>
+							</div>
+							<div className="flex items-center gap-2 pr-1">
+								{/* <Toggle onPressedChange={() => setViewLike()}>
               {(() => {
                 return (
                   <>
@@ -293,189 +287,215 @@ export default function Partner() {
                 )
               })()}
             </Toggle> */}
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									size={"sm"}
-									variant={"ghost"}
-									className={`${
-										stateFilter
-											? `border-${stateFilter?.slug}`
-											: "border-transparent"
-									} border-2 text-xs font-bold`}
-								>
-									{stateFilter
-										? stateFilter.title
-										: "Filtre pelo Status"}
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent className="bg-content">
-								<DropdownMenuCheckboxItem
-									className="bg-select-item flex gap-2"
-									onCheckedChange={() => {
-										setStateFilter(undefined);
-									}}
-								>
-									<div
-										className={`h-3 w-3 rounded-full border-2 border-white`}
-									></div>
-									<div>Todos os Status</div>
-								</DropdownMenuCheckboxItem>
-								{states.map((state) => (
-									<DropdownMenuCheckboxItem
-										className="bg-select-item flex gap-2"
-										key={state.id}
-										checked={state.id === stateFilter?.id}
-										onCheckedChange={(checked) => {
-											if (
-												!checked &&
-												state.id === stateFilter?.id
-											) {
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button
+											size={"sm"}
+											variant={"ghost"}
+											className={`${
+												stateFilter
+													? `border-${stateFilter?.slug}`
+													: "border-transparent"
+											} border-2 text-xs font-bold`}
+										>
+											{stateFilter
+												? stateFilter.title
+												: "Filtre pelo Status"}
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent className="bg-content">
+										<DropdownMenuCheckboxItem
+											className="bg-select-item flex gap-2"
+											onCheckedChange={() => {
 												setStateFilter(undefined);
-											} else {
-												setStateFilter(state);
+											}}
+										>
+											<div
+												className={`h-3 w-3 rounded-full border-2 border-white`}
+											></div>
+											<div>Todos os Status</div>
+										</DropdownMenuCheckboxItem>
+										{states.map((state) => (
+											<DropdownMenuCheckboxItem
+												className="bg-select-item flex gap-2"
+												key={state.id}
+												checked={
+													state.id === stateFilter?.id
+												}
+												onCheckedChange={(checked) => {
+													if (
+														!checked &&
+														state.id ===
+															stateFilter?.id
+													) {
+														setStateFilter(
+															undefined
+														);
+													} else {
+														setStateFilter(state);
+													}
+												}}
+											>
+												<div
+													className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
+												></div>
+												<div>{state.title}</div>
+											</DropdownMenuCheckboxItem>
+										))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button
+											size={"sm"}
+											variant={
+												categoryFilter.length > 0
+													? "default"
+													: "ghost"
 											}
-										}}
-									>
-										<div
-											className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
-										></div>
-										<div>{state.title}</div>
-									</DropdownMenuCheckboxItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									size={"sm"}
-									variant={
-										categoryFilter.length > 0
-											? "default"
-											: "ghost"
-									}
-									className={`text-xs font-bold`}
-								>
-									{categoryFilter.length > 0 ? (
-										<>
-											<div>
-												{categoryFilter
-													.map(
-														(category) =>
-															category.title
-													)
-													.join(", ")}
-											</div>
-										</>
-									) : (
-										"Filtre pela Categoria"
-									)}
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent className="bg-content">
-								<DropdownMenuCheckboxItem
-									className="bg-select-item flex gap-2"
-									checked={categoryFilter?.length == 0}
-									onCheckedChange={() => {
-										setCategoryFilter([]);
-									}}
-								>
-									<Icons className="h-3 w-3" id="all" />
-									<div>Todas as Categorias</div>
-								</DropdownMenuCheckboxItem>
-								{categories.map((category) => (
-									<DropdownMenuCheckboxItem
-										className="bg-select-item flex gap-2"
-										key={category.id}
-										checked={
-											categoryFilter
-												? categoryFilter?.findIndex(
-														(c) =>
-															category.id === c.id
-												  ) >= 0
-												: false
-										}
-										onCheckedChange={(checked) => {
-											if (
-												!checked &&
-												categoryFilter?.findIndex(
-													(c) => category.id === c.id
-												) >= 0
-											) {
-												const filters =
-													categoryFilter.filter(
-														(c) =>
-															c.id != category.id
-													);
-
-												setCategoryFilter(filters);
-											} else {
-												setCategoryFilter(
+											className={`text-xs font-bold`}
+										>
+											{categoryFilter.length > 0 ? (
+												<>
+													<div>
+														{categoryFilter
+															.map(
+																(category) =>
+																	category.title
+															)
+															.join(", ")}
+													</div>
+												</>
+											) : (
+												"Filtre pela Categoria"
+											)}
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent className="bg-content">
+										<DropdownMenuCheckboxItem
+											className="bg-select-item flex gap-2"
+											checked={
+												categoryFilter?.length == 0
+											}
+											onCheckedChange={() => {
+												setCategoryFilter([]);
+											}}
+										>
+											<Icons
+												className="h-3 w-3"
+												id="all"
+											/>
+											<div>Todas as Categorias</div>
+										</DropdownMenuCheckboxItem>
+										{categories.map((category) => (
+											<DropdownMenuCheckboxItem
+												className="bg-select-item flex gap-2"
+												key={category.id}
+												checked={
 													categoryFilter
-														? [
-																...categoryFilter,
-																category,
-														  ]
-														: [category]
-												);
-											}
-										}}
+														? categoryFilter?.findIndex(
+																(c) =>
+																	category.id ===
+																	c.id
+														  ) >= 0
+														: false
+												}
+												onCheckedChange={(checked) => {
+													if (
+														!checked &&
+														categoryFilter?.findIndex(
+															(c) =>
+																category.id ===
+																c.id
+														) >= 0
+													) {
+														const filters =
+															categoryFilter.filter(
+																(c) =>
+																	c.id !=
+																	category.id
+															);
+
+														setCategoryFilter(
+															filters
+														);
+													} else {
+														setCategoryFilter(
+															categoryFilter
+																? [
+																		...categoryFilter,
+																		category,
+																  ]
+																: [category]
+														);
+													}
+												}}
+											>
+												<Icons
+													id={category.slug}
+													className="h-3 w-3"
+												/>
+												<div>{category.title}</div>
+											</DropdownMenuCheckboxItem>
+										))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</div>
+						</div>
+						<div
+							className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider  md:grid`}
+						>
+							{eachDayOfInterval({
+								start: startOfWeek(new Date()),
+								end: endOfWeek(new Date()),
+							}).map((day, j) => {
+								return (
+									<div
+										key={j}
+										className={
+											day.getDay() === new Date().getDay()
+												? "text-gray-100"
+												: "text-gray-500"
+										}
 									>
-										<Icons
-											id={category.slug}
-											className="h-3 w-3"
-										/>
-										<div>{category.title}</div>
-									</DropdownMenuCheckboxItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
+										{format(day, "EEE", { locale: ptBR })}
+									</div>
+								);
+							})}
+						</div>
+						<div
+							id="divider"
+							className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-gray-700"
+						></div>
+					</div>
+					<div
+						id="calendar"
+						className={`grid-cols-7 pb-4 text-gray-300 md:grid`}
+					>
+						{calendar.map((day, i) => (
+							<CalendarDay
+								key={i}
+								categories={categories}
+								priorities={priorities}
+								states={states}
+								currentDate={currentDate}
+								day={day}
+								setDraggedAction={setDraggedAction}
+								partner={partner}
+								person={person}
+								people={people}
+							/>
+						))}
 					</div>
 				</div>
-				<div
-					className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider  md:grid`}
-				>
-					{eachDayOfInterval({
-						start: startOfWeek(new Date()),
-						end: endOfWeek(new Date()),
-					}).map((day, j) => {
-						return (
-							<div
-								key={j}
-								className={
-									day.getDay() === new Date().getDay()
-										? "text-gray-100"
-										: "text-gray-500"
-								}
-							>
-								{format(day, "EEE", { locale: ptBR })}
-							</div>
-						);
-					})}
-				</div>
-				<div
-					id="divider"
-					className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-gray-700"
-				></div>
 			</div>
-			<div
-				id="calendar"
-				className={`grid-cols-7 pb-4 text-gray-300 md:grid`}
-			>
-				{calendar.map((day, i) => (
-					<CalendarDay
-						key={i}
-						categories={categories}
-						priorities={priorities}
-						states={states}
-						currentDate={currentDate}
-						day={day}
-						setDraggedAction={setDraggedAction}
-						partner={partner}
-						person={person}
-						people={people}
-					/>
-				))}
+			<div className="max-w-96">
+				<GridOfActions
+					categories={categories}
+					priorities={priorities}
+					states={states}
+					actions={instagramActions}
+				/>
 			</div>
 		</div>
 	);
