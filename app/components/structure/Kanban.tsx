@@ -14,7 +14,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 							className="min-w-72 w-full max-h-[70vh] overflow-hidden p-1 bg-gray-950 rounded-md hover:bg-gray-950/50 transition"
 							key={state.id}
 						>
-							<div className="mb-2 flex items-center gap-2 px-2">
+							<div className="mb-2 flex items-center gap-2 px-2 pt-2">
 								<div
 									className={`size-4 rounded-full border-4 border-${state.slug}`}
 								></div>
