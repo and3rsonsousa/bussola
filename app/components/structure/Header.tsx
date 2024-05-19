@@ -12,7 +12,7 @@ import {
 	PlusIcon,
 	Users2Icon,
 } from "lucide-react";
-import { AvatarPerson } from "~/lib/helpers";
+import { Avatar } from "~/lib/helpers";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -71,7 +71,13 @@ export default function Header() {
 				{person && (
 					<DropdownMenu>
 						<DropdownMenuTrigger className="outline-none focus-within:ring-2 ring-primary rounded-full p-1 -mr-1">
-							<AvatarPerson person={person} />
+							<Avatar
+								size="md"
+								item={{
+									image: person.image,
+									short: person.initials!,
+								}}
+							/>
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent>

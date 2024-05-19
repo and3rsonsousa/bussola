@@ -43,8 +43,7 @@ import {
 } from "~/components/ui/context-menu";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
-	AvatarPartner,
-	AvatarPerson,
+	Avatar,
 	Icons,
 	amIResponsible,
 	getActionsByState,
@@ -134,10 +133,13 @@ export function ActionLine({
 					) : null}
 
 					{partner && (
-						<AvatarPartner
+						<Avatar
 							size="xs"
-							partner={partner}
-							className=""
+							item={{
+								short: partner.short,
+								bg: partner.bg,
+								fg: partner.fg,
+							}}
 						/>
 					)}
 					{showCategory && (
@@ -233,7 +235,15 @@ export function ActionLine({
 						{amIResponsible(
 							action.responsibles,
 							person.user_id
-						) && <AvatarPerson person={person} size="xs" />}
+						) && (
+							<Avatar
+								item={{
+									image: person.image,
+									short: person.initials!,
+								}}
+								size="xs"
+							/>
+						)}
 					</div>
 
 					{date && (
@@ -375,7 +385,13 @@ export function ActionBlock({ action }: { action: Action }) {
 						<div className="flex items-center gap-2">
 							{/* Cliente */}
 							{partner ? (
-								<AvatarPartner partner={partner} />
+								<Avatar
+									item={{
+										short: partner.short,
+										bg: partner.bg,
+										fg: partner.fg,
+									}}
+								/>
 							) : null}
 							{/* Category - Categoria */}
 							<div>
@@ -406,8 +422,11 @@ export function ActionBlock({ action }: { action: Action }) {
 									action.responsibles,
 									person.user_id
 								) && (
-									<AvatarPerson
-										person={person}
+									<Avatar
+										item={{
+											image: person.image,
+											short: person.initials!,
+										}}
 										size="sm"
 										key={person.id}
 									/>
@@ -609,7 +628,7 @@ export function BlockOfActions({
 			<div
 				className={`grid ${
 					!max
-						? "@[500px]:grid-cols-2 @[750px]:grid-cols-3 @[1000px]:grid-cols-4"
+						? "@[500px]:grid-cols-2 @[750px]:grid-cols-3 @[1000px]:grid-cols-4 @[1300px]:grid-cols-6"
 						: max === 2
 						? "grid-cols-2"
 						: ""
@@ -1153,8 +1172,11 @@ function ContextMenuItems({
 					<div className="flex items-center">
 						{getResponsibles(people, action.responsibles).map(
 							(person) => (
-								<AvatarPerson
-									person={person}
+								<Avatar
+									item={{
+										image: person.image,
+										short: person.initials!,
+									}}
 									size="sm"
 									key={person.id}
 									group
@@ -1205,7 +1227,13 @@ function ContextMenuItems({
 									});
 								}}
 							>
-								<AvatarPerson person={person} size="sm" />
+								<Avatar
+									item={{
+										image: person.image,
+										short: person.initials!,
+									}}
+									size="sm"
+								/>
 								{`${person.name} ${person.surname}`}
 							</ContextMenuCheckboxItem>
 						))}

@@ -2,7 +2,7 @@ import { Form, Link, useLoaderData } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import { Trash2Icon } from "lucide-react";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { AvatarPerson } from "~/lib/helpers";
+import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -29,7 +29,13 @@ export default function AdminPartners() {
 							key={person.id}
 							to={`/dashboard/admin/users/${person.id}`}
 						>
-							<AvatarPerson person={person} size="lg" />
+							<Avatar
+								item={{
+									image: person.image,
+									short: person.initials!,
+								}}
+								size="lg"
+							/>
 							<div className="text-2xl tracking-tighter font-bold">
 								{`${person.name} ${person.surname}`}
 							</div>

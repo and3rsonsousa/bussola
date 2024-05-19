@@ -1,7 +1,7 @@
 import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import { Trash2Icon } from "lucide-react";
-import { AvatarPartner, AvatarPerson, getResponsibles } from "~/lib/helpers";
+import { Avatar, getResponsibles } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -35,7 +35,14 @@ export default function AdminPartners() {
 							tabIndex={-1}
 						>
 							<div className="flex gap-4">
-								<AvatarPartner partner={partner} size="lg" />
+								<Avatar
+									item={{
+										short: partner.short,
+										bg: partner.bg,
+										fg: partner.fg,
+									}}
+									size="lg"
+								/>
 								<div>
 									<div className="text-2xl font-bold leading-none outline-none">
 										{partner.title}
@@ -48,9 +55,12 @@ export default function AdminPartners() {
 											people,
 											partner.users_ids
 										).map((person) => (
-											<AvatarPerson
+											<Avatar
 												key={person.id}
-												person={person}
+												item={{
+													image: person.image,
+													short: person.initials!,
+												}}
 												group
 											/>
 										))}

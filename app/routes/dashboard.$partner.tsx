@@ -9,7 +9,7 @@ import { CalendarDaysIcon, Grid3X3Icon, ListTodoIcon } from "lucide-react";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { AvatarPartner } from "~/lib/helpers";
+import { Avatar } from "~/lib/helpers";
 
 import { createClient } from "~/lib/supabase";
 
@@ -56,7 +56,14 @@ export default function Partner() {
 						to={`/dashboard/${partner.slug}`}
 						className="flex items-center gap-4 "
 					>
-						<AvatarPartner partner={partner} size="lg" />
+						<Avatar
+							item={{
+								short: partner.short,
+								bg: partner.bg,
+								fg: partner.fg,
+							}}
+							size="lg"
+						/>
 						<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
 							<div>{partner?.title}</div>
 							<Progress

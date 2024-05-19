@@ -10,7 +10,7 @@ import invariant from "tiny-invariant";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { AvatarPartner, AvatarPerson } from "~/lib/helpers";
+import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -73,7 +73,14 @@ export default function AdminPartners() {
 						className="flex items-center gap-2 rounded py-4 font-extrabold tracking-tighter text-gray-100"
 						key={partner.id}
 					>
-						<AvatarPartner partner={partner} size="lg" />
+						<Avatar
+							item={{
+								short: partner.short,
+								bg: partner.bg,
+								fg: partner.fg,
+							}}
+							size="lg"
+						/>
 						<Link
 							to={`/dashboard/${partner.slug}`}
 							className="text-2xl"
@@ -127,8 +134,11 @@ export default function AdminPartners() {
 										<div
 											className={`ring-offset-background transition rounded-full ring-primary ring-offset-2 peer-checked:ring-2`}
 										>
-											<AvatarPerson
-												person={person}
+											<Avatar
+												item={{
+													image: person.image,
+													short: person.initials!,
+												}}
 												size="lg"
 											/>
 										</div>

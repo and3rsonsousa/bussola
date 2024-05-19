@@ -45,7 +45,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { INTENTS } from "~/lib/constants";
-import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
+import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -122,8 +122,12 @@ export default function ActionPage() {
 			<div className="pt-16"></div>
 			<div className="flex shrink grow-0 items-center justify-between p-4 text-sm">
 				<div className="flex items-center gap-2 ">
-					<AvatarPartner
-						partner={partner}
+					<Avatar
+						item={{
+							short: partner.short,
+							bg: partner.bg,
+							fg: partner.fg,
+						}}
 						size="md"
 						style={{
 							viewTransitionName: "avatar-partner",
@@ -219,7 +223,14 @@ export default function ActionPage() {
 					<div>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-								<AvatarPartner partner={partner} size="lg" />
+								<Avatar
+									item={{
+										short: partner.short,
+										bg: partner.bg,
+										fg: partner.fg,
+									}}
+									size="lg"
+								/>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
 								{partners.map((partner) => (
@@ -246,7 +257,13 @@ export default function ActionPage() {
 											}
 										}}
 									>
-										<AvatarPartner partner={partner} />
+										<Avatar
+											item={{
+												short: partner.short,
+												bg: partner.bg,
+												fg: partner.fg,
+											}}
+										/>
 										<span>{partner.title}</span>
 									</DropdownMenuItem>
 								))}
@@ -360,8 +377,11 @@ export default function ActionPage() {
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
 								<div className="flex rounded-full bg-gray-900 p-2 pl-3">
 									{responsibles.map((person) => (
-										<AvatarPerson
-											person={person}
+										<Avatar
+											item={{
+												image: person.image,
+												short: person.initials!,
+											}}
 											key={person.id}
 											group
 											size="md"
@@ -405,7 +425,12 @@ export default function ActionPage() {
 											});
 										}}
 									>
-										<AvatarPerson person={person} />
+										<Avatar
+											item={{
+												image: person.image,
+												short: person.initials!,
+											}}
+										/>
 										<span>{person.name}</span>
 									</DropdownMenuCheckboxItem>
 								))}

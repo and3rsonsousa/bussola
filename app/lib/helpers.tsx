@@ -19,7 +19,11 @@ import {
 	XIcon,
 } from "lucide-react";
 import { type CSSProperties } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import {
+	Avatar as AvatarShad,
+	AvatarFallback,
+	AvatarImage,
+} from "~/components/ui/avatar";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "./constants";
 import { cn } from "./utils";
 
@@ -37,6 +41,7 @@ export function ShortText({
 				`text-center text-[10px] font-extrabold uppercase leading-none tracking-wide`,
 				className
 			)}
+			style={{ fontStretch: "125%" }}
 		>
 			{length >= 4 ? (
 				<>
@@ -50,65 +55,21 @@ export function ShortText({
 	);
 }
 
-export function AvatarPartner({
-	partner,
+export function Avatar({
+	item,
+	group,
 	size = "sm",
 	style,
 	className,
 }: {
-	partner: Partner;
+	item: { image?: string | null; bg?: string; fg?: string; short: string };
 	size?: "xs" | "sm" | "md" | "lg";
 	style?: CSSProperties;
 	className?: string;
+	group?: boolean;
 }) {
 	return (
-		<Avatar
-			className={cn([
-				size === "xs"
-					? "h-4 w-4"
-					: size === "sm"
-					? "h-6 w-6"
-					: size === "md"
-					? "h-8 w-8"
-					: "h-12 w-12",
-				className,
-			])}
-			style={style}
-		>
-			<AvatarFallback
-				style={{
-					backgroundColor: partner.bg || "#778",
-					color: partner.fg || "#dde",
-				}}
-			>
-				<ShortText
-					text={size === "xs" ? partner.short[0] : partner.short}
-					className={
-						size === "sm"
-							? "scale-[0.7]"
-							: size === "md"
-							? "scale-[0.8]"
-							: "scale-[1.3]"
-					}
-				/>
-			</AvatarFallback>
-		</Avatar>
-	);
-}
-export const AvatarPerson = ({
-	person,
-	className,
-	size = "sm",
-	group,
-}: {
-	person: Person;
-	className?: string;
-	size?: "xs" | "sm" | "md" | "lg";
-	group?: boolean;
-}) => {
-	return (
-		<Avatar
-			key={person.id}
+		<AvatarShad
 			className={cn([
 				size === "xs"
 					? "h-4 w-4"
@@ -118,30 +79,37 @@ export const AvatarPerson = ({
 					? "h-8 w-8"
 					: "h-12 w-12",
 				group ? "-ml-1" : "",
+				"border",
 				className,
 			])}
+			style={style}
 		>
-			{person.image ? (
-				<AvatarImage src={person.image} />
+			{item.image ? (
+				<AvatarImage src={item.image} />
 			) : (
 				<AvatarFallback
-					className={cn(
-						size === "xs"
-							? "text-[6px]"
-							: size === "sm"
-							? "text-[10px]"
-							: size === "md"
-							? "text-[14px]"
-							: "text-[20px]",
-						"font-semibold"
-					)}
+					style={{
+						backgroundColor: item.bg || "#778",
+						color: item.fg || "#dde",
+					}}
 				>
-					{person.initials?.toUpperCase()}
+					<ShortText
+						text={size === "xs" ? item.short[0] : item.short}
+						className={
+							size === "lg"
+								? "scale-[1.3]"
+								: size === "sm"
+								? "scale-[0.6]"
+								: size === "md"
+								? "scale-[0.8]"
+								: ""
+						}
+					/>
 				</AvatarFallback>
 			)}
-		</Avatar>
+		</AvatarShad>
 	);
-};
+}
 
 export function sortActions(
 	actions?: Action[] | null,

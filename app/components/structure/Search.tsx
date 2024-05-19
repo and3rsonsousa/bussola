@@ -4,7 +4,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import { CommandLoading } from "cmdk";
 import { useEffect, useState } from "react";
 import { PRIORITIES } from "~/lib/constants";
-import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
+import { Avatar, Icons } from "~/lib/helpers";
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -192,16 +192,22 @@ export default function Search() {
 											<div className="flex">
 												{item.obs.responsibles.map(
 													(responsible) => (
-														<AvatarPerson
-															person={responsible}
+														<Avatar
+															item={{
+																image: responsible.image,
+																short: responsible.initials!,
+															}}
 															key={responsible.id}
 															group
 														/>
 													)
 												)}
 											</div>
-											<AvatarPartner
-												partner={item.obs.partner}
+											<Avatar
+												item={{
+													short: item.obs.partner
+														.short,
+												}}
 											/>
 											<Icons
 												id={item.obs.category.slug}

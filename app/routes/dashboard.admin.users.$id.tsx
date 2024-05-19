@@ -8,7 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { INTENTS } from "~/lib/constants";
-import { AvatarPartner, AvatarPerson } from "~/lib/helpers";
+import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -102,7 +102,13 @@ export default function AdminPartners() {
 							className="flex items-center gap-2 py-4"
 							key={person.id}
 						>
-							<AvatarPerson person={person} size="lg" />
+							<Avatar
+								item={{
+									image: person.image,
+									short: person.initials!,
+								}}
+								size="lg"
+							/>
 							<div className="font-extrabold text-lg tracking-tighter text-gray-100">
 								{`${person.name} ${person.surname}`}
 							</div>
@@ -247,8 +253,12 @@ export default function AdminPartners() {
 										<div
 											className={`ring-offset-background transition rounded-full ring-primary ring-offset-2 peer-checked:ring-2`}
 										>
-											<AvatarPartner
-												partner={partner}
+											<Avatar
+												item={{
+													short: partner.short,
+													bg: partner.bg,
+													fg: partner.fg,
+												}}
 												size="md"
 											/>
 										</div>

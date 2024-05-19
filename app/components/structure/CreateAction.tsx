@@ -5,7 +5,7 @@ import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CATEGORIES, INTENTS, STATES } from "~/lib/constants";
-import { AvatarPartner, AvatarPerson, Icons } from "~/lib/helpers";
+import { Avatar, Icons } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
@@ -192,14 +192,14 @@ export default function CreateAction({
 								}`}
 							>
 								{action.partner_id ? (
-									<AvatarPartner
-										partner={
-											partners.find(
+									<Avatar
+										item={{
+											short: partners.find(
 												(partner) =>
 													partner.id ===
 													action.partner_id
-											) as Partner
-										}
+											)!.short,
+										}}
 									/>
 								) : (
 									"Cliente"
@@ -292,8 +292,11 @@ export default function CreateAction({
 									tabIndex={0}
 								>
 									{responsibles.map((person) => (
-										<AvatarPerson
-											person={person}
+										<Avatar
+											item={{
+												image: person.image,
+												short: person.initials!,
+											}}
 											key={person.id}
 										/>
 									))}
@@ -335,7 +338,12 @@ export default function CreateAction({
 										}}
 									>
 										<div className="flex items-center gap-2">
-											<AvatarPerson person={person} />
+											<Avatar
+												item={{
+													image: person.image,
+													short: person.initials!,
+												}}
+											/>
 											<div>{person.name}</div>
 										</div>
 									</DropdownMenuCheckboxItem>
