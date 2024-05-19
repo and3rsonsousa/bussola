@@ -606,8 +606,11 @@ export const CalendarDay = ({
 								key={category.id}
 								className="flex flex-col gap-1"
 							>
-								<div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">
-									{category.title}
+								<div className="text-[8px] font-bold uppercase tracking-widest text-gray-500 flex gap-1 items-center">
+									<div
+										className={`bg-${category.slug} size-1.5 rounded-full`}
+									></div>
+									<div>{category.title}</div>
 								</div>
 								{actions?.map((action) => (
 									<ActionLine
