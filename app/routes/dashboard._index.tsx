@@ -28,7 +28,7 @@ import {
 	SignalIcon,
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
-import { ListOfActions } from "~/components/structure/Action";
+import { BlockOfActions, ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
 import Kanban from "~/components/structure/Kanban";
@@ -340,15 +340,7 @@ export default function DashboardIndex() {
 							/>
 						</div>
 
-						<ListOfActions
-							showCategory
-							actions={tomorrowActions}
-							columns={6}
-							date={{
-								dateFormat: 0,
-								timeFormat: 1,
-							}}
-						/>
+						<BlockOfActions actions={tomorrowActions} />
 					</div>
 				) : null}
 
