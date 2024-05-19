@@ -8,10 +8,10 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 	return (
 		<div className="overflow-hidden">
 			<div className="scrollbars-horizontal">
-				<div className="flex w-full pb-4">
+				<div className="flex w-full pb-4 gap-2">
 					{states.map((state) => (
 						<div
-							className="min-w-72 w-full max-h-[70vh] overflow-hidden"
+							className="min-w-72 w-full max-h-[70vh] overflow-hidden p-1 bg-gray-950 rounded-md hover:bg-gray-950/50 transition"
 							key={state.id}
 						>
 							<div className="mb-2 flex items-center gap-2 px-2">

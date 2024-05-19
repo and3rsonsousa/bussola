@@ -162,7 +162,7 @@ PRETO E BRANCO
 		@apply border-border;
 	}
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-[#000] text-foreground;
 	}
 }
 
@@ -278,7 +278,7 @@ body {
 }
 
 .scrollbars {
-	@apply h-full overflow-hidden overflow-y-auto pr-1;
+	@apply h-full overflow-hidden overflow-y-auto pr-2;
 	scrollbars-gutter: stable;
 }
 

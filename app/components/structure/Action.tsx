@@ -295,7 +295,7 @@ export function ActionBlock({ action }: { action: Action }) {
 					} ${
 						edit
 							? "bg-gray-800 text-gray-200"
-							: "border-white/20 bg-gray-900 hover:bg-gray-800  hover:text-gray-100"
+							: "border-white/20 bg-gray-900 hover:bg-gray-800 hover:text-gray-100"
 					}`}
 					onMouseEnter={() => {
 						setHover(true);
