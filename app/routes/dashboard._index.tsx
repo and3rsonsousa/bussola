@@ -23,6 +23,7 @@ import {
 import { ptBR } from "date-fns/locale";
 import {
 	CalendarClock,
+	ComponentIcon,
 	KanbanIcon,
 	ListTodoIcon,
 	SignalIcon,
@@ -34,9 +35,10 @@ import CreateAction from "~/components/structure/CreateAction";
 import Kanban from "~/components/structure/Kanban";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
-import { INTENTS } from "~/lib/constants";
+import { INTENTS, STATES } from "~/lib/constants";
 import {
 	Avatar,
+	Icons,
 	getActionsByPriority,
 	getActionsByState,
 	getActionsForThisDay,
@@ -95,13 +97,16 @@ export default function DashboardIndex() {
 	const matches = useMatches();
 	const submit = useSubmit();
 	const [draggedAction, setDraggedAction] = useState<Action>();
-	const [todayView, setTodayView] = useState<"kanban" | "hours">("kanban");
+	const [todayView, setTodayView] = useState<
+		"kanban" | "hours" | "categories"
+	>("kanban");
 
 	if (!actions) {
 		actions = [];
 	}
 
-	const { states, partners } = matches[1].data as DashboardDataType;
+	const { states, partners, categories } = matches[1]
+		.data as DashboardDataType;
 
 	const pendingActions = usePendingActions();
 	const idsToRemove = useIDsToRemove();
@@ -137,6 +142,9 @@ export default function DashboardIndex() {
 			isSameDay(action.date, day)
 		) as Action[],
 	}));
+	const nextActions = actions?.filter(
+		(action) => action.state_id != STATES.finish
+	);
 
 	useEffect(() => {
 		if (draggedAction) {
@@ -253,77 +261,85 @@ export default function DashboardIndex() {
 									className="-translate-y-1 translate-x-8"
 								/>
 							</div>
-							<div>
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => {
-										setTodayView(() =>
-											todayView === "hours"
-												? "kanban"
-												: "hours"
-										);
-									}}
-								>
-									{todayView === "kanban" ? (
-										<KanbanIcon className="w-6" />
-									) : (
-										<CalendarClock className="w-6" />
-									)}
-								</Button>
+							<div className="flex gap-2">
+								{[
+									{
+										id: "kanban",
+										title: "Kanban",
+										description:
+											"Ver o Kanban de progresso",
+										Icon: <KanbanIcon className="w-6" />,
+									},
+									{
+										id: "categories",
+										title: "Categorias",
+										description: "Ver por categorias",
+										Icon: <ComponentIcon className="w-6" />,
+									},
+									{
+										id: "hours",
+										title: "Horas",
+										description: "Ver por horas do dia",
+										Icon: <CalendarClock className="w-6" />,
+									},
+								].map((button) => (
+									<Button
+										key={button.id}
+										variant={
+											todayView === button.id
+												? "default"
+												: "ghost"
+										}
+										size={"sm"}
+										title={button.description}
+										className="flex gap-2 items-center"
+										onClick={() => {
+											setTodayView(
+												button.id as
+													| "kanban"
+													| "hours"
+													| "categories"
+											);
+										}}
+									>
+										{button.Icon}
+										<div className="hidden md:block">
+											{button.title}
+										</div>
+									</Button>
+								))}
 							</div>
 						</div>
 
 						{todayView === "kanban" ? (
 							<Kanban actions={todayActions} />
+						) : todayView === "hours" ? (
+							<HoursView actions={todayActions} />
 						) : (
-							<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-								{[
-									[0, 1, 2, 3, 4, 5],
-									[6, 7, 8, 9, 10, 11],
-									[12, 13, 14, 15, 16, 17],
-									[18, 19, 20, 21, 22, 23],
-								].map((columns, i) => (
-									<div key={i}>
-										{columns.map((hour, j) => {
-											const hourActions =
-												todayActions.filter(
-													(action) =>
-														new Date(
-															action.date
-														).getHours() === hour
-												);
-											return (
-												<div
-													key={j}
-													className="flex min-h-10 gap-2 border-t py-2"
-												>
-													<div
-														className={`text-xs font-bold ${
-															hourActions.length ===
-															0
-																? "opacity-15"
-																: ""
-														}`}
-													>
-														{hour}h
-													</div>
-													<div className="w-full">
-														<ListOfActions
-															actions={
-																hourActions
-															}
-															showCategory={true}
-															columns={1}
-															date={{
-																dateFormat: 0,
-																timeFormat: 1,
-															}}
-														/>
-													</div>
-												</div>
-											);
-										})}
+							<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+								{categories.map((category) => (
+									<div key={category.id}>
+										<div className="flex items-center gap-2 mb-4">
+											{
+												<Icons
+													id={category.slug}
+													className="size-4 text-gray-400"
+												/>
+											}
+
+											<h4 className="font-bold">
+												{category.title}
+											</h4>
+										</div>
+
+										<ListOfActions
+											actions={todayActions.filter(
+												(action) =>
+													action.category_id ===
+													category.id
+											)}
+											isFoldable
+										/>
 									</div>
 								))}
 							</div>
@@ -364,11 +380,15 @@ export default function DashboardIndex() {
 							Próximas Ações
 						</h2>
 						<Badge
-							value={actions?.length || 0}
+							value={nextActions?.length || 0}
 							className="translate-x-8 -translate-y-1"
 						/>
 					</div>
-					<ListOfActions actions={actions} columns={3} isFoldable />
+					<ListOfActions
+						actions={nextActions}
+						columns={3}
+						isFoldable
+					/>
 				</div>
 			</div>
 		</div>
@@ -430,6 +450,55 @@ export function WeekView({
 					</div>
 				))}
 			</div>
+		</div>
+	);
+}
+
+export function HoursView({ actions }: { actions: Action[] }) {
+	return (
+		<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
+			{[
+				[0, 1, 2, 3, 4, 5],
+				[6, 7, 8, 9, 10, 11],
+				[12, 13, 14, 15, 16, 17],
+				[18, 19, 20, 21, 22, 23],
+			].map((columns, i) => (
+				<div key={i}>
+					{columns.map((hour, j) => {
+						const hourActions = actions.filter(
+							(action) =>
+								new Date(action.date).getHours() === hour
+						);
+						return (
+							<div
+								key={j}
+								className="flex min-h-10 gap-2 border-t py-2"
+							>
+								<div
+									className={`text-xs font-bold ${
+										hourActions.length === 0
+											? "opacity-15"
+											: ""
+									}`}
+								>
+									{hour}h
+								</div>
+								<div className="w-full">
+									<ListOfActions
+										actions={hourActions}
+										showCategory={true}
+										columns={1}
+										date={{
+											dateFormat: 0,
+											timeFormat: 1,
+										}}
+									/>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			))}
 		</div>
 	);
 }

@@ -592,7 +592,7 @@ export function ListOfActions({
 						onPressedChange={(isPressed) => {
 							setFold(isPressed ? undefined : foldCount);
 						}}
-						className="inline-flex gap-2"
+						className="inline-flex uppercase text-xs tracking-wider gap-2"
 					>
 						{fold ? (
 							<>
