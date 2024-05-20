@@ -734,39 +734,59 @@ function ShortcutActions({ action }: { action: Action }) {
 					"KeyF",
 					"KeyD",
 					"KeyA",
+					"KeyM",
+					"KeyN",
 				].find((k) => k === code) &&
 				event.altKey
 			) {
 				let category_id = CATEGORIES.post;
-				if (code === "KeyT") {
-					category_id = CATEGORIES.todo;
-				}
-				if (code === "KeyP") {
-					category_id = CATEGORIES.post;
-				}
-				if (code === "KeyV") {
-					category_id = CATEGORIES.video;
-				}
-				if (code === "KeyS") {
-					category_id = CATEGORIES.stories;
-				}
-				if (code === "KeyC") {
-					category_id = CATEGORIES.dev;
-				}
-				if (code === "KeyI") {
-					category_id = CATEGORIES.print;
-				}
-				if (code === "KeyR") {
-					category_id = CATEGORIES.meeting;
-				}
-				if (code === "KeyF") {
-					category_id = CATEGORIES.finance;
-				}
-				if (code === "KeyD") {
-					category_id = CATEGORIES.design;
-				}
-				if (code === "KeyA") {
-					category_id = CATEGORIES.ads;
+				switch (code) {
+					case "KeyT":
+						category_id = CATEGORIES.todo;
+						break;
+
+					case "KeyP":
+						category_id = CATEGORIES.post;
+						break;
+
+					case "KeyV":
+						category_id = CATEGORIES.video;
+						break;
+
+					case "KeyS":
+						category_id = CATEGORIES.stories;
+						break;
+
+					case "KeyC":
+						category_id = CATEGORIES.dev;
+						break;
+
+					case "KeyI":
+						category_id = CATEGORIES.print;
+						break;
+
+					case "KeyR":
+						category_id = CATEGORIES.meeting;
+						break;
+
+					case "KeyF":
+						category_id = CATEGORIES.finance;
+						break;
+
+					case "KeyD":
+						category_id = CATEGORIES.design;
+						break;
+
+					case "KeyA":
+						category_id = CATEGORIES.ads;
+						break;
+					case "KeyM":
+						category_id = CATEGORIES.sm;
+						break;
+
+					case "KeyN":
+						category_id = CATEGORIES.plan;
+						break;
 				}
 
 				handleActions({

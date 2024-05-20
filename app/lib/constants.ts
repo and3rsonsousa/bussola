@@ -18,6 +18,7 @@ export const CATEGORIES = {
 	design: "46c11cf4-e7bf-4ba4-bb8b-09f1582fdd00",
 	ads: "3b809865-b187-41d3-9f05-96bff1040b8c",
 	sm: "308aed8c-6a9e-412e-a12a-5d6848b75eb5",
+	plan: "0716eaf2-60d3-4c13-8ab3-557d0f0e4596",
 };
 
 export const PRIORITIES = {
