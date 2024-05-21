@@ -11,7 +11,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 				<div className="flex w-full pb-4 gap-2">
 					{states.map((state) => (
 						<div
-							className="min-w-72 w-full max-h-[70vh] overflow-hidden p-1 bg-gray-950 rounded-md hover:bg-gray-950/50 transition"
+							className="min-w-72 w-full max-h-[70vh] overflow-hidden p-1 bg-gray-950 rounded-md hover:bg-gray-950/50 transition flex flex-col"
 							key={state.id}
 						>
 							<div className="mb-2 flex items-center gap-2 px-2 pt-2">
