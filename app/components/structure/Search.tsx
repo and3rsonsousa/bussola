@@ -207,6 +207,8 @@ export default function Search() {
 												item={{
 													short: item.obs.partner
 														.short,
+													bg: item.obs.partner.bg,
+													fg: item.obs.partner.fg,
 												}}
 											/>
 											<Icons
