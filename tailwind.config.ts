@@ -21,7 +21,7 @@ const config = {
 
 		extend: {
 			colors: {
-				gray: colors.slate,
+				// gray: colors.zinc,
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",

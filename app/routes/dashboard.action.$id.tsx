@@ -119,7 +119,6 @@ export default function ActionPage() {
 
 	return (
 		<div className="mx-auto flex h-full w-full max-w-xl flex-col overflow-hidden">
-			<div className="pt-16"></div>
 			<div className="flex shrink grow-0 items-center justify-between p-4 text-sm">
 				<div className="flex items-center gap-2 ">
 					<Avatar

@@ -25,7 +25,6 @@ export default function AdminPartners() {
 	return (
 		<div className="overflow-hidden">
 			<div className="scrollbars px-2">
-				<div className="pt-16"></div>
 				<div className="grid py-4 items-center sm:grid-cols-2 lg:grid-cols-3">
 					{partners?.map((partner: Partner) => (
 						<Link

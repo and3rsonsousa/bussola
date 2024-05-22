@@ -46,7 +46,6 @@ export default function NewPartners() {
 	return (
 		<div className="overflow-hidden">
 			<ScrollArea className="h-full w-full">
-				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<div className="gap-2 rounded py-4 text-center text-2xl font-medium">
 						Novo partnere

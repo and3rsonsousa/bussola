@@ -8,7 +8,7 @@ import {
 	useSearchParams,
 	useSubmit,
 } from "@remix-run/react";
-import { json, type LoaderFunctionArgs } from "@vercel/remix";
+import { MetaFunction, json, type LoaderFunctionArgs } from "@vercel/remix";
 import {
 	addMonths,
 	eachDayOfInterval,
@@ -28,10 +28,16 @@ import {
 	subMonths,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
+import {
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	Grid3x3Icon,
+	PlusIcon,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { ActionLine, GridOfActions } from "~/components/structure/Action";
+import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -40,8 +46,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Toggle } from "~/components/ui/toggle";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
+	Avatar,
 	Icons,
 	getInstagramActions,
 	sortActions,
@@ -86,9 +94,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	return json({ actions, partner }, { headers });
 };
 
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+	return [
+		{
+			title: data?.partner?.title,
+		},
+	];
+};
+
 export default function Partner() {
-	let { actions } = useLoaderData<typeof loader>();
-	const { partner } = useLoaderData<typeof loader>();
+	let { actions, partner } = useLoaderData<typeof loader>();
+
 	const [searchParams] = useSearchParams();
 
 	const matches = useMatches();
@@ -97,6 +113,7 @@ export default function Partner() {
 	const [draggedAction, setDraggedAction] = useState<Action>();
 	const [stateFilter, setStateFilter] = useState<State>();
 	const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
+	const [showFeed, setFeed] = useState(false);
 
 	invariant(partner);
 
@@ -174,104 +191,128 @@ export default function Partner() {
 		}
 	}, [draggedAction, submit]);
 
-	// useEffect(() => {
-	// 	document
-	// 		.querySelector("[data-radix-scroll-area-viewport]")!
-	// 		.addEventListener("scroll", function (e: unknown) {
-	// 			const header = document.querySelector("#daysheader");
-	// 			const calendar = document.querySelector("#calendar");
-	// 			const divider = document.querySelector("#divider");
-	// 			if (
-	// 				(e as React.UIEvent<HTMLElement>).currentTarget.scrollTop >
-	// 				60
-	// 			) {
-	// 				header?.classList.add(
-	// 					"fixed",
-	// 					"top-[64px]",
-	// 					"-ml-8",
-	// 					"px-8"
-	// 				);
-	// 				calendar?.classList.add("mt-20");
-	// 				divider?.classList.remove("hidden");
-	// 			} else {
-	// 				header?.classList.remove("fixed", "-ml-8", "px-8");
-	// 				calendar?.classList.remove("mt-20");
-	// 				divider?.classList.add("hidden");
-	// 			}
-	// 		});
-	// }, []);
-
 	return (
-		<div className="lg:flex w-full gap-4 overflow-hidden">
-			<div className="scrollbars scrollbars-thin w-full h-1/2">
-				<div className="relative flex flex-col overflow-y-hidden">
-					<div id="daysheader" className="w-full">
-						<div className="flex items-center justify-between py-2">
-							<div className="flex items-center gap-1 text-xl font-bold ">
-								<div className="mr-4">
-									<DropdownMenu>
-										<DropdownMenuTrigger className="capitalize outline-none">
-											{format(currentDate, "MMMM", {
-												locale: ptBR,
-											})}
-										</DropdownMenuTrigger>
-										<DropdownMenuContent className="bg-content">
-											{eachMonthOfInterval({
-												start: startOfYear(new Date()),
-												end: endOfYear(new Date()),
-											}).map((month) => (
-												<DropdownMenuItem
-													className="bg-item capitalize"
-													key={month.getMonth()}
-													onSelect={() => {}}
-													asChild
-												>
-													<Link
-														to={`/dashboard/${
-															partner.slug
-														}/?date=${format(
-															new Date().setMonth(
-																month.getMonth()
-															),
-															"yyyy-MM-'01'"
-														)}`}
+		<div className="flex flex-col overflow-hidden p-4 md:px-8">
+			<div className="flex justify-between items-center">
+				<Link
+					to={`/dashboard/${partner.slug}`}
+					className="flex items-center gap-4 "
+				>
+					<Avatar
+						item={{
+							short: partner.short,
+							bg: partner.bg,
+							fg: partner.fg,
+						}}
+						size="lg"
+					/>
+					<div className="text-2xl font-extrabold text-gray-100 tracking-tight">
+						<div>{partner?.title}</div>
+						<Progress
+							total={actions?.length || 1}
+							values={states.map((state) => ({
+								id: state.id,
+								title: state.title,
+								value: actions?.filter(
+									(action) => action.state_id === state.id
+								).length,
+								color: `bg-${state.slug}`,
+							}))}
+						/>
+					</div>
+				</Link>
+				<div>
+					<Button
+						size={"sm"}
+						variant={showFeed ? "default" : "ghost"}
+						className="inline-flex gap-2"
+						onClick={() => setFeed((v) => !v)}
+					>
+						<Grid3x3Icon className="size-4" /> Mostrar Feed do
+						Instagram
+					</Button>
+				</div>
+			</div>
+			<div className="lg:flex w-full gap-4 overflow-hidden h-full">
+				{/* Calendar */}
+				<div className="w-full h-1/2 lg:overflow-hidden lg:h-full">
+					<div className="overflow-hidden h-full flex flex-col">
+						<div
+							id="daysheader"
+							className="w-full border-b flex flex-col"
+						>
+							<div className="flex items-center justify-between py-2">
+								<div className="flex items-center gap-1 text-xl font-bold ">
+									<div className="mr-4">
+										<DropdownMenu>
+											<DropdownMenuTrigger className="capitalize outline-none">
+												{format(currentDate, "MMMM", {
+													locale: ptBR,
+												})}
+											</DropdownMenuTrigger>
+											<DropdownMenuContent className="bg-content">
+												{eachMonthOfInterval({
+													start: startOfYear(
+														new Date()
+													),
+													end: endOfYear(new Date()),
+												}).map((month) => (
+													<DropdownMenuItem
+														className="bg-item capitalize"
+														key={month.getMonth()}
+														onSelect={() => {}}
+														asChild
 													>
-														{format(month, "MMMM", {
-															locale: ptBR,
-														})}
-													</Link>
-												</DropdownMenuItem>
-											))}
-										</DropdownMenuContent>
-									</DropdownMenu>
+														<Link
+															to={`/dashboard/${
+																partner.slug
+															}/?date=${format(
+																new Date().setMonth(
+																	month.getMonth()
+																),
+																"yyyy-MM-'01'"
+															)}`}
+														>
+															{format(
+																month,
+																"MMMM",
+																{
+																	locale: ptBR,
+																}
+															)}
+														</Link>
+													</DropdownMenuItem>
+												))}
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</div>
+									<Button size="icon" variant="ghost" asChild>
+										<Link
+											to={`/dashboard/${
+												partner?.slug
+											}?date=${format(
+												subMonths(currentDate, 1),
+												"yyyy-MM-dd"
+											)}`}
+										>
+											<ChevronLeftIcon className="h-4 w-4" />
+										</Link>
+									</Button>
+									<Button size="icon" variant="ghost" asChild>
+										<Link
+											to={`/dashboard/${
+												partner?.slug
+											}?date=${format(
+												addMonths(currentDate, 1),
+												"yyyy-MM-dd"
+											)}`}
+										>
+											<ChevronRightIcon className="h-4 w-4" />
+										</Link>
+									</Button>
 								</div>
-								<Button size="icon" variant="ghost" asChild>
-									<Link
-										to={`/dashboard/${
-											partner?.slug
-										}?date=${format(
-											subMonths(currentDate, 1),
-											"yyyy-MM-dd"
-										)}`}
-									>
-										<ChevronLeftIcon className="h-4 w-4" />
-									</Link>
-								</Button>
-								<Button size="icon" variant="ghost" asChild>
-									<Link
-										to={`/dashboard/${
-											partner?.slug
-										}?date=${format(
-											addMonths(currentDate, 1),
-											"yyyy-MM-dd"
-										)}`}
-									>
-										<ChevronRightIcon className="h-4 w-4" />
-									</Link>
-								</Button>
-							</div>
-							<div className="flex items-center gap-2 pr-1">
-								{/* <Toggle onPressedChange={() => setViewLike()}>
+								<div className="flex items-center gap-2 pr-1">
+									{/* <Toggle onPressedChange={() => setViewLike()}>
               {(() => {
                 return (
                   <>
@@ -281,215 +322,233 @@ export default function Partner() {
                 )
               })()}
             </Toggle> */}
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											size={"sm"}
-											variant={"ghost"}
-											className={`${
-												stateFilter
-													? `border-${stateFilter?.slug}`
-													: "border-transparent"
-											} border-2 text-xs font-bold`}
-										>
-											{stateFilter
-												? stateFilter.title
-												: "Filtre pelo Status"}
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent className="bg-content">
-										<DropdownMenuCheckboxItem
-											className="bg-select-item flex gap-2"
-											onCheckedChange={() => {
-												setStateFilter(undefined);
-											}}
-										>
-											<div
-												className={`h-3 w-3 rounded-full border-2 border-white`}
-											></div>
-											<div>Todos os Status</div>
-										</DropdownMenuCheckboxItem>
-										{states.map((state) => (
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												size={"sm"}
+												variant={"ghost"}
+												className={`${
+													stateFilter
+														? `border-${stateFilter?.slug}`
+														: "border-transparent"
+												} border-2 text-xs font-bold`}
+											>
+												{stateFilter
+													? stateFilter.title
+													: "Filtre pelo Status"}
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent className="bg-content">
 											<DropdownMenuCheckboxItem
 												className="bg-select-item flex gap-2"
-												key={state.id}
-												checked={
-													state.id === stateFilter?.id
-												}
-												onCheckedChange={(checked) => {
-													if (
-														!checked &&
-														state.id ===
-															stateFilter?.id
-													) {
-														setStateFilter(
-															undefined
-														);
-													} else {
-														setStateFilter(state);
-													}
+												onCheckedChange={() => {
+													setStateFilter(undefined);
 												}}
 											>
 												<div
-													className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
+													className={`h-3 w-3 rounded-full border-2 border-white`}
 												></div>
-												<div>{state.title}</div>
+												<div>Todos os Status</div>
 											</DropdownMenuCheckboxItem>
-										))}
-									</DropdownMenuContent>
-								</DropdownMenu>
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											size={"sm"}
-											variant={
-												categoryFilter.length > 0
-													? "default"
-													: "ghost"
-											}
-											className={`text-xs font-bold`}
-										>
-											{categoryFilter.length > 0 ? (
-												<>
-													<div>
-														{categoryFilter
-															.map(
-																(category) =>
-																	category.title
-															)
-															.join(", ")}
-													</div>
-												</>
-											) : (
-												"Filtre pela Categoria"
-											)}
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent className="bg-content">
-										<DropdownMenuCheckboxItem
-											className="bg-select-item flex gap-2"
-											checked={
-												categoryFilter?.length == 0
-											}
-											onCheckedChange={() => {
-												setCategoryFilter([]);
-											}}
-										>
-											<Icons
-												className="h-3 w-3"
-												id="all"
-											/>
-											<div>Todas as Categorias</div>
-										</DropdownMenuCheckboxItem>
-										{categories.map((category) => (
+											{states.map((state) => (
+												<DropdownMenuCheckboxItem
+													className="bg-select-item flex gap-2"
+													key={state.id}
+													checked={
+														state.id ===
+														stateFilter?.id
+													}
+													onCheckedChange={(
+														checked
+													) => {
+														if (
+															!checked &&
+															state.id ===
+																stateFilter?.id
+														) {
+															setStateFilter(
+																undefined
+															);
+														} else {
+															setStateFilter(
+																state
+															);
+														}
+													}}
+												>
+													<div
+														className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
+													></div>
+													<div>{state.title}</div>
+												</DropdownMenuCheckboxItem>
+											))}
+										</DropdownMenuContent>
+									</DropdownMenu>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												size={"sm"}
+												variant={
+													categoryFilter.length > 0
+														? "default"
+														: "ghost"
+												}
+												className={`text-xs font-bold`}
+											>
+												{categoryFilter.length > 0 ? (
+													<>
+														<div>
+															{categoryFilter
+																.map(
+																	(
+																		category
+																	) =>
+																		category.title
+																)
+																.join(", ")}
+														</div>
+													</>
+												) : (
+													"Filtre pela Categoria"
+												)}
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent className="bg-content">
 											<DropdownMenuCheckboxItem
 												className="bg-select-item flex gap-2"
-												key={category.id}
 												checked={
-													categoryFilter
-														? categoryFilter?.findIndex(
-																(c) =>
-																	category.id ===
-																	c.id
-														  ) >= 0
-														: false
+													categoryFilter?.length == 0
 												}
-												onCheckedChange={(checked) => {
-													if (
-														!checked &&
-														categoryFilter?.findIndex(
-															(c) =>
-																category.id ===
-																c.id
-														) >= 0
-													) {
-														const filters =
-															categoryFilter.filter(
-																(c) =>
-																	c.id !=
-																	category.id
-															);
-
-														setCategoryFilter(
-															filters
-														);
-													} else {
-														setCategoryFilter(
-															categoryFilter
-																? [
-																		...categoryFilter,
-																		category,
-																  ]
-																: [category]
-														);
-													}
+												onCheckedChange={() => {
+													setCategoryFilter([]);
 												}}
 											>
 												<Icons
-													id={category.slug}
 													className="h-3 w-3"
+													id="all"
 												/>
-												<div>{category.title}</div>
+												<div>Todas as Categorias</div>
 											</DropdownMenuCheckboxItem>
-										))}
-									</DropdownMenuContent>
-								</DropdownMenu>
+											{categories.map((category) => (
+												<DropdownMenuCheckboxItem
+													className="bg-select-item flex gap-2"
+													key={category.id}
+													checked={
+														categoryFilter
+															? categoryFilter?.findIndex(
+																	(c) =>
+																		category.id ===
+																		c.id
+															  ) >= 0
+															: false
+													}
+													onCheckedChange={(
+														checked
+													) => {
+														if (
+															!checked &&
+															categoryFilter?.findIndex(
+																(c) =>
+																	category.id ===
+																	c.id
+															) >= 0
+														) {
+															const filters =
+																categoryFilter.filter(
+																	(c) =>
+																		c.id !=
+																		category.id
+																);
+
+															setCategoryFilter(
+																filters
+															);
+														} else {
+															setCategoryFilter(
+																categoryFilter
+																	? [
+																			...categoryFilter,
+																			category,
+																	  ]
+																	: [category]
+															);
+														}
+													}}
+												>
+													<Icons
+														id={category.slug}
+														className="h-3 w-3"
+													/>
+													<div>{category.title}</div>
+												</DropdownMenuCheckboxItem>
+											))}
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</div>
+							</div>
+							<div
+								className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider  md:grid`}
+							>
+								{eachDayOfInterval({
+									start: startOfWeek(new Date()),
+									end: endOfWeek(new Date()),
+								}).map((day, j) => {
+									return (
+										<div
+											key={j}
+											className={
+												day.getDay() ===
+												new Date().getDay()
+													? "text-gray-100"
+													: "text-gray-500"
+											}
+										>
+											{format(day, "EEE", {
+												locale: ptBR,
+											})}
+										</div>
+									);
+								})}
+							</div>
+							<div
+								id="divider"
+								className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-gray-700"
+							></div>
+						</div>
+						<div className="scrollbars scrollbars-thin overflow-y-hidden h-full">
+							<div
+								id="calendar"
+								className={`grid-cols-7 pb-4 text-gray-300 md:grid`}
+							>
+								{calendar.map((day, i) => (
+									<CalendarDay
+										key={i}
+										categories={categories}
+										priorities={priorities}
+										states={states}
+										currentDate={currentDate}
+										day={day}
+										setDraggedAction={setDraggedAction}
+										partner={partner}
+										person={person}
+										people={people}
+									/>
+								))}
 							</div>
 						</div>
-						<div
-							className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider  md:grid`}
-						>
-							{eachDayOfInterval({
-								start: startOfWeek(new Date()),
-								end: endOfWeek(new Date()),
-							}).map((day, j) => {
-								return (
-									<div
-										key={j}
-										className={
-											day.getDay() === new Date().getDay()
-												? "text-gray-100"
-												: "text-gray-500"
-										}
-									>
-										{format(day, "EEE", { locale: ptBR })}
-									</div>
-								);
-							})}
-						</div>
-						<div
-							id="divider"
-							className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-gray-700"
-						></div>
-					</div>
-					<div
-						id="calendar"
-						className={`grid-cols-7 pb-4 text-gray-300 md:grid`}
-					>
-						{calendar.map((day, i) => (
-							<CalendarDay
-								key={i}
-								categories={categories}
-								priorities={priorities}
-								states={states}
-								currentDate={currentDate}
-								day={day}
-								setDraggedAction={setDraggedAction}
-								partner={partner}
-								person={person}
-								people={people}
-							/>
-						))}
 					</div>
 				</div>
-			</div>
-			<div className="max-w-96">
-				<GridOfActions
-					categories={categories}
-					priorities={priorities}
-					states={states}
-					actions={instagramActions}
-				/>
+				{/* Instagram Grid */}
+				{showFeed && (
+					<div className="max-w-96">
+						<GridOfActions
+							categories={categories}
+							priorities={priorities}
+							states={states}
+							actions={instagramActions}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	);
@@ -556,7 +615,7 @@ export const CalendarDay = ({
 		<div
 			className={`${
 				!isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-			} group/day relative flex flex-col border-t bg-gradient-to-b pb-4 pt-2 transition hover:from-gray-900 hover:via-transparent md:px-1 md:pt-0`}
+			} group/day relative flex flex-col border-b bg-gradient-to-b pb-4 pt-2 transition hover:from-gray-900 hover:via-transparent md:px-1 md:pt-0`}
 			data-date={format(day.date, "yyyy-MM-dd")}
 			onDragOver={(e) => {
 				e.stopPropagation();

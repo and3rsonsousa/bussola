@@ -160,7 +160,7 @@ export function ActionLine({
 								ref={inputRef}
 								type="text"
 								name="title"
-								style={{ fontStretch: "90%" }}
+								style={{ fontStretch: "85%" }}
 								defaultValue={action.title}
 								className="w-full bg-transparent outline-none"
 								onKeyDown={(event) => {
@@ -211,7 +211,7 @@ export function ActionLine({
 						) : (
 							<button
 								ref={buttonRef}
-								style={{ fontStretch: "90%" }}
+								style={{ fontStretch: "85%" }}
 								className={`block w-full cursor-text overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
 								onClick={() => {
 									flushSync(() => {
@@ -508,6 +508,7 @@ export function ActionGrid({
 					<div></div>
 					<div
 						className={`line-clamp-2 py-4 text-gray-400 text-center transition group-hover/action:text-gray-300 font-bold tracking-tighter leading-none overflow-hidden`}
+						style={{ fontStretch: "85%" }}
 					>
 						{action.title}
 					</div>

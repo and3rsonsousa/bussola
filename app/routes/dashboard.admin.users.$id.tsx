@@ -92,7 +92,6 @@ export default function AdminPartners() {
 	return (
 		<div className="overflow-hidden">
 			<div className="scrollbars">
-				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<h2 className="py-4 text-3xl font-extrabold tracking-tighter text-gray-100">
 						<Link to={"/dashboard/admin/users"}>Usuários</Link>

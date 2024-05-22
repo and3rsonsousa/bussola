@@ -67,7 +67,6 @@ export default function AdminPartners() {
 	return (
 		<div className="overflow-hidden">
 			<div className="scrollbars">
-				<div className="pt-16"></div>
 				<div className="px-4 md:px-8">
 					<div
 						className="flex items-center gap-2 rounded py-4 font-extrabold tracking-tighter text-gray-100"

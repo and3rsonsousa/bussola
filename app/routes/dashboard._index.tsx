@@ -176,7 +176,7 @@ export default function DashboardIndex() {
 
 	return (
 		<div className="overflow-hidden">
-			<div className="scrollbars mt-16 pb-16 px-4 md:px-8">
+			<div className="scrollbars px-4 md:px-8">
 				<Progress
 					long={true}
 					className={"fixed z-50 w-full top-0 right-0"}
