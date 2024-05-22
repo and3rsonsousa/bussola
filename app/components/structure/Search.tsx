@@ -144,7 +144,7 @@ export default function Search() {
 		}
 
 		getActions();
-	}, [supabase]);
+	}, []);
 
 	return (
 		<CommandDialog open={open} onOpenChange={setOpen}>
