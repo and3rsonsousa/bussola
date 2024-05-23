@@ -76,7 +76,7 @@ export function ActionLine({
 
 	const { states, categories, person } = matches[1].data as DashboardDataType;
 
-	const state = states.find((state) => state.id === action.state_id);
+	const state = states.find((state) => state.id === action.state_id) as State;
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
@@ -99,11 +99,11 @@ export function ActionLine({
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action @container relative flex w-full select-none items-center gap-2 rounded border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs ${
+					className={`group/action @container relative flex w-full select-none items-center gap-2 rounded-r-sm rounded-l-[4px] border-l-4 px-2 py-1 text-sm font-medium shadow outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs ${
 						edit
 							? "text-white"
 							: "cursor-text bg-gray-900 hover:bg-gray-800 hover:text-gray-200"
-					} border-${state?.slug}`}
+					} border-${state.slug}`}
 					onClick={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
@@ -255,7 +255,6 @@ export function ActionLine({
 							})}
 						</div>
 					)}
-					{/* <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 opacity-0 transition group-hover/action:opacity-100"></div> */}
 				</div>
 			</ContextMenuTrigger>
 			<ContextMenuItems action={action} handleActions={handleActions} />
@@ -279,7 +278,9 @@ export function ActionBlock({ action }: { action: Action }) {
 		.data as DashboardDataType;
 	const partner = partners.find(
 		(partner) => partner.id === action.partner_id
-	);
+	) as Partner;
+
+	const state = states.find((state) => state.id === action.state_id) as State;
 
 	function handleActions(data: {
 		[key: string]: string | number | null | string[];
@@ -299,14 +300,11 @@ export function ActionBlock({ action }: { action: Action }) {
 			<ContextMenuTrigger>
 				<div
 					title={action.title}
-					className={`group/action relative flex flex-col justify-between gap-2 overflow-hidden rounded focus-within:ring-2 ring-primary border-l-4 px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container border-${
-						states.find((state) => state.id === action.state_id)
-							?.slug
-					} ${
+					className={`group/action relative flex flex-col justify-between gap-2 overflow-hidden rounded-r rounded-l-[4px] border-l-4 focus-within:ring-2 ring-primary px-4 py-2 text-sm transition ring-offset-2 ring-offset-background @container ${
 						edit
 							? "bg-gray-800 text-gray-200"
 							: "border-white/20 bg-gray-900 hover:bg-gray-800 hover:text-gray-100"
-					}`}
+					} border-${state.slug}`}
 					onMouseEnter={() => {
 						setHover(true);
 					}}
@@ -383,6 +381,9 @@ export function ActionBlock({ action }: { action: Action }) {
 					</div>
 					<div className="flex items-center justify-between text-gray-400">
 						<div className="flex items-center gap-2">
+							{/* <div
+								className={`size-2 rounded-full bg-${state.slug}`}
+							></div> */}
 							{/* Cliente */}
 							{partner ? (
 								<Avatar
