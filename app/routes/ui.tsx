@@ -68,6 +68,43 @@ export default function UI() {
 				UI
 			</h1>
 			<div>
+				<h1 className="text-3xl font-bold">Cores</h1>
+				<div className="grid grid-cols-3 mt-4 gap-2">
+					<div className="grid place-content-center bg-background text-foreground border p-4 rounded-lg">
+						<div>.bg-background</div>
+						<div>.text-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-card text-card-foreground border p-4 rounded-lg">
+						<div>.bg-card</div>
+						<div>.text-card-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-popover text-popover-foreground border p-4 rounded-lg">
+						<div>.bg-popover</div>
+						<div>.text-popover-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-primary text-primary-foreground border p-4 rounded-lg">
+						<div>.bg-primary</div>
+						<div>.text-primary-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-secondary text-secondary-foreground border p-4 rounded-lg">
+						<div>.bg-secondary</div>
+						<div>.text-secondary-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-muted text-muted-foreground border p-4 rounded-lg">
+						<div>.bg-muted</div>
+						<div>.text-muted-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-accent text-accent-foreground border p-4 rounded-lg">
+						<div>.bg-accent</div>
+						<div>.text-accent-foreground</div>
+					</div>
+					<div className="grid place-content-center bg-destructive text-destructive-foreground border p-4 rounded-lg">
+						<div>.bg-destructive</div>
+						<div>.text-destructive-foreground</div>
+					</div>
+				</div>
+			</div>
+			<div>
 				<h1 className="text-3xl font-bold">Avatar</h1>
 				<div className="flex gap-2 mt-4">
 					<Avatar item={{ short: "cnvt" }} size="xs" />

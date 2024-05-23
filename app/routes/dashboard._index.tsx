@@ -192,61 +192,11 @@ export default function DashboardIndex() {
 				/>
 				{/* Ações em Atraso */}
 				{lateActions?.length ? (
-					<LateActions actions={lateActions} />
+					<DelayedActions actions={lateActions} />
 				) : null}
 				{/* Parceiros */}
 
-				<div className="mb-8 mt-4">
-					<h4 className="mb-4 text-xl text-center font-bold">
-						Parceiros
-					</h4>
-					{partners.length > 0 ? (
-						<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
-							{partners.map((partner) => (
-								<Link
-									to={`/dashboard/${partner.slug}`}
-									key={partner.id}
-									className="group relative"
-								>
-									<Avatar
-										item={{
-											short: partner.short,
-											bg: partner.bg,
-											fg: partner.fg,
-										}}
-										size="lg"
-										className="mx-auto"
-									/>
-									<Badge
-										value={
-											lateActions.filter(
-												(action) =>
-													action.partner_id ===
-													partner.id
-											).length
-										}
-										isDynamic
-										className="-translate-y-2 translate-x-2"
-									/>
-								</Link>
-							))}
-						</div>
-					) : (
-						<div className="p-4 grid place-content-center text-center">
-							<div className="text-4xl text-error-600 tracking-tighter font-semibold mb-2">
-								Nenhum{" "}
-								<span className="font-extrabold">PARCEIRO</span>{" "}
-								está designado para você.
-							</div>
-							<div className="text-lg tracking-tight font-normal">
-								Fale com o seu Head para viabilizar o seu acesso
-								<br />
-								aos parceiros da empresa que você deve ter
-								acesso.
-							</div>
-						</div>
-					)}
-				</div>
+				<Partners actions={lateActions} />
 
 				{/* Ações de Hoje */}
 				{todayActions?.length ? (
@@ -503,7 +453,7 @@ export function HoursView({ actions }: { actions: Action[] }) {
 	);
 }
 
-function LateActions({ actions }: { actions: Action[] }) {
+function DelayedActions({ actions }: { actions: Action[] }) {
 	const [view, setView] = useState<"state" | "priority" | "time">("state");
 	const [a, setA] = useState(actions);
 
@@ -553,6 +503,62 @@ function LateActions({ actions }: { actions: Action[] }) {
 				columns={6}
 				date={{ dateFormat: 1 }}
 			/>
+		</div>
+	);
+}
+
+function Partners({ actions }: { actions: Action[] }) {
+	const matches = useMatches();
+	const { partners } = matches[1].data as DashboardDataType;
+
+	return (
+		<div className="mb-8 mt-4">
+			<h4 className="mb-4 text-xl text-center font-bold text-gray-100">
+				Parceiros
+			</h4>
+			{partners.length > 0 ? (
+				<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
+					{partners.map((partner) => (
+						<Link
+							to={`/dashboard/${partner.slug}`}
+							key={partner.id}
+							className="group relative focus:ring-2 outline-none ring-ring rounded-full"
+						>
+							<Avatar
+								item={{
+									short: partner.short,
+									bg: partner.bg,
+									fg: partner.fg,
+								}}
+								size="lg"
+								className="mx-auto"
+							/>
+							<Badge
+								value={
+									actions.filter(
+										(action) =>
+											action.partner_id === partner.id
+									).length
+								}
+								isDynamic
+								className="-translate-y-2 translate-x-2"
+							/>
+						</Link>
+					))}
+				</div>
+			) : (
+				<div className="p-4 grid place-content-center text-center">
+					<div className="text-4xl text-error-600 tracking-tighter font-semibold mb-2">
+						Nenhum <span className="font-extrabold">PARCEIRO</span>{" "}
+						está designado para você.
+					</div>
+					<div className="text-lg tracking-tight font-normal">
+						Fale com o seu Head para viabilizar o seu acesso
+						<br />
+						aos parceiros da empresa que você deve ter acesso.
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

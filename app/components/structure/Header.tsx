@@ -34,7 +34,11 @@ export default function Header() {
 	return (
 		<header className="flex flex-shrink-0 flex-grow items-center justify-between p-4 backdrop-blur-xl md:px-8">
 			<div className="flex items-center gap-2">
-				<Link to="/dashboard" unstable_viewTransition>
+				<Link
+					to="/dashboard"
+					unstable_viewTransition
+					className="ring-offset-background rounded-md focus:ring-2 ring-ring outline-none p-2"
+				>
 					<img src="/logo.png" className="h-4 w-auto" alt="Bússola" />
 				</Link>
 

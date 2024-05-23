@@ -292,7 +292,7 @@ export default function CreateAction({
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<button
-									className="flex rounded border-none p-2 pl-2 outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0"
+									className="flex rounded-md border-none p-2 pl-2 outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0"
 									tabIndex={0}
 								>
 									{responsibles.map((person) => (
