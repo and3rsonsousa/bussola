@@ -283,12 +283,25 @@ export default function ActionPage() {
 										key={category.id}
 										className="bg-item flex items-center gap-2"
 										textValue={category.title}
-										onSelect={() =>
-											setAction({
-												...action,
-												category_id: category.id,
-											})
-										}
+										onSelect={async () => {
+											if (
+												category.id !==
+												action.category_id
+											) {
+												await handleActions({
+													id: action.id,
+													intent: INTENTS.updateAction,
+													category_id: Number(
+														category.id
+													),
+												});
+
+												setAction({
+													...action,
+													category_id: category.id,
+												});
+											}
+										}}
 									>
 										<Icons
 											id={category.slug}
@@ -304,14 +317,13 @@ export default function ActionPage() {
 					<div>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-								<div className="grid h-12 w-12 place-content-center rounded-full bg-gray-900">
+								<div className="grid place-content-center rounded-full bg-gray-900">
 									<div
-										className={`h-6 w-6 rounded-full border-4 border-${state.slug}`}
-									></div>
+										className={`rounded-full border font-bold border-${state.slug} bg-${state.slug}-dark px-2`}
+									>
+										{state.title}
+									</div>
 								</div>
-								{/* <span className="font-medium">
-									{state.title}
-								</span> */}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
 								{states.map((state) => (
@@ -319,12 +331,20 @@ export default function ActionPage() {
 										key={state.id}
 										className="bg-item flex items-center gap-2"
 										textValue={state.title}
-										onSelect={() =>
-											setAction({
-												...action,
-												state_id: state.id,
-											})
-										}
+										onSelect={async () => {
+											if (state.id !== action.state_id) {
+												await handleActions({
+													id: action.id,
+													intent: INTENTS.updateAction,
+													state_id: Number(state.id),
+												});
+
+												setAction({
+													...action,
+													state_id: state.id,
+												});
+											}
+										}}
 									>
 										<div
 											className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
@@ -342,9 +362,6 @@ export default function ActionPage() {
 								<div className="grid h-12 w-12 place-content-center rounded-full bg-gray-900">
 									<Icons id={priority.slug} type="priority" />
 								</div>
-								{/* <span className="font-medium">
-									{priority.title}
-								</span> */}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-content">
 								{priorities.map((priority) => (
@@ -352,12 +369,25 @@ export default function ActionPage() {
 										key={priority.id}
 										className="bg-item flex items-center gap-2"
 										textValue={priority.title}
-										onSelect={() =>
-											setAction({
-												...action,
-												priority_id: priority.id,
-											})
-										}
+										onSelect={async () => {
+											if (
+												priority.id !==
+												action.priority_id
+											) {
+												await handleActions({
+													id: action.id,
+													intent: INTENTS.updateAction,
+													priority_id: Number(
+														priority.id
+													),
+												});
+
+												setAction({
+													...action,
+													priority_id: priority.id,
+												});
+											}
+										}}
 									>
 										<Icons
 											id={priority.slug}
@@ -397,7 +427,7 @@ export default function ActionPage() {
 										checked={action.responsibles.includes(
 											person.user_id
 										)}
-										onCheckedChange={(checked) => {
+										onCheckedChange={async (checked) => {
 											if (
 												!checked &&
 												action.responsibles.length < 2
@@ -417,6 +447,12 @@ export default function ActionPage() {
 															id !==
 															person.user_id
 												  );
+
+											await handleActions({
+												id: action.id,
+												intent: INTENTS.updateAction,
+												responsibles: tempResponsibles,
+											});
 
 											setAction({
 												...action,
