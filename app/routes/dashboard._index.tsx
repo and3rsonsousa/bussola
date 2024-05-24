@@ -277,7 +277,7 @@ export default function DashboardIndex() {
 												/>
 											}
 
-											<h4 className="font-bold">
+											<h4 className="font-bold text-gray-100">
 												{category.title}
 											</h4>
 										</div>
@@ -376,7 +376,7 @@ export function WeekView({
 					>
 						{/* Dia */}
 						<div
-							className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide"
+							className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-gray-100"
 							style={{ fontStretch: "75%" }}
 						>
 							{format(date, "EEEE ", { locale: ptBR })}
