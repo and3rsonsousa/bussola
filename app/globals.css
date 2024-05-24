@@ -138,6 +138,24 @@ body {
 .bg-finished {
 	@apply bg-finished-500 text-finished-100;
 }
+.bg-idea-dark {
+	@apply bg-idea-950 text-idea-100 hover:bg-idea-900;
+}
+.bg-do-dark {
+	@apply bg-do-950 text-do-100 hover:bg-do-900;
+}
+.bg-doing-dark {
+	@apply bg-doing-950 text-doing-100 hover:bg-doing-900;
+}
+.bg-review-dark {
+	@apply bg-review-950 text-review-100 hover:bg-review-900;
+}
+.bg-done-dark {
+	@apply bg-done-950 text-done-100 hover:bg-done-900;
+}
+.bg-finished-dark {
+	@apply bg-finished-950 text-finished-100 hover:bg-finished-900;
+}
 
 .hover-bg-idea {
 	@apply hover:bg-idea-700;

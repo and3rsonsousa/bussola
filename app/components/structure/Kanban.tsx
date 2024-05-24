@@ -14,11 +14,13 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 							className="min-w-72 w-full max-h-[70vh] overflow-hidden  rounded-md  transition flex flex-col"
 							key={state.id}
 						>
-							<div className="mb-2 flex items-center gap-2 px-2 pt-2">
+							<div className="mb-2 flex items-center px-2 pt-2">
 								<div
-									className={`size-4 rounded-full border-4 border-${state.slug}`}
-								></div>
-								<h4 className="font-bold">{state.title}</h4>
+									className={`rounded-full px-3 border border-${state.slug} bg-${state.slug}-dark text-lg font-bold tracking-tight`}
+									style={{ fontStretch: "85%" }}
+								>
+									{state.title}
+								</div>
 							</div>
 							<div className="scrollbars p-2 scrollbars-thin">
 								<BlockOfActions

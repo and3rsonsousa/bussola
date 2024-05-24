@@ -33,9 +33,8 @@ export default function CreateAction({
 }) {
 	const { categories, states, partners, people, user } = useMatches()[1]
 		.data as DashboardDataType;
-	// const partner = undefined;
 	const match3 = useMatches()[3];
-	const partner = match3
+	let partner = match3
 		? (match3.data as DashboardPartnerType).partner
 		: undefined;
 
@@ -197,13 +196,18 @@ export default function CreateAction({
 							>
 								{action.partner_id ? (
 									<Avatar
-										item={{
-											short: partners.find(
+										item={(() => {
+											let p = partners.find(
 												(partner) =>
 													partner.id ===
 													action.partner_id
-											)!.short,
-										}}
+											) as Partner;
+											return {
+												short: p.short,
+												bg: p.bg,
+												fg: p.fg,
+											};
+										})()}
 									/>
 								) : (
 									"Cliente"
@@ -268,8 +272,10 @@ export default function CreateAction({
 								className={`border-none bg-transparent focus:ring-offset-0`}
 							>
 								<div
-									className={`h-4 w-4 rounded-full border-4 border-${state.slug}`}
-								></div>
+									className={`rounded-full border border-${state.slug} bg-${state.slug}-dark px-2`}
+								>
+									{state.title}
+								</div>
 							</SelectTrigger>
 							<SelectContent className="bg-content">
 								{states.map((state) => (
