@@ -689,10 +689,10 @@ export const CalendarDay = ({
 				<div
 					className={`absolute -bottom-2 left-1/2 z-10 mt-2 -translate-x-1/2  focus-within:relative`}
 				>
-					<div className="overflow-hidden rounded border border-white/10 bg-gray-950/50 p-1 ring-primary backdrop-blur-lg focus-within:ring-2">
+					<div className="overflow-hidden w-full rounded border border-white/10 bg-gray-950/50 py-1 px-3 ring-ring backdrop-blur-lg focus-within:ring-2">
 						<Form
 							method="post"
-							className="flex items-center gap-1"
+							className="flex items-center gap-2 "
 							action="/handle-actions"
 							onSubmit={(e) => {
 								e.preventDefault();
@@ -734,20 +734,9 @@ export const CalendarDay = ({
 								}}
 							/>
 
-							<button
-								type={isCreating ? "submit" : "button"}
-								onClick={(e) => {
-									if (isCreating) {
-										setIsCreating(false);
-									} else {
-										e.preventDefault();
-										e.stopPropagation();
-										setIsCreating(true);
-									}
-								}}
-							>
-								<PlusIcon className="h-4 w-4 text-gray-500" />
-							</button>
+							{!isCreating && (
+								<PlusIcon className="h-4 text-gray-500" />
+							)}
 						</Form>
 					</div>
 				</div>
