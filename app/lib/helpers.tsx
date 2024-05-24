@@ -1,32 +1,29 @@
 import { useFetchers } from "@remix-run/react";
 import { isAfter, isBefore, isSameDay, parseISO } from "date-fns";
 import {
-	CircleDashedIcon,
+	BadgeCheckIcon,
+	CircleFadingPlusIcon,
+	ClapperboardIcon,
 	Code2Icon,
 	ComponentIcon,
 	DollarSignIcon,
 	ImageIcon,
 	ListChecksIcon,
-	type LucideIcon,
 	MegaphoneIcon,
 	PenToolIcon,
-	PlayIcon,
 	PrinterIcon,
+	RouteIcon,
 	SignalIcon,
 	SignalLowIcon,
 	SignalMediumIcon,
 	UsersIcon,
-	XIcon,
-	BadgeCheckIcon,
-	RouteIcon,
-	CircleDotDashedIcon,
-	CircleFadingPlusIcon,
+	type LucideIcon,
 } from "lucide-react";
 import { type CSSProperties } from "react";
 import {
-	Avatar as AvatarShad,
 	AvatarFallback,
 	AvatarImage,
+	Avatar as AvatarShad,
 } from "~/components/ui/avatar";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "./constants";
 import { cn } from "./utils";
@@ -254,7 +251,7 @@ const iconsList: { [key: string]: LucideIcon } = {
 	all: ComponentIcon,
 	//Category
 	post: ImageIcon,
-	video: PlayIcon,
+	video: ClapperboardIcon,
 	stories: CircleFadingPlusIcon,
 	todo: ListChecksIcon,
 	finance: DollarSignIcon,

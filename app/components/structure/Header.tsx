@@ -84,7 +84,7 @@ export default function Header() {
 							/>
 						</DropdownMenuTrigger>
 
-						<DropdownMenuContent>
+						<DropdownMenuContent className="bg-content">
 							{/* <DropdownMenuItem
 								className="bg-item"
 								id="account"

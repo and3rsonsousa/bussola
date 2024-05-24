@@ -692,7 +692,7 @@ export const CalendarDay = ({
 					<div className="overflow-hidden w-full rounded border border-white/10 bg-gray-950/50 py-1 px-3 ring-ring backdrop-blur-lg focus-within:ring-2">
 						<Form
 							method="post"
-							className="flex items-center gap-2 "
+							className="flex items-center gap-2"
 							action="/handle-actions"
 							onSubmit={(e) => {
 								e.preventDefault();
