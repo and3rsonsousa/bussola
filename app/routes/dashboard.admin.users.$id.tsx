@@ -29,43 +29,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	return json({ person, headers });
 };
 
-// export const action = async ({ request }: ActionFunctionArgs) => {
-// 	const { supabase } = createClient(request);
-
-// 	const formData = await request.formData();
-
-// 	const id = String(formData.get("id"));
-
-// 	const data = {
-// 		name: String(formData.get("name")),
-// 		surname: String(formData.get("surname")),
-// 		short: String(formData.get("short")),
-// 		initials: String(formData.get("initials")),
-// 		admin: Boolean(formData.get("admin")),
-// 	};
-
-// const partners_id = String(formData.getAll("partner_id")).split(",");
-
-// const { data: partners } = await supabase.from("partners").select();
-
-// const promisses = partners?.map(partner => partners_id.findIndex(p => p === partner.id) ?
-// //
-//  :
-// //  )
-
-// console.log({ data, partners_id, promisses });
-
-// const { error } = await supabase.from("partners").update(data).eq("id", id);
-
-// if (error) {
-// 	console.log(error);
-// } else {
-// 	return redirect(`/dashboard/admin/partners`);
-// }
-
-// 	return { ok: true };
-// };
-
 export default function AdminPartners() {
 	const matches = useMatches();
 

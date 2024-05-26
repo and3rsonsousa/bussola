@@ -14,8 +14,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (intent === INTENTS.createAction) {
 		const actionToInsert = {
 			id: id.toString(),
-			created_at: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
-			updated_at: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
+			created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+			updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
 			category_id: values["category_id"].toString(),
 			state_id: values["state_id"].toString(),
 			partner_id: values["partner_id"].toString(),
@@ -43,7 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				.update({
 					...values,
 					responsibles: values["responsibles"].toString().split(","),
-					updated_at: format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss"),
+					updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
 				})
 				.eq("id", id);
 			return { data, error };
@@ -52,9 +52,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				.from("actions")
 				.update({
 					...values,
-					updated_at: format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss"),
+					updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
 				})
 				.eq("id", id);
+
+			if (error) console.log({ error });
 
 			return { data, error };
 		}

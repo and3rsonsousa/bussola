@@ -3,6 +3,7 @@ import {
 	useFetchers,
 	useLoaderData,
 	useMatches,
+	useNavigate,
 	useNavigation,
 	useSubmit,
 } from "@remix-run/react";
@@ -19,6 +20,8 @@ import {
 	CalendarIcon,
 	Grid3X3Icon,
 	ListTodoIcon,
+	Trash2Icon,
+	TrashIcon,
 } from "lucide-react";
 import { useState } from "react";
 import Tiptap from "~/components/structure/Tiptap";
@@ -55,9 +58,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	if (!id) throw new Error("$id não foi definido");
 
 	const { data: action } = await supabase
-		.from("actions")
+		.from("get_full_actions")
 		.select("*")
 		.eq("id", id)
+		.returns<ActionComplete>()
 		.single();
 
 	return json({ headers, action });
@@ -111,6 +115,7 @@ export default function ActionPage() {
 	};
 
 	const navigation = useNavigation();
+	const navigate = useNavigate();
 	const fetchers = useFetchers();
 
 	const isWorking =
@@ -159,23 +164,6 @@ export default function ActionPage() {
 							)}
 						</div>
 					</div>
-				</div>
-				<div className="flex items-center gap-2">
-					<Button asChild size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${partner.slug}/actions`}>
-							<ListTodoIcon className="h-4 w-4" />
-						</Link>
-					</Button>
-					<Button size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${partner.slug}/instagram`}>
-							<Grid3X3Icon className="h-4 w-4" />
-						</Link>
-					</Button>
-					<Button size={"icon"} variant="ghost">
-						<Link to={`/dashboard/${partner.slug}/calendar`}>
-							<CalendarDaysIcon className="h-4 w-4" />
-						</Link>
-					</Button>
 				</div>
 			</div>
 
@@ -273,7 +261,9 @@ export default function ActionPage() {
 					<div>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-								<div className="grid h-12 w-12 place-content-center rounded-full bg-gray-900">
+								<div
+									className={`grid h-12 w-12 place-content-center rounded-full bg-gray-900 border-2 fg-${category.slug} border-${category.slug}`}
+								>
 									<Icons id={category.slug} />
 								</div>
 							</DropdownMenuTrigger>
@@ -516,7 +506,7 @@ export default function ActionPage() {
 												...action,
 												date: format(
 													date,
-													"yyyy-MM-dd'T'HH:mm"
+													"yyyy-MM-dd HH:mm:ss"
 												),
 											});
 										}
@@ -534,7 +524,7 @@ export default function ActionPage() {
 												...action,
 												date: format(
 													date,
-													"yyyy-MM-dd'T'HH:mm"
+													"yyyy-MM-dd HH:mm:ss"
 												),
 											});
 										}}
@@ -568,7 +558,7 @@ export default function ActionPage() {
 												...action,
 												date: format(
 													date,
-													"yyyy-MM-dd'T'HH:mm"
+													"yyyy-MM-dd HH:mm:ss"
 												),
 											});
 										}}
@@ -596,11 +586,30 @@ export default function ActionPage() {
 						</Popover>
 					</div>
 
-					<div>
+					<div className="flex gap-2">
+						<Button
+							variant={"destructive"}
+							onClick={() => {
+								if (
+									confirm(
+										"ESSA AÇÃO NÃO PODE SER DESFEITA! Deseja mesmo deletar essa ação?"
+									)
+								) {
+									handleActions({
+										id: action.id,
+										intent: INTENTS.deleteAction,
+									});
+
+									navigate(-1);
+								}
+							}}
+						>
+							<Trash2Icon className="size-4" />
+						</Button>
 						<Button
 							onClick={() => {
 								handleActions({
-									...action,
+									id: action.id,
 									responsibles: action.responsibles,
 									intent: INTENTS.updateAction,
 								});

@@ -214,6 +214,43 @@ body {
 	@apply stroke-finished-600;
 }
 
+.fg-post {
+	@apply text-post-500;
+}
+.fg-video {
+	@apply text-video-600;
+}
+.fg-stories {
+	@apply text-stories-500;
+}
+.fg-todo {
+	@apply text-todo-500;
+}
+.fg-dev {
+	@apply text-dev-500;
+}
+.fg-print {
+	@apply text-print-500;
+}
+.fg-meeting {
+	@apply text-meeting-700;
+}
+.fg-finance {
+	@apply text-finance-500;
+}
+.fg-design {
+	@apply text-design-500;
+}
+.fg-ads {
+	@apply text-ads-500;
+}
+.fg-sm {
+	@apply text-sm-700;
+}
+.fg-plan {
+	@apply text-plan-500;
+}
+
 .border-post {
 	@apply border-post-500;
 }

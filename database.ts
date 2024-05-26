@@ -244,7 +244,64 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      get_full_actions: {
+        Row: {
+          category: Json | null
+          category_id: string | null
+          created_at: string | null
+          date: string | null
+          description: string | null
+          id: string | null
+          partner: Json | null
+          partner_id: string | null
+          priority: Json | null
+          priority_id: string | null
+          responsibles: string[] | null
+          slug: string | null
+          state: Json | null
+          state_id: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actions_priority_id_fkey"
+            columns: ["priority_id"]
+            isOneToOne: false
+            referencedRelation: "priorities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actions_state_id_fkey"
+            columns: ["state_id"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

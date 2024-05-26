@@ -67,7 +67,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		.single();
 
 	const { data: actions } = await supabase
-		.from("actions")
+		.from("get_full_actions")
 		.select("*")
 		.contains("responsibles", person?.admin ? [] : [user.id])
 		.gte(
@@ -76,7 +76,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 				startOfDay(startOfWeek(startOfMonth(new Date()))),
 				"yyyy-MM-dd HH:mm:ss"
 			)
-		);
+		)
+		.returns<ActionComplete[]>();
 
 	return json({ actions }, { headers });
 };
@@ -105,13 +106,12 @@ export default function DashboardIndex() {
 		actions = [];
 	}
 
-	const { states, partners, categories } = matches[1]
-		.data as DashboardDataType;
+	const { states, categories } = matches[1].data as DashboardDataType;
 
 	const pendingActions = usePendingActions();
 	const idsToRemove = useIDsToRemove();
 
-	const actionsMap = new Map<string, Action>(
+	const actionsMap = new Map<string, ActionComplete>(
 		actions.map((action) => [action.id, action])
 	);
 

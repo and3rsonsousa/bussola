@@ -13,7 +13,6 @@ import {
 	addMonths,
 	eachDayOfInterval,
 	eachMonthOfInterval,
-	endOfDay,
 	endOfMonth,
 	endOfWeek,
 	endOfYear,
@@ -46,7 +45,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Toggle } from "~/components/ui/toggle";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
 	Avatar,
@@ -86,10 +84,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		.single();
 
 	const { data: actions } = await supabase
-		.from("actions")
+		.from("get_full_actions")
 		.select("*")
-		.eq("partner_id", partner!.id)
-		.contains("responsibles", person?.admin ? [] : [user.id]);
+		.match({ slug: params["partner"] })
+		.contains("responsibles", person?.admin ? [] : [user.id])
+		.returns<ActionComplete[]>();
 
 	return json({ actions, partner }, { headers });
 };
@@ -601,7 +600,7 @@ export const CalendarDay = ({
 				date.setHours(11, 0);
 				return date;
 			})(),
-			"yyyy-MM-dd'T'HH:mm:ss"
+			"yyyy-MM-dd HH:mm:ss"
 		),
 		title: "",
 		description: "",

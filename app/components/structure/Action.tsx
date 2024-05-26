@@ -178,7 +178,7 @@ export function ActionLine({
 											flushSync(() => {
 												handleActions({
 													intent: INTENTS.updateAction,
-													...action,
+													id: action.id,
 													title: String(
 														inputRef.current?.value
 													),
@@ -198,7 +198,7 @@ export function ActionLine({
 										flushSync(() => {
 											handleActions({
 												intent: INTENTS.updateAction,
-												...action,
+												id: action.id,
 												title: String(
 													inputRef.current?.value
 												),
@@ -332,7 +332,7 @@ export function ActionBlock({ action }: { action: Action }) {
 										) {
 											handleActions({
 												intent: INTENTS.updateAction,
-												...action,
+												id: action.id,
 												title: inputRef.current?.value,
 											});
 										}
@@ -355,7 +355,7 @@ export function ActionBlock({ action }: { action: Action }) {
 										)
 											handleActions({
 												intent: INTENTS.updateAction,
-												...action,
+												id: action.id,
 												title: inputRef.current?.value,
 											});
 
@@ -694,47 +694,52 @@ function ShortcutActions({ action }: { action: Action }) {
 			const key = event.key.toLowerCase();
 			const code = event.code;
 
+			// Set States
 			if (
 				["i", "f", "z", "a", "t", "c"].find((k) => k === key) &&
 				!event.shiftKey
 			) {
 				let state_id = STATES.do;
-				if (key === "i") {
-					state_id = STATES.ideia;
-				}
-				if (key === "f") {
-					state_id = STATES.do;
-				}
-				if (key === "z") {
-					state_id = STATES.doing;
-				}
-				if (key === "a") {
-					state_id = STATES.review;
-				}
-				if (key === "t") {
-					state_id = STATES.done;
-				}
-				if (key === "c") {
-					state_id = STATES.finish;
+				switch (key) {
+					case "i":
+						state_id = STATES.ideia;
+						break;
+					case "f":
+						state_id = STATES.do;
+						break;
+					case "z":
+						state_id = STATES.doing;
+						break;
+					case "a":
+						state_id = STATES.review;
+						break;
+					case "t":
+						state_id = STATES.done;
+						break;
+					case "c":
+						state_id = STATES.finish;
+						break;
 				}
 
 				handleActions({
 					intent: INTENTS.updateAction,
-					...action,
+					id: action.id,
 					state_id,
 				});
-			}
-			if (
+			} else if (
 				[
 					"KeyT",
 					"KeyP",
 					"KeyV",
+
 					"KeyS",
 					"KeyC",
 					"KeyI",
+
 					"KeyR",
 					"KeyF",
 					"KeyD",
+
 					"KeyA",
 					"KeyM",
 					"KeyN",
@@ -793,36 +798,41 @@ function ShortcutActions({ action }: { action: Action }) {
 
 				handleActions({
 					intent: INTENTS.updateAction,
-					...action,
+					id: action.id,
 					category_id,
 				});
 			} else if (key === "e" && event.shiftKey) {
 				navigate(`/dashboard/action/${action.id}`);
 			} else if (key === "d" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					newId: window.crypto.randomUUID(),
-					created_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-					updated_at: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+					created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+					updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
 					intent: INTENTS.duplicateAction,
 				});
 			} else if (key === "x" && event.shiftKey) {
-				handleActions({ ...action, intent: INTENTS.deleteAction });
+				if (confirm("Deseja mesmo excluir essa ação?")) {
+					handleActions({
+						id: action.id,
+						intent: INTENTS.deleteAction,
+					});
+				}
 			} else if (key === ",") {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.low,
 				});
 			} else if (key === ".") {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.medium,
 				});
 			} else if (key === "/") {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.high,
 				});
@@ -830,88 +840,85 @@ function ShortcutActions({ action }: { action: Action }) {
 			//em uma hora
 			else if (code === "Digit1" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 1)
 							: addHours(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
 			//em duas horas
 			else if (code === "Digit2" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 2)
 							: addHours(action.date, 2),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
 			//em três horas
 			else if (code === "Digit3" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
 							? addHours(new Date(), 3)
 							: addHours(action.date, 3),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
 			//Hoje
 			else if (key === "h" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						addMinutes(new Date(), 30),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
 			// Amanhã
 			else if (key === "a" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
-					date: format(
-						addDays(new Date(), 1),
-						"yyyy-MM-dd'T'HH:mm:ss"
-					),
+					date: format(addDays(new Date(), 1), "yyyy-MM-dd HH:mm:ss"),
 				});
 			}
 
 			// Adiciona uma semana
 			else if (key === "s" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
 							? addWeeks(new Date(), 1)
 							: addWeeks(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
 			// Adiciona um mês
 			else if (key === "m" && event.shiftKey) {
 				handleActions({
-					...action,
+					id: action.id,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
 							? addMonths(new Date(), 1)
 							: addMonths(action.date, 1),
-						"yyyy-MM-dd'T'HH:mm:ss"
+						"yyyy-MM-dd HH:mm:ss"
 					),
 				});
 			}
@@ -1077,12 +1084,12 @@ function ContextMenuItems({
 										onSelect={() => {
 											const date = format(
 												period.time,
-												"yyyy-MM-dd'T'HH:mm:ss"
+												"yyyy-MM-dd HH:mm:ss"
 											);
 
 											handleActions({
 												intent: INTENTS.updateAction,
-												...action,
+												id: action.id,
 												date,
 											});
 										}}
@@ -1125,7 +1132,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										...action,
+										id: action.id,
 										state_id: state.id,
 										intent: INTENTS.updateAction,
 									});
@@ -1168,7 +1175,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										...action,
+										id: action.id,
 										category_id: category.id,
 										intent: INTENTS.updateAction,
 									});
@@ -1235,7 +1242,7 @@ function ContextMenuItems({
 									});
 
 									handleActions({
-										...action,
+										id: action.id,
 										responsibles: r.join(","),
 
 										intent: INTENTS.updateAction,
@@ -1283,7 +1290,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										...action,
+										id: action.id,
 										priority_id: priority.id,
 										intent: INTENTS.updateAction,
 									});
@@ -1303,12 +1310,3 @@ function ContextMenuItems({
 		</ContextMenuContent>
 	);
 }
-
-// ${
-// 	action.title.length > 30
-// 		? "text-sm leading-tight"
-// 		: action.title.length > 18 ||
-// 			action.title.indexOf(" ") === -1
-// 		? "text-lg leading-[1.15] tracking-tight"
-// 		: "text-2xl leading-none tracking-tight"
-// }

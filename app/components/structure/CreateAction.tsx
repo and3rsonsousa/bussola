@@ -508,7 +508,7 @@ export default function CreateAction({
 									toast({
 										variant: "destructive",
 										description:
-											"Selecione o partnere dessa ação.",
+											"Selecione o Parceiro dessa ação.",
 									});
 								} else {
 									submit(
