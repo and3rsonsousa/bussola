@@ -155,7 +155,7 @@ export default function DashboardIndex() {
 				//
 				submit(
 					{
-						...draggedAction,
+						id: draggedAction.id,
 						date: date?.concat(
 							`T${format(draggedAction.date, "HH:mm:ss")}`
 						),

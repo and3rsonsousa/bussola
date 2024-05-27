@@ -230,7 +230,7 @@ export default function ActionPage() {
 												partner.id !== action.partner_id
 											) {
 												await handleActions({
-													id: action.id,
+													...action,
 													intent: INTENTS.updateAction,
 													partner_id: Number(
 														partner.id
@@ -279,7 +279,7 @@ export default function ActionPage() {
 												action.category_id
 											) {
 												await handleActions({
-													id: action.id,
+													...action,
 													intent: INTENTS.updateAction,
 													category_id: Number(
 														category.id
@@ -324,7 +324,7 @@ export default function ActionPage() {
 										onSelect={async () => {
 											if (state.id !== action.state_id) {
 												await handleActions({
-													id: action.id,
+													...action,
 													intent: INTENTS.updateAction,
 													state_id: Number(state.id),
 												});
@@ -365,7 +365,7 @@ export default function ActionPage() {
 												action.priority_id
 											) {
 												await handleActions({
-													id: action.id,
+													...action,
 													intent: INTENTS.updateAction,
 													priority_id: Number(
 														priority.id
@@ -439,7 +439,7 @@ export default function ActionPage() {
 												  );
 
 											await handleActions({
-												id: action.id,
+												...action,
 												intent: INTENTS.updateAction,
 												responsibles: tempResponsibles,
 											});
@@ -596,7 +596,7 @@ export default function ActionPage() {
 									)
 								) {
 									handleActions({
-										id: action.id,
+										...action,
 										intent: INTENTS.deleteAction,
 									});
 
@@ -609,7 +609,7 @@ export default function ActionPage() {
 						<Button
 							onClick={() => {
 								handleActions({
-									id: action.id,
+									...action,
 									responsibles: action.responsibles,
 									intent: INTENTS.updateAction,
 								});

@@ -37,7 +37,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	} else if (intent === INTENTS.updateAction) {
 		if (!id) throw new Error("No id was provided");
 
+		delete values.priority;
+		delete values.category;
+		delete values.state;
+		delete values.partner;
+		delete values.slug;
+
 		if (values["responsibles"]) {
+			console.log({ values });
+
 			const { data, error } = await supabase
 				.from("actions")
 				.update({
@@ -46,6 +54,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 					updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
 				})
 				.eq("id", id);
+			if (error) console.log({ error });
 			return { data, error };
 		} else {
 			const { data, error } = await supabase

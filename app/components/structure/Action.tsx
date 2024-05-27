@@ -178,7 +178,7 @@ export function ActionLine({
 											flushSync(() => {
 												handleActions({
 													intent: INTENTS.updateAction,
-													id: action.id,
+													...action,
 													title: String(
 														inputRef.current?.value
 													),
@@ -198,7 +198,7 @@ export function ActionLine({
 										flushSync(() => {
 											handleActions({
 												intent: INTENTS.updateAction,
-												id: action.id,
+												...action,
 												title: String(
 													inputRef.current?.value
 												),
@@ -332,7 +332,7 @@ export function ActionBlock({ action }: { action: Action }) {
 										) {
 											handleActions({
 												intent: INTENTS.updateAction,
-												id: action.id,
+												...action,
 												title: inputRef.current?.value,
 											});
 										}
@@ -355,7 +355,7 @@ export function ActionBlock({ action }: { action: Action }) {
 										)
 											handleActions({
 												intent: INTENTS.updateAction,
-												id: action.id,
+												...action,
 												title: inputRef.current?.value,
 											});
 
@@ -723,7 +723,7 @@ function ShortcutActions({ action }: { action: Action }) {
 
 				handleActions({
 					intent: INTENTS.updateAction,
-					id: action.id,
+					...action,
 					state_id,
 				});
 			} else if (
@@ -798,14 +798,14 @@ function ShortcutActions({ action }: { action: Action }) {
 
 				handleActions({
 					intent: INTENTS.updateAction,
-					id: action.id,
+					...action,
 					category_id,
 				});
 			} else if (key === "e" && event.shiftKey) {
 				navigate(`/dashboard/action/${action.id}`);
 			} else if (key === "d" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					newId: window.crypto.randomUUID(),
 					created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
 					updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
@@ -814,25 +814,25 @@ function ShortcutActions({ action }: { action: Action }) {
 			} else if (key === "x" && event.shiftKey) {
 				if (confirm("Deseja mesmo excluir essa ação?")) {
 					handleActions({
-						id: action.id,
+						...action,
 						intent: INTENTS.deleteAction,
 					});
 				}
 			} else if (key === ",") {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.low,
 				});
 			} else if (key === ".") {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.medium,
 				});
 			} else if (key === "/") {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					priority_id: PRIORITIES.high,
 				});
@@ -840,7 +840,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			//em uma hora
 			else if (code === "Digit1" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
@@ -853,7 +853,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			//em duas horas
 			else if (code === "Digit2" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
@@ -866,7 +866,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			//em três horas
 			else if (code === "Digit3" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
@@ -879,7 +879,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			//Hoje
 			else if (key === "h" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						addMinutes(new Date(), 30),
@@ -890,7 +890,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			// Amanhã
 			else if (key === "a" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(addDays(new Date(), 1), "yyyy-MM-dd HH:mm:ss"),
 				});
@@ -899,7 +899,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			// Adiciona uma semana
 			else if (key === "s" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
@@ -912,7 +912,7 @@ function ShortcutActions({ action }: { action: Action }) {
 			// Adiciona um mês
 			else if (key === "m" && event.shiftKey) {
 				handleActions({
-					id: action.id,
+					...action,
 					intent: INTENTS.updateAction,
 					date: format(
 						isBefore(action.date, new Date())
@@ -1089,7 +1089,7 @@ function ContextMenuItems({
 
 											handleActions({
 												intent: INTENTS.updateAction,
-												id: action.id,
+												...action,
 												date,
 											});
 										}}
@@ -1132,7 +1132,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										id: action.id,
+										...action,
 										state_id: state.id,
 										intent: INTENTS.updateAction,
 									});
@@ -1175,7 +1175,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										id: action.id,
+										...action,
 										category_id: category.id,
 										intent: INTENTS.updateAction,
 									});
@@ -1242,7 +1242,7 @@ function ContextMenuItems({
 									});
 
 									handleActions({
-										id: action.id,
+										...action,
 										responsibles: r.join(","),
 
 										intent: INTENTS.updateAction,
@@ -1290,7 +1290,7 @@ function ContextMenuItems({
 								className="bg-item flex items-center gap-2"
 								onSelect={() => {
 									handleActions({
-										id: action.id,
+										...action,
 										priority_id: priority.id,
 										intent: INTENTS.updateAction,
 									});
