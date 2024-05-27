@@ -455,15 +455,6 @@ export function HoursView({ actions }: { actions: Action[] }) {
 
 function DelayedActions({ actions }: { actions: Action[] }) {
 	const [view, setView] = useState<"state" | "priority" | "time">("state");
-	const [a, setA] = useState(actions);
-
-	useEffect(() => {
-		if (view === "priority") {
-			setA(getActionsByPriority(actions));
-		} else {
-			setA(getActionsByState(actions));
-		}
-	}, [view, actions]);
 
 	return (
 		<div className="mb-4">
@@ -473,7 +464,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
 						Atrasados
 					</h2>
 					<Badge
-						value={a.length}
+						value={actions.length}
 						className="-translate-y-1 translate-x-8"
 					/>
 				</div>
@@ -498,10 +489,12 @@ function DelayedActions({ actions }: { actions: Action[] }) {
 			</div>
 
 			<ListOfActions
-				actions={a}
+				actions={actions}
 				showCategory={true}
 				columns={6}
 				date={{ dateFormat: 1 }}
+				descending
+				orderBy={view}
 			/>
 		</div>
 	);

@@ -46,6 +46,7 @@ import {
 	Avatar,
 	Icons,
 	amIResponsible,
+	getActionsByPriority,
 	getActionsByState,
 	getResponsibles,
 } from "~/lib/helpers";
@@ -543,6 +544,8 @@ export function ListOfActions({
 	columns = 1,
 	onDrag,
 	isFoldable,
+	descending = false,
+	orderBy = "state",
 }: {
 	actions?: Action[] | null;
 	showCategory?: boolean;
@@ -550,8 +553,14 @@ export function ListOfActions({
 	columns?: 1 | 2 | 3 | 6;
 	onDrag?: (action: Action) => void;
 	isFoldable?: boolean;
+	descending?: boolean;
+	orderBy?: "state" | "priority" | "category" | "time";
 }) {
-	actions = actions ? getActionsByState(actions) : [];
+	actions = actions
+		? orderBy === "state"
+			? getActionsByState(actions, descending)
+			: getActionsByPriority(actions, descending)
+		: [];
 	const matches = useMatches();
 	const { states, categories, priorities, partners } = matches[1]
 		.data as DashboardDataType;

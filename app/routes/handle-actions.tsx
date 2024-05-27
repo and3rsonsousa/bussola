@@ -52,6 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 					updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
 				})
 				.eq("id", id);
+
 			if (error) console.log({ error });
 			return { data, error };
 		} else {

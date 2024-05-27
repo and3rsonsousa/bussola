@@ -185,31 +185,23 @@ export function getUrgentActions(actions: Action[] | null) {
 		: [];
 }
 
-export function getActionsByPriority(actions?: Action[] | null) {
-	let sorted = actions?.sort((a, b) => {
-		return (
-			(PRIORITIES.low === a.priority_id
-				? 1
-				: PRIORITIES.medium === a.priority_id
-				? 2
-				: 3) -
-			(PRIORITIES.low === b.priority_id
-				? 1
-				: PRIORITIES.medium === b.priority_id
-				? 2
-				: 3)
-		);
+export function getActionsByPriority(actions: Action[], descending?: boolean) {
+	let _sorted: Action[][] = [];
+
+	Object.entries(PRIORITIES).map(([, value]) => {
+		_sorted.push(actions.filter((action) => action.priority_id === value));
 	});
-	return sorted || [];
+
+	return descending ? _sorted.flat().reverse() : _sorted.flat();
 }
 
-export function getActionsByState(actions: Action[]) {
+export function getActionsByState(actions: Action[], descending?: boolean) {
 	let _sorted: Action[][] = [];
 	Object.entries(STATES).map(([, value]) => {
 		_sorted.push(actions.filter((action) => action.state_id === value));
 	});
 
-	return _sorted.flat();
+	return descending ? _sorted.flat().reverse() : _sorted.flat();
 }
 
 export function getActionsForThisDay({
