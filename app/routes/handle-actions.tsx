@@ -44,8 +44,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		delete values.slug;
 
 		if (values["responsibles"]) {
-			console.log({ values });
-
 			const { data, error } = await supabase
 				.from("actions")
 				.update({
