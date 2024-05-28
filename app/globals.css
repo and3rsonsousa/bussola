@@ -195,7 +195,34 @@ body {
 	@apply border-finished-500;
 }
 
-.stroke-idea {
+.action-item {
+	@apply bg-gray-900 hover:bg-gray-800 relative flex w-full select-none items-center gap-2 rounded-[4px] border-l-4 px-2 py-1 text-sm font-medium outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs;
+}
+
+.action-item.action-delayed {
+	@apply bg-error-600 text-error-100 animate-pulse;
+}
+
+.action-idea {
+	@apply border-l-idea-500;
+}
+.action-do {
+	@apply border-l-do-600;
+}
+.action-doing {
+	@apply border-l-doing-500;
+}
+.action-review {
+	@apply border-l-review-500;
+}
+.action-done {
+	@apply border-l-done-500;
+}
+.action-finished {
+	@apply border-finished-500;
+}
+
+.stroke-l-idea {
 	@apply stroke-idea-500;
 }
 .stroke-do {

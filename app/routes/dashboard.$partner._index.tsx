@@ -669,10 +669,8 @@ export const CalendarDay = ({
 								</div>
 								{actions?.map((action) => (
 									<ActionLine
+										showDelay
 										action={action}
-										categories={categories}
-										priorities={priorities}
-										states={states}
 										key={action.id}
 										date={{
 											timeFormat: 1,
