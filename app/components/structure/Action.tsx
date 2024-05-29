@@ -40,6 +40,7 @@ import {
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
@@ -981,11 +982,13 @@ function ContextMenuItems({
         >
           <PencilLineIcon className="size-3" />
           <span>Editar</span>
+          <ContextMenuShortcut className="pl-2">⇧+E</ContextMenuShortcut>
         </Link>
       </ContextMenuItem>
       <ContextMenuItem className="bg-item flex items-center gap-2">
         <CopyIcon className="size-3" />
         <span>Duplicar</span>
+        <ContextMenuShortcut className="pl-2">⇧+D</ContextMenuShortcut>
       </ContextMenuItem>
       {/* Adiar */}
       <ContextMenuSub>
@@ -1242,6 +1245,7 @@ function ContextMenuItems({
       <ContextMenuItem className="bg-item flex items-center gap-2">
         <TrashIcon className="size-3" />
         <span>Deletar</span>
+        <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
       <ContextMenuSeparator className="bg-gray-300/20 " />
       {/* States */}
@@ -1274,6 +1278,18 @@ function ContextMenuItems({
                   className={`size-3 rounded-full border-2 border-${state?.slug}`}
                 ></div>
                 <span>{state.title}</span>
+                <ContextMenuShortcut className="pl-2">
+                  {
+                    [
+                      { id: STATES.ideia, shortcut: "i" },
+                      { id: STATES.do, shortcut: "f" },
+                      { id: STATES.doing, shortcut: "z" },
+                      { id: STATES.review, shortcut: "a" },
+                      { id: STATES.done, shortcut: "t" },
+                      { id: STATES.finish, shortcut: "c" },
+                    ].find((s) => s.id === state.id)?.shortcut
+                  }
+                </ContextMenuShortcut>
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>
@@ -1313,6 +1329,25 @@ function ContextMenuItems({
               >
                 <Icons id={category.slug} className="size-3" />
                 {category.title}
+                <ContextMenuShortcut className="w-8 pl-2 text-left">
+                  ⇧+
+                  {
+                    [
+                      { id: CATEGORIES.ads, shortcut: "a" },
+                      { id: CATEGORIES.design, shortcut: "d" },
+                      { id: CATEGORIES.dev, shortcut: "c" },
+                      { id: CATEGORIES.finance, shortcut: "f" },
+                      { id: CATEGORIES.meeting, shortcut: "r" },
+                      { id: CATEGORIES.plan, shortcut: "n" },
+                      { id: CATEGORIES.post, shortcut: "p" },
+                      { id: CATEGORIES.print, shortcut: "i" },
+                      { id: CATEGORIES.sm, shortcut: "m" },
+                      { id: CATEGORIES.stories, shortcut: "s" },
+                      { id: CATEGORIES.todo, shortcut: "t" },
+                      { id: CATEGORIES.video, shortcut: "v" },
+                    ].find((s) => s.id === category.id)?.shortcut
+                  }
+                </ContextMenuShortcut>
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>
@@ -1419,6 +1454,15 @@ function ContextMenuItems({
               >
                 <Icons id={priority.slug} type="priority" className="size-3" />
                 {priority.title}
+                <ContextMenuShortcut className="pl-2">
+                  {
+                    [
+                      { id: PRIORITIES.low, shortcut: "," },
+                      { id: PRIORITIES.medium, shortcut: "." },
+                      { id: PRIORITIES.high, shortcut: "/" },
+                    ].find((s) => s.id === priority.id)?.shortcut
+                  }
+                </ContextMenuShortcut>
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>
