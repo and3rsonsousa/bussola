@@ -93,16 +93,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .gte(
       "date",
       format(
-        startOfDay(startOfWeek(startOfMonth(new Date()))),
+        startOfDay(startOfWeek(startOfMonth(date))),
         "yyyy-MM-dd HH:mm:ss",
       ),
     )
     .lte(
       "date",
-      format(
-        endOfDay(endOfWeek(endOfMonth(new Date()))),
-        "yyyy-MM-dd HH:mm:ss",
-      ),
+      format(endOfDay(endOfWeek(endOfMonth(date))), "yyyy-MM-dd HH:mm:ss"),
     )
     .returns<ActionComplete[]>();
 
