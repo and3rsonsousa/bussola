@@ -531,7 +531,7 @@ export function ListOfActions({
   onDrag?: (action: Action) => void;
   isFoldable?: boolean;
   descending?: boolean;
-  orderBy?: "state" | "priority" | "category" | "time";
+  orderBy?: "state" | "priority" | "time";
 }) {
   actions = actions
     ? orderBy === "state"

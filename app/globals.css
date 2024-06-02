@@ -3,57 +3,57 @@
 @tailwind utilities;
 
 @font-face {
-	font-family: "Compasso";
-	src: url("/compasso/compasso-vf.woff2?url") format("woff2");
-	font-weight: 100 900;
-	font-display: swap;
+  font-family: "Compasso";
+  src: url("/compasso/compasso-vf.woff2?url") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
 }
 
 @layer base {
-	:root {
-		--background: 0 0% 100%;
-		--foreground: 224 71.4% 4.1%;
-		--card: 0 0% 100%;
-		--card-foreground: 224 71.4% 4.1%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 224 71.4% 4.1%;
-		--primary: 250 80% 60%;
-		--primary-foreground: 210 20% 98%;
-		--secondary: 220 14.3% 95.9%;
-		--secondary-foreground: 220.9 39.3% 11%;
-		--muted: 220 14.3% 95.9%;
-		--muted-foreground: 220 8.9% 46.1%;
-		--accent: 220 14.3% 95.9%;
-		--accent-foreground: 220.9 39.3% 11%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 210 20% 98%;
-		--border: 220 13% 91%;
-		--input: 220 13% 91%;
-		--ring: 250 80% 60%;
-		--radius: 1rem;
-	}
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 250 80% 60%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 250 80% 60%;
+    --radius: 1rem;
+  }
 
-	.dark {
-		--background: 224 71.4% 4.1%;
-		--foreground: 210 20% 98%;
-		--card: 224 71.4% 4.1%;
-		--card-foreground: 210 20% 98%;
-		--popover: 224 71.4% 4.1%;
-		--popover-foreground: 210 20% 98%;
-		--primary: 250 80% 60%;
-		--primary-foreground: 250 90% 97%;
-		--secondary: 215 27.9% 16.9%;
-		--secondary-foreground: 210 20% 98%;
-		--muted: 215 27.9% 16.9%;
-		--muted-foreground: 217.9 10.6% 64.9%;
-		--accent: 215 27.9% 16.9%;
-		--accent-foreground: 210 20% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 210 20% 98%;
-		--border: 215 27.9% 16.9%;
-		--input: 215 27.9% 16.9%;
-		--ring: 250 80% 60%;
-	}
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 250 80% 60%;
+    --primary-foreground: 250 90% 97%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 250 80% 60%;
+  }
 }
 
 /*
@@ -108,374 +108,374 @@ PRETO E BRANCO
 }
 */
 @layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-gray-300;
-	}
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-gray-300;
+  }
 }
 
 body {
-	font-family: "Compasso", "sans";
+  font-family: "Compasso", "sans";
 }
 
 .bg-idea {
-	@apply bg-idea-500 text-idea-100;
+  @apply bg-idea-500 text-idea-100;
 }
 .bg-do {
-	@apply bg-do-600 text-do-100;
+  @apply bg-do-600 text-do-100;
 }
 .bg-doing {
-	@apply bg-doing-500 text-doing-100;
+  @apply bg-doing-500 text-doing-100;
 }
 .bg-review {
-	@apply bg-review-500 text-review-100;
+  @apply bg-review-500 text-review-100;
 }
 .bg-done {
-	@apply bg-done-500 text-done-100;
+  @apply bg-done-500 text-done-100;
 }
 .bg-finished {
-	@apply bg-finished-500 text-finished-100;
+  @apply bg-finished-500 text-finished-100;
 }
 .bg-idea-dark {
-	@apply bg-idea-950 text-idea-100 hover:bg-idea-900;
+  @apply bg-idea-950 text-idea-100 hover:bg-idea-900;
 }
 .bg-do-dark {
-	@apply bg-do-950 text-do-100 hover:bg-do-900;
+  @apply bg-do-950 text-do-100 hover:bg-do-900;
 }
 .bg-doing-dark {
-	@apply bg-doing-950 text-doing-100 hover:bg-doing-900;
+  @apply bg-doing-950 text-doing-100 hover:bg-doing-900;
 }
 .bg-review-dark {
-	@apply bg-review-950 text-review-100 hover:bg-review-900;
+  @apply bg-review-950 text-review-100 hover:bg-review-900;
 }
 .bg-done-dark {
-	@apply bg-done-950 text-done-100 hover:bg-done-900;
+  @apply bg-done-950 text-done-100 hover:bg-done-900;
 }
 .bg-finished-dark {
-	@apply bg-finished-950 text-finished-100 hover:bg-finished-900;
+  @apply bg-finished-950 text-finished-100 hover:bg-finished-900;
 }
 
 .hover-bg-idea {
-	@apply hover:bg-idea-700;
+  @apply hover:bg-idea-700;
 }
 .hover-bg-do {
-	@apply hover:bg-do-700;
+  @apply hover:bg-do-700;
 }
 .hover-bg-doing {
-	@apply hover:bg-doing-700;
+  @apply hover:bg-doing-700;
 }
 .hover-bg-review {
-	@apply hover:bg-review-700;
+  @apply hover:bg-review-700;
 }
 .hover-bg-done {
-	@apply hover:bg-done-700;
+  @apply hover:bg-done-700;
 }
 .hover-bg-finished {
-	@apply hover:bg-finished-700;
+  @apply hover:bg-finished-700;
 }
 
 .border-idea {
-	@apply border-idea-500;
+  @apply border-idea-500;
 }
 .border-do {
-	@apply border-do-600;
+  @apply border-do-600;
 }
 .border-doing {
-	@apply border-doing-500;
+  @apply border-doing-500;
 }
 .border-review {
-	@apply border-review-500;
+  @apply border-review-500;
 }
 .border-done {
-	@apply border-done-500;
+  @apply border-done-500;
 }
 .border-finished {
-	@apply border-finished-500;
+  @apply border-finished-500;
 }
 
 .action-item {
-	@apply bg-gray-900 hover:bg-gray-800 relative flex w-full select-none items-center gap-2 rounded-[4px] border-l-4 px-2 py-1 text-sm font-medium outline-none ring-primary transition focus-within:ring-2 focus:ring-2 md:text-xs;
+  @apply relative flex w-full select-none items-center gap-2 rounded-[4px] border-l-4 bg-gray-800 px-2 py-1 text-sm font-medium outline-none ring-primary transition focus-within:ring-2 hover:bg-gray-700 focus:ring-2 md:text-xs;
 }
 
 .action-item.action-delayed {
-	@apply bg-error-600 text-error-100 animate-pulse;
+  @apply animate-pulse bg-error-600 text-error-100;
 }
 
 .action-idea {
-	@apply border-l-idea-500;
+  @apply border-l-idea-500;
 }
 .action-do {
-	@apply border-l-do-600;
+  @apply border-l-do-600;
 }
 .action-doing {
-	@apply border-l-doing-500;
+  @apply border-l-doing-500;
 }
 .action-review {
-	@apply border-l-review-500;
+  @apply border-l-review-500;
 }
 .action-done {
-	@apply border-l-done-500;
+  @apply border-l-done-500;
 }
 .action-finished {
-	@apply border-finished-500;
+  @apply border-finished-500;
 }
 
 .stroke-l-idea {
-	@apply stroke-idea-500;
+  @apply stroke-idea-500;
 }
 .stroke-do {
-	@apply stroke-do-500;
+  @apply stroke-do-500;
 }
 .stroke-doing {
-	@apply stroke-doing-500;
+  @apply stroke-doing-500;
 }
 .stroke-review {
-	@apply stroke-review-500;
+  @apply stroke-review-500;
 }
 .stroke-done {
-	@apply stroke-done-500;
+  @apply stroke-done-500;
 }
 .stroke-finished {
-	@apply stroke-finished-600;
+  @apply stroke-finished-600;
 }
 
 .fg-post {
-	@apply text-post-500;
+  @apply text-post-500;
 }
 .fg-video {
-	@apply text-video-600;
+  @apply text-video-600;
 }
 .fg-stories {
-	@apply text-stories-500;
+  @apply text-stories-500;
 }
 .fg-todo {
-	@apply text-todo-500;
+  @apply text-todo-500;
 }
 .fg-dev {
-	@apply text-dev-500;
+  @apply text-dev-500;
 }
 .fg-print {
-	@apply text-print-500;
+  @apply text-print-500;
 }
 .fg-meeting {
-	@apply text-meeting-700;
+  @apply text-meeting-700;
 }
 .fg-finance {
-	@apply text-finance-500;
+  @apply text-finance-500;
 }
 .fg-design {
-	@apply text-design-500;
+  @apply text-design-500;
 }
 .fg-ads {
-	@apply text-ads-500;
+  @apply text-ads-500;
 }
 .fg-sm {
-	@apply text-sm-700;
+  @apply text-sm-700;
 }
 .fg-plan {
-	@apply text-plan-500;
+  @apply text-plan-500;
 }
 
 .border-post {
-	@apply border-post-500;
+  @apply border-post-500;
 }
 .border-video {
-	@apply border-video-600;
+  @apply border-video-600;
 }
 .border-stories {
-	@apply border-stories-500;
+  @apply border-stories-500;
 }
 .border-todo {
-	@apply border-todo-500;
+  @apply border-todo-500;
 }
 .border-dev {
-	@apply border-dev-500;
+  @apply border-dev-500;
 }
 .border-print {
-	@apply border-print-500;
+  @apply border-print-500;
 }
 .border-meeting {
-	@apply border-meeting-700;
+  @apply border-meeting-700;
 }
 .border-finance {
-	@apply border-finance-500;
+  @apply border-finance-500;
 }
 .border-design {
-	@apply border-design-500;
+  @apply border-design-500;
 }
 .border-ads {
-	@apply border-ads-500;
+  @apply border-ads-500;
 }
 .border-sm {
-	@apply border-sm-700;
+  @apply border-sm-700;
 }
 .border-plan {
-	@apply border-plan-500;
+  @apply border-plan-500;
 }
 
 .bg-post {
-	@apply bg-post-500;
+  @apply bg-post-500;
 }
 .bg-video {
-	@apply bg-video-600;
+  @apply bg-video-600;
 }
 .bg-stories {
-	@apply bg-stories-500;
+  @apply bg-stories-500;
 }
 .bg-todo {
-	@apply bg-todo-500;
+  @apply bg-todo-500;
 }
 .bg-dev {
-	@apply bg-dev-500;
+  @apply bg-dev-500;
 }
 .bg-print {
-	@apply bg-print-500;
+  @apply bg-print-500;
 }
 .bg-meeting {
-	@apply bg-meeting-700;
+  @apply bg-meeting-700;
 }
 .bg-finance {
-	@apply bg-finance-500;
+  @apply bg-finance-500;
 }
 .bg-design {
-	@apply bg-design-500;
+  @apply bg-design-500;
 }
 .bg-ads {
-	@apply bg-ads-500;
+  @apply bg-ads-500;
 }
 .bg-sm {
-	@apply bg-sm-700;
+  @apply bg-sm-700;
 }
 .bg-plan {
-	@apply bg-plan-500;
+  @apply bg-plan-500;
 }
 
 .scrollbars {
-	@apply h-full overflow-hidden overflow-y-auto pr-2;
-	scrollbars-gutter: stable;
+  @apply h-full overflow-hidden overflow-y-auto pr-2;
+  scrollbars-gutter: stable;
 }
 
 .scrollbars::-webkit-scrollbar {
-	@apply mr-4 block w-2;
+  @apply mr-4 block w-2;
 }
 .scrollbars-thin::-webkit-scrollbar {
-	@apply mr-4 block w-1;
+  @apply mr-4 block w-1;
 }
 .scrollbars::-webkit-scrollbar-button {
-	@apply hidden;
+  @apply hidden;
 }
 
 .scrollbars::-webkit-scrollbar-track {
-	@apply mr-4 bg-transparent;
+  @apply mr-4 bg-transparent;
 }
 .scrollbars::-webkit-scrollbar-track-piece {
-	@apply mr-4 bg-transparent;
+  @apply mr-4 bg-transparent;
 }
 
 .scrollbars::-webkit-scrollbar-thumb {
-	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
+  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
 }
 
 .scrollbars-horizontal {
-	@apply h-full overflow-hidden overflow-x-auto pb-1;
-	scrollbars-gutter: stable;
+  @apply h-full overflow-hidden overflow-x-auto pb-1;
+  scrollbars-gutter: stable;
 }
 
 .scrollbars-horizontal::-webkit-scrollbar {
-	@apply mb-4 block h-2;
+  @apply mb-4 block h-2;
 }
 .scrollbars-horizontal-thin::-webkit-scrollbar {
-	@apply mb-4 block h-1;
+  @apply mb-4 block h-1;
 }
 .scrollbars-horizontal::-webkit-scrollbar-button {
-	@apply hidden;
+  @apply hidden;
 }
 
 .scrollbars-horizontal::-webkit-scrollbar-track {
-	@apply mb-4 bg-transparent;
+  @apply mb-4 bg-transparent;
 }
 .scrollbars-horizontal::-webkit-scrollbar-track-piece {
-	@apply mr-4 bg-transparent;
+  @apply mr-4 bg-transparent;
 }
 .scrollbars-horizontal::-webkit-scrollbar-thumb {
-	@apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
+  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
 }
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-	@apply bg-gray-500/25;
+  @apply bg-gray-500/25;
 }
 
 .bg-content {
-	@apply border border-gray-300/15 bg-gray-300/5 outline-black/10 backdrop-blur-lg;
+  @apply border border-gray-300/15 bg-gray-300/5 outline-black/10 backdrop-blur-lg;
 }
 
 .bg-item {
-	@apply font-light px-4 flex gap-2;
+  @apply flex gap-2 px-4 font-light;
 }
 
 .bg-select-item {
-	@apply font-normal pl-8 pr-4;
+  @apply pl-8 pr-4 font-normal;
 }
 
 .debug-1 {
-	@apply border border-red-500;
+  @apply border border-red-500;
 }
 .debug-2 {
-	@apply border border-yellow-500;
+  @apply border border-yellow-500;
 }
 .debug-3 {
-	@apply border border-green-500;
+  @apply border border-green-500;
 }
 .debug-4 {
-	@apply border border-sky-500;
+  @apply border border-sky-500;
 }
 .debug-5 {
-	@apply border border-pink-500;
+  @apply border border-pink-500;
 }
 
 .editor-tiptap {
-	@apply min-h-full flex flex-col;
+  @apply flex min-h-full flex-col;
 }
 
 .editor-tiptap > div:nth-child(2) {
-	@apply flex-1 shrink-0 flex flex-col;
+  @apply flex flex-1 shrink-0 flex-col;
 }
 
 .tiptap {
-	@apply outline-none text-lg font-normal tracking-tight text-gray-300 flex-1 shrink-0;
+  @apply flex-1 shrink-0 text-lg font-normal tracking-tight text-gray-300 outline-none;
 }
 
 .tiptap > * {
-	@apply mb-2;
+  @apply mb-2;
 }
 
 .tiptap h1 {
-	@apply text-4xl font-bold tracking-tight text-gray-100;
+  @apply text-4xl font-bold tracking-tight text-gray-100;
 }
 .tiptap h2 {
-	@apply text-2xl font-bold tracking-tight text-gray-100;
+  @apply text-2xl font-bold tracking-tight text-gray-100;
 }
 .tiptap h3 {
-	@apply text-xl font-bold uppercase tracking-wide text-gray-100;
+  @apply text-xl font-bold uppercase tracking-wide text-gray-100;
 }
 .tiptap h4 {
-	@apply text-xl font-bold tracking-tight text-gray-100;
+  @apply text-xl font-bold tracking-tight text-gray-100;
 }
 .tiptap h5 {
-	@apply text-base font-bold tracking-wider uppercase text-gray-100;
+  @apply text-base font-bold uppercase tracking-wider text-gray-100;
 }
 
 .tiptap ul,
 ol {
-	padding: 0 2rem;
+  padding: 0 2rem;
 }
 
 .tiptap ul {
-	list-style: disc;
+  list-style: disc;
 }
 .tiptap ol {
-	list-style: decimal;
+  list-style: decimal;
 }

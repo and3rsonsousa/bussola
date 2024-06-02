@@ -561,7 +561,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } group/day relative flex flex-col border-b bg-gradient-to-b pb-4 pt-2 transition hover:from-gray-900 hover:via-transparent md:px-1 md:pt-0`}
+      } group/day relative flex flex-col border-b pb-4 pt-2 transition hover:bg-gray-900 md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();

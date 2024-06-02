@@ -1,32 +1,33 @@
 import {
-	Link,
-	redirect,
-	useLoaderData,
-	useMatches,
-	useSubmit,
+  Link,
+  redirect,
+  useLoaderData,
+  useMatches,
+  useSubmit,
 } from "@remix-run/react";
 import {
-	json,
-	type LoaderFunctionArgs,
-	type MetaFunction,
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
 } from "@vercel/remix";
 import {
-	addDays,
-	eachDayOfInterval,
-	endOfWeek,
-	format,
-	isSameDay,
-	startOfDay,
-	startOfMonth,
-	startOfWeek,
+  addDays,
+  eachDayOfInterval,
+  endOfWeek,
+  format,
+  isSameDay,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
-	CalendarClock,
-	ComponentIcon,
-	KanbanIcon,
-	ListTodoIcon,
-	SignalIcon,
+  CalendarClock,
+  ComponentIcon,
+  KanbanIcon,
+  ListIcon,
+  ListTodoIcon,
+  SignalIcon,
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
 import { BlockOfActions, ListOfActions } from "~/components/structure/Action";
@@ -37,521 +38,529 @@ import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { INTENTS, STATES } from "~/lib/constants";
 import {
-	Avatar,
-	Icons,
-	getActionsByPriority,
-	getActionsByState,
-	getActionsForThisDay,
-	getDelayedActions,
-	sortActions,
-	useIDsToRemove,
-	usePendingActions,
+  Avatar,
+  Icons,
+  getActionsByPriority,
+  getActionsByState,
+  getActionsForThisDay,
+  getDelayedActions,
+  sortActions,
+  useIDsToRemove,
+  usePendingActions,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const { headers, supabase } = createClient(request);
+  const { headers, supabase } = createClient(request);
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-	if (!user) {
-		return redirect("/login");
-	}
+  if (!user) {
+    return redirect("/login");
+  }
 
-	const { data: person } = await supabase
-		.from("people")
-		.select("*")
-		.eq("user_id", user.id)
-		.single();
+  const { data: person } = await supabase
+    .from("people")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
 
-	const { data: actions } = await supabase
-		.from("get_full_actions")
-		.select("*")
-		.contains("responsibles", person?.admin ? [] : [user.id])
-		.gte(
-			"date",
-			format(
-				startOfDay(startOfWeek(startOfMonth(new Date()))),
-				"yyyy-MM-dd HH:mm:ss"
-			)
-		)
-		.returns<ActionComplete[]>();
+  const { data: actions } = await supabase
+    .from("get_full_actions")
+    .select("*")
+    .contains("responsibles", person?.admin ? [] : [user.id])
+    .gte(
+      "date",
+      format(
+        startOfDay(startOfWeek(startOfMonth(new Date()))),
+        "yyyy-MM-dd HH:mm:ss",
+      ),
+    )
+    .returns<ActionComplete[]>();
 
-	return json({ actions }, { headers });
+  return json({ actions }, { headers });
 };
 
 export const meta: MetaFunction = () => {
-	return [
-		{ title: "ʙússoʟa - Domine, Crie e Conquiste." },
-		{
-			name: "description",
-			content:
-				"Aplicativo de Gestão de Projetos Criado e Mantido pela Agência Canivete. ",
-		},
-	];
+  return [
+    { title: "ʙússoʟa - Domine, Crie e Conquiste." },
+    {
+      name: "description",
+      content:
+        "Aplicativo de Gestão de Projetos Criado e Mantido pela Agência Canivete. ",
+    },
+  ];
 };
 
 export default function DashboardIndex() {
-	let { actions } = useLoaderData<typeof loader>();
-	const matches = useMatches();
-	const submit = useSubmit();
-	const [draggedAction, setDraggedAction] = useState<Action>();
-	const [todayView, setTodayView] = useState<
-		"kanban" | "hours" | "categories"
-	>("kanban");
+  let { actions } = useLoaderData<typeof loader>();
+  const matches = useMatches();
+  const submit = useSubmit();
+  const [draggedAction, setDraggedAction] = useState<Action>();
+  const [todayView, setTodayView] = useState<"kanban" | "hours" | "categories">(
+    "kanban",
+  );
 
-	if (!actions) {
-		actions = [];
-	}
+  if (!actions) {
+    actions = [];
+  }
 
-	const { states, categories } = matches[1].data as DashboardDataType;
+  const { states, categories } = matches[1].data as DashboardDataType;
 
-	const pendingActions = usePendingActions();
-	const idsToRemove = useIDsToRemove();
+  const pendingActions = usePendingActions();
+  const idsToRemove = useIDsToRemove();
 
-	const actionsMap = new Map<string, ActionComplete>(
-		actions.map((action) => [action.id, action])
-	);
+  const actionsMap = new Map<string, ActionComplete>(
+    actions.map((action) => [action.id, action]),
+  );
 
-	for (const action of pendingActions as Action[]) {
-		actionsMap.set(action.id, action);
-	}
+  for (const action of pendingActions as Action[]) {
+    actionsMap.set(action.id, action);
+  }
 
-	for (const id of idsToRemove) {
-		actionsMap.delete(id);
-	}
+  for (const id of idsToRemove) {
+    actionsMap.delete(id);
+  }
 
-	actions = sortActions(Array.from(actionsMap, ([, v]) => v));
+  actions = sortActions(Array.from(actionsMap, ([, v]) => v));
 
-	const lateActions = getDelayedActions({ actions: actions as Action[] });
-	const todayActions = getActionsForThisDay({ actions });
-	const tomorrowActions = getActionsByState(
-		getActionsForThisDay({
-			actions,
-			date: addDays(new Date(), 1),
-		})
-	);
-	const weekActions = eachDayOfInterval({
-		start: startOfWeek(new Date()),
-		end: endOfWeek(new Date()),
-	}).map((day) => ({
-		date: day,
-		actions: actions?.filter((action) =>
-			isSameDay(action.date, day)
-		) as Action[],
-	}));
-	const nextActions = actions?.filter(
-		(action) => action.state_id != STATES.finish
-	);
+  const lateActions = getDelayedActions({ actions: actions as Action[] });
+  const todayActions = getActionsForThisDay({ actions });
+  const tomorrowActions = getActionsByState(
+    getActionsForThisDay({
+      actions,
+      date: addDays(new Date(), 1),
+    }),
+  );
+  const weekActions = eachDayOfInterval({
+    start: startOfWeek(new Date()),
+    end: endOfWeek(new Date()),
+  }).map((day) => ({
+    date: day,
+    actions: actions?.filter((action) =>
+      isSameDay(action.date, day),
+    ) as Action[],
+  }));
+  const nextActions = actions?.filter(
+    (action) => action.state_id != STATES.finish,
+  );
 
-	useEffect(() => {
-		if (draggedAction) {
-			const day = document.querySelector(".dragover") as HTMLElement;
-			const date = day?.getAttribute("data-date") as string;
+  useEffect(() => {
+    if (draggedAction) {
+      const day = document.querySelector(".dragover") as HTMLElement;
+      const date = day?.getAttribute("data-date") as string;
 
-			if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
-				//
-				submit(
-					{
-						id: draggedAction.id,
-						date: date?.concat(
-							`T${format(draggedAction.date, "HH:mm:ss")}`
-						),
-						intent: INTENTS.updateAction,
-					},
-					{
-						action: "/handle-actions",
-						method: "POST",
-						navigate: false,
-						fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-					}
-				);
-			}
-			//reset
-			setDraggedAction(undefined);
-		}
-	}, [draggedAction, submit]);
+      if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
+        //
+        submit(
+          {
+            id: draggedAction.id,
+            date: date?.concat(`T${format(draggedAction.date, "HH:mm:ss")}`),
+            intent: INTENTS.updateAction,
+          },
+          {
+            action: "/handle-actions",
+            method: "POST",
+            navigate: false,
+            fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
+          },
+        );
+      }
+      //reset
+      setDraggedAction(undefined);
+    }
+  }, [draggedAction, submit]);
 
-	return (
-		<div className="overflow-hidden">
-			<div className="scrollbars px-4 md:px-8">
-				<Progress
-					long={true}
-					className={"fixed z-50 w-full top-0 right-0"}
-					values={states.map((state) => ({
-						id: state.id,
-						title: state.title,
-						value: actions?.filter(
-							(action) => action.state_id === state.id
-						).length,
-						color: `bg-${state.slug}`,
-					}))}
-					total={actions?.length || 0}
-				/>
-				{/* Ações em Atraso */}
-				{lateActions?.length ? (
-					<DelayedActions actions={lateActions} />
-				) : null}
-				{/* Parceiros */}
+  return (
+    <div className="overflow-hidden">
+      <div className="scrollbars px-4 md:px-8">
+        <Progress
+          long={true}
+          className={"fixed right-0 top-0 z-50 w-full"}
+          values={states.map((state) => ({
+            id: state.id,
+            title: state.title,
+            value: actions?.filter((action) => action.state_id === state.id)
+              .length,
+            color: `bg-${state.slug}`,
+          }))}
+          total={actions?.length || 0}
+        />
+        {/* Ações em Atraso */}
+        {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
+        {/* Parceiros */}
 
-				<Partners actions={lateActions} />
+        <Partners actions={lateActions} />
 
-				{/* Ações de Hoje */}
-				{todayActions?.length ? (
-					<div className="mb-8">
-						<div className="flex justify-between py-8">
-							<div className="relative flex">
-								<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-									Hoje
-								</h2>
-								<Badge
-									value={todayActions?.length}
-									className="-translate-y-1 translate-x-8"
-								/>
-							</div>
-							<div className="flex gap-2">
-								{[
-									{
-										id: "kanban",
-										title: "Kanban",
-										description:
-											"Ver o Kanban de progresso",
-										Icon: <KanbanIcon className="w-6" />,
-									},
-									{
-										id: "categories",
-										title: "Categorias",
-										description: "Ver por categorias",
-										Icon: <ComponentIcon className="w-6" />,
-									},
-									{
-										id: "hours",
-										title: "Horas",
-										description: "Ver por horas do dia",
-										Icon: <CalendarClock className="w-6" />,
-									},
-								].map((button) => (
-									<Button
-										key={button.id}
-										variant={
-											todayView === button.id
-												? "default"
-												: "ghost"
-										}
-										size={"sm"}
-										title={button.description}
-										className="flex gap-2 items-center"
-										onClick={() => {
-											setTodayView(
-												button.id as
-													| "kanban"
-													| "hours"
-													| "categories"
-											);
-										}}
-									>
-										{button.Icon}
-										<div className="hidden md:block">
-											{button.title}
-										</div>
-									</Button>
-								))}
-							</div>
-						</div>
+        {/* Ações de Hoje */}
+        {todayActions?.length ? (
+          <div className="mb-8">
+            <div className="flex justify-between py-8">
+              <div className="relative flex">
+                <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+                  Hoje
+                </h2>
+                <Badge
+                  value={todayActions?.length}
+                  className="-translate-y-1 translate-x-8"
+                />
+              </div>
+              <div className="flex gap-2">
+                {[
+                  {
+                    id: "kanban",
+                    title: "Kanban",
+                    description: "Ver o Kanban de progresso",
+                    Icon: <KanbanIcon className="w-6" />,
+                  },
+                  {
+                    id: "categories",
+                    title: "Categorias",
+                    description: "Ver por categorias",
+                    Icon: <ComponentIcon className="w-6" />,
+                  },
+                  {
+                    id: "hours",
+                    title: "Horas",
+                    description: "Ver por horas do dia",
+                    Icon: <CalendarClock className="w-6" />,
+                  },
+                ].map((button) => (
+                  <Button
+                    key={button.id}
+                    variant={todayView === button.id ? "default" : "ghost"}
+                    size={"sm"}
+                    title={button.description}
+                    className="flex items-center gap-2"
+                    onClick={() => {
+                      setTodayView(
+                        button.id as "kanban" | "hours" | "categories",
+                      );
+                    }}
+                  >
+                    {button.Icon}
+                    <div className="hidden md:block">{button.title}</div>
+                  </Button>
+                ))}
+              </div>
+            </div>
 
-						{todayView === "kanban" ? (
-							<Kanban actions={todayActions} />
-						) : todayView === "hours" ? (
-							<HoursView actions={todayActions} />
-						) : (
-							<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-								{categories.map((category) => (
-									<div key={category.id}>
-										<div className="flex items-center gap-2 mb-4">
-											{
-												<Icons
-													id={category.slug}
-													className="size-4 text-gray-400"
-												/>
-											}
+            {todayView === "kanban" ? (
+              <Kanban actions={todayActions} />
+            ) : todayView === "hours" ? (
+              <HoursView actions={todayActions} />
+            ) : (
+              <CategoriesView actions={todayActions} />
+            )}
+          </div>
+        ) : null}
+        {/* Ações de Amanhã */}
+        {tomorrowActions?.length ? (
+          <div className="mb-8">
+            <div className="relative inline-flex pb-4">
+              <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+                Amanhã
+              </h2>
+              <Badge
+                value={tomorrowActions?.length}
+                className="-translate-y-1 translate-x-8"
+              />
+            </div>
 
-											<h4 className="font-bold text-gray-100">
-												{category.title}
-											</h4>
-										</div>
+            <BlockOfActions actions={tomorrowActions} />
+          </div>
+        ) : null}
 
-										<ListOfActions
-											actions={todayActions.filter(
-												(action) =>
-													action.category_id ===
-													category.id
-											)}
-											isFoldable
-										/>
-									</div>
-								))}
-							</div>
-						)}
-					</div>
-				) : null}
-				{/* Ações de Amanhã */}
-				{tomorrowActions?.length ? (
-					<div className="mb-8">
-						<div className="inline-flex relative pb-4">
-							<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-								Amanhã
-							</h2>
-							<Badge
-								value={tomorrowActions?.length}
-								className="translate-x-8 -translate-y-1"
-							/>
-						</div>
+        {/* Ações da Semana */}
+        {weekActions.reduce(
+          (acc, currentValue) => acc + currentValue.actions.length,
+          0,
+        ) ? (
+          <WeekView
+            weekActions={weekActions}
+            setDraggedAction={setDraggedAction}
+          />
+        ) : null}
 
-						<BlockOfActions actions={tomorrowActions} />
-					</div>
-				) : null}
-
-				{/* Ações da Semana */}
-				{weekActions.reduce(
-					(acc, currentValue) => acc + currentValue.actions.length,
-					0
-				) ? (
-					<WeekView
-						weekActions={weekActions}
-						setDraggedAction={setDraggedAction}
-					/>
-				) : null}
-
-				<div className="mb-8">
-					<div className="inline-flex relative pb-4">
-						<h2 className="text-3xl font-extrabold uppercase text-gray-100 tracking-tighter">
-							Próximas Ações
-						</h2>
-						<Badge
-							value={nextActions?.length || 0}
-							className="translate-x-8 -translate-y-1"
-						/>
-					</div>
-					<ListOfActions
-						actions={nextActions}
-						columns={3}
-						isFoldable
-					/>
-				</div>
-			</div>
-		</div>
-	);
+        <div className="mb-8">
+          <div className="relative inline-flex pb-4">
+            <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+              Próximas Ações
+            </h2>
+            <Badge
+              value={nextActions?.length || 0}
+              className="-translate-y-1 translate-x-8"
+            />
+          </div>
+          <ListOfActions actions={nextActions} columns={3} isFoldable />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function WeekView({
-	weekActions,
-	setDraggedAction,
+  weekActions,
+  setDraggedAction,
 }: {
-	weekActions: { date: Date; actions: Action[] }[];
-	setDraggedAction: React.Dispatch<SetStateAction<Action | undefined>>;
+  weekActions: { date: Date; actions: Action[] }[];
+  setDraggedAction: React.Dispatch<SetStateAction<Action | undefined>>;
 }) {
-	return (
-		<div className="pt-8">
-			<div className="pb-4">
-				<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
-					Semana
-				</h2>
-			</div>
-			<div className="grid grid-cols-7 gap-2">
-				{weekActions.map(({ date, actions }) => (
-					<div
-						className="group pb-8"
-						key={date.getDate()}
-						data-date={format(date, "yyyy-MM-dd")}
-						onDragOver={(e) => {
-							e.stopPropagation();
-							e.preventDefault();
-							document
-								.querySelectorAll(".dragover")
-								.forEach((e) => e.classList.remove("dragover"));
-							e.currentTarget.classList.add("dragover");
-						}}
-					>
-						{/* Dia */}
-						<div
-							className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-gray-100"
-							style={{ fontStretch: "75%" }}
-						>
-							{format(date, "EEEE ", { locale: ptBR })}
-						</div>
-						{/* Data */}
-						<div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
-							{format(date, "d 'de' MMMM", {
-								locale: ptBR,
-							})}
-						</div>
-						{/* Lista de Ações do dia */}
-						<ListOfActions
-							actions={actions}
-							date={{ timeFormat: 1 }}
-							showCategory={true}
-							onDrag={setDraggedAction}
-						/>
-						<div className="mt-4 transition text-center group-hover:opacity-100 opacity-0">
-							<CreateAction mode="day" date={date} />
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-	);
+  return (
+    <div className="pt-8">
+      <div className="pb-4">
+        <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+          Semana
+        </h2>
+      </div>
+      <div className="grid grid-cols-7 gap-2">
+        {weekActions.map(({ date, actions }) => (
+          <div
+            className="group pb-8"
+            key={date.getDate()}
+            data-date={format(date, "yyyy-MM-dd")}
+            onDragOver={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              document
+                .querySelectorAll(".dragover")
+                .forEach((e) => e.classList.remove("dragover"));
+              e.currentTarget.classList.add("dragover");
+            }}
+          >
+            {/* Dia */}
+            <div
+              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-gray-100"
+              style={{ fontStretch: "75%" }}
+            >
+              {format(date, "EEEE ", { locale: ptBR })}
+            </div>
+            {/* Data */}
+            <div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
+              {format(date, "d 'de' MMMM", {
+                locale: ptBR,
+              })}
+            </div>
+            {/* Lista de Ações do dia */}
+            <ListOfActions
+              actions={actions}
+              date={{ timeFormat: 1 }}
+              showCategory={true}
+              onDrag={setDraggedAction}
+            />
+            <div className="mt-4 text-center opacity-0 transition group-hover:opacity-100">
+              <CreateAction mode="day" date={date} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export function HoursView({ actions }: { actions: Action[] }) {
-	return (
-		<div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-			{[
-				[0, 1, 2, 3, 4, 5],
-				[6, 7, 8, 9, 10, 11],
-				[12, 13, 14, 15, 16, 17],
-				[18, 19, 20, 21, 22, 23],
-			].map((columns, i) => (
-				<div key={i}>
-					{columns.map((hour, j) => {
-						const hourActions = actions.filter(
-							(action) =>
-								new Date(action.date).getHours() === hour
-						);
-						return (
-							<div
-								key={j}
-								className="flex min-h-10 gap-2 border-t py-2"
-							>
-								<div
-									className={`text-xs font-bold ${
-										hourActions.length === 0
-											? "opacity-15"
-											: ""
-									}`}
-								>
-									{hour}h
-								</div>
-								<div className="w-full">
-									<ListOfActions
-										actions={hourActions}
-										showCategory={true}
-										columns={1}
-										date={{
-											dateFormat: 0,
-											timeFormat: 1,
-										}}
-									/>
-								</div>
-							</div>
-						);
-					})}
-				</div>
-			))}
-		</div>
-	);
+  return (
+    <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
+      {[
+        [0, 1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10, 11],
+        [12, 13, 14, 15, 16, 17],
+        [18, 19, 20, 21, 22, 23],
+      ].map((columns, i) => (
+        <div key={i}>
+          {columns.map((hour, j) => {
+            const hourActions = actions.filter(
+              (action) => new Date(action.date).getHours() === hour,
+            );
+            return (
+              <div key={j} className="flex min-h-10 gap-2 border-t py-2">
+                <div
+                  className={`text-xs font-bold ${
+                    hourActions.length === 0 ? "opacity-15" : ""
+                  }`}
+                >
+                  {hour}h
+                </div>
+                <div className="w-full">
+                  <ListOfActions
+                    actions={hourActions}
+                    showCategory={true}
+                    columns={1}
+                    date={{
+                      dateFormat: 0,
+                      timeFormat: 1,
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function DelayedActions({ actions }: { actions: Action[] }) {
-	const [view, setView] = useState<"state" | "priority" | "time">("state");
+  const [order, setOrder] = useState<"state" | "priority" | "time">("state");
+  const [view, setView] = useState<"list" | "category">("list");
 
-	return (
-		<div className="mb-4">
-			<div className="flex justify-between py-8">
-				<div className="flex relative">
-					<h2 className="text-3xl font-extrabold text-gray-100 uppercase tracking-tighter">
-						Atrasados
-					</h2>
-					<Badge
-						value={actions.length}
-						className="-translate-y-1 translate-x-8"
-					/>
-				</div>
-				<div>
-					<Button
-						variant={"ghost"}
-						onClick={() => {
-							if (view === "priority") {
-								setView("state");
-							} else {
-								setView("priority");
-							}
-						}}
-					>
-						{view === "priority" ? (
-							<SignalIcon className="size-4" />
-						) : (
-							<ListTodoIcon className="size-4" />
-						)}
-					</Button>
-				</div>
-			</div>
+  return (
+    <div className="mb-4">
+      <div className="flex justify-between py-8">
+        <div className="relative flex">
+          <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+            Atrasados
+          </h2>
+          <Badge
+            value={actions.length}
+            className="-translate-y-1 translate-x-8"
+          />
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="text-[10px] font-bold uppercase text-gray-500">
+              Ordenar por
+            </div>
+            <Button
+              size={"sm"}
+              variant={order === "state" ? "default" : "ghost"}
+              onClick={() => {
+                setOrder("state");
+              }}
+            >
+              <ListTodoIcon className="size-4" />
+            </Button>
+            <Button
+              size={"sm"}
+              variant={order === "priority" ? "default" : "ghost"}
+              onClick={() => {
+                setOrder("priority");
+              }}
+            >
+              <SignalIcon className="size-4" />
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="text-[10px] font-bold uppercase text-gray-500">
+              Categorizar por
+            </div>
+            <Button
+              size={"sm"}
+              variant={view === "list" ? "default" : "ghost"}
+              onClick={() => {
+                setView("list");
+              }}
+            >
+              <ListIcon className="size-4" />
+            </Button>
+            <Button
+              size={"sm"}
+              variant={view === "category" ? "default" : "ghost"}
+              onClick={() => {
+                setView("category");
+              }}
+            >
+              <ComponentIcon className="size-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
 
-			<ListOfActions
-				actions={actions}
-				showCategory={true}
-				columns={6}
-				date={{ dateFormat: 1 }}
-				descending
-				orderBy={view}
-			/>
-		</div>
-	);
+      {view === "list" ? (
+        <ListOfActions
+          actions={actions}
+          showCategory={true}
+          columns={6}
+          date={{ dateFormat: 1 }}
+          descending
+          orderBy={order}
+        />
+      ) : (
+        <CategoriesView actions={actions} />
+      )}
+    </div>
+  );
 }
 
 function Partners({ actions }: { actions: Action[] }) {
-	const matches = useMatches();
-	const { partners } = matches[1].data as DashboardDataType;
+  const matches = useMatches();
+  const { partners } = matches[1].data as DashboardDataType;
 
-	return (
-		<div className="mb-8 mt-4">
-			<h4 className="mb-4 text-xl text-center font-bold text-gray-100">
-				Parceiros
-			</h4>
-			{partners.length > 0 ? (
-				<div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
-					{partners.map((partner) => (
-						<Link
-							to={`/dashboard/${partner.slug}`}
-							key={partner.id}
-							className="group relative focus:ring-2 outline-none ring-ring rounded-full"
-						>
-							<Avatar
-								item={{
-									short: partner.short,
-									bg: partner.bg,
-									fg: partner.fg,
-								}}
-								size="lg"
-								className="mx-auto"
-							/>
-							<Badge
-								value={
-									actions.filter(
-										(action) =>
-											action.partner_id === partner.id
-									).length
-								}
-								isDynamic
-								className="-translate-y-2 translate-x-2"
-							/>
-						</Link>
-					))}
-				</div>
-			) : (
-				<div className="p-4 grid place-content-center text-center">
-					<div className="text-4xl text-error-600 tracking-tighter font-semibold mb-2">
-						Nenhum <span className="font-extrabold">PARCEIRO</span>{" "}
-						está designado para você.
-					</div>
-					<div className="text-lg tracking-tight font-normal">
-						Fale com o seu Head para viabilizar o seu acesso
-						<br />
-						aos parceiros da empresa que você deve ter acesso.
-					</div>
-				</div>
-			)}
-		</div>
-	);
+  return (
+    <div className="mb-8 mt-4">
+      <h4 className="mb-4 text-center text-xl font-bold text-gray-100">
+        Parceiros
+      </h4>
+      {partners.length > 0 ? (
+        <div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
+          {partners.map((partner) => (
+            <Link
+              to={`/dashboard/${partner.slug}`}
+              key={partner.id}
+              className="group relative rounded-full outline-none ring-ring focus:ring-2"
+            >
+              <Avatar
+                item={{
+                  short: partner.short,
+                  bg: partner.bg,
+                  fg: partner.fg,
+                }}
+                size="lg"
+                className="mx-auto"
+              />
+              <Badge
+                value={
+                  actions.filter((action) => action.partner_id === partner.id)
+                    .length
+                }
+                isDynamic
+                className="-translate-y-2 translate-x-2"
+              />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="grid place-content-center p-4 text-center">
+          <div className="mb-2 text-4xl font-semibold tracking-tighter text-error-600">
+            Nenhum <span className="font-extrabold">PARCEIRO</span> está
+            designado para você.
+          </div>
+          <div className="text-lg font-normal tracking-tight">
+            Fale com o seu Head para viabilizar o seu acesso
+            <br />
+            aos parceiros da empresa que você deve ter acesso.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CategoriesView({ actions }: { actions: Action[] }) {
+  const matches = useMatches();
+  const { categories } = matches[1].data as DashboardDataType;
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {categories.map((category) => (
+        <div key={category.id}>
+          <div className="mb-4 flex items-center gap-2">
+            {<Icons id={category.slug} className="size-4 text-gray-400" />}
+
+            <h4 className="font-bold text-gray-100">{category.title}</h4>
+          </div>
+
+          <ListOfActions
+            actions={actions.filter(
+              (action) => action.category_id === category.id,
+            )}
+            isFoldable
+          />
+        </div>
+      ))}
+    </div>
+  );
 }
