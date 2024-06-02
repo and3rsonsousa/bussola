@@ -35,7 +35,7 @@ import {
   Grid3x3Icon,
   PlusIcon,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { ActionLine, GridOfActions } from "~/components/structure/Action";
 import Progress from "~/components/structure/Progress";
@@ -148,7 +148,7 @@ export default function Partner() {
   const idsToRemove = useIDsToRemove();
 
   for (const action of pendingActions as Action[]) {
-    actionsMap.set(action.id, action);
+    if (action.partner_id === partner.id) actionsMap.set(action.id, action);
   }
 
   for (const id of idsToRemove) {
