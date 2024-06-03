@@ -12,20 +12,20 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    --foreground: 224 5% 60%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 224 20% 5%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 250 80% 60%;
+    --popover-foreground: 224 20% 5%;
+    --primary: 260 100% 60%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 224 20% 5%;
+    --muted: 220 5% 90%;
+    --muted-foreground: 220 9% 60%;
+    --accent: 220 15% 80%;
+    --accent-foreground: 220 20% 5%;
+    --destructive: 355 85% 55%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
@@ -34,85 +34,34 @@
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
+    --background: 220 70% 5%;
     --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
+    --card: 220 70% 5%;
     --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
+    --popover: 220 70% 5%;
     --popover-foreground: 210 20% 98%;
-    --primary: 250 80% 60%;
+    --primary: 260 100% 60%;
     --primary-foreground: 250 90% 97%;
-    --secondary: 215 27.9% 16.9%;
+    --secondary: 215 20% 15%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
+    --muted: 215 20% 25%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 215 15% 35%;
     --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 350 75% 45%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
+    --border: 215 15 30%;
     --input: 215 27.9% 16.9%;
     --ring: 250 80% 60%;
   }
 }
 
-/*
-
-PRETO E BRANCO
-
-@layer base {
-	:root {
-		--background: 0 0% 100%;
-		--foreground: 240 10% 3.9%;
-		--card: 0 0% 100%;
-		--card-foreground: 240 10% 3.9%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 240 10% 3.9%;
-		--primary: 240 5.9% 10%;
-		--primary-foreground: 0 0% 98%;
-		--secondary: 240 4.8% 95.9%;
-		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
-		--muted-foreground: 240 3.8% 46.1%;
-		--accent: 240 4.8% 95.9%;
-		--accent-foreground: 240 5.9% 10%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
-		--ring: 240 5.9% 10%;
-		--radius: 0.75rem;
-	}
-
-	.dark {
-		--background: 240 10% 3.9%;
-		--foreground: 0 0% 98%;
-		--card: 240 10% 3.9%;
-		--card-foreground: 0 0% 98%;
-		--popover: 240 10% 3.9%;
-		--popover-foreground: 0 0% 98%;
-		--primary: 0 0% 98%;
-		--primary-foreground: 240 5.9% 10%;
-		--secondary: 240 3.7% 15.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 240 3.7% 15.9%;
-		--muted-foreground: 240 5% 64.9%;
-		--accent: 240 3.7% 15.9%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
-		--ring: 240 4.9% 83.9%;
-	}
-}
-*/
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-gray-300;
+    @apply bg-background font-light text-foreground antialiased;
   }
 }
 
@@ -196,7 +145,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none items-center gap-2 rounded-[4px] border-l-4 bg-gray-800 px-2 py-1 text-sm font-medium outline-none ring-primary transition focus-within:ring-2 hover:bg-gray-700 focus:ring-2 md:text-xs;
+  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary text-secondary-foreground outline-none ring-primary transition focus-within:ring-2 hover:bg-secondary/75 focus:ring-2;
 }
 
 .action-item.action-delayed {
@@ -375,7 +324,7 @@ body {
 }
 
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
+  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-accent/25;
 }
 
 .scrollbars-horizontal {
@@ -400,20 +349,20 @@ body {
   @apply mr-4 bg-transparent;
 }
 .scrollbars-horizontal::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-gray-500/50;
+  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-accent/25;
 }
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-gray-500/25;
+  @apply bg-accent/10;
 }
 
 .bg-content {
-  @apply border border-gray-300/15 bg-gray-300/5 outline-black/10 backdrop-blur-lg;
+  @apply border bg-popover/10 outline-border backdrop-blur-xl;
 }
 
 .bg-item {
-  @apply flex gap-2 px-4 font-light;
+  @apply flex gap-2 px-4 font-normal;
 }
 
 .bg-select-item {
@@ -445,7 +394,7 @@ body {
 }
 
 .tiptap {
-  @apply flex-1 shrink-0 text-lg font-normal tracking-tight text-gray-300 outline-none;
+  @apply flex-1 shrink-0 text-lg font-normal tracking-tight  outline-none;
 }
 
 .tiptap > * {
@@ -453,19 +402,19 @@ body {
 }
 
 .tiptap h1 {
-  @apply text-4xl font-bold tracking-tight text-gray-100;
+  @apply text-4xl font-bold tracking-tight text-secondary-foreground;
 }
 .tiptap h2 {
-  @apply text-2xl font-bold tracking-tight text-gray-100;
+  @apply text-2xl font-bold tracking-tight text-secondary-foreground;
 }
 .tiptap h3 {
-  @apply text-xl font-bold uppercase tracking-wide text-gray-100;
+  @apply text-xl font-bold uppercase tracking-wide text-secondary-foreground;
 }
 .tiptap h4 {
-  @apply text-xl font-bold tracking-tight text-gray-100;
+  @apply text-xl font-bold tracking-tight text-secondary-foreground;
 }
 .tiptap h5 {
-  @apply text-base font-bold uppercase tracking-wider text-gray-100;
+  @apply text-base font-bold uppercase tracking-wider text-secondary-foreground;
 }
 
 .tiptap ul,

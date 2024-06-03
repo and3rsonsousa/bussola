@@ -40,11 +40,11 @@ import {
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuSeparator,
-  ContextMenuShortcut,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
+  ContextMenuShortcut,
 } from "~/components/ui/context-menu";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
@@ -66,6 +66,7 @@ export function ActionLine({
   partner,
   date,
   onDrag,
+  short,
 }: {
   action: Action;
   showCategory?: boolean;
@@ -73,6 +74,7 @@ export function ActionLine({
   partner?: Partner;
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   onDrag?: (action: Action) => void;
+  short?: boolean;
 }) {
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
@@ -105,8 +107,8 @@ export function ActionLine({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action action-item @container ${
-            edit ? "text-white" : `cursor-text hover:text-gray-200`
+          className={`group/action action-item items-center ${short ? "px-2 py-1" : "p-2"} text-sm font-medium @container md:text-xs ${
+            edit ? "" : `cursor-text`
           } action-${state.slug} ${
             showDelay &&
             isBefore(action.date, new Date()) &&
@@ -295,11 +297,7 @@ export function ActionBlock({ action }: { action: Action }) {
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action relative flex flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm ring-primary ring-offset-2 ring-offset-background transition @container focus-within:ring-2 ${
-            edit
-              ? "bg-gray-800 text-gray-200"
-              : "border-white/20 bg-gray-900 hover:bg-gray-800 hover:text-gray-100"
-          } border-${state.slug}`}
+          className={`group/action action-item flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm border-${state.slug} @container`}
           onMouseEnter={() => {
             setHover(true);
           }}
@@ -356,7 +354,7 @@ export function ActionBlock({ action }: { action: Action }) {
               <button
                 ref={buttonRef}
                 style={{ fontStretch: "85%" }}
-                className={`block w-full overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`block w-full cursor-text overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                 onClick={() => {
                   flushSync(() => {
                     setEdit(true);
@@ -368,12 +366,8 @@ export function ActionBlock({ action }: { action: Action }) {
               </button>
             )}
           </div>
-          <div className="flex items-center justify-between text-gray-400">
+          <div className="flex items-center justify-between text-muted-foreground">
             <div className="flex items-center gap-2">
-              {/* <div
-								className={`size-2 rounded-full bg-${state.slug}`}
-							></div> */}
-              {/* Cliente */}
               {partner ? (
                 <Avatar
                   item={{
@@ -414,7 +408,7 @@ export function ActionBlock({ action }: { action: Action }) {
                 )}
               </div>
             </div>
-            <div className="whitespace-nowrap text-right text-sm font-medium text-gray-500 md:text-xs">
+            <div className="whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
               <span className="@[200px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
@@ -438,7 +432,6 @@ export function ActionBlock({ action }: { action: Action }) {
               </span>
             </div>
           </div>
-          {/* <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div> */}
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />
@@ -475,12 +468,12 @@ export function ActionGrid({
     <ContextMenu>
       <ContextMenuTrigger>
         <div
-          className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5 p-2 text-gray-500 hover:bg-gradient-to-b ${cn(
+          className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5 p-2 text-muted-foreground hover:bg-gradient-to-b ${cn(
             classNames,
           )} ${
             action.state_id === STATES.finish
-              ? " bg-gray-900/50 "
-              : "highlight-soft bg-gray-800"
+              ? " bg-muted text-muted-foreground "
+              : "highlight-soft bg-secondary text-secondary-foreground"
           }`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -488,7 +481,7 @@ export function ActionGrid({
           {isHover ? <ShortcutActions action={action} /> : null}
           <div></div>
           <div
-            className={`line-clamp-2 overflow-hidden py-4 text-center font-bold leading-none tracking-tighter text-gray-400 transition group-hover/action:text-gray-300`}
+            className={`line-clamp-2 overflow-hidden py-4 text-center font-bold leading-none tracking-tighter text-muted-foreground transition group-hover/action:text-muted`}
             style={{ fontStretch: "85%" }}
           >
             {action.title}
@@ -500,13 +493,13 @@ export function ActionGrid({
               }`}
             ></div>
 
-            <div className="text-[10px] text-gray-400">
+            <div className="text-[10px] text-muted-foreground">
               {format(parseISO(action.date), "E, d 'de' MMM", {
                 locale: ptBR,
               })}
             </div>
           </div>
-          <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 opacity-0 transition group-hover/action:opacity-100"></div>
+          <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/action:opacity-100"></div>
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />
@@ -523,6 +516,7 @@ export function ListOfActions({
   isFoldable,
   descending = false,
   orderBy = "state",
+  short,
 }: {
   actions?: Action[] | null;
   showCategory?: boolean;
@@ -532,6 +526,7 @@ export function ListOfActions({
   isFoldable?: boolean;
   descending?: boolean;
   orderBy?: "state" | "priority" | "time";
+  short?: boolean;
 }) {
   actions = actions
     ? orderBy === "state"
@@ -561,6 +556,7 @@ export function ListOfActions({
           ?.slice(0, fold)
           .map((action) => (
             <ActionLine
+              short={short}
               key={action.id}
               action={action}
               showCategory={showCategory}
@@ -980,20 +976,20 @@ function ContextMenuItems({
           className="bg-item flex items-center gap-2"
           to={`/dashboard/action/${action.id}`}
         >
-          <PencilLineIcon className="size-3" />
+          <PencilLineIcon className="size-3 text-secondary-foreground/50" />
           <span>Editar</span>
           <ContextMenuShortcut className="pl-2">⇧+E</ContextMenuShortcut>
         </Link>
       </ContextMenuItem>
       <ContextMenuItem className="bg-item flex items-center gap-2">
-        <CopyIcon className="size-3" />
+        <CopyIcon className="size-3 text-secondary-foreground/50" />
         <span>Duplicar</span>
         <ContextMenuShortcut className="pl-2">⇧+D</ContextMenuShortcut>
       </ContextMenuItem>
       {/* Adiar */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
-          <TimerIcon className="size-3" />
+          <TimerIcon className="size-3 text-secondary-foreground/50" />
           <span>Adiar</span>
         </ContextMenuSubTrigger>
         <ContextMenuPortal>
@@ -1038,7 +1034,7 @@ function ContextMenuItems({
                 </Button>
               </div>
             </ContextMenuItem>
-            <ContextMenuSeparator className="bg-gray-300/20" />
+            <ContextMenuSeparator className="bg-border" />
             {/* Adiar Dias */}
             <ContextMenuItem
               asChild
@@ -1079,7 +1075,7 @@ function ContextMenuItems({
                 </Button>
               </div>
             </ContextMenuItem>
-            <ContextMenuSeparator className="bg-gray-300/20" />
+            <ContextMenuSeparator className="bg-border" />
             {/* Adiar semanas */}
             <ContextMenuItem
               asChild
@@ -1122,7 +1118,7 @@ function ContextMenuItems({
             </ContextMenuItem>
             {delay.day + delay.hour + delay.week > 0 && (
               <>
-                <ContextMenuSeparator className="bg-gray-300/20" />
+                <ContextMenuSeparator className="bg-border" />
                 <ContextMenuItem
                   disabled={delay.day + delay.hour + delay.week === 0}
                   className="justify-center"
@@ -1161,98 +1157,21 @@ function ContextMenuItems({
                 </ContextMenuItem>
               </>
             )}
-            {/* {[
-              {
-                periods: [
-                  {
-                    time: addHours(new Date(), 1),
-                    text: "daqui a 1 hora",
-                  },
-                  {
-                    time: addHours(new Date(), 3),
-                    text: "daqui a 3 horas",
-                  },
-                  {
-                    time: addHours(new Date(), 8),
-                    text: "daqui a 8 horas",
-                  },
-                ],
-              },
-              {
-                periods: [
-                  {
-                    time: parseISO(action.date).setDate(
-                      addDays(new Date(), 1).getDate(),
-                    ),
-                    text: "Amanhã",
-                  },
-                  {
-                    time: parseISO(action.date).setDate(
-                      addDays(new Date(), 3).getDate(),
-                    ),
-                    text: "3 dias",
-                  },
-                ],
-              },
-              {
-                periods: [
-                  {
-                    time: parseISO(action.date).setDate(
-                      addDays(new Date(), 7).getDate(),
-                    ),
-                    text: "1 semana",
-                  },
-                  {
-                    time: parseISO(action.date).setMonth(
-                      addMonths(new Date(), 1).getMonth(),
-                    ),
-                    text: "1 mês",
-                  },
-                ],
-              },
-            ].map((group, i) => (
-              <Fragment key={i}>
-                {i > 0 && (
-                  <ContextMenuSeparator
-                    key={`separator-${i}`}
-                    className="bg-gray-300/20"
-                  />
-                )}
-
-                {group.periods.map((period) => (
-                  <ContextMenuItem
-                    key={`period-${period.time}`}
-                    className="bg-item flex items-center gap-2"
-                    onSelect={() => {
-                      const date = format(period.time, "yyyy-MM-dd HH:mm:ss");
-
-                      handleActions({
-                        intent: INTENTS.updateAction,
-                        ...action,
-                        date,
-                      });
-                    }}
-                  >
-                    {period.text}
-                  </ContextMenuItem>
-                ))}
-              </Fragment>
-            ))} */}
           </ContextMenuSubContent>
         </ContextMenuPortal>
       </ContextMenuSub>
       {/* Deletar */}
       <ContextMenuItem className="bg-item flex items-center gap-2">
-        <TrashIcon className="size-3" />
+        <TrashIcon className="size-3 text-secondary-foreground/50" />
         <span>Deletar</span>
         <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
-      <ContextMenuSeparator className="bg-gray-300/20 " />
+      <ContextMenuSeparator className="bg-border " />
       {/* States */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
           <div
-            className={`size-3 rounded-full border-2 border-${
+            className={`size-2 rounded-full text-muted bg-${
               states.find((state) => state.id === action.state_id)?.slug
             }`}
           ></div>
@@ -1275,7 +1194,7 @@ function ContextMenuItems({
                 }}
               >
                 <div
-                  className={`size-3 rounded-full border-2 border-${state?.slug}`}
+                  className={`size-2 rounded-full text-muted bg-${state?.slug}`}
                 ></div>
                 <span>{state.title}</span>
                 <ContextMenuShortcut className="pl-2">
@@ -1304,7 +1223,7 @@ function ContextMenuItems({
               categories.find((category) => category.id === action.category_id)
                 ?.slug
             }
-            className="size-3"
+            className="size-3 text-secondary-foreground/50"
           />
           <span>
             {
@@ -1327,7 +1246,10 @@ function ContextMenuItems({
                   });
                 }}
               >
-                <Icons id={category.slug} className="size-3" />
+                <Icons
+                  id={category.slug}
+                  className="size-3 text-secondary-foreground/50"
+                />
                 {category.title}
                 <ContextMenuShortcut className="w-8 pl-2 text-left">
                   ⇧+
@@ -1428,7 +1350,7 @@ function ContextMenuItems({
               priorities.find((priority) => priority.id === action.priority_id)
                 ?.slug
             }
-            className="size-3"
+            className="size-3 text-secondary-foreground/50"
             type="priority"
           />
           <span>
@@ -1452,7 +1374,11 @@ function ContextMenuItems({
                   });
                 }}
               >
-                <Icons id={priority.slug} type="priority" className="size-3" />
+                <Icons
+                  id={priority.slug}
+                  type="priority"
+                  className="size-3 text-secondary-foreground/50"
+                />
                 {priority.title}
                 <ContextMenuShortcut className="pl-2">
                   {

@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 // import CreateAction from "./CreateAction";
 import Header from "./Header";
 import CreateAction from "./CreateAction";
@@ -7,17 +7,15 @@ import Search from "./Search";
 // import Search from "./Search";
 
 export default function Layout({ children }: { children: ReactNode }) {
-	return (
-		<div
-			className="relative
-		 flex h-[100dvh] flex-col font-light text-gray-300 antialiased md:overflow-hidden"
-		>
-			<Header />
-			<div className="flex h-full flex-col overflow-hidden">
-				{children}
-			</div>
-			<CreateAction mode="fixed" />
-			<Search />
-		</div>
-	);
+  return (
+    <div
+      className={`relative
+		 flex h-[100dvh] flex-col bg-background md:overflow-hidden`}
+    >
+      <Header />
+      <div className="flex h-full flex-col overflow-hidden">{children}</div>
+      <CreateAction mode="fixed" />
+      <Search />
+    </div>
+  );
 }

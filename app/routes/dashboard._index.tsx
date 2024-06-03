@@ -199,7 +199,7 @@ export default function DashboardIndex() {
           <div className="mb-8">
             <div className="flex justify-between py-8">
               <div className="relative flex">
-                <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+                <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
                   Hoje
                 </h2>
                 <Badge
@@ -260,7 +260,7 @@ export default function DashboardIndex() {
         {tomorrowActions?.length ? (
           <div className="mb-8">
             <div className="relative inline-flex pb-4">
-              <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+              <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
                 Amanhã
               </h2>
               <Badge
@@ -286,7 +286,7 @@ export default function DashboardIndex() {
 
         <div className="mb-8">
           <div className="relative inline-flex pb-4">
-            <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+            <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
               Próximas Ações
             </h2>
             <Badge
@@ -311,7 +311,7 @@ export function WeekView({
   return (
     <div className="pt-8">
       <div className="pb-4">
-        <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+        <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
           Semana
         </h2>
       </div>
@@ -332,7 +332,7 @@ export function WeekView({
           >
             {/* Dia */}
             <div
-              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-gray-100"
+              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-secondary-foreground"
               style={{ fontStretch: "75%" }}
             >
               {format(date, "EEEE ", { locale: ptBR })}
@@ -349,6 +349,7 @@ export function WeekView({
               date={{ timeFormat: 1 }}
               showCategory={true}
               onDrag={setDraggedAction}
+              short
             />
             <div className="mt-4 text-center opacity-0 transition group-hover:opacity-100">
               <CreateAction mode="day" date={date} />
@@ -411,7 +412,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
     <div className="mb-4">
       <div className="flex justify-between py-8">
         <div className="relative flex">
-          <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-gray-100">
+          <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
             Atrasados
           </h2>
           <Badge
@@ -421,7 +422,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="text-[10px] font-bold uppercase text-gray-500">
+            <div className="text-[10px] font-bold uppercase text-muted-foreground">
               Ordenar por
             </div>
             <Button
@@ -444,7 +445,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] font-bold uppercase text-gray-500">
+            <div className="text-[10px] font-bold uppercase text-muted-foreground">
               Categorizar por
             </div>
             <Button
@@ -491,7 +492,7 @@ function Partners({ actions }: { actions: Action[] }) {
 
   return (
     <div className="mb-8 mt-4">
-      <h4 className="mb-4 text-center text-xl font-bold text-gray-100">
+      <h4 className="mb-4 text-center text-xl font-bold text-secondary-foreground">
         Parceiros
       </h4>
       {partners.length > 0 ? (
@@ -544,13 +545,20 @@ function CategoriesView({ actions }: { actions: Action[] }) {
   const { categories } = matches[1].data as DashboardDataType;
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
         <div key={category.id}>
-          <div className="mb-4 flex items-center gap-2">
-            {<Icons id={category.slug} className="size-4 text-gray-400" />}
+          <div className="mb-2 flex items-center gap-2">
+            {
+              <Icons
+                id={category.slug}
+                className={`size-4 fg-${category.slug}`}
+              />
+            }
 
-            <h4 className="font-bold text-gray-100">{category.title}</h4>
+            <h4 className="font-bold text-secondary-foreground">
+              {category.title}
+            </h4>
           </div>
 
           <ListOfActions

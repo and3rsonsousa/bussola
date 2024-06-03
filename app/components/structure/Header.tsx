@@ -10,7 +10,9 @@ import {
   HandshakeIcon,
   HelpCircle,
   LogOutIcon,
+  MoonIcon,
   PlusIcon,
+  SunIcon,
   Users2Icon,
 } from "lucide-react";
 import { Avatar } from "~/lib/helpers";
@@ -22,26 +24,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { SetStateAction, useEffect, useState } from "react";
 
 export default function Header() {
   const matches = useMatches();
   const navigation = useNavigation();
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState<"dark" | "light">("dark");
+
   const { partners, person } = matches[1].data as DashboardDataType;
   const { partner } = matches[1].params;
 
   const fetchers = useFetchers();
 
+  useEffect(() => {
+    if (mode === "dark") {
+      document.querySelector("body")?.classList.add("dark");
+    } else {
+      document.querySelector("body")?.classList.remove("dark");
+    }
+  }, [mode]);
+
   return (
-    <header className="flex flex-shrink-0 flex-grow items-center justify-between p-4 backdrop-blur-xl md:px-8">
+    <header
+      className={`flex flex-shrink-0 flex-grow items-center justify-between p-4 backdrop-blur-xl md:px-8`}
+    >
       <div className="flex items-center gap-2">
         <Link
           to="/dashboard"
           unstable_viewTransition
           className="rounded-md p-2 outline-none ring-ring ring-offset-background focus:ring-2"
         >
-          <img src="/logo.png" className="h-4 w-auto" alt="Bússola" />
+          <span className="text-2xl font-black tracking-tighter text-secondary-foreground">
+            BÚSSOLA
+          </span>
+          {/* <img src="/logo.png" className="h-4 w-auto" alt="Bússola" /> */}
         </Link>
         <Button
           size="icon"
@@ -93,6 +111,24 @@ export default function Header() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="bg-content">
+              <DropdownMenuItem
+                className="bg-item"
+                onSelect={() => {
+                  setMode((mode) => (mode === "dark" ? "light" : "dark"));
+                }}
+              >
+                {mode === "light" ? (
+                  <>
+                    <MoonIcon className="size-4 opacity-50" />
+                    <span>Modo escuro</span>
+                  </>
+                ) : (
+                  <>
+                    <SunIcon className="size-4 opacity-50" />
+                    <span>Modo claro</span>
+                  </>
+                )}
+              </DropdownMenuItem>
               {/* <DropdownMenuItem
 								className="bg-item"
 								id="account"
@@ -161,7 +197,7 @@ export default function Header() {
         )}
       </div>
 
-      <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r  from-transparent via-gray-700"></div>
+      <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r  from-transparent via-muted"></div>
     </header>
   );
 }

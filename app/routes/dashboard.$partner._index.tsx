@@ -103,7 +103,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     )
     .returns<ActionComplete[]>();
 
-  return json({ actions, partner }, { headers });
+  return json({ actions, partner, person }, { headers });
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -216,7 +216,7 @@ export default function Partner() {
             }}
             size="lg"
           />
-          <div className="text-2xl font-extrabold tracking-tight text-gray-100">
+          <div className="text-2xl font-extrabold tracking-tight text-secondary-foreground">
             <div>{partner?.title}</div>
             <Progress
               total={actions?.length || 1}
@@ -445,8 +445,8 @@ export default function Partner() {
                       key={j}
                       className={
                         day.getDay() === new Date().getDay()
-                          ? "text-gray-100"
-                          : "text-gray-500"
+                          ? "text-secondary-foreground"
+                          : ""
                       }
                     >
                       {format(day, "EEE", {
@@ -458,20 +458,14 @@ export default function Partner() {
               </div>
               <div
                 id="divider"
-                className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-gray-700"
+                className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-muted"
               ></div>
             </div>
             <div className="scrollbars scrollbars-thin h-full overflow-y-hidden">
-              <div
-                id="calendar"
-                className={`grid-cols-7 pb-4 text-gray-300 md:grid`}
-              >
+              <div id="calendar" className={`grid-cols-7 pb-4 md:grid`}>
                 {calendar.map((day, i) => (
                   <CalendarDay
                     key={i}
-                    categories={categories}
-                    priorities={priorities}
-                    states={states}
                     currentDate={currentDate}
                     day={day}
                     setDraggedAction={setDraggedAction}
@@ -503,18 +497,11 @@ export default function Partner() {
 export const CalendarDay = ({
   day,
   currentDate,
-  categories,
-  priorities,
-  states,
   setDraggedAction,
-  partner,
   person,
 }: {
   day: { date: Date; actions?: Action[] };
   currentDate: Date;
-  categories: Category[];
-  priorities: Priority[];
-  states: State[];
   partner: Partner;
   person: Person;
   people: Person[];
@@ -524,6 +511,9 @@ export const CalendarDay = ({
   const [isCreating, setIsCreating] = useState(false);
 
   const submit = useSubmit();
+  const matches = useMatches();
+  const { categories } = matches[1].data as DashboardDataType;
+  const { partner } = matches[3].data as DashboardPartnerType;
 
   function handleActions(data: {
     [key: string]: string | number | null | string[];
@@ -561,7 +551,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } group/day relative flex flex-col border-b pb-4 pt-2 transition hover:bg-gray-900 md:px-1 md:pt-0`}
+      } group/day relative flex flex-col border-b pb-4 pt-2 transition hover:bg-muted md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
@@ -577,12 +567,12 @@ export const CalendarDay = ({
       onMouseLeave={() => setIsHover(false)}
     >
       {/* Brilho */}
-      <div className="absolute -top-[1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 opacity-0 transition group-hover/day:opacity-100"></div>
+      <div className="absolute -top-[1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/day:opacity-100"></div>
 
       <div className="my-1 flex justify-between">
         <div
           className={`grid h-6 w-6 place-content-center rounded-full text-xs font-medium ${
-            isSameMonth(day.date, currentDate) ? "" : "text-gray-700"
+            isSameMonth(day.date, currentDate) ? "" : "text-muted"
           } ${
             isToday(day.date) ? "bg-primary text-primary-foreground" : "-ml-1"
           } `}
@@ -601,7 +591,7 @@ export const CalendarDay = ({
           .map(({ category, actions }) =>
             actions && actions.length > 0 ? (
               <div key={category.id} className="flex flex-col gap-1">
-                <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest text-gray-500">
+                <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
                   <div
                     className={`bg-${category.slug} size-1.5 rounded-full`}
                   ></div>
@@ -626,7 +616,7 @@ export const CalendarDay = ({
         <div
           className={`absolute -bottom-2 left-1/2 z-10 mt-2 -translate-x-1/2  focus-within:relative`}
         >
-          <div className="w-full overflow-hidden rounded border border-white/10 bg-gray-950/50 px-3 py-1 ring-ring backdrop-blur-lg focus-within:ring-2">
+          <div className="w-full overflow-hidden rounded border border-white/10 bg-secondary px-3 py-1 ring-ring backdrop-blur-lg focus-within:ring-2">
             <Form
               method="post"
               className="flex items-center gap-2"
@@ -652,7 +642,7 @@ export const CalendarDay = ({
               <input
                 type="text"
                 id="title"
-                className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-gray-700 hover:placeholder:text-gray-400"
+                className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted hover:placeholder:text-muted-foreground"
                 placeholder="Nova ação..."
                 name="title"
                 tabIndex={0}
@@ -671,7 +661,7 @@ export const CalendarDay = ({
                 }}
               />
 
-              {!isCreating && <PlusIcon className="h-4 text-gray-500" />}
+              {!isCreating && <PlusIcon className="h-4" />}
             </Form>
           </div>
         </div>
