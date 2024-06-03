@@ -100,7 +100,7 @@ export default function Header() {
         </DropdownMenu>
         {person && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="-mr-1 rounded-full p-1 outline-none ring-primary focus-within:ring-2">
+            <DropdownMenuTrigger className="-mr-1 rounded-full outline-none ring-primary ring-offset-2 focus-within:ring-2">
               <Avatar
                 size="md"
                 item={{

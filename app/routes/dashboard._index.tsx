@@ -318,7 +318,7 @@ export function WeekView({
       <div className="grid grid-cols-7 gap-2">
         {weekActions.map(({ date, actions }) => (
           <div
-            className="group pb-8"
+            className="group"
             key={date.getDate()}
             data-date={format(date, "yyyy-MM-dd")}
             onDragOver={(e) => {
@@ -332,13 +332,13 @@ export function WeekView({
           >
             {/* Dia */}
             <div
-              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase tracking-wide text-secondary-foreground"
+              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase leading-none"
               style={{ fontStretch: "75%" }}
             >
               {format(date, "EEEE ", { locale: ptBR })}
             </div>
             {/* Data */}
-            <div className="mb-4 text-[10px] uppercase tracking-widest text-muted-foreground">
+            <div className="mb-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
               {format(date, "d 'de' MMMM", {
                 locale: ptBR,
               })}

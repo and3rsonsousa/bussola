@@ -976,24 +976,24 @@ function ContextMenuItems({
           className="bg-item flex items-center gap-2"
           to={`/dashboard/action/${action.id}`}
         >
-          <PencilLineIcon className="size-3 text-secondary-foreground/50" />
+          <PencilLineIcon className="size-3 opacity-50" />
           <span>Editar</span>
           <ContextMenuShortcut className="pl-2">⇧+E</ContextMenuShortcut>
         </Link>
       </ContextMenuItem>
       <ContextMenuItem className="bg-item flex items-center gap-2">
-        <CopyIcon className="size-3 text-secondary-foreground/50" />
+        <CopyIcon className="size-3 opacity-50" />
         <span>Duplicar</span>
         <ContextMenuShortcut className="pl-2">⇧+D</ContextMenuShortcut>
       </ContextMenuItem>
       {/* Adiar */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
-          <TimerIcon className="size-3 text-secondary-foreground/50" />
+          <TimerIcon className="size-3 opacity-50" />
           <span>Adiar</span>
         </ContextMenuSubTrigger>
         <ContextMenuPortal>
-          <ContextMenuSubContent className="bg-content">
+          <ContextMenuSubContent className="bg-content font-medium">
             {/* Adiar horas */}
             <ContextMenuItem
               asChild
@@ -1139,11 +1139,11 @@ function ContextMenuItems({
                     });
                   }}
                 >
-                  <div className="flex flex-col gap-1">
-                    <div className="text-[10px] font-light uppercase tracking-wider">
+                  <div className="flex flex-col">
+                    <div className="text-[10px] uppercase tracking-wider">
                       Confirmar adiamento para
                     </div>
-                    <div className="text-base font-light">
+                    <div className="px-2 text-base">
                       {formatActionDatetime({
                         date: addWeeks(
                           addDays(addHours(action.date, delay.hour), delay.day),
@@ -1162,7 +1162,7 @@ function ContextMenuItems({
       </ContextMenuSub>
       {/* Deletar */}
       <ContextMenuItem className="bg-item flex items-center gap-2">
-        <TrashIcon className="size-3 text-secondary-foreground/50" />
+        <TrashIcon className="size-3 opacity-50" />
         <span>Deletar</span>
         <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
@@ -1223,7 +1223,7 @@ function ContextMenuItems({
               categories.find((category) => category.id === action.category_id)
                 ?.slug
             }
-            className="size-3 text-secondary-foreground/50"
+            className="size-3 opacity-50"
           />
           <span>
             {
@@ -1246,10 +1246,7 @@ function ContextMenuItems({
                   });
                 }}
               >
-                <Icons
-                  id={category.slug}
-                  className="size-3 text-secondary-foreground/50"
-                />
+                <Icons id={category.slug} className="size-3 opacity-50" />
                 {category.title}
                 <ContextMenuShortcut className="w-8 pl-2 text-left">
                   ⇧+
@@ -1350,7 +1347,7 @@ function ContextMenuItems({
               priorities.find((priority) => priority.id === action.priority_id)
                 ?.slug
             }
-            className="size-3 text-secondary-foreground/50"
+            className="size-3 opacity-50"
             type="priority"
           />
           <span>
@@ -1377,7 +1374,7 @@ function ContextMenuItems({
                 <Icons
                   id={priority.slug}
                   type="priority"
-                  className="size-3 text-secondary-foreground/50"
+                  className="size-3 opacity-50"
                 />
                 {priority.title}
                 <ContextMenuShortcut className="pl-2">
