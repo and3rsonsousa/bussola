@@ -468,12 +468,12 @@ export function ActionGrid({
     <ContextMenu>
       <ContextMenuTrigger>
         <div
-          className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded from-white/5 p-2 text-muted-foreground hover:bg-gradient-to-b ${cn(
+          className={`group/action relative flex aspect-square select-none flex-col items-center justify-between rounded-[4px] p-2 transition ${cn(
             classNames,
           )} ${
             action.state_id === STATES.finish
-              ? " bg-muted text-muted-foreground "
-              : "highlight-soft bg-secondary text-secondary-foreground"
+              ? "bg-secondary opacity-50"
+              : "bg-secondary hover:bg-muted hover:text-secondary-foreground"
           }`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -481,7 +481,7 @@ export function ActionGrid({
           {isHover ? <ShortcutActions action={action} /> : null}
           <div></div>
           <div
-            className={`line-clamp-2 overflow-hidden py-4 text-center font-bold leading-none tracking-tighter text-muted-foreground transition group-hover/action:text-muted`}
+            className={`line-clamp-2 overflow-hidden py-4 text-center leading-none tracking-tighter transition`}
             style={{ fontStretch: "85%" }}
           >
             {action.title}
@@ -493,7 +493,7 @@ export function ActionGrid({
               }`}
             ></div>
 
-            <div className="text-[10px] text-muted-foreground">
+            <div className="text-[10px] opacity-50">
               {format(parseISO(action.date), "E, d 'de' MMM", {
                 locale: ptBR,
               })}

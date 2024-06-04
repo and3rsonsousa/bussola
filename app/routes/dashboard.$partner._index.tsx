@@ -32,6 +32,8 @@ import { ptBR } from "date-fns/locale";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronsDownUpIcon,
+  ChevronsUpDownIcon,
   Grid3x3Icon,
   PlusIcon,
 } from "lucide-react";
@@ -47,6 +49,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Toggle } from "~/components/ui/toggle";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
   Avatar,
@@ -126,6 +129,7 @@ export default function Partner() {
   const [stateFilter, setStateFilter] = useState<State>();
   const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
   const [showFeed, setFeed] = useState(false);
+  const [short, setShort] = useState(false);
 
   invariant(partner);
 
@@ -303,16 +307,22 @@ export default function Partner() {
                   </Button>
                 </div>
                 <div className="flex items-center gap-2 pr-1">
-                  {/* <Toggle onPressedChange={() => setViewLike()}>
-              {(() => {
-                return (
-                  <>
-                    <CalendarClockIcon className="size-4" />
-                    <AlignJustifyIcon className="size-4" />
-                  </>
-                )
-              })()}
-            </Toggle> */}
+                  <Toggle
+                    pressed={short}
+                    size={"sm"}
+                    onPressedChange={() => setShort((short) => !short)}
+                    title={
+                      short
+                        ? "Aumentar o tamanho da ação"
+                        : "Diminuir o tamanho da ação"
+                    }
+                  >
+                    {short ? (
+                      <ChevronsUpDownIcon className="size-4" />
+                    ) : (
+                      <ChevronsDownUpIcon className="size-4" />
+                    )}
+                  </Toggle>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -470,9 +480,8 @@ export default function Partner() {
                       currentDate={currentDate}
                       day={day}
                       setDraggedAction={setDraggedAction}
-                      partner={partner}
                       person={person}
-                      people={people}
+                      short={short}
                     />
                     {(i + 1) % 7 === 0 && (
                       <div className="col-span-7 h-[1px] bg-border"></div>
@@ -504,13 +513,13 @@ export const CalendarDay = ({
   currentDate,
   setDraggedAction,
   person,
+  short,
 }: {
   day: { date: Date; actions?: Action[] };
   currentDate: Date;
-  partner: Partner;
-  person: Person;
-  people: Person[];
   setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
+  person: Person;
+  short?: boolean;
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -571,9 +580,6 @@ export const CalendarDay = ({
       onMouseOver={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      {/* Brilho */}
-      {/* <div className="absolute -top-[1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/day:opacity-100"></div> */}
-
       <div className="my-1 flex justify-between">
         <div
           className={`grid h-6 w-6 place-content-center rounded-full text-xs font-medium ${
@@ -604,6 +610,7 @@ export const CalendarDay = ({
                 </div>
                 {actions?.map((action) => (
                   <ActionLine
+                    short={short}
                     showDelay
                     action={action}
                     key={action.id}
