@@ -34,14 +34,17 @@ import {
   ChevronRightIcon,
   ChevronsDownUpIcon,
   ChevronsUpDownIcon,
+  ClipboardCheckIcon,
   Grid3x3Icon,
   PlusIcon,
 } from "lucide-react";
 import React, { act, useEffect, useState } from "react";
+import { DateRange } from "react-day-picker";
 import invariant from "tiny-invariant";
 import { ActionLine, GridOfActions } from "~/components/structure/Action";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -49,6 +52,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 import { Toggle } from "~/components/ui/toggle";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
@@ -235,6 +243,7 @@ export default function Partner() {
           </div>
         </Link>
         <div>
+          <ReportReview partner={partner} />
           <Button
             size={"sm"}
             variant={showFeed ? "default" : "ghost"}
@@ -687,5 +696,50 @@ export const CalendarDay = ({
         </div>
       ) : null}
     </div>
+  );
+};
+
+export const ReportReview = ({ partner }: { partner: Partner }) => {
+  const [range, setRange] = useState<DateRange | undefined>({
+    from: startOfDay(startOfWeek(new Date())),
+    to: endOfDay(endOfWeek(new Date())),
+  });
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant={"ghost"} size={"sm"}>
+          <ClipboardCheckIcon className="mr-2 size-4" />
+          Gerar Relatório
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="bg-content">
+        <Calendar
+          mode="range"
+          selected={range}
+          locale={ptBR}
+          onSelect={(range) => setRange(range)}
+        />
+        {range?.from && range.to ? (
+          <>
+            <div className="border-b"></div>
+            <div className="py-2 text-center text-sm">
+              {range.from && range.to
+                ? `${format(range.from, "d/M/yy")} a ${format(range.to, "d/M/yy")}`
+                : "Selecione um intervalo de datas"}
+            </div>
+            <div className="text-center">
+              <Button asChild>
+                <Link
+                  to={`/report?range=${format(range.from, "yyyy-MM-dd")}---${format(range.to, "yyyy-MM-dd")}&partner_id=${partner.id}`}
+                >
+                  Gerar relatório de aprovação
+                </Link>
+              </Button>
+            </div>
+          </>
+        ) : null}
+      </PopoverContent>
+    </Popover>
   );
 };

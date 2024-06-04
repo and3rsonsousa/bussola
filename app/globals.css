@@ -361,7 +361,7 @@ body {
 }
 
 .bg-content {
-  @apply border bg-popover/10 outline-border backdrop-blur-xl;
+  @apply border bg-popover/10 backdrop-blur-xl;
 }
 
 .bg-item {
