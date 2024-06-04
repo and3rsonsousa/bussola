@@ -15,7 +15,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
             );
             return (
               <div
-                className={`flex max-h-[60vh] w-full ${stateActions.length > 0 ? "min-w-72 " : "w-auto"} flex-col  overflow-hidden transition`}
+                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 " : "w-auto"} flex-col  overflow-hidden transition`}
                 key={state.id}
               >
                 <div className="mb-2 flex items-center px-2 pt-2">

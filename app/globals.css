@@ -46,9 +46,8 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 215 15% 25%;
     --muted-foreground: 220 15% 60%;
-    --accent: 245 15% 20%;
-    /* --accent: 215 15% 35%; */
-    --accent-foreground: 215 15% 90%;
+    --accent: 245 15% 22%;
+    --accent-foreground: 235 15% 98%;
     --destructive: 350 75% 45%;
     --destructive-foreground: 210 20% 98%;
     --border: 215 15 20%;
@@ -433,6 +432,6 @@ ol {
   list-style: decimal;
 }
 
-.main-container:hover .item-container:not(:hover) {
+/* .main-container:hover .item-container:not(:hover) {
   opacity: 0.25;
-}
+} */

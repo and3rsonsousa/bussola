@@ -618,53 +618,65 @@ export const CalendarDay = ({
           )}
       </div>
       {isHover || isCreating ? (
-        <div className={`mt-2`}>
-          <div className="action-item border-idea p-2">
-            <Form
-              method="post"
-              className="flex items-center gap-2"
-              action="/handle-actions"
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        <div
+          className={`-top-1 right-0 mt-2 ${isCreating ? "relative" : "absolute"}`}
+        >
+          {isCreating ? (
+            <div className="action-item border-idea  p-2">
+              <Form
+                method="post"
+                className="flex items-center gap-2"
+                action="/handle-actions"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
 
-                const formData = new FormData(e.currentTarget);
-                const title = formData.get("title") as string;
+                  const formData = new FormData(e.currentTarget);
+                  const title = formData.get("title") as string;
 
-                if (title.length > 2) {
-                  handleActions({
-                    ...newAction,
-                    title,
-
-                    id: window.crypto.randomUUID(),
-                    intent: INTENTS.createAction,
-                  });
-                }
-              }}
-            >
-              <input
-                type="text"
-                id="title"
-                className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted hover:placeholder:text-muted-foreground"
-                placeholder="Nova ação..."
-                name="title"
-                tabIndex={0}
-                onFocus={() => {
-                  setIsCreating(true);
-                }}
-                onBlur={(e) => {
-                  setIsCreating(false);
-                  if (e.target.value.length > 2)
+                  if (title.length > 2) {
                     handleActions({
                       ...newAction,
-                      title: e.currentTarget.value,
+                      title,
+
                       id: window.crypto.randomUUID(),
                       intent: INTENTS.createAction,
                     });
+                  }
                 }}
-              />
-            </Form>
-          </div>
+              >
+                <input
+                  type="text"
+                  id="title"
+                  className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted"
+                  placeholder="+"
+                  name="title"
+                  autoFocus
+                  tabIndex={0}
+                  onFocus={() => {
+                    setIsCreating(true);
+                  }}
+                  onBlur={(e) => {
+                    setIsCreating(false);
+                    if (e.target.value.length > 2)
+                      handleActions({
+                        ...newAction,
+                        title: e.currentTarget.value,
+                        id: window.crypto.randomUUID(),
+                        intent: INTENTS.createAction,
+                      });
+                  }}
+                />
+              </Form>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsCreating(true)}
+              className="grid size-6 place-content-center rounded-full bg-secondary hover:bg-accent"
+            >
+              <PlusIcon className="size-3" />
+            </button>
+          )}
         </div>
       ) : null}
     </div>
