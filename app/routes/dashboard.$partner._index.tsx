@@ -220,7 +220,7 @@ export default function Partner() {
             }}
             size="lg"
           />
-          <div className="text-2xl font-extrabold tracking-tight text-secondary-foreground">
+          <div className="text-3xl font-extrabold tracking-tighter text-secondary-foreground">
             <div>{partner?.title}</div>
             <Progress
               total={actions?.length || 1}
