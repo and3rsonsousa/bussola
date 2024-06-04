@@ -461,18 +461,23 @@ export default function Partner() {
                 className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-muted"
               ></div>
             </div>
-            <div className="scrollbars scrollbars-thin h-full overflow-y-hidden">
+            <div className="scrollbars scrollbars-thin main-container h-full overflow-y-hidden">
               <div id="calendar" className={`grid-cols-7 pb-4 md:grid`}>
                 {calendar.map((day, i) => (
-                  <CalendarDay
-                    key={i}
-                    currentDate={currentDate}
-                    day={day}
-                    setDraggedAction={setDraggedAction}
-                    partner={partner}
-                    person={person}
-                    people={people}
-                  />
+                  <>
+                    <CalendarDay
+                      key={i}
+                      currentDate={currentDate}
+                      day={day}
+                      setDraggedAction={setDraggedAction}
+                      partner={partner}
+                      person={person}
+                      people={people}
+                    />
+                    {(i + 1) % 7 === 0 && (
+                      <div className="col-span-7 h-[1px] bg-border"></div>
+                    )}
+                  </>
                 ))}
               </div>
             </div>
@@ -551,7 +556,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } group/day relative flex flex-col border-b pb-4 pt-2 transition hover:bg-muted md:px-1 md:pt-0`}
+      } item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
@@ -567,7 +572,7 @@ export const CalendarDay = ({
       onMouseLeave={() => setIsHover(false)}
     >
       {/* Brilho */}
-      <div className="absolute -top-[1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/day:opacity-100"></div>
+      {/* <div className="absolute -top-[1px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/day:opacity-100"></div> */}
 
       <div className="my-1 flex justify-between">
         <div
@@ -580,7 +585,7 @@ export const CalendarDay = ({
           {day.date.getDate()}
         </div>
       </div>
-      <div className="relative flex shrink-0 grow flex-col gap-3">
+      <div className="relative flex flex-col gap-3">
         {categories
           .map((category) => ({
             category,
@@ -613,10 +618,8 @@ export const CalendarDay = ({
           )}
       </div>
       {isHover || isCreating ? (
-        <div
-          className={`absolute -bottom-2 left-1/2 z-10 mt-2 -translate-x-1/2  focus-within:relative`}
-        >
-          <div className="w-full overflow-hidden rounded border border-white/10 bg-secondary px-3 py-1 ring-ring backdrop-blur-lg focus-within:ring-2">
+        <div className={`mt-2`}>
+          <div className="action-item border-idea p-2">
             <Form
               method="post"
               className="flex items-center gap-2"
@@ -660,8 +663,6 @@ export const CalendarDay = ({
                     });
                 }}
               />
-
-              {!isCreating && <PlusIcon className="h-4" />}
             </Form>
           </div>
         </div>

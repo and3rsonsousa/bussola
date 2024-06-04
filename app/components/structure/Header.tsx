@@ -100,7 +100,7 @@ export default function Header() {
         </DropdownMenu>
         {person && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="-mr-1 rounded-full outline-none ring-primary ring-offset-2 focus-within:ring-2">
+            <DropdownMenuTrigger className="-mr-1 rounded-full outline-none ring-primary ring-offset-2 ring-offset-background focus-within:ring-2">
               <Avatar
                 size="md"
                 item={{
@@ -155,7 +155,7 @@ export default function Header() {
               </DropdownMenuItem>
               {person.admin && (
                 <>
-                  <DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+                  <DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-border" />
                   <DropdownMenuItem
                     className="bg-item"
                     id="partners"
@@ -173,7 +173,7 @@ export default function Header() {
                     <div>Novo parceiro</div>
                   </DropdownMenuItem>
 
-                  <DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-white/20" />
+                  <DropdownMenuSeparator className="-mx-1 my-2 h-[1px] bg-border" />
                   <DropdownMenuItem
                     className="bg-item"
                     id="users"

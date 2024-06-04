@@ -19,12 +19,12 @@
     --popover-foreground: 224 20% 5%;
     --primary: 260 100% 60%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 220 15% 95%;
+    --secondary: 225 35% 97%;
     --secondary-foreground: 224 20% 5%;
-    --muted: 220 5% 90%;
+    --muted: 220 20% 92%;
     --muted-foreground: 220 9% 60%;
-    --accent: 220 15% 80%;
-    --accent-foreground: 220 20% 5%;
+    --accent: 240 100% 95%;
+    --accent-foreground: 260 75% 50%;
     --destructive: 355 85% 55%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
@@ -46,11 +46,12 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 215 15% 25%;
     --muted-foreground: 220 15% 60%;
-    --accent: 215 15% 35%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 245 15% 20%;
+    /* --accent: 215 15% 35%; */
+    --accent-foreground: 215 15% 90%;
     --destructive: 350 75% 45%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 15 30%;
+    --border: 215 15 20%;
     --input: 215 27.9% 16.9%;
     --ring: 250 80% 60%;
   }
@@ -61,7 +62,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-light text-foreground antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
@@ -145,11 +146,14 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary outline-none ring-primary transition focus-within:ring-2 hover:bg-muted hover:text-secondary-foreground focus:ring-2;
+  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-muted hover:text-secondary-foreground focus:ring-2;
 }
 
+.dark .action-item.action-delayed {
+  @apply bg-error-950 text-error-100;
+}
 .action-item.action-delayed {
-  @apply animate-pulse bg-error-600 text-error-100;
+  @apply bg-error-100 text-error-950;
 }
 
 .action-idea {
@@ -324,7 +328,7 @@ body {
 }
 
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-accent/25;
+  @apply rounded-full;
 }
 
 .scrollbars-horizontal {
@@ -349,12 +353,12 @@ body {
   @apply mr-4 bg-transparent;
 }
 .scrollbars-horizontal::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-transparent outline-black/10 backdrop-blur-lg transition hover:bg-accent/25;
+  @apply rounded-full;
 }
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-accent/10;
+  @apply bg-secondary/50 transition hover:bg-secondary;
 }
 
 .bg-content {
@@ -362,11 +366,11 @@ body {
 }
 
 .bg-item {
-  @apply flex gap-2 px-4 font-normal;
+  @apply flex gap-2 px-4;
 }
 
 .bg-select-item {
-  @apply pl-8 pr-4 font-normal;
+  @apply pl-8 pr-4;
 }
 
 .debug-1 {
@@ -394,7 +398,7 @@ body {
 }
 
 .tiptap {
-  @apply flex-1 shrink-0 text-lg font-normal tracking-tight  outline-none;
+  @apply flex-1 shrink-0 text-lg tracking-tight  outline-none;
 }
 
 .tiptap > * {
@@ -427,4 +431,8 @@ ol {
 }
 .tiptap ol {
   list-style: decimal;
+}
+
+.main-container:hover .item-container:not(:hover) {
+  opacity: 0.25;
 }

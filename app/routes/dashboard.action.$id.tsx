@@ -255,7 +255,7 @@ export default function ActionPage() {
             <DropdownMenu>
               <DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
                 <div
-                  className={`grid h-12 w-12 place-content-center rounded-full border-2 bg-gray-900 fg-${category.slug} border-${category.slug}`}
+                  className={`grid h-12 w-12 place-content-center rounded-full  fg-${category.slug}`}
                 >
                   <Icons id={category.slug} />
                 </div>
@@ -281,7 +281,10 @@ export default function ActionPage() {
                       }
                     }}
                   >
-                    <Icons id={category.slug} className="h-4 w-4 opacity-75" />
+                    <Icons
+                      id={category.slug}
+                      className={`h-4 w-4 fg-${category.slug} opacity-75`}
+                    />
                     <span>{category.title}</span>
                   </DropdownMenuItem>
                 ))}
@@ -294,7 +297,7 @@ export default function ActionPage() {
               <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
                 <div className="grid place-content-center rounded-full bg-gray-900">
                   <div
-                    className={`rounded-full border font-bold border-${state.slug} bg-${state.slug}-dark px-2`}
+                    className={`rounded-full font-bold bg-${state.slug} px-2`}
                   >
                     {state.title}
                   </div>
@@ -334,7 +337,7 @@ export default function ActionPage() {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="grid h-12 w-12 place-content-center rounded-full bg-gray-900">
+                <div className="grid h-12 w-12 place-content-center rounded-full">
                   <Icons id={priority.slug} type="priority" />
                 </div>
               </DropdownMenuTrigger>
@@ -374,7 +377,7 @@ export default function ActionPage() {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="flex rounded-full bg-gray-900 p-2 pl-3">
+                <div className="flex rounded-full p-2 pl-3">
                   {responsibles.map((person) => (
                     <Avatar
                       item={{
@@ -426,7 +429,7 @@ export default function ActionPage() {
                         short: person.initials!,
                       }}
                     />
-                    <span>{person.name}</span>
+                    <span>{`${person.name} ${person.surname}`}</span>
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
@@ -434,13 +437,13 @@ export default function ActionPage() {
           </div>
         </div>
         <div className="flex items-center justify-between pb-4">
-          <div className="font-normal">
+          <div className=" ">
             <Popover>
               <PopoverTrigger asChild tabIndex={-7}>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="-ml-3 flex items-center gap-2 font-normal focus-visible:ring-offset-0"
+                  className="-ml-3 flex items-center gap-2   focus-visible:ring-offset-0"
                 >
                   <CalendarIcon className="size-4" />
                   <span>

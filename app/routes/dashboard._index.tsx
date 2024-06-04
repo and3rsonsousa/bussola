@@ -492,9 +492,7 @@ function Partners({ actions }: { actions: Action[] }) {
 
   return (
     <div className="mb-8 mt-4">
-      <h4 className="mb-4 text-center text-xl font-bold text-secondary-foreground">
-        Parceiros
-      </h4>
+      <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
       {partners.length > 0 ? (
         <div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
           {partners.map((partner) => (
@@ -529,7 +527,7 @@ function Partners({ actions }: { actions: Action[] }) {
             Nenhum <span className="font-extrabold">PARCEIRO</span> está
             designado para você.
           </div>
-          <div className="text-lg font-normal tracking-tight">
+          <div className="text-lg   tracking-tight">
             Fale com o seu Head para viabilizar o seu acesso
             <br />
             aos parceiros da empresa que você deve ter acesso.

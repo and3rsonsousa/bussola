@@ -32,7 +32,7 @@ export function Layout() {
         <Meta />
         <Links />
       </head>
-      <body className="dark transition duration-1000">
+      <body className="dark">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

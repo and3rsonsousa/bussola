@@ -351,7 +351,7 @@ export default function CreateAction({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-xs font-normal focus-visible:ring-offset-0"
+                  className="text-xs   focus-visible:ring-offset-0"
                 >
                   {action.date
                     ? format(

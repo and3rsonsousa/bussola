@@ -74,23 +74,23 @@ export default function UI() {
             <div>.bg-popover</div>
             <div>.text-popover-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-primary p-4 text-primary-foreground">
+          <div className="grid place-content-center rounded-lg bg-primary p-4 text-primary-foreground">
             <div>.bg-primary</div>
             <div>.text-primary-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-secondary p-4 text-secondary-foreground">
+          <div className="grid place-content-center rounded-lg bg-secondary p-4 text-secondary-foreground">
             <div>.bg-secondary</div>
             <div>.text-secondary-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-muted p-4 text-muted-foreground">
+          <div className="grid place-content-center rounded-lg bg-muted p-4 text-muted-foreground">
             <div>.bg-muted</div>
             <div>.text-muted-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-accent p-4 text-accent-foreground">
+          <div className="grid place-content-center rounded-lg bg-accent p-4 text-accent-foreground">
             <div>.bg-accent</div>
             <div>.text-accent-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-destructive p-4 text-destructive-foreground">
+          <div className="grid place-content-center rounded-lg bg-destructive p-4 text-destructive-foreground">
             <div>.bg-destructive</div>
             <div>.text-destructive-foreground</div>
           </div>
