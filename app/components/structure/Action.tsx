@@ -253,7 +253,7 @@ export function ActionLine({
           </div>
 
           {date && (
-            <div className="hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 @[200px]:block md:text-[10px]">
+            <div className="hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 @[150px]:block md:text-[10px]">
               {formatActionDatetime({
                 date: action.date,
                 dateFormat: date.dateFormat,
