@@ -435,3 +435,7 @@ ol {
 /* .main-container:hover .item-container:not(:hover) {
   opacity: 0.25;
 } */
+
+.dragover {
+  @apply bg-secondary/50;
+}

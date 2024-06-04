@@ -13,7 +13,6 @@ import {
   addWeeks,
   format,
   formatDistanceToNow,
-  isAfter,
   isBefore,
   isSameYear,
   parseISO,
@@ -30,21 +29,20 @@ import {
   TimerIcon,
   TrashIcon,
 } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
-  ContextMenuGroup,
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-  ContextMenuShortcut,
 } from "~/components/ui/context-menu";
 import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
@@ -56,8 +54,8 @@ import {
   getResponsibles,
 } from "~/lib/helpers";
 import { cn } from "~/lib/utils";
-import { Toggle } from "../ui/toggle";
 import { Button } from "../ui/button";
+import { Toggle } from "../ui/toggle";
 
 export function ActionLine({
   action,
@@ -142,7 +140,6 @@ export function ActionLine({
           }}
           role="button"
           tabIndex={0}
-          onKeyDown={() => {}}
           draggable={!!onDrag && !isMobile}
           onDragEnd={() => {
             if (onDrag) onDrag(action);
@@ -268,16 +265,19 @@ export function ActionLine({
   );
 }
 
-export function ActionRow({ action }: { action: Action }) {
-  return;
-}
-
-export function ActionBlock({ action }: { action: Action }) {
+export function ActionBlock({
+  action,
+  onDrag,
+}: {
+  action: Action;
+  onDrag?: (action: Action) => void;
+}) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const submit = useSubmit();
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
   const matches = useMatches();
   const { categories, states, partners, person } = matches[1]
@@ -301,6 +301,14 @@ export function ActionBlock({ action }: { action: Action }) {
     );
   }
 
+  useEffect(() => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      ),
+    );
+  }, [isMobile]);
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -312,6 +320,10 @@ export function ActionBlock({ action }: { action: Action }) {
           }}
           onMouseLeave={() => {
             setHover(false);
+          }}
+          draggable={!!onDrag && !isMobile}
+          onDragEnd={() => {
+            if (onDrag) onDrag(action);
           }}
         >
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
@@ -607,9 +619,11 @@ export function ListOfActions({
 export function BlockOfActions({
   actions,
   max,
+  onDrag,
 }: {
   actions?: Action[] | null;
   max?: 1 | 2;
+  onDrag?: (action: Action) => void;
 }) {
   return (
     <div className="@container">
@@ -623,7 +637,7 @@ export function BlockOfActions({
         } gap-2`}
       >
         {actions?.map((action) => (
-          <ActionBlock action={action} key={action.id} />
+          <ActionBlock onDrag={onDrag} action={action} key={action.id} />
         ))}
       </div>
     </div>
