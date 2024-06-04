@@ -81,6 +81,7 @@ export function ActionLine({
   const navigate = useNavigate();
   const submit = useSubmit();
   const matches = useMatches();
+  const [isMobile, setIsMobile] = useState(true);
 
   const { states, categories, person } = matches[1].data as DashboardDataType;
 
@@ -101,6 +102,14 @@ export function ActionLine({
       },
     );
   }
+
+  useEffect(() => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      ),
+    );
+  }, [isMobile]);
 
   return (
     <ContextMenu>
@@ -134,7 +143,7 @@ export function ActionLine({
           role="button"
           tabIndex={0}
           onKeyDown={() => {}}
-          draggable={!!onDrag}
+          draggable={!!onDrag && !isMobile}
           onDragEnd={() => {
             if (onDrag) onDrag(action);
           }}
