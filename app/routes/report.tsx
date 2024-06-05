@@ -40,27 +40,26 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function ReportPage() {
   const { actions, partner } = useLoaderData<typeof loader>();
 
-  useLayoutEffect(() => {
-    document.body.classList.remove("dark");
-  }, []);
+  // useLayoutEffect(() => {
+  //   document.body.classList.remove("dark");
+  // }, []);
 
   return (
-    <div className="p-4" style={{ color: "#000" }}>
-      <h5 className="mb-4 text-xs font-bold uppercase tracking-wider">
+    <div className="p-4">
+      <h5 className="mb-4 text-xs font-bold uppercase tracking-wider ">
         AGÊNCIA CNVT ®
       </h5>
-      <h1 className="text-5xl font-bold tracking-tighter">{partner?.title}</h1>
+      <h1 className="text-5xl font-bold tracking-tighter text-secondary-foreground">
+        {partner?.title}
+      </h1>
       <h5 className="text-sm font-bold uppercase tracking-wider">
         Aprovação de Conteúdo para o período
       </h5>
-      <div>
+      <div className="mt-8 grid grid-cols-2 gap-2">
         {actions?.map((action) => (
-          <div key={action.id} className="py-4">
+          <div key={action.id} className="rounded-sm bg-secondary p-4">
             <div className="flex items-center gap-2">
-              <div
-                className="rounded-sm px-2 py-0.5 text-sm font-bold uppercase tracking-wider"
-                style={{ backgroundColor: "#000", color: "#fff" }}
-              >
+              <div className="text-sm font-black uppercase tracking-wider">
                 {action.category_id === CATEGORIES.post
                   ? "Imagem Estática"
                   : "Reels"}
@@ -69,7 +68,9 @@ export default function ReportPage() {
                 {format(action.date, "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
               </div>
             </div>
-            <div className="mb-2 text-2xl font-bold">{action.title}</div>
+            <div className="mb-2 text-2xl font-bold leading-none tracking-tighter">
+              {action.title}
+            </div>
             <div
               dangerouslySetInnerHTML={{ __html: action.description || "" }}
             ></div>
