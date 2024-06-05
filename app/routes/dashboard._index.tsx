@@ -330,9 +330,11 @@ export function WeekView({
               e.currentTarget.classList.add("dragover");
             }}
             onDragEnd={(e) => {
-              document
-                .querySelectorAll(".dragover")
-                .forEach((e) => e.classList.remove("dragover"));
+              setTimeout(() => {
+                document
+                  .querySelectorAll(".dragover")
+                  .forEach((e) => e.classList.remove("dragover"));
+              }, 500);
             }}
           >
             {/* Dia */}

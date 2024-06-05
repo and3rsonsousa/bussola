@@ -584,6 +584,13 @@ export const CalendarDay = ({
           .forEach((e) => e.classList.remove("dragover"));
         e.currentTarget.classList.add("dragover");
       }}
+      onDragEnd={(e) => {
+        setTimeout(() => {
+          document
+            .querySelectorAll(".dragover")
+            .forEach((e) => e.classList.remove("dragover"));
+        }, 500);
+      }}
       onFocus={() => setIsHover(true)}
       onBlur={() => setIsHover(false)}
       onMouseOver={() => setIsHover(true)}

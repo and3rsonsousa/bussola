@@ -65,7 +65,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
                     document
                       .querySelectorAll(".dragover")
                       .forEach((e) => e.classList.remove("dragover"));
-                  }, 100);
+                  }, 500);
                 }}
               >
                 <div className="mb-2 flex items-center px-2 pt-2">
