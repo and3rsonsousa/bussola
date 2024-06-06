@@ -254,9 +254,7 @@ export default function ActionPage() {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div
-                  className={`grid h-12 w-12 place-content-center rounded-full  fg-${category.slug}`}
-                >
+                <div>
                   <Icons id={category.slug} />
                 </div>
               </DropdownMenuTrigger>
@@ -281,10 +279,7 @@ export default function ActionPage() {
                       }
                     }}
                   >
-                    <Icons
-                      id={category.slug}
-                      className={`h-4 w-4 fg-${category.slug} opacity-75`}
-                    />
+                    <Icons id={category.slug} className={`size-4 opacity-50`} />
                     <span>{category.title}</span>
                   </DropdownMenuItem>
                 ))}
@@ -295,12 +290,11 @@ export default function ActionPage() {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="grid place-content-center rounded-full bg-gray-900">
+                <div className="flex items-center gap-2">
                   <div
-                    className={`rounded-full font-bold bg-${state.slug} px-2`}
-                  >
-                    {state.title}
-                  </div>
+                    className={`rounded-full font-bold border-${state.slug} size-4 border-4`}
+                  ></div>
+                  <div className="font-semibold">{state.title}</div>
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-content">
@@ -538,7 +532,7 @@ export default function ActionPage() {
 
           <div className="flex gap-2">
             <Button
-              variant={"destructive"}
+              variant={"ghost"}
               onClick={() => {
                 if (
                   confirm(
