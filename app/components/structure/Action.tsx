@@ -65,6 +65,7 @@ export function ActionLine({
   date,
   onDrag,
   short,
+  allUsers,
 }: {
   action: Action;
   showCategory?: boolean;
@@ -73,6 +74,7 @@ export function ActionLine({
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   onDrag?: (action: Action) => void;
   short?: boolean;
+  allUsers?: boolean;
 }) {
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
@@ -81,7 +83,8 @@ export function ActionLine({
   const matches = useMatches();
   const [isMobile, setIsMobile] = useState(true);
 
-  const { states, categories, person } = matches[1].data as DashboardDataType;
+  const { states, categories, person, people } = matches[1]
+    .data as DashboardDataType;
 
   const state = states.find((state) => state.id === action.state_id) as State;
 
@@ -237,16 +240,34 @@ export function ActionLine({
             ) : null}
           </div>
 
-          <div className="hidden @[200px]:flex">
-            {amIResponsible(action.responsibles, person.user_id) && (
-              <Avatar
-                item={{
-                  image: person.image,
-                  short: person.initials!,
-                }}
-                size="xs"
-              />
-            )}
+          <div className={` ${!allUsers ? "hidden @[200px]:flex" : "flex"}`}>
+            {allUsers
+              ? people
+                  .filter(
+                    (person) =>
+                      action.responsibles.filter(
+                        (responsible_id) => responsible_id === person.user_id,
+                      ).length > 0,
+                  )
+                  .map((person) => (
+                    <Avatar
+                      item={{
+                        image: person.image,
+                        short: person.initials!,
+                      }}
+                      size="xs"
+                      group
+                    />
+                  ))
+              : amIResponsible(action.responsibles, person.user_id) && (
+                  <Avatar
+                    item={{
+                      image: person.image,
+                      short: person.initials!,
+                    }}
+                    size="xs"
+                  />
+                )}
           </div>
 
           {date && (

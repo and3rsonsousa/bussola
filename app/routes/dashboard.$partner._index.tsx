@@ -38,6 +38,8 @@ import {
   ClipboardCheckIcon,
   Grid3x3Icon,
   PlusIcon,
+  UserIcon,
+  UsersIcon,
 } from "lucide-react";
 import React, { act, useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
@@ -139,6 +141,7 @@ export default function Partner() {
   const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
   const [showFeed, setFeed] = useState(false);
   const [short, setShort] = useState(false);
+  const [allUsers, setAllUsers] = useState(false);
 
   invariant(partner);
 
@@ -318,6 +321,22 @@ export default function Partner() {
                 </div>
                 <div className="flex items-center gap-2 pr-1">
                   <Toggle
+                    pressed={allUsers}
+                    size={"sm"}
+                    onPressedChange={() => setAllUsers((allUsers) => !allUsers)}
+                    title={
+                      allUsers
+                        ? "Mostrar todos os responsáveis"
+                        : "Exibir apenas 'eu' como responsável"
+                    }
+                  >
+                    {allUsers ? (
+                      <UsersIcon className="size-4" />
+                    ) : (
+                      <UserIcon className="size-4" />
+                    )}
+                  </Toggle>
+                  <Toggle
                     pressed={short}
                     size={"sm"}
                     onPressedChange={() => setShort((short) => !short)}
@@ -491,6 +510,7 @@ export default function Partner() {
                       setDraggedAction={setDraggedAction}
                       person={person}
                       short={short}
+                      allUsers={allUsers}
                     />
                     {(i + 1) % 7 === 0 && (
                       <div className="col-span-7 h-[1px] bg-border"></div>
@@ -523,12 +543,14 @@ export const CalendarDay = ({
   setDraggedAction,
   person,
   short,
+  allUsers,
 }: {
   day: { date: Date; actions?: Action[] };
   currentDate: Date;
   setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
   person: Person;
   short?: boolean;
+  allUsers?: boolean;
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -631,6 +653,7 @@ export const CalendarDay = ({
                 {actions?.map((action) => (
                   <ActionLine
                     short={short}
+                    allUsers={allUsers}
                     showDelay
                     action={action}
                     key={action.id}
