@@ -320,10 +320,10 @@ export default function Partner() {
                   </Button>
                 </div>
                 <div className="flex items-center gap-2 pr-1">
-                  <Toggle
-                    pressed={allUsers}
+                  <Button
                     size={"sm"}
-                    onPressedChange={() => setAllUsers((allUsers) => !allUsers)}
+                    variant={allUsers ? "default" : "ghost"}
+                    onClick={() => setAllUsers((allUsers) => !allUsers)}
                     title={
                       allUsers
                         ? "Mostrar todos os responsáveis"
@@ -335,11 +335,11 @@ export default function Partner() {
                     ) : (
                       <UserIcon className="size-4" />
                     )}
-                  </Toggle>
-                  <Toggle
-                    pressed={short}
+                  </Button>
+                  <Button
+                    variant={short ? "default" : "ghost"}
                     size={"sm"}
-                    onPressedChange={() => setShort((short) => !short)}
+                    onClick={() => setShort((short) => !short)}
                     title={
                       short
                         ? "Aumentar o tamanho da ação"
@@ -351,7 +351,7 @@ export default function Partner() {
                     ) : (
                       <ChevronsDownUpIcon className="size-4" />
                     )}
-                  </Toggle>
+                  </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
