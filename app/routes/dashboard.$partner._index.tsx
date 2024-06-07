@@ -10,6 +10,7 @@ import {
 } from "@remix-run/react";
 import { MetaFunction, json, type LoaderFunctionArgs } from "@vercel/remix";
 import {
+  addHours,
   addMonths,
   eachDayOfInterval,
   eachMonthOfInterval,
@@ -485,7 +486,6 @@ export default function Partner() {
                 {calendar.map((day, i) => (
                   <>
                     <CalendarDay
-                      key={i}
                       currentDate={currentDate}
                       day={day}
                       setDraggedAction={setDraggedAction}
@@ -557,7 +557,11 @@ export const CalendarDay = ({
     date: format(
       (() => {
         const date = day.date;
-        date.setHours(11, 0);
+        if (new Date().getHours() > 11) {
+          date.setHours(new Date().getHours() + 1, new Date().getMinutes());
+        } else {
+          date.setHours(11, 0);
+        }
         return date;
       })(),
       "yyyy-MM-dd HH:mm:ss",
