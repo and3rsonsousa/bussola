@@ -49,7 +49,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
             );
             return (
               <div
-                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 " : "w-auto"} flex-col  overflow-hidden transition`}
+                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 grow" : "w-auto xl:min-w-72 xl:grow"} flex-col  overflow-hidden transition`}
                 key={state.id}
                 data-state={state.id}
                 onDragOver={(e) => {
