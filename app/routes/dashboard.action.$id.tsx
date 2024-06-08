@@ -7,6 +7,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
+import { createBrowserClient } from "@supabase/ssr";
 import {
   json,
   type LoaderFunctionArgs,
@@ -23,7 +24,8 @@ import {
   Trash2Icon,
   TrashIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ListOfActions } from "~/components/structure/Action";
 import Tiptap from "~/components/structure/Tiptap";
 
 import { Button } from "~/components/ui/button";
@@ -47,7 +49,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { INTENTS } from "~/lib/constants";
+import { INTENTS, STATES } from "~/lib/constants";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -78,9 +80,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function ActionPage() {
   const { action: baseAction } = useLoaderData<typeof loader>();
   const [action, setAction] = useState(baseAction as Action);
-  const submit = useSubmit();
+  const [actions, setActions] = useState<ActionComplete[] | null>(null);
 
-  const { categories, partners, people, priorities, states } = useMatches()[1]
+  const submit = useSubmit();
+  const matches = useMatches();
+
+  const { categories, partners, people, priorities, states } = matches[1]
     .data as DashboardDataType;
 
   const partner = partners.find(
@@ -122,452 +127,503 @@ export default function ActionPage() {
     navigation.state !== "idle" ||
     fetchers.filter((f) => f.formData).length > 0;
 
+  const { env } = matches[0].data as {
+    env: { SUPABASE_URL: string; SUPABASE_KEY: string };
+  };
+
+  const supabase = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_KEY);
+
+  useEffect(() => {
+    async function getOtherActions() {
+      const { data: actions } = await supabase
+        .from("get_full_actions")
+        .select()
+        .match({ partner_id: baseAction.partner_id })
+        .returns<ActionComplete>();
+      setActions(actions);
+    }
+
+    getOtherActions();
+  }, []);
+
   return (
-    <div className="mx-auto flex h-full w-full max-w-xl flex-col overflow-hidden">
-      <div className="flex shrink grow-0 items-center justify-between p-4 text-sm">
-        <div className="flex items-center gap-2 ">
-          <Avatar
-            item={{
-              short: partner.short,
-              bg: partner.bg,
-              fg: partner.fg,
+    <div className="mx-auto flex h-full gap-8">
+      <div className=" flex h-full w-full max-w-xl flex-col overflow-hidden">
+        <div className="flex shrink grow-0 items-center justify-between p-4 text-sm">
+          <div className="flex items-center gap-2 ">
+            <Avatar
+              item={{
+                short: partner.short,
+                bg: partner.bg,
+                fg: partner.fg,
+              }}
+              size="md"
+              style={{
+                viewTransitionName: "avatar-partner",
+              }}
+            />
+            <div>
+              <Link
+                to={`/dashboard/${partner.slug}`}
+                className="font-extrabold uppercase tracking-wider text-secondary-foreground transition"
+              >
+                {partner.title}
+              </Link>
+              <div className="text-[11px] leading-none tracking-wide ">
+                {format(
+                  parseISO(baseAction?.updated_at as string),
+                  "yyyy-MM-dd HH:mm:ss",
+                ) ===
+                format(
+                  parseISO(baseAction?.created_at as string),
+                  "yyyy-MM-dd HH:mm:ss",
+                )
+                  ? "Criado "
+                  : "Atualizado "}
+                {formatDistanceToNow(
+                  parseISO(baseAction?.updated_at as string),
+                  {
+                    locale: ptBR,
+                    addSuffix: true,
+                  },
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex shrink grow flex-col gap-4 overflow-hidden px-4">
+          {/* Título */}
+          <div
+            contentEditable="true"
+            dangerouslySetInnerHTML={{
+              __html: action?.title as string,
             }}
-            size="md"
-            style={{
-              viewTransitionName: "avatar-partner",
+            onBlur={(e) =>
+              setAction({
+                ...action,
+                title: e.currentTarget.innerText,
+              })
+            }
+            className="bg-transparent text-5xl font-extrabold tracking-tighter outline-none transition focus-within:text-secondary-foreground"
+            onPaste={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setAction({
+                ...action,
+                title: e.clipboardData.getData("text"),
+              });
             }}
           />
-          <div>
-            <Link
-              to={`/dashboard/${partner.slug}`}
-              className="font-extrabold uppercase tracking-wider text-secondary-foreground transition"
-            >
-              {partner.title}
-            </Link>
-            <div className="text-[11px] leading-none tracking-wide ">
-              {format(
-                parseISO(baseAction?.updated_at as string),
-                "yyyy-MM-dd HH:mm:ss",
-              ) ===
-              format(
-                parseISO(baseAction?.created_at as string),
-                "yyyy-MM-dd HH:mm:ss",
-              )
-                ? "Criado "
-                : "Atualizado "}
-              {formatDistanceToNow(parseISO(baseAction?.updated_at as string), {
-                locale: ptBR,
-                addSuffix: true,
-              })}
+          {/* Descrição */}
+          <div className="flex shrink grow flex-col overflow-hidden">
+            <div className="mb-2 flex items-center gap-4 text-xs font-medium uppercase tracking-wider">
+              <div>Descrição</div>
+            </div>
+
+            <div className="scrollbars">
+              <Tiptap
+                content={action.description}
+                onBlur={(text) => {
+                  setAction({ ...action, description: text });
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
+            {/* Partners */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
+                  <Avatar
+                    item={{
+                      short: partner.short,
+                      bg: partner.bg,
+                      fg: partner.fg,
+                    }}
+                    size="lg"
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-content">
+                  {partners.map((partner) => (
+                    <DropdownMenuItem
+                      key={partner.id}
+                      className="bg-item flex items-center gap-2"
+                      textValue={partner.title}
+                      onSelect={async () => {
+                        if (partner.id !== action.partner_id) {
+                          await handleActions({
+                            ...action,
+                            intent: INTENTS.updateAction,
+                            partner_id: Number(partner.id),
+                          });
+
+                          setAction({
+                            ...action,
+                            partner_id: partner.id,
+                          });
+                        }
+                      }}
+                    >
+                      <Avatar
+                        item={{
+                          short: partner.short,
+                          bg: partner.bg,
+                          fg: partner.fg,
+                        }}
+                      />
+                      <span>{partner.title}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* Categoria */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
+                  <div>
+                    <Icons id={category.slug} />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-content">
+                  {categories.map((category) => (
+                    <DropdownMenuItem
+                      key={category.id}
+                      className="bg-item flex items-center gap-2"
+                      textValue={category.title}
+                      onSelect={async () => {
+                        if (category.id !== action.category_id) {
+                          await handleActions({
+                            ...action,
+                            intent: INTENTS.updateAction,
+                            category_id: Number(category.id),
+                          });
+
+                          setAction({
+                            ...action,
+                            category_id: category.id,
+                          });
+                        }
+                      }}
+                    >
+                      <Icons
+                        id={category.slug}
+                        className={`size-4 opacity-50`}
+                      />
+                      <span>{category.title}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* States */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`rounded-full font-bold border-${state.slug} size-4 border-4`}
+                    ></div>
+                    <div className="font-semibold">{state.title}</div>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-content">
+                  {states.map((state) => (
+                    <DropdownMenuItem
+                      key={state.id}
+                      className="bg-item flex items-center gap-2"
+                      textValue={state.title}
+                      onSelect={async () => {
+                        if (state.id !== action.state_id) {
+                          await handleActions({
+                            ...action,
+                            intent: INTENTS.updateAction,
+                            state_id: Number(state.id),
+                          });
+
+                          setAction({
+                            ...action,
+                            state_id: state.id,
+                          });
+                        }
+                      }}
+                    >
+                      <div
+                        className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
+                      ></div>
+                      <span>{state.title}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* Prioridade */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
+                  <div className="grid h-12 w-12 place-content-center rounded-full">
+                    <Icons id={priority.slug} type="priority" />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-content">
+                  {priorities.map((priority) => (
+                    <DropdownMenuItem
+                      key={priority.id}
+                      className="bg-item flex items-center gap-2"
+                      textValue={priority.title}
+                      onSelect={async () => {
+                        if (priority.id !== action.priority_id) {
+                          await handleActions({
+                            ...action,
+                            intent: INTENTS.updateAction,
+                            priority_id: Number(priority.id),
+                          });
+
+                          setAction({
+                            ...action,
+                            priority_id: priority.id,
+                          });
+                        }
+                      }}
+                    >
+                      <Icons
+                        id={priority.slug}
+                        type="priority"
+                        className="h-4 w-4"
+                      />
+                      <span>{priority.title}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* Responsáveis */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
+                  <div className="flex rounded-full p-2 pl-3">
+                    {responsibles.map((person) => (
+                      <Avatar
+                        item={{
+                          image: person.image,
+                          short: person.initials!,
+                        }}
+                        key={person.id}
+                        group
+                        size="md"
+                      />
+                    ))}
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-content">
+                  {people.map((person) => (
+                    <DropdownMenuCheckboxItem
+                      key={person.id}
+                      className="bg-select-item flex items-center gap-2"
+                      textValue={person.name}
+                      checked={action.responsibles.includes(person.user_id)}
+                      onCheckedChange={async (checked) => {
+                        if (!checked && action.responsibles.length < 2) {
+                          alert(
+                            "É necessário ter pelo menos um responsável pala ação",
+                          );
+                          return false;
+                        }
+                        const tempResponsibles = checked
+                          ? [...action.responsibles, person.user_id]
+                          : action.responsibles.filter(
+                              (id) => id !== person.user_id,
+                            );
+
+                        await handleActions({
+                          ...action,
+                          intent: INTENTS.updateAction,
+                          responsibles: tempResponsibles,
+                        });
+
+                        setAction({
+                          ...action,
+                          responsibles: tempResponsibles,
+                        });
+                      }}
+                    >
+                      <Avatar
+                        item={{
+                          image: person.image,
+                          short: person.initials!,
+                        }}
+                      />
+                      <span>{`${person.name} ${person.surname}`}</span>
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+          <div className="flex items-center justify-between pb-4">
+            <div className=" ">
+              <Popover>
+                <PopoverTrigger asChild tabIndex={-7}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="-ml-3 flex items-center gap-2   focus-visible:ring-offset-0"
+                  >
+                    <CalendarIcon className="size-4" />
+                    <span>
+                      {format(
+                        date,
+                        "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(
+                          date.getMinutes() > 0 ? "m" : "",
+                        ),
+                        {
+                          locale: ptBR,
+                        },
+                      )}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="bg-content">
+                  <Calendar
+                    mode="single"
+                    selected={parseISO(action.date)}
+                    locale={ptBR}
+                    onSelect={(date) => {
+                      if (date) {
+                        date?.setHours(
+                          parseISO(action.date).getHours(),
+                          parseISO(action.date).getMinutes(),
+                        );
+
+                        setAction({
+                          ...action,
+                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                        });
+                      }
+                    }}
+                  />
+                  <div className="mx-auto flex w-40 gap-2">
+                    <Select
+                      value={parseISO(action.date).getHours().toString()}
+                      onValueChange={(value) => {
+                        const date = parseISO(action.date);
+                        date.setHours(Number(value));
+                        setAction({
+                          ...action,
+                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                        });
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array(24)
+                          .fill(0)
+                          .map((i, j) => {
+                            return (
+                              <SelectItem value={j.toString()} key={j}>
+                                {j.toString()}
+                              </SelectItem>
+                            );
+                          })}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={parseISO(action.date).getMinutes().toString()}
+                      onValueChange={(value) => {
+                        const date = parseISO(action.date);
+                        date.setMinutes(Number(value));
+                        setAction({
+                          ...action,
+                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                        });
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array(60)
+                          .fill(0)
+                          .map((i, j) => {
+                            return (
+                              <SelectItem value={j.toString()} key={j}>
+                                {j.toString()}
+                              </SelectItem>
+                            );
+                          })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                variant={"ghost"}
+                onClick={() => {
+                  if (
+                    confirm(
+                      "ESSA AÇÃO NÃO PODE SER DESFEITA! Deseja mesmo deletar essa ação?",
+                    )
+                  ) {
+                    handleActions({
+                      ...action,
+                      intent: INTENTS.deleteAction,
+                    });
+
+                    navigate(-1);
+                  }
+                }}
+              >
+                <Trash2Icon className="size-4" />
+              </Button>
+              <Button
+                onClick={() => {
+                  handleActions({
+                    ...action,
+                    responsibles: action.responsibles,
+                    intent: INTENTS.updateAction,
+                  });
+                }}
+                disabled={isWorking}
+              >
+                {isWorking ? (
+                  <div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
+                ) : (
+                  "Atualizar"
+                )}
+              </Button>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="flex shrink grow flex-col gap-4 overflow-hidden px-4">
-        {/* Título */}
-        <div
-          contentEditable="true"
-          dangerouslySetInnerHTML={{
-            __html: action?.title as string,
-          }}
-          onBlur={(e) =>
-            setAction({
-              ...action,
-              title: e.currentTarget.innerText,
-            })
-          }
-          className="bg-transparent text-5xl font-extrabold tracking-tighter outline-none transition focus-within:text-secondary-foreground"
-          onPaste={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setAction({
-              ...action,
-              title: e.clipboardData.getData("text"),
-            });
-          }}
-        />
-        {/* Descrição */}
-        <div className="flex shrink grow flex-col overflow-hidden">
-          <div className="mb-2 flex items-center gap-4 text-xs font-medium uppercase tracking-wider">
-            <div>Descrição</div>
-          </div>
-
-          <div className="scrollbars">
-            <Tiptap
-              content={action.description}
-              onBlur={(text) => {
-                setAction({ ...action, description: text });
+      <div className="flex w-80 flex-col overflow-hidden opacity-25 duration-500 focus-within:opacity-100 hover:opacity-100">
+        <h3 className="py-4 text-xl font-bold text-secondary-foreground">
+          Próximas ações
+        </h3>
+        {actions ? (
+          <div className="scrollbars scrollbars-thin">
+            <ListOfActions
+              actions={actions.filter(
+                (action) => action.state_id !== STATES.finish,
+              )}
+              date={{
+                dateFormat: 2,
+                timeFormat: 1,
               }}
             />
           </div>
-        </div>
-        <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
-          {/* Partners */}
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <Avatar
-                  item={{
-                    short: partner.short,
-                    bg: partner.bg,
-                    fg: partner.fg,
-                  }}
-                  size="lg"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {partners.map((partner) => (
-                  <DropdownMenuItem
-                    key={partner.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={partner.title}
-                    onSelect={async () => {
-                      if (partner.id !== action.partner_id) {
-                        await handleActions({
-                          ...action,
-                          intent: INTENTS.updateAction,
-                          partner_id: Number(partner.id),
-                        });
-
-                        setAction({
-                          ...action,
-                          partner_id: partner.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Avatar
-                      item={{
-                        short: partner.short,
-                        bg: partner.bg,
-                        fg: partner.fg,
-                      }}
-                    />
-                    <span>{partner.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+        ) : actions === null ? (
+          <div className="grid place-content-center p-4">
+            <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-b-primary/50"></div>
           </div>
-          {/* Categoria */}
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div>
-                  <Icons id={category.slug} />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {categories.map((category) => (
-                  <DropdownMenuItem
-                    key={category.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={category.title}
-                    onSelect={async () => {
-                      if (category.id !== action.category_id) {
-                        await handleActions({
-                          ...action,
-                          intent: INTENTS.updateAction,
-                          category_id: Number(category.id),
-                        });
-
-                        setAction({
-                          ...action,
-                          category_id: category.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Icons id={category.slug} className={`size-4 opacity-50`} />
-                    <span>{category.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          {/* States */}
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`rounded-full font-bold border-${state.slug} size-4 border-4`}
-                  ></div>
-                  <div className="font-semibold">{state.title}</div>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {states.map((state) => (
-                  <DropdownMenuItem
-                    key={state.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={state.title}
-                    onSelect={async () => {
-                      if (state.id !== action.state_id) {
-                        await handleActions({
-                          ...action,
-                          intent: INTENTS.updateAction,
-                          state_id: Number(state.id),
-                        });
-
-                        setAction({
-                          ...action,
-                          state_id: state.id,
-                        });
-                      }
-                    }}
-                  >
-                    <div
-                      className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
-                    ></div>
-                    <span>{state.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          {/* Prioridade */}
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="grid h-12 w-12 place-content-center rounded-full">
-                  <Icons id={priority.slug} type="priority" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {priorities.map((priority) => (
-                  <DropdownMenuItem
-                    key={priority.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={priority.title}
-                    onSelect={async () => {
-                      if (priority.id !== action.priority_id) {
-                        await handleActions({
-                          ...action,
-                          intent: INTENTS.updateAction,
-                          priority_id: Number(priority.id),
-                        });
-
-                        setAction({
-                          ...action,
-                          priority_id: priority.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Icons
-                      id={priority.slug}
-                      type="priority"
-                      className="h-4 w-4"
-                    />
-                    <span>{priority.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          {/* Responsáveis */}
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                <div className="flex rounded-full p-2 pl-3">
-                  {responsibles.map((person) => (
-                    <Avatar
-                      item={{
-                        image: person.image,
-                        short: person.initials!,
-                      }}
-                      key={person.id}
-                      group
-                      size="md"
-                    />
-                  ))}
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {people.map((person) => (
-                  <DropdownMenuCheckboxItem
-                    key={person.id}
-                    className="bg-select-item flex items-center gap-2"
-                    textValue={person.name}
-                    checked={action.responsibles.includes(person.user_id)}
-                    onCheckedChange={async (checked) => {
-                      if (!checked && action.responsibles.length < 2) {
-                        alert(
-                          "É necessário ter pelo menos um responsável pala ação",
-                        );
-                        return false;
-                      }
-                      const tempResponsibles = checked
-                        ? [...action.responsibles, person.user_id]
-                        : action.responsibles.filter(
-                            (id) => id !== person.user_id,
-                          );
-
-                      await handleActions({
-                        ...action,
-                        intent: INTENTS.updateAction,
-                        responsibles: tempResponsibles,
-                      });
-
-                      setAction({
-                        ...action,
-                        responsibles: tempResponsibles,
-                      });
-                    }}
-                  >
-                    <Avatar
-                      item={{
-                        image: person.image,
-                        short: person.initials!,
-                      }}
-                    />
-                    <span>{`${person.name} ${person.surname}`}</span>
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-        <div className="flex items-center justify-between pb-4">
-          <div className=" ">
-            <Popover>
-              <PopoverTrigger asChild tabIndex={-7}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="-ml-3 flex items-center gap-2   focus-visible:ring-offset-0"
-                >
-                  <CalendarIcon className="size-4" />
-                  <span>
-                    {format(
-                      date,
-                      "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(
-                        date.getMinutes() > 0 ? "m" : "",
-                      ),
-                      {
-                        locale: ptBR,
-                      },
-                    )}
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="bg-content">
-                <Calendar
-                  mode="single"
-                  selected={parseISO(action.date)}
-                  locale={ptBR}
-                  onSelect={(date) => {
-                    if (date) {
-                      date?.setHours(
-                        parseISO(action.date).getHours(),
-                        parseISO(action.date).getMinutes(),
-                      );
-
-                      setAction({
-                        ...action,
-                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                      });
-                    }
-                  }}
-                />
-                <div className="mx-auto flex w-40 gap-2">
-                  <Select
-                    value={parseISO(action.date).getHours().toString()}
-                    onValueChange={(value) => {
-                      const date = parseISO(action.date);
-                      date.setHours(Number(value));
-                      setAction({
-                        ...action,
-                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                      });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(24)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={parseISO(action.date).getMinutes().toString()}
-                    onValueChange={(value) => {
-                      const date = parseISO(action.date);
-                      date.setMinutes(Number(value));
-                      setAction({
-                        ...action,
-                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                      });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(60)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant={"ghost"}
-              onClick={() => {
-                if (
-                  confirm(
-                    "ESSA AÇÃO NÃO PODE SER DESFEITA! Deseja mesmo deletar essa ação?",
-                  )
-                ) {
-                  handleActions({
-                    ...action,
-                    intent: INTENTS.deleteAction,
-                  });
-
-                  navigate(-1);
-                }
-              }}
-            >
-              <Trash2Icon className="size-4" />
-            </Button>
-            <Button
-              onClick={() => {
-                handleActions({
-                  ...action,
-                  responsibles: action.responsibles,
-                  intent: INTENTS.updateAction,
-                });
-              }}
-              disabled={isWorking}
-            >
-              {isWorking ? (
-                <div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
-              ) : (
-                "Atualizar"
-              )}
-            </Button>
-          </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
