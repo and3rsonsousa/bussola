@@ -674,10 +674,10 @@ export const CalendarDay = ({
           className={`-top-1 right-0 mt-2 ${isCreating ? "relative" : "absolute"}`}
         >
           {isCreating ? (
-            <div className="action-item border-idea  p-2">
+            <div className="action-item border-idea p-2">
               <Form
                 method="post"
-                className="flex items-center gap-2"
+                className="flex w-full items-center gap-2"
                 action="/handle-actions"
                 onSubmit={(e) => {
                   e.preventDefault();
