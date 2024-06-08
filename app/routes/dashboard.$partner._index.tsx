@@ -19,6 +19,8 @@ import {
   endOfWeek,
   endOfYear,
   format,
+  isAfter,
+  isBefore,
   isSameDay,
   isSameMonth,
   isToday,
@@ -600,7 +602,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
+      } item-container relative flex flex-col ${isAfter(day.date, new Date()) ? "" : "opacity-25"} pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
