@@ -206,7 +206,7 @@ body {
   @apply text-stories-500;
 }
 .fg-todo {
-  @apply text-todo-500;
+  @apply text-todo-600;
 }
 .fg-dev {
   @apply text-dev-500;
@@ -246,7 +246,7 @@ body {
   @apply border-stories-500;
 }
 .border-todo {
-  @apply border-todo-500;
+  @apply border-todo-600;
 }
 .border-dev {
   @apply border-dev-500;
@@ -286,7 +286,7 @@ body {
   @apply bg-stories-500;
 }
 .bg-todo {
-  @apply bg-todo-500;
+  @apply bg-todo-600;
 }
 .bg-dev {
   @apply bg-dev-500;
