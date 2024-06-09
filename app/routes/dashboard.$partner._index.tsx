@@ -616,8 +616,8 @@ export const CalendarDay = ({
       }}
       onFocus={() => setIsHover(true)}
       onBlur={() => setIsHover(false)}
-      onMouseOver={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      // onMouseOver={() => setIsHover(true)}
+      // onMouseLeave={() => setIsHover(false)}
     >
       <div className="my-1 flex justify-between">
         <div
