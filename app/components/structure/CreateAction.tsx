@@ -262,7 +262,7 @@ export default function CreateAction({
               }
             >
               <SelectTrigger
-                className={`border-none bg-transparent focus:ring-offset-0`}
+                className={`border-none bg-transparent font-bold focus:ring-offset-0`}
               >
                 <div
                   className={`rounded-full border border-${state.slug} bg-${state.slug} px-2`}
