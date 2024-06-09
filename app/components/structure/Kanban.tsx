@@ -16,8 +16,6 @@ export default function Kanban({ actions }: { actions: Action[] }) {
       const state = document.querySelector(".dragover") as HTMLElement;
       const state_id = state?.getAttribute("data-state") as string;
 
-      console.log({ state_id, draggedAction });
-
       if (state_id !== draggedAction.state_id) {
         //
         submit(

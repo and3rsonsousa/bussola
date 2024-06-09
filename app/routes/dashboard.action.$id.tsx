@@ -63,7 +63,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .from("get_full_actions")
     .select("*")
     .eq("id", id)
-    .returns<ActionComplete>()
+    .returns<Action>()
     .single();
 
   return json({ headers, action });
@@ -79,8 +79,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function ActionPage() {
   const { action: baseAction } = useLoaderData<typeof loader>();
-  const [action, setAction] = useState(baseAction as Action);
-  const [actions, setActions] = useState<ActionComplete[] | null>(null);
+  const [action, setAction] = useState(baseAction);
+  const [actions, setActions] = useState<Action[] | null>(null);
 
   const submit = useSubmit();
   const matches = useMatches();
@@ -139,7 +139,7 @@ export default function ActionPage() {
         .from("get_full_actions")
         .select()
         .match({ partner_id: baseAction.partner_id })
-        .returns<ActionComplete>();
+        .returns<Action>();
       setActions(actions);
     }
 

@@ -196,6 +196,9 @@ body {
 .fg-post {
   @apply text-post-500;
 }
+.fg-carousel {
+  @apply text-carousel-500;
+}
 .fg-video {
   @apply text-video-600;
 }
@@ -233,6 +236,9 @@ body {
 .border-post {
   @apply border-post-500;
 }
+.border-carousel {
+  @apply border-carousel-500;
+}
 .border-video {
   @apply border-video-600;
 }
@@ -269,6 +275,9 @@ body {
 
 .bg-post {
   @apply bg-post-500;
+}
+.bg-carousel {
+  @apply bg-carousel-500;
 }
 .bg-video {
   @apply bg-video-600;

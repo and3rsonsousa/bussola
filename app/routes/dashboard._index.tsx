@@ -78,7 +78,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         "yyyy-MM-dd HH:mm:ss",
       ),
     )
-    .returns<ActionComplete[]>();
+    .returns<Action[]>();
 
   return json({ actions }, { headers });
 };
@@ -107,12 +107,12 @@ export default function DashboardIndex() {
     actions = [];
   }
 
-  const { states, categories } = matches[1].data as DashboardDataType;
+  const { states } = matches[1].data as DashboardDataType;
 
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();
 
-  const actionsMap = new Map<string, ActionComplete>(
+  const actionsMap = new Map<string, Action>(
     actions.map((action) => [action.id, action]),
   );
 
@@ -294,7 +294,11 @@ export default function DashboardIndex() {
               className="-translate-y-1 translate-x-8"
             />
           </div>
-          <ListOfActions actions={nextActions} columns={3} isFoldable />
+          <ListOfActions
+            actions={nextActions as Action[]}
+            columns={3}
+            isFoldable
+          />
         </div>
       </div>
     </div>

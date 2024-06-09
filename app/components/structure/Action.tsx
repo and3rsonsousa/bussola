@@ -520,10 +520,10 @@ export function ActionGrid({
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          {isHover ? <ShortcutActions action={action} /> : null}
-          <div></div>
+          {isHover ? <ShortcutActions action={action as Action} /> : null}
+          <div className="text-xs"></div>
           <div
-            className={`line-clamp-2 overflow-hidden py-4 text-center leading-none tracking-tighter transition`}
+            className={`line-clamp-2 text-center font-semibold leading-none tracking-tighter transition`}
             style={{ fontStretch: "85%" }}
           >
             {action.title}
@@ -536,7 +536,7 @@ export function ActionGrid({
             ></div>
 
             <div className="text-[10px] opacity-50">
-              {format(parseISO(action.date), "E, d 'de' MMM", {
+              {format(parseISO((action as Action).date), "E, d 'de' MMM", {
                 locale: ptBR,
               })}
             </div>
@@ -544,7 +544,10 @@ export function ActionGrid({
           <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-muted opacity-0 transition group-hover/action:opacity-100"></div>
         </div>
       </ContextMenuTrigger>
-      <ContextMenuItems action={action} handleActions={handleActions} />
+      <ContextMenuItems
+        action={action as Action}
+        handleActions={handleActions}
+      />
     </ContextMenu>
   );
 }
@@ -665,17 +668,7 @@ export function BlockOfActions({
   );
 }
 
-export function GridOfActions({
-  actions,
-  categories,
-  states,
-  priorities,
-}: {
-  actions?: Action[];
-  categories: Category[];
-  states: State[];
-  priorities: Priority[];
-}) {
+export function GridOfActions({ actions }: { actions?: Action[] }) {
   return (
     <div className="scrollbars scrollbars-thin">
       <div className="grid h-full grid-cols-3 place-content-start gap-1">
@@ -751,6 +744,7 @@ function ShortcutActions({ action }: { action: Action }) {
         [
           "KeyT",
           "KeyP",
+          "KeyL",
           "KeyV",
 
           "KeyS",
@@ -775,6 +769,10 @@ function ShortcutActions({ action }: { action: Action }) {
 
           case "KeyP":
             category_id = CATEGORIES.post;
+            break;
+
+          case "KeyL":
+            category_id = CATEGORIES.carousel;
             break;
 
           case "KeyV":

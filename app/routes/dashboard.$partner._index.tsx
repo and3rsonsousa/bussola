@@ -117,7 +117,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       "date",
       format(endOfDay(endOfWeek(endOfMonth(date))), "yyyy-MM-dd HH:mm:ss"),
     )
-    .returns<ActionComplete[]>();
+    .returns<Action[]>();
 
   return json({ actions, partner, person }, { headers });
 };
@@ -141,7 +141,7 @@ export default function Partner() {
   const [draggedAction, setDraggedAction] = useState<Action>();
   const [stateFilter, setStateFilter] = useState<State>();
   const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
-  const [showFeed, setFeed] = useState(false);
+  const [showFeed, setFeed] = useState(true);
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
 
@@ -526,12 +526,7 @@ export default function Partner() {
         {/* Instagram Grid */}
         {showFeed && (
           <div className="max-w-96">
-            <GridOfActions
-              categories={categories}
-              priorities={priorities}
-              states={states}
-              actions={instagramActions}
-            />
+            <GridOfActions actions={instagramActions} />
           </div>
         )}
       </div>
@@ -602,7 +597,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } item-container relative flex flex-col ${isAfter(day.date, new Date()) ? "" : "opacity-25"} pb-4 pt-2 transition md:px-1 md:pt-0`}
+      } item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
@@ -675,51 +670,29 @@ export const CalendarDay = ({
         >
           {isCreating ? (
             <div className="action-item border-idea p-2">
-              <Form
-                method="post"
-                className="flex w-full items-center gap-2"
-                action="/handle-actions"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-
-                  const formData = new FormData(e.currentTarget);
-                  const title = formData.get("title") as string;
-
-                  if (title.length > 2) {
+              <div>{JSON.stringify(day.date)}</div>
+              <input
+                type="text"
+                id="title"
+                className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted"
+                placeholder="+"
+                name="title"
+                autoFocus
+                tabIndex={0}
+                onFocus={() => {
+                  setIsCreating(true);
+                }}
+                onBlur={(e) => {
+                  setIsCreating(false);
+                  if (e.target.value.length > 2)
                     handleActions({
                       ...newAction,
-                      title,
-
+                      title: e.currentTarget.value,
                       id: window.crypto.randomUUID(),
                       intent: INTENTS.createAction,
                     });
-                  }
                 }}
-              >
-                <input
-                  type="text"
-                  id="title"
-                  className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted"
-                  placeholder="+"
-                  name="title"
-                  autoFocus
-                  tabIndex={0}
-                  onFocus={() => {
-                    setIsCreating(true);
-                  }}
-                  onBlur={(e) => {
-                    setIsCreating(false);
-                    if (e.target.value.length > 2)
-                      handleActions({
-                        ...newAction,
-                        title: e.currentTarget.value,
-                        id: window.crypto.randomUUID(),
-                        intent: INTENTS.createAction,
-                      });
-                  }}
-                />
-              </Form>
+              />
             </div>
           ) : (
             <button
