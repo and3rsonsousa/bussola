@@ -47,6 +47,7 @@ import React, { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import invariant from "tiny-invariant";
 import { ActionLine, GridOfActions } from "~/components/structure/Action";
+import Badge from "~/components/structure/Badge";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
@@ -67,6 +68,7 @@ import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
   Avatar,
   Icons,
+  getDelayedActions,
   getInstagramActions,
   sortActions,
   useIDsToRemove,
@@ -100,6 +102,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .select("*")
     .eq("slug", params["partner"] as string)
     .single();
+
+  invariant(partner);
 
   const { data: actions } = await supabase
     .from("get_full_actions")
@@ -141,11 +145,9 @@ export default function Partner() {
   const [draggedAction, setDraggedAction] = useState<Action>();
   const [stateFilter, setStateFilter] = useState<State>();
   const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
-  const [showFeed, setFeed] = useState(true);
+  const [showFeed, setFeed] = useState(false);
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
-
-  invariant(partner);
 
   const { categories, priorities, states, person, people } = matches[1]
     .data as DashboardDataType;
@@ -175,6 +177,7 @@ export default function Partner() {
 
   actions = sortActions(Array.from(actionsMap, ([, v]) => v));
   const instagramActions = getInstagramActions({ actions });
+  const lateActions = getDelayedActions({ actions });
 
   const calendar = days.map((day) => {
     return {
@@ -224,7 +227,7 @@ export default function Partner() {
       <div className="flex items-center justify-between">
         <Link
           to={`/dashboard/${partner.slug}`}
-          className="flex items-center gap-4 "
+          className="relative flex items-center gap-4"
         >
           <Avatar
             item={{
@@ -247,6 +250,12 @@ export default function Partner() {
               }))}
             />
           </div>
+          <Badge
+            title={`${lateActions.length} ${lateActions.length === 1 ? "ação" : "ações"} em atraso.`}
+            value={lateActions.length}
+            className="-right-8"
+            isDynamic
+          />
         </Link>
         <div>
           <ReportReview partner={partner} />
@@ -597,7 +606,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
+      } ${isBefore(format(day.date, "yyyy-MM-dd"), format(new Date(), "yyyy-MM-dd")) ? "opacity-25 hover:opacity-100" : ""} item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();

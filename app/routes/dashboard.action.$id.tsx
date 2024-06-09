@@ -16,15 +16,9 @@ import {
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
-import {
-  CalendarDaysIcon,
-  CalendarIcon,
-  Grid3X3Icon,
-  ListTodoIcon,
-  Trash2Icon,
-  TrashIcon,
-} from "lucide-react";
+import { CalendarIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
+import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
 import Tiptap from "~/components/structure/Tiptap";
 
@@ -63,8 +57,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .from("get_full_actions")
     .select("*")
     .eq("id", id)
-    .returns<Action>()
+    .returns<Action[]>()
     .single();
+
+  invariant(action);
 
   return json({ headers, action });
 };
@@ -80,7 +76,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function ActionPage() {
   const { action: baseAction } = useLoaderData<typeof loader>();
   const [action, setAction] = useState(baseAction);
-  const [actions, setActions] = useState<Action[] | null>(null);
+  const [actions, setActions] = useState<Action[] | null>();
 
   const submit = useSubmit();
   const matches = useMatches();
@@ -139,7 +135,7 @@ export default function ActionPage() {
         .from("get_full_actions")
         .select()
         .match({ partner_id: baseAction.partner_id })
-        .returns<Action>();
+        .returns<Action[]>();
       setActions(actions);
     }
 

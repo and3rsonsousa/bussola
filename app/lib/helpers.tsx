@@ -134,7 +134,7 @@ export function getDelayedActions({
   actions,
   priority,
 }: {
-  actions: Action[];
+  actions?: Action[] | null;
   priority?: PRIORITIES;
 }) {
   priority = priority
