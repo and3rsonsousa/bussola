@@ -130,7 +130,7 @@ export default function CreateAction({
 
         {/* Título */}
         <div
-          className="mb-1 w-full bg-transparent text-2xl font-bold outline-none placeholder:text-muted"
+          className="mb-1 w-full bg-transparent text-2xl font-bold tracking-tighter outline-none placeholder:text-muted"
           onBlur={(e) =>
             setAction({
               ...action,
