@@ -43,7 +43,7 @@ import {
   UserIcon,
   UsersIcon,
 } from "lucide-react";
-import React, { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import invariant from "tiny-invariant";
 import { ActionLine, GridOfActions } from "~/components/structure/Action";
