@@ -295,6 +295,7 @@ export default function Partner() {
                             asChild
                           >
                             <Link
+                              prefetch="intent"
                               to={`/dashboard/${partner.slug}/?date=${format(
                                 new Date().setMonth(month.getMonth()),
                                 "yyyy-MM-'01'",
@@ -311,6 +312,7 @@ export default function Partner() {
                   </div>
                   <Button size="icon" variant="ghost" asChild>
                     <Link
+                      prefetch="intent"
                       to={`/dashboard/${partner?.slug}?date=${format(
                         subMonths(currentDate, 1),
                         "yyyy-MM-dd",
@@ -321,6 +323,7 @@ export default function Partner() {
                   </Button>
                   <Button size="icon" variant="ghost" asChild>
                     <Link
+                      prefetch="intent"
                       to={`/dashboard/${partner?.slug}?date=${format(
                         addMonths(currentDate, 1),
                         "yyyy-MM-dd",
@@ -602,11 +605,18 @@ export const CalendarDay = ({
     state_id: STATES.ideia,
   };
 
+  //   isBefore(
+  //     format(day.date, "yyyy-MM-dd"),
+  //     format(new Date(), "yyyy-MM-dd"),
+  //   )
+  // ? "opacity-25 hover:opacity-100"
+  // : ""
+
   return (
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } ${isBefore(format(day.date, "yyyy-MM-dd"), format(new Date(), "yyyy-MM-dd")) ? "opacity-25 hover:opacity-100" : ""} item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
+      }  item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
