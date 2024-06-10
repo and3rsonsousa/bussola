@@ -1,6 +1,6 @@
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useMatches, useSubmit } from "@remix-run/react";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -44,7 +44,7 @@ export default function CreateAction({
 
   const newDate = date || new Date();
 
-  if (new Date().getHours() > 11) {
+  if (isToday(newDate) && new Date().getHours() > 11) {
     newDate.setHours(new Date().getHours() + 1, new Date().getMinutes());
   } else {
     newDate.setHours(11, 0);
