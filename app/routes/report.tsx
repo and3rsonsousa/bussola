@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { MetaFunction, useLoaderData } from "@remix-run/react";
 import {
   json,
   redirect,
@@ -44,6 +44,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return json({ actions, partner, categories, range }, { headers });
 };
 
+export const meta: MetaFunction = ({ data }) => {
+  const partner = (data as { partner: Partner }).partner;
+
+  return [{ title: "Relatório de " + partner.title }];
+};
+
 export default function ReportPage() {
   const { actions, partner, categories, range } =
     useLoaderData<typeof loader>();
@@ -57,10 +63,14 @@ export default function ReportPage() {
         {partner?.title}
       </h1>
 
-      <h5 className="text-lg font-medium" style={{ fontStretch: "75%" }}>
-        Aprovação de Conteúdo para o período de{" "}
-        {`${format(range[0], "d".concat(!isSameMonth(range[0], range[1]) ? " 'de' MMMM".concat(!isSameYear(range[0], range[1]) ? " 'de' yyyy" : "") : ""), { locale: ptBR })} a
+      <h5 className="text-lg font-medium leading-none">
+        <div style={{ fontStretch: "75%" }}>
+          Aprovação de Conteúdo para o período de
+        </div>
+        <div className="text-2xl font-bold tracking-tighter text-gray-950">
+          {`${format(range[0], "d".concat(!isSameMonth(range[0], range[1]) ? " 'de' MMMM".concat(!isSameYear(range[0], range[1]) ? " 'de' yyyy" : "") : ""), { locale: ptBR })} a
         ${format(range[1], "d 'de' MMMM 'de' yyyy", { locale: ptBR })}`}
+        </div>
       </h5>
       <div className="mx-auto mt-8 flex max-w-lg flex-col gap-2 text-left">
         {actions?.map((action) => (
