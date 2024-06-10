@@ -679,46 +679,6 @@ export const CalendarDay = ({
             ) : null,
           )}
       </div>
-      {isHover || isCreating ? (
-        <div
-          className={`-top-1 right-0 mt-2 ${isCreating ? "relative" : "absolute"}`}
-        >
-          {isCreating ? (
-            <div className="action-item border-idea p-2">
-              <div>{JSON.stringify(day.date)}</div>
-              <input
-                type="text"
-                id="title"
-                className="block w-full bg-transparent p-0 text-xs font-medium outline-none placeholder:text-muted"
-                placeholder="+"
-                name="title"
-                autoFocus
-                tabIndex={0}
-                onFocus={() => {
-                  setIsCreating(true);
-                }}
-                onBlur={(e) => {
-                  setIsCreating(false);
-                  if (e.target.value.length > 2)
-                    handleActions({
-                      ...newAction,
-                      title: e.currentTarget.value,
-                      id: window.crypto.randomUUID(),
-                      intent: INTENTS.createAction,
-                    });
-                }}
-              />
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsCreating(true)}
-              className="grid size-6 place-content-center rounded-full bg-secondary hover:bg-accent"
-            >
-              <PlusIcon className="size-3" />
-            </button>
-          )}
-        </div>
-      ) : null}
     </div>
   );
 };
