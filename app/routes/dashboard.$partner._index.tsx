@@ -517,19 +517,15 @@ export default function Partner() {
             <div className="scrollbars scrollbars-thin main-container h-full overflow-y-hidden">
               <div id="calendar" className={`grid-cols-7 pb-4 md:grid`}>
                 {calendar.map((day, i) => (
-                  <>
-                    <CalendarDay
-                      currentDate={currentDate}
-                      day={day}
-                      setDraggedAction={setDraggedAction}
-                      person={person}
-                      short={short}
-                      allUsers={allUsers}
-                    />
-                    {(i + 1) % 7 === 0 && (
-                      <div className="col-span-7 h-[1px] bg-border"></div>
-                    )}
-                  </>
+                  <CalendarDay
+                    currentDate={currentDate}
+                    day={day}
+                    setDraggedAction={setDraggedAction}
+                    person={person}
+                    short={short}
+                    allUsers={allUsers}
+                    key={i}
+                  />
                 ))}
               </div>
             </div>

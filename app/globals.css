@@ -452,3 +452,7 @@ ol {
 .dragover {
   @apply bg-secondary/50;
 }
+
+#calendar > * {
+  @apply border-b;
+}
