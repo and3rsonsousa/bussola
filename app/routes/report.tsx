@@ -28,9 +28,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       .from("actions")
       .select("*")
       .match({ partner_id: id })
-      .in("category_id", [CATEGORIES.post, CATEGORIES.video])
+      .in("category_id", [
+        CATEGORIES.post,
+        CATEGORIES.video,
+        CATEGORIES.carousel,
+      ])
       .gte("date", range[0])
-      .lte("date", range[1]),
+      .lte("date", range[1])
+      .order("date", { ascending: true }),
     supabase.from("partners").select().match({ id }).single(),
   ]);
 

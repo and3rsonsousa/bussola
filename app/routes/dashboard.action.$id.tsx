@@ -19,7 +19,6 @@ import { ptBR } from "date-fns/locale";
 import { CalendarIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { ListOfActions } from "~/components/structure/Action";
 import Tiptap from "~/components/structure/Tiptap";
 
 import { Button } from "~/components/ui/button";
@@ -43,7 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { INTENTS, STATES } from "~/lib/constants";
+import { INTENTS } from "~/lib/constants";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -230,7 +229,7 @@ export default function ActionPage() {
             {/* Partners */}
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex h-auto w-auto items-center gap-4 rounded-full border-none outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
+              <DropdownMenuTrigger className="rounded-full border-none outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
                 <Avatar
                   item={{
                     short: partner.short,
@@ -248,12 +247,6 @@ export default function ActionPage() {
                     textValue={partner.title}
                     onSelect={async () => {
                       if (partner.id !== action.partner_id) {
-                        // await handleActions({
-                        //   ...action,
-                        //   intent: INTENTS.updateAction,
-                        //   partner_id: Number(partner.id),
-                        // });
-
                         setAction({
                           ...action,
                           partner_id: partner.id,
@@ -277,7 +270,7 @@ export default function ActionPage() {
             {/* Categoria */}
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center rounded-full border-none p-2 outline-none ring-primary focus:ring-2">
+              <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
                 <Icons id={category.slug} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-content">
@@ -288,12 +281,6 @@ export default function ActionPage() {
                     textValue={category.title}
                     onSelect={async () => {
                       if (category.id !== action.category_id) {
-                        // await handleActions({
-                        //   ...action,
-                        //   intent: INTENTS.updateAction,
-                        //   category_id: Number(category.id),
-                        // });
-
                         setAction({
                           ...action,
                           category_id: category.id,
@@ -312,7 +299,7 @@ export default function ActionPage() {
 
             <DropdownMenu>
               <DropdownMenuTrigger
-                className={`flex h-auto w-auto items-center rounded  border-none px-3 py-1 font-semibold outline-none ring-primary ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
+                className={`flex items-center rounded  border-none px-3 py-1 font-semibold outline-none ring-primary ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
               >
                 {state.title}
               </DropdownMenuTrigger>
@@ -349,7 +336,7 @@ export default function ActionPage() {
             {/* Prioridade */}
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-full p-2 ring-primary focus:ring-2">
+              <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
                 <Icons id={priority.slug} type="priority" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-content">
@@ -385,68 +372,67 @@ export default function ActionPage() {
             </DropdownMenu>
 
             {/* Responsáveis */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                  <div className="flex rounded-full p-2 pl-3">
-                    {responsibles.map((person) => (
-                      <Avatar
-                        item={{
-                          image: person.image,
-                          short: person.initials!,
-                        }}
-                        key={person.id}
-                        group
-                        size="md"
-                      />
-                    ))}
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-content">
-                  {people.map((person) => (
-                    <DropdownMenuCheckboxItem
-                      key={person.id}
-                      className="bg-select-item flex items-center gap-2"
-                      textValue={person.name}
-                      checked={action.responsibles.includes(person.user_id)}
-                      onCheckedChange={async (checked) => {
-                        if (!checked && action.responsibles.length < 2) {
-                          alert(
-                            "É necessário ter pelo menos um responsável pala ação",
-                          );
-                          return false;
-                        }
-                        const tempResponsibles = checked
-                          ? [...action.responsibles, person.user_id]
-                          : action.responsibles.filter(
-                              (id) => id !== person.user_id,
-                            );
 
-                        // await handleActions({
-                        //   ...action,
-                        //   intent: INTENTS.updateAction,
-                        //   responsibles: tempResponsibles,
-                        // });
-
-                        setAction({
-                          ...action,
-                          responsibles: tempResponsibles,
-                        });
+            <DropdownMenu>
+              <DropdownMenuTrigger className="rounded-full border-none  outline-none ring-primary ring-offset-4 ring-offset-background focus:ring-2">
+                <div className="flex -space-x-2">
+                  {responsibles.map((person) => (
+                    <Avatar
+                      item={{
+                        image: person.image,
+                        short: person.initials!,
                       }}
-                    >
-                      <Avatar
-                        item={{
-                          image: person.image,
-                          short: person.initials!,
-                        }}
-                      />
-                      <span>{`${person.name} ${person.surname}`}</span>
-                    </DropdownMenuCheckboxItem>
+                      key={person.id}
+                      size="md"
+                    />
                   ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {people.map((person) => (
+                  <DropdownMenuCheckboxItem
+                    key={person.id}
+                    className="bg-select-item flex items-center gap-2"
+                    textValue={person.name}
+                    checked={action.responsibles.includes(person.user_id)}
+                    onCheckedChange={async (checked) => {
+                      if (!checked && action.responsibles.length < 2) {
+                        alert(
+                          "É necessário ter pelo menos um responsável pala ação",
+                        );
+                        return false;
+                      }
+                      const tempResponsibles = checked
+                        ? [...action.responsibles, person.user_id]
+                        : action.responsibles.filter(
+                            (id) => id !== person.user_id,
+                          );
+
+                      // await handleActions({
+                      //   ...action,
+                      //   intent: INTENTS.updateAction,
+                      //   responsibles: tempResponsibles,
+                      // });
+
+                      setAction({
+                        ...action,
+                        responsibles: tempResponsibles,
+                      });
+                    }}
+                  >
+                    <Avatar
+                      item={{
+                        image: person.image,
+                        short: person.initials!,
+                      }}
+                    />
+                    <span>{`${person.name} ${person.surname}`}</span>
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+
           <div className="flex items-center justify-between pb-4">
             <div className=" ">
               <Popover>

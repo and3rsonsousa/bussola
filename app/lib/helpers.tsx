@@ -83,7 +83,7 @@ export function Avatar({
               ? "h-8 w-8"
               : "h-12 w-12",
         group ? "-ml-1" : "",
-        "border",
+        "block border",
         className,
       ])}
       style={style}
@@ -300,6 +300,7 @@ export function convertToAction(data: { [key: string]: unknown }): Action {
     title: String(data["title"]),
     updated_at: String(data["updated_at"]),
     user_id: String(data["user_id"]),
+    date_to_post: String(data["date_to_post"]),
   };
   return action;
 }
@@ -343,6 +344,7 @@ export function usePendingActions() {
         created_at: String(fetcher.formData?.get("created_at")),
         updated_at: String(fetcher.formData?.get("updated_at")),
         priority_id: String(fetcher.formData?.get("priority_id")),
+        date_to_post: String(fetcher.formData?.get("date_to_post")),
       };
 
       return { ...action };
