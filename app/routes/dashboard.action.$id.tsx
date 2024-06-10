@@ -228,172 +228,162 @@ export default function ActionPage() {
           </div>
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
             {/* Partners */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                  <Avatar
-                    item={{
-                      short: partner.short,
-                      bg: partner.bg,
-                      fg: partner.fg,
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex h-auto w-auto items-center gap-4 rounded-full border-none outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
+                <Avatar
+                  item={{
+                    short: partner.short,
+                    bg: partner.bg,
+                    fg: partner.fg,
+                  }}
+                  size="lg"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {partners.map((partner) => (
+                  <DropdownMenuItem
+                    key={partner.id}
+                    className="bg-item flex items-center gap-2"
+                    textValue={partner.title}
+                    onSelect={async () => {
+                      if (partner.id !== action.partner_id) {
+                        // await handleActions({
+                        //   ...action,
+                        //   intent: INTENTS.updateAction,
+                        //   partner_id: Number(partner.id),
+                        // });
+
+                        setAction({
+                          ...action,
+                          partner_id: partner.id,
+                        });
+                      }
                     }}
-                    size="lg"
-                  />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-content">
-                  {partners.map((partner) => (
-                    <DropdownMenuItem
-                      key={partner.id}
-                      className="bg-item flex items-center gap-2"
-                      textValue={partner.title}
-                      onSelect={async () => {
-                        if (partner.id !== action.partner_id) {
-                          await handleActions({
-                            ...action,
-                            intent: INTENTS.updateAction,
-                            partner_id: Number(partner.id),
-                          });
-
-                          setAction({
-                            ...action,
-                            partner_id: partner.id,
-                          });
-                        }
+                  >
+                    <Avatar
+                      item={{
+                        short: partner.short,
+                        bg: partner.bg,
+                        fg: partner.fg,
                       }}
-                    >
-                      <Avatar
-                        item={{
-                          short: partner.short,
-                          bg: partner.bg,
-                          fg: partner.fg,
-                        }}
-                      />
-                      <span>{partner.title}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                    />
+                    <span>{partner.title}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* Categoria */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex h-auto  w-auto items-center gap-2 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                  <div>
-                    <Icons id={category.slug} />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-content">
-                  {categories.map((category) => (
-                    <DropdownMenuItem
-                      key={category.id}
-                      className="bg-item flex items-center gap-2"
-                      textValue={category.title}
-                      onSelect={async () => {
-                        if (category.id !== action.category_id) {
-                          await handleActions({
-                            ...action,
-                            intent: INTENTS.updateAction,
-                            category_id: Number(category.id),
-                          });
 
-                          setAction({
-                            ...action,
-                            category_id: category.id,
-                          });
-                        }
-                      }}
-                    >
-                      <Icons
-                        id={category.slug}
-                        className={`size-4 opacity-50`}
-                      />
-                      <span>{category.title}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center rounded-full border-none p-2 outline-none ring-primary focus:ring-2">
+                <Icons id={category.slug} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {categories.map((category) => (
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="bg-item flex items-center gap-2"
+                    textValue={category.title}
+                    onSelect={async () => {
+                      if (category.id !== action.category_id) {
+                        // await handleActions({
+                        //   ...action,
+                        //   intent: INTENTS.updateAction,
+                        //   category_id: Number(category.id),
+                        // });
+
+                        setAction({
+                          ...action,
+                          category_id: category.id,
+                        });
+                      }
+                    }}
+                  >
+                    <Icons id={category.slug} className={`size-4 opacity-50`} />
+                    <span>{category.title}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* States */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                  <div className="flex items-center gap-2">
+
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={`flex h-auto w-auto items-center rounded  border-none px-3 py-1 font-semibold outline-none ring-primary ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
+              >
+                {state.title}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {states.map((state) => (
+                  <DropdownMenuItem
+                    key={state.id}
+                    className="bg-item flex items-center gap-2"
+                    textValue={state.title}
+                    onSelect={async () => {
+                      if (state.id !== action.state_id) {
+                        // await handleActions({
+                        //   ...action,
+                        //   intent: INTENTS.updateAction,
+                        //   state_id: Number(state.id),
+                        // });
+
+                        setAction({
+                          ...action,
+                          state_id: state.id,
+                        });
+                      }
+                    }}
+                  >
                     <div
-                      className={`rounded-full font-bold border-${state.slug} size-4 border-4`}
+                      className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
                     ></div>
-                    <div className="font-semibold">{state.title}</div>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-content">
-                  {states.map((state) => (
-                    <DropdownMenuItem
-                      key={state.id}
-                      className="bg-item flex items-center gap-2"
-                      textValue={state.title}
-                      onSelect={async () => {
-                        if (state.id !== action.state_id) {
-                          await handleActions({
-                            ...action,
-                            intent: INTENTS.updateAction,
-                            state_id: Number(state.id),
-                          });
+                    <span>{state.title}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-                          setAction({
-                            ...action,
-                            state_id: state.id,
-                          });
-                        }
-                      }}
-                    >
-                      <div
-                        className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
-                      ></div>
-                      <span>{state.title}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
             {/* Prioridade */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="-ml-2 flex h-auto w-auto items-center gap-4 rounded-xl border-none p-2 outline-none ring-primary focus:ring-2 focus:ring-offset-0">
-                  <div className="grid h-12 w-12 place-content-center rounded-full">
-                    <Icons id={priority.slug} type="priority" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-content">
-                  {priorities.map((priority) => (
-                    <DropdownMenuItem
-                      key={priority.id}
-                      className="bg-item flex items-center gap-2"
-                      textValue={priority.title}
-                      onSelect={async () => {
-                        if (priority.id !== action.priority_id) {
-                          await handleActions({
-                            ...action,
-                            intent: INTENTS.updateAction,
-                            priority_id: Number(priority.id),
-                          });
 
-                          setAction({
-                            ...action,
-                            priority_id: priority.id,
-                          });
-                        }
-                      }}
-                    >
-                      <Icons
-                        id={priority.slug}
-                        type="priority"
-                        className="h-4 w-4"
-                      />
-                      <span>{priority.title}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="rounded-full p-2 ring-primary focus:ring-2">
+                <Icons id={priority.slug} type="priority" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {priorities.map((priority) => (
+                  <DropdownMenuItem
+                    key={priority.id}
+                    className="bg-item flex items-center gap-2"
+                    textValue={priority.title}
+                    onSelect={async () => {
+                      if (priority.id !== action.priority_id) {
+                        // await handleActions({
+                        //   ...action,
+                        //   intent: INTENTS.updateAction,
+                        //   priority_id: Number(priority.id),
+                        // });
+
+                        setAction({
+                          ...action,
+                          priority_id: priority.id,
+                        });
+                      }
+                    }}
+                  >
+                    <Icons
+                      id={priority.slug}
+                      type="priority"
+                      className="h-4 w-4"
+                    />
+                    <span>{priority.title}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* Responsáveis */}
             <div>
               <DropdownMenu>
@@ -432,11 +422,11 @@ export default function ActionPage() {
                               (id) => id !== person.user_id,
                             );
 
-                        await handleActions({
-                          ...action,
-                          intent: INTENTS.updateAction,
-                          responsibles: tempResponsibles,
-                        });
+                        // await handleActions({
+                        //   ...action,
+                        //   intent: INTENTS.updateAction,
+                        //   responsibles: tempResponsibles,
+                        // });
 
                         setAction({
                           ...action,
@@ -597,7 +587,7 @@ export default function ActionPage() {
           </div>
         </div>
       </div>
-      <div className="flex w-80 flex-col overflow-hidden opacity-25 duration-500 focus-within:opacity-100 hover:opacity-100">
+      {/* <div className="flex w-80 flex-col overflow-hidden opacity-25 duration-500 focus-within:opacity-100 hover:opacity-100">
         <h3 className="py-4 text-xl font-bold text-secondary-foreground">
           Próximas ações
         </h3>
@@ -620,7 +610,7 @@ export default function ActionPage() {
         ) : (
           ""
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
