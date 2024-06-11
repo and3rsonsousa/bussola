@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SetStateAction, useEffect, useState } from "react";
+import Loader from "./Loader";
 
 export default function Header() {
   const matches = useMatches();
@@ -71,7 +72,7 @@ export default function Header() {
 
         {(navigation.state !== "idle" ||
           fetchers.filter((f) => f.formData).length > 0) && (
-          <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-b-primary/50"></div>
+          <Loader size="md" />
         )}
       </div>
       <div className="flex items-center justify-end gap-2 text-sm font-medium">

@@ -13,6 +13,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import Loader from "./Loader";
 
 export default function Search() {
   const [open, setOpen] = useState(false);
@@ -147,7 +148,7 @@ export default function Search() {
         <CommandEmpty>No results Founds</CommandEmpty>
         {loading && (
           <CommandLoading>
-            <div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
+            <Loader size="md" />
           </CommandLoading>
         )}
         {sections.map((section, i) =>

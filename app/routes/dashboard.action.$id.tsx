@@ -19,6 +19,7 @@ import { ptBR } from "date-fns/locale";
 import { CalendarIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+import Loader from "~/components/structure/Loader";
 import Tiptap from "~/components/structure/Tiptap";
 
 import { Button } from "~/components/ui/button";
@@ -559,11 +560,7 @@ export default function ActionPage() {
               }}
               disabled={isWorking}
             >
-              {isWorking ? (
-                <div className="h-6 w-6 animate-spin rounded-full border-4 border-white border-b-transparent"></div>
-              ) : (
-                "Atualizar"
-              )}
+              {isWorking ? <Loader size="sm" /> : "Atualizar"}
             </Button>
           </div>
         </div>

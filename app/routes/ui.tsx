@@ -5,6 +5,7 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
 import { Divide } from "lucide-react";
+import Loader from "~/components/structure/Loader";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -83,7 +84,7 @@ export default function UI() {
           { className: "bg-do", text: "adipisicing elit" },
           {
             className: "bg-doing",
-            text: "Odio ratione placeat voluptas itaque et illo saepe",
+            text: "Odio ratione placeat voluptas itaque.",
           },
           {
             className: "bg-review",
@@ -96,12 +97,26 @@ export default function UI() {
           },
         ].map((item, i) => (
           <div
-            className={`${item.className} flex items-center rounded-sm p-4 text-sm font-semibold leading-none tracking-tight text-white`}
+            className={`${item.className} flex items-center rounded-sm border border-white/20 p-4 text-sm font-semibold leading-none tracking-tight`}
             key={i}
           >
             {item.text}
           </div>
         ))}
+      </div>
+      <div>
+        <h1 className="text-3xl font-bold">Loaders</h1>
+        <div className="flex justify-between">
+          <div>
+            <Loader size="sm" />
+          </div>
+          <div>
+            <Loader size="md" />
+          </div>
+          <div>
+            <Loader size="lg" />
+          </div>
+        </div>
       </div>
       <div>
         <h1 className="text-3xl font-bold">Cores</h1>
