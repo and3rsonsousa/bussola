@@ -56,9 +56,7 @@ export default function Header() {
           unstable_viewTransition
           className="rounded-md p-2 outline-none ring-ring ring-offset-background focus:ring-2"
         >
-          <span className="text-2xl font-black tracking-tighter text-secondary-foreground">
-            BÚSSOLA
-          </span>
+          <span className="text-2xl font-black tracking-tighter">BÚSSOLA</span>
           {/* <img src="/logo.png" className="h-4 w-auto" alt="Bússola" /> */}
         </Link>
         <Button
@@ -197,7 +195,7 @@ export default function Header() {
         )}
       </div>
 
-      <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r  from-transparent via-muted"></div>
+      <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-muted"></div>
     </header>
   );
 }

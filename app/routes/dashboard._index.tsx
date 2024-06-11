@@ -199,7 +199,7 @@ export default function DashboardIndex() {
           <div className="mb-8">
             <div className="flex justify-between py-8">
               <div className="relative flex">
-                <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
+                <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
                   Hoje
                 </h2>
                 <Badge
@@ -260,7 +260,7 @@ export default function DashboardIndex() {
         {tomorrowActions?.length ? (
           <div className="mb-8">
             <div className="relative inline-flex pb-4">
-              <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
+              <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
                 Amanhã
               </h2>
               <Badge
@@ -286,7 +286,7 @@ export default function DashboardIndex() {
 
         <div className="mb-8">
           <div className="relative inline-flex pb-4">
-            <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
+            <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
               Próximas Ações
             </h2>
             <Badge
@@ -315,7 +315,7 @@ export function WeekView({
   return (
     <div className="pt-8">
       <div className="pb-4">
-        <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
+        <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
           Semana
         </h2>
       </div>
@@ -423,7 +423,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
     <div className="mb-4">
       <div className="flex justify-between py-8">
         <div className="relative flex">
-          <h2 className="text-3xl font-extrabold uppercase tracking-tighter text-secondary-foreground">
+          <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
             Atrasados
           </h2>
           <Badge
@@ -538,7 +538,7 @@ function Partners({ actions }: { actions: Action[] }) {
             Nenhum <span className="font-extrabold">PARCEIRO</span> está
             designado para você.
           </div>
-          <div className="text-lg   tracking-tight">
+          <div className="text-lg tracking-tight">
             Fale com o seu Head para viabilizar o seu acesso
             <br />
             aos parceiros da empresa que você deve ter acesso.
@@ -565,9 +565,7 @@ function CategoriesView({ actions }: { actions: Action[] }) {
               />
             }
 
-            <h4 className="font-bold text-secondary-foreground">
-              {category.title}
-            </h4>
+            <h4 className="font-bold">{category.title}</h4>
           </div>
 
           <ListOfActions

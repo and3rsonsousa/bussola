@@ -34,20 +34,20 @@
   }
 
   .dark {
-    --background: 220 70% 5%;
-    --foreground: 210 20% 80%;
-    --card: 220 70% 5%;
+    --background: 220 30% 2%;
+    --foreground: 210 50% 95%;
+    --card: 220 30% 10%;
     --card-foreground: 210 20% 98%;
-    --popover: 220 70% 5%;
+    --popover: 220 30% 10%;
     --popover-foreground: 210 20% 98%;
-    --primary: 260 100% 60%;
-    --primary-foreground: 250 90% 97%;
-    --secondary: 215 20% 15%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 15% 25%;
+    --primary: 250 30% 95%;
+    --primary-foreground: 250 90% 7%;
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 220 20% 80%;
+    --muted: 220 15% 30%;
     --muted-foreground: 220 15% 60%;
-    --accent: 245 15% 22%;
-    --accent-foreground: 235 15% 98%;
+    --accent: 220 15% 20%;
+    --accent-foreground: 220 15% 98%;
     --destructive: 350 75% 45%;
     --destructive-foreground: 210 20% 98%;
     --border: 215 15 90%;
@@ -145,7 +145,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-muted hover:text-secondary-foreground focus:ring-2;
+  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-accent focus:ring-2;
 }
 
 .dark .action-item.action-delayed {
@@ -410,7 +410,7 @@ body {
 }
 
 .tiptap {
-  @apply flex-1 shrink-0 text-lg tracking-tight  outline-none;
+  @apply flex-1 shrink-0 text-lg tracking-tight outline-none;
 }
 
 .tiptap > * {
@@ -418,19 +418,19 @@ body {
 }
 
 .tiptap h1 {
-  @apply text-4xl font-bold tracking-tight text-secondary-foreground;
+  @apply text-4xl font-bold tracking-tight;
 }
 .tiptap h2 {
-  @apply text-2xl font-bold tracking-tight text-secondary-foreground;
+  @apply text-2xl font-bold tracking-tight;
 }
 .tiptap h3 {
-  @apply text-xl font-bold uppercase tracking-wide text-secondary-foreground;
+  @apply text-xl font-bold uppercase tracking-wide;
 }
 .tiptap h4 {
-  @apply text-xl font-bold tracking-tight text-secondary-foreground;
+  @apply text-xl font-bold tracking-tight;
 }
 .tiptap h5 {
-  @apply text-base font-bold uppercase tracking-wider text-secondary-foreground;
+  @apply text-base font-bold uppercase tracking-wider;
 }
 
 .tiptap ul,

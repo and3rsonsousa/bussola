@@ -237,7 +237,7 @@ export default function Partner() {
             }}
             size="lg"
           />
-          <div className="text-3xl font-extrabold tracking-tighter text-secondary-foreground">
+          <div className="text-3xl font-extrabold tracking-tighter">
             <div>{partner?.title}</div>
             <Progress
               total={actions?.length || 1}
@@ -275,7 +275,7 @@ export default function Partner() {
           <div className="flex h-full flex-col overflow-hidden">
             <div id="daysheader" className="flex w-full flex-col border-b">
               <div className="flex items-center justify-between py-2">
-                <div className="flex items-center gap-1 text-xl font-bold ">
+                <div className="flex items-center gap-1 text-xl font-bold">
                   <div className="mr-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="capitalize outline-none">
@@ -487,7 +487,7 @@ export default function Partner() {
                 </div>
               </div>
               <div
-                className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider  md:grid`}
+                className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider md:grid`}
               >
                 {eachDayOfInterval({
                   start: startOfWeek(new Date()),
@@ -498,8 +498,8 @@ export default function Partner() {
                       key={j}
                       className={
                         day.getDay() === new Date().getDay()
-                          ? "text-secondary-foreground"
-                          : ""
+                          ? ""
+                          : "text-muted-foreground"
                       }
                     >
                       {format(day, "EEE", {
@@ -612,7 +612,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      }  item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
+      } item-container relative flex flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();

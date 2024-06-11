@@ -4,6 +4,7 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
+import { Divide } from "lucide-react";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -59,6 +60,20 @@ export default function UI() {
       <h1 className="text-5xl font-bold" style={{ fontStretch: "125%" }}>
         UI
       </h1>
+      <div className="h-2 overflow-hidden rounded-sm">
+        <div className="flex w-[110%] -translate-y-8 blur-xl">
+          {[
+            "bg-idea",
+            "bg-do",
+            "bg-doing",
+            "bg-review",
+            "bg-done",
+            "bg-finished",
+          ].map((bg) => (
+            <div key={bg} className={`${bg} h-20 grow -translate-x-8`}></div>
+          ))}
+        </div>
+      </div>
       <div>
         <h1 className="text-3xl font-bold">Cores</h1>
         <div className="mt-4 grid grid-cols-3 gap-2">

@@ -515,7 +515,7 @@ export function ActionGrid({
           )} ${
             action.state_id === STATES.finish
               ? "bg-secondary opacity-50"
-              : "bg-secondary hover:bg-muted hover:text-secondary-foreground"
+              : "bg-secondary hover:bg-accent"
           }`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -594,7 +594,7 @@ export function ListOfActions({
               ? "grid sm:grid-cols-2"
               : columns === 3
                 ? "grid sm:grid-cols-2 md:grid-cols-3"
-                : "grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  2xl:grid-cols-6"
+                : "grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6"
         } gap-x-4 gap-y-1 @container`}
       >
         {actions
@@ -1208,7 +1208,7 @@ function ContextMenuItems({
         <span>Deletar</span>
         <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
-      <ContextMenuSeparator className="bg-border " />
+      <ContextMenuSeparator className="bg-border" />
       {/* States */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
