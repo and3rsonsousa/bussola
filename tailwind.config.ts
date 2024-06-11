@@ -56,7 +56,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         idea: colors.yellow,
-        do: colors.amber,
+        do: colors.orange,
         doing: colors.rose,
         review: colors.purple,
         done: colors.sky,

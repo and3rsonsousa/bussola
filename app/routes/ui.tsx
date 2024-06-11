@@ -74,6 +74,35 @@ export default function UI() {
           ))}
         </div>
       </div>
+      <div className="flex gap-4">
+        {[
+          {
+            className: "bg-idea",
+            text: "Lorem ipsum dolor sit amet consectetur",
+          },
+          { className: "bg-do", text: "adipisicing elit" },
+          {
+            className: "bg-doing",
+            text: "Odio ratione placeat voluptas itaque et illo saepe",
+          },
+          {
+            className: "bg-review",
+            text: "unde similique fugiat consequuntur officia",
+          },
+          { className: "bg-done", text: "provident eos quisquam" },
+          {
+            className: "bg-finished",
+            text: "ipsum dolor ab debitis dignissimos. Dolorem.",
+          },
+        ].map((item, i) => (
+          <div
+            className={`${item.className} flex items-center rounded-sm p-4 text-sm font-semibold leading-none tracking-tight text-white`}
+            key={i}
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
       <div>
         <h1 className="text-3xl font-bold">Cores</h1>
         <div className="mt-4 grid grid-cols-3 gap-2">

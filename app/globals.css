@@ -79,7 +79,7 @@ body {
   @apply bg-doing-500 text-doing-100;
 }
 .bg-review {
-  @apply bg-review-500 text-review-100;
+  @apply bg-review-600 text-review-100;
 }
 .bg-done {
   @apply bg-done-500 text-done-100;
