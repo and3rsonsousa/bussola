@@ -62,9 +62,9 @@ const config = {
         idea: "#fb3",
         do: "#f64",
         doing: "#e46",
-        review: "#76f",
+        review: "#93e",
         done: "#38f",
-        finished: "#3e7",
+        finished: "#3d7",
 
         todo: colors.blue,
         post: colors.orange,
