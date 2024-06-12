@@ -102,7 +102,7 @@ export default function CreateAction({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         {mode === "day" ? (
-          <Button size={"sm"} variant={"secondary"}>
+          <Button size={"sm"} variant={"accent"}>
             <PlusIcon className="size-4" />
           </Button>
         ) : mode === "button" ? (
@@ -155,7 +155,7 @@ export default function CreateAction({
         {/* Descrição */}
         <div
           contentEditable="true"
-          className="relative w-full bg-transparent py-2 text-sm  font-light outline-none"
+          className="relative w-full bg-transparent py-2 text-sm font-light outline-none"
           onBlur={(e) =>
             setAction({
               ...action,
@@ -351,7 +351,7 @@ export default function CreateAction({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-xs   focus-visible:ring-offset-0"
+                  className="text-xs focus-visible:ring-offset-0"
                 >
                   {action.date
                     ? format(
