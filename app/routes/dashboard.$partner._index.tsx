@@ -261,7 +261,7 @@ export default function Partner() {
           <ReportReview partner={partner} />
           <Button
             size={"sm"}
-            variant={showFeed ? "default" : "ghost"}
+            variant={showFeed ? "accent" : "ghost"}
             className="inline-flex gap-2"
             onClick={() => setFeed((v) => !v)}
           >
@@ -336,7 +336,7 @@ export default function Partner() {
                 <div className="flex items-center gap-2 pr-1">
                   <Button
                     size={"sm"}
-                    variant={allUsers ? "default" : "ghost"}
+                    variant={allUsers ? "accent" : "ghost"}
                     onClick={() => setAllUsers((allUsers) => !allUsers)}
                     title={
                       allUsers
@@ -351,7 +351,7 @@ export default function Partner() {
                     )}
                   </Button>
                   <Button
-                    variant={short ? "default" : "ghost"}
+                    variant={short ? "accent" : "ghost"}
                     size={"sm"}
                     onClick={() => setShort((short) => !short)}
                     title={
@@ -417,9 +417,7 @@ export default function Partner() {
                     <DropdownMenuTrigger asChild>
                       <Button
                         size={"sm"}
-                        variant={
-                          categoryFilter.length > 0 ? "default" : "ghost"
-                        }
+                        variant={categoryFilter.length > 0 ? "accent" : "ghost"}
                         className={`text-xs font-bold`}
                       >
                         {categoryFilter.length > 0 ? (

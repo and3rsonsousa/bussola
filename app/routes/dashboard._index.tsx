@@ -230,7 +230,7 @@ export default function DashboardIndex() {
                 ].map((button) => (
                   <Button
                     key={button.id}
-                    variant={todayView === button.id ? "default" : "ghost"}
+                    variant={todayView === button.id ? "accent" : "ghost"}
                     size={"sm"}
                     title={button.description}
                     className="flex items-center gap-2"
@@ -438,7 +438,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </div>
             <Button
               size={"sm"}
-              variant={order === "state" ? "default" : "ghost"}
+              variant={order === "state" ? "accent" : "ghost"}
               onClick={() => {
                 setOrder("state");
               }}
@@ -447,7 +447,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </Button>
             <Button
               size={"sm"}
-              variant={order === "priority" ? "default" : "ghost"}
+              variant={order === "priority" ? "accent" : "ghost"}
               onClick={() => {
                 setOrder("priority");
               }}
@@ -461,7 +461,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </div>
             <Button
               size={"sm"}
-              variant={view === "list" ? "default" : "ghost"}
+              variant={view === "list" ? "accent" : "ghost"}
               onClick={() => {
                 setView("list");
               }}
@@ -470,7 +470,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </Button>
             <Button
               size={"sm"}
-              variant={view === "category" ? "default" : "ghost"}
+              variant={view === "category" ? "accent" : "ghost"}
               onClick={() => {
                 setView("category");
               }}
