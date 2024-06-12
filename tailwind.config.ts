@@ -9,6 +9,11 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  safelist: [
+    {
+      pattern: /.*-(idea|do|doing|review|done|finished)/,
+    },
+  ],
   prefix: "",
   theme: {
     container: {
@@ -21,7 +26,6 @@ const config = {
 
     extend: {
       colors: {
-        // gray: colors.zinc,
         border: "hsl(var(--border) / .1)",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -55,12 +59,12 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        idea: colors.yellow,
-        do: colors.orange,
-        doing: colors.rose,
-        review: colors.purple,
-        done: colors.sky,
-        finished: colors.lime,
+        idea: "#fb3",
+        do: "#f64",
+        doing: "#e46",
+        review: "#76f",
+        done: "#38f",
+        finished: "#3e7",
 
         todo: colors.blue,
         post: colors.orange,

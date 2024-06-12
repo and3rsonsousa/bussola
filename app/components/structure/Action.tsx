@@ -335,7 +335,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action action-item flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm border-${state.slug} @container`}
+          className={`group/action action-item flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm action-${state.slug} @container`}
           onMouseEnter={() => {
             setHover(true);
           }}

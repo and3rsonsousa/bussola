@@ -42,7 +42,7 @@
     --popover-foreground: 210 20% 98%;
     --primary: 250 30% 95%;
     --primary-foreground: 250 90% 7%;
-    --secondary: 220 20% 15%;
+    --secondary: 210 30% 10%;
     --secondary-foreground: 220 20% 80%;
     --muted: 220 15% 30%;
     --muted-foreground: 220 15% 60%;
@@ -69,83 +69,8 @@ body {
   font-family: "Compasso", "sans";
 }
 
-.bg-idea {
-  @apply bg-idea-500 text-idea-100;
-}
-.bg-do {
-  @apply bg-do-600 text-do-100;
-}
-.bg-doing {
-  @apply bg-doing-500 text-doing-100;
-}
-.bg-review {
-  @apply bg-review-600 text-review-100;
-}
-.bg-done {
-  @apply bg-done-500 text-done-100;
-}
-.bg-finished {
-  @apply bg-finished-500 text-finished-100;
-}
-.bg-idea-dark {
-  @apply bg-idea-950 text-idea-100 hover:bg-idea-900;
-}
-.bg-do-dark {
-  @apply bg-do-950 text-do-100 hover:bg-do-900;
-}
-.bg-doing-dark {
-  @apply bg-doing-950 text-doing-100 hover:bg-doing-900;
-}
-.bg-review-dark {
-  @apply bg-review-950 text-review-100 hover:bg-review-900;
-}
-.bg-done-dark {
-  @apply bg-done-950 text-done-100 hover:bg-done-900;
-}
-.bg-finished-dark {
-  @apply bg-finished-950 text-finished-100 hover:bg-finished-900;
-}
-
-.hover-bg-idea {
-  @apply hover:bg-idea-700;
-}
-.hover-bg-do {
-  @apply hover:bg-do-700;
-}
-.hover-bg-doing {
-  @apply hover:bg-doing-700;
-}
-.hover-bg-review {
-  @apply hover:bg-review-700;
-}
-.hover-bg-done {
-  @apply hover:bg-done-700;
-}
-.hover-bg-finished {
-  @apply hover:bg-finished-700;
-}
-
-.border-idea {
-  @apply border-idea-500;
-}
-.border-do {
-  @apply border-do-600;
-}
-.border-doing {
-  @apply border-doing-500;
-}
-.border-review {
-  @apply border-review-500;
-}
-.border-done {
-  @apply border-done-500;
-}
-.border-finished {
-  @apply border-finished-500;
-}
-
 .action-item {
-  @apply relative flex w-full select-none gap-2 rounded-[4px] border-l-4 bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-accent focus:ring-2;
+  @apply relative flex w-full select-none gap-2 rounded-[4px] border border-l-4 border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
 }
 
 .dark .action-item.action-delayed {
@@ -156,41 +81,22 @@ body {
 }
 
 .action-idea {
-  @apply border-l-idea-500;
+  @apply border-l-idea hover:border-l-idea;
 }
 .action-do {
-  @apply border-l-do-600;
+  @apply border-l-do hover:border-l-do;
 }
 .action-doing {
-  @apply border-l-doing-500;
+  @apply border-l-doing hover:border-l-doing;
 }
 .action-review {
-  @apply border-l-review-500;
+  @apply border-l-review hover:border-l-review;
 }
 .action-done {
-  @apply border-l-done-500;
+  @apply border-l-done hover:border-l-done;
 }
 .action-finished {
-  @apply border-finished-500;
-}
-
-.stroke-l-idea {
-  @apply stroke-idea-500;
-}
-.stroke-do {
-  @apply stroke-do-500;
-}
-.stroke-doing {
-  @apply stroke-doing-500;
-}
-.stroke-review {
-  @apply stroke-review-500;
-}
-.stroke-done {
-  @apply stroke-done-500;
-}
-.stroke-finished {
-  @apply stroke-finished-600;
+  @apply border-l-finished hover:border-l-finished;
 }
 
 .fg-post {
@@ -456,3 +362,33 @@ ol {
 #calendar > * {
   @apply border-b;
 }
+/* 
+.focus-ring {
+  @apply ring-1 ring-offset-2;
+  animation: animate-ring 0.5s infinite;
+}
+
+@keyframes animate-ring {
+  0% {
+    @apply ring-idea-500;
+  }
+  18% {
+    @apply ring-do-500;
+  }
+  36% {
+    @apply ring-doing-500;
+  }
+  54% {
+    @apply ring-review-500;
+  }
+  62% {
+    @apply ring-done-500;
+  }
+
+  80% {
+    @apply ring-finished-500;
+  }
+  100% {
+    @apply ring-idea-500;
+  }
+} */

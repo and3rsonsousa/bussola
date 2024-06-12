@@ -4,8 +4,8 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
-import { Divide } from "lucide-react";
 import Loader from "~/components/structure/Loader";
+import { Button } from "~/components/ui/button";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -104,18 +104,25 @@ export default function UI() {
           </div>
         ))}
       </div>
-      <div>
-        <h1 className="text-3xl font-bold">Loaders</h1>
-        <div className="flex justify-between">
-          <div>
-            <Loader size="sm" />
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div>
+          <h1 className="mb-4 text-3xl font-bold">Loaders</h1>
+          <div className="flex justify-between">
+            <div>
+              <Loader size="sm" />
+            </div>
+            <div>
+              <Loader size="md" />
+            </div>
+            <div>
+              <Loader size="lg" />
+            </div>
           </div>
-          <div>
-            <Loader size="md" />
-          </div>
-          <div>
-            <Loader size="lg" />
-          </div>
+        </div>
+
+        <div>
+          <h1 className="mb-4 text-3xl font-bold">Focus Ring</h1>
+          <Button className="focus:focus-ring">Focus Ring on use</Button>
         </div>
       </div>
       <div>
