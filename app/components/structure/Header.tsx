@@ -77,7 +77,7 @@ export default function Header() {
       </div>
       <div className="flex items-center justify-end gap-2 text-sm font-medium">
         <DropdownMenu>
-          <DropdownMenuTrigger className="mr-2 rounded-lg px-2 py-1 outline-none ring-primary focus-within:ring-2">
+          <DropdownMenuTrigger className="mr-2 rounded-lg px-2 py-1 outline-none ring-ring focus-within:ring-2">
             {partner
               ? partners.find(
                   (currentPartner) => currentPartner.slug === partner,
@@ -99,7 +99,7 @@ export default function Header() {
         </DropdownMenu>
         {person && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="-mr-1 rounded-full outline-none ring-primary ring-offset-2 ring-offset-background focus-within:ring-2">
+            <DropdownMenuTrigger className="-mr-1 rounded-full outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring-2">
               <Avatar
                 size="md"
                 item={{

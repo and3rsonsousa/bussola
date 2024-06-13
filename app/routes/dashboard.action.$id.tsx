@@ -226,7 +226,7 @@ export default function ActionPage() {
           {/* Partners */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
               <Avatar
                 item={{
                   short: partner.short,
@@ -267,7 +267,7 @@ export default function ActionPage() {
           {/* Categoria */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
               <Icons id={category.slug} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-content">
@@ -296,7 +296,7 @@ export default function ActionPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-primary ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
+              className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-ring ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
             >
               {state.title}
             </DropdownMenuTrigger>
@@ -333,7 +333,7 @@ export default function ActionPage() {
           {/* Prioridade */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-primary ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
               <Icons id={priority.slug} type="priority" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-content">
@@ -371,7 +371,7 @@ export default function ActionPage() {
           {/* Responsáveis */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-primary ring-offset-4 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-4 ring-offset-background focus:ring-2">
               <div className="flex -space-x-2">
                 {responsibles.map((person) => (
                   <Avatar
