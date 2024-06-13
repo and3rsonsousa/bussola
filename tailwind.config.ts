@@ -61,7 +61,7 @@ const config = {
         },
         idea: "#fb3",
         do: "#f64",
-        doing: "#e46",
+        doing: "#f37",
         review: "#93e",
         done: "#38f",
         finished: "#3d7",

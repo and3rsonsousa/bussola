@@ -637,7 +637,7 @@ export const CalendarDay = ({
           className={`grid h-6 w-6 place-content-center rounded-full text-xs font-medium ${
             isSameMonth(day.date, currentDate) ? "" : "text-muted"
           } ${
-            isToday(day.date) ? "bg-primary text-primary-foreground" : "-ml-1"
+            isToday(day.date) ? "bg-accent text-accent-foreground" : "-ml-1"
           } `}
         >
           {day.date.getDate()}
