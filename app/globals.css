@@ -19,12 +19,12 @@
     --popover-foreground: 224 20% 5%;
     --primary: 260 100% 60%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 225 35% 97%;
+    --secondary: 225 35% 96%;
     --secondary-foreground: 224 20% 5%;
-    --muted: 220 20% 92%;
+    --muted: 220 20% 90%;
     --muted-foreground: 220 9% 60%;
-    --accent: 240 100% 95%;
-    --accent-foreground: 260 75% 50%;
+    --accent: 240 15% 93%;
+    --accent-foreground: 260 15% 20%;
     --destructive: 355 85% 55%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 50%;
@@ -69,6 +69,9 @@ body {
   font-family: "Compasso", "sans";
 }
 
+/* .action-item {
+  @apply relative flex w-full select-none gap-2 rounded-[4px] border border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
+} */
 .action-item {
   @apply relative flex w-full select-none gap-2 rounded-[4px] border border-l-4 border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
 }
@@ -272,7 +275,7 @@ body {
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-secondary/50 transition hover:bg-secondary;
+  @apply bg-secondary transition hover:bg-accent;
 }
 
 .bg-content {

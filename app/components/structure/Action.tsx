@@ -148,6 +148,14 @@ export function ActionLine({
             if (onDrag) onDrag(action);
           }}
         >
+          {/* <div className={`absolute left-0 top-0 flex w-full`}>
+            {states.map((state) => (
+            <div
+              key={state.id}
+              className={`bg-gradient-to-r from-transparent via-${state.slug} h-[1px] ${state.id === action.state_id ? "w-3/4" : "grow"}`}
+            ></div>
+            ))}
+          </div> */}
           {/* Atalhos */}
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
 

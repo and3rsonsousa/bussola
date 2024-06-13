@@ -47,7 +47,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
             );
             return (
               <div
-                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 grow" : "w-auto xl:min-w-72 xl:grow"} flex-col  overflow-hidden transition`}
+                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 grow" : "w-auto xl:min-w-72 xl:grow"} flex-col overflow-hidden transition`}
                 key={state.id}
                 data-state={state.id}
                 onDragOver={(e) => {
@@ -68,7 +68,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
               >
                 <div className="mb-2 flex items-center px-2 pt-2">
                   <div
-                    className={`rounded-full px-3 bg-${state.slug} text-lg font-bold tracking-tight`}
+                    className={`rounded-full px-3 bg-${state.slug} text-lg font-bold tracking-tight text-white`}
                     style={{ fontStretch: "85%" }}
                   >
                     {state.title}
