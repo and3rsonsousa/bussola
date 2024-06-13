@@ -17,12 +17,12 @@ export default function Loader({ size }: { size?: "sm" | "md" | "lg" }) {
       style={{ width: measure * 2, height: measure * 2 }}
     >
       {[
-        "stroke-idea-500",
-        "stroke-do-500",
-        "stroke-doing-500",
-        "stroke-review-500",
-        "stroke-done-500",
-        "stroke-finished-500",
+        "stroke-idea",
+        "stroke-do",
+        "stroke-doing",
+        "stroke-review",
+        "stroke-done",
+        "stroke-finished",
       ].map((strokeColor, i) => (
         <div
           className="absolute left-0 top-0 h-full w-full"
