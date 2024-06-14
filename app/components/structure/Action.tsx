@@ -117,9 +117,7 @@ export function ActionLine({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action action-item items-center ${short ? "px-2 py-1" : "p-2"} text-sm font-medium @container md:text-xs ${
-            edit ? "" : `cursor-text`
-          } action-${state.slug} ${
+          className={`group/action action-item items-center ${short ? "px-2 py-1" : "p-2"} cursor-pointer text-sm font-medium @container md:text-xs action-${state.slug} ${
             showDelay &&
             isBefore(action.date, new Date()) &&
             state.id !== STATES.finish
@@ -129,10 +127,8 @@ export function ActionLine({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (e.shiftKey && !edit) {
+            if (!e.shiftKey && !edit) {
               navigate(`/dashboard/action/${action.id}`);
-            } else {
-              setEdit(true);
             }
           }}
           onMouseEnter={() => {
@@ -148,14 +144,6 @@ export function ActionLine({
             if (onDrag) onDrag(action);
           }}
         >
-          {/* <div className={`absolute left-0 top-0 flex w-full`}>
-            {states.map((state) => (
-            <div
-              key={state.id}
-              className={`bg-gradient-to-r from-transparent via-${state.slug} h-[1px] ${state.id === action.state_id ? "w-3/4" : "grow"}`}
-            ></div>
-            ))}
-          </div> */}
           {/* Atalhos */}
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
@@ -229,12 +217,14 @@ export function ActionLine({
               <button
                 ref={buttonRef}
                 style={{ fontStretch: "85%" }}
-                className={`block w-full cursor-text overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
-                onClick={() => {
-                  flushSync(() => {
-                    setEdit(true);
-                  });
-                  inputRef.current?.select();
+                className={`block w-full select-none overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                onClick={(event) => {
+                  if (event.shiftKey && !edit) {
+                    flushSync(() => {
+                      setEdit(true);
+                    });
+                    inputRef.current?.select();
+                  }
                 }}
               >
                 {action.title}
