@@ -296,7 +296,7 @@ export default function ActionPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-ring ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug}`}
+              className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-ring ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug} text-white`}
             >
               {state.title}
             </DropdownMenuTrigger>
@@ -308,12 +308,6 @@ export default function ActionPage() {
                   textValue={state.title}
                   onSelect={async () => {
                     if (state.id !== action.state_id) {
-                      // await handleActions({
-                      //   ...action,
-                      //   intent: INTENTS.updateAction,
-                      //   state_id: Number(state.id),
-                      // });
-
                       setAction({
                         ...action,
                         state_id: state.id,
