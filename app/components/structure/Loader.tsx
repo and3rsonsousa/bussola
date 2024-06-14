@@ -9,8 +9,6 @@ export default function Loader({ size }: { size?: "sm" | "md" | "lg" }) {
       break;
   }
 
-  console.log(measure, measure - measure / 4);
-
   return (
     <div
       className="relative animate-spin"

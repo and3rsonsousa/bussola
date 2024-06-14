@@ -23,6 +23,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CopyIcon,
+  Edit3Icon,
+  EditIcon,
   ExpandIcon,
   PencilLineIcon,
   ShrinkIcon,
@@ -76,11 +78,13 @@ export function ActionLine({
   short?: boolean;
   allUsers?: boolean;
 }) {
-  const [edit, setEdit] = useState(false);
-  const [isHover, setHover] = useState(false);
   const navigate = useNavigate();
   const submit = useSubmit();
   const matches = useMatches();
+
+  const [edit, setEdit] = useState(false);
+  const [isHover, setHover] = useState(false);
+  const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
   const { states, categories, person, people } = matches[1]
@@ -148,25 +152,31 @@ export function ActionLine({
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
           {partner && (
-            <Avatar
-              size="xs"
-              item={{
-                short: partner.short,
-                bg: partner.bg,
-                fg: partner.fg,
-              }}
-            />
+            <div className="mr-1">
+              <Avatar
+                size="xs"
+                item={{
+                  short: partner.short,
+                  bg: partner.bg,
+                  fg: partner.fg,
+                }}
+              />
+            </div>
           )}
           {showCategory && (
-            <Icons
-              id={
-                categories.find(
-                  (category) => category.id === action.category_id,
-                )?.slug
-              }
-              className="hidden size-3 shrink-0 opacity-25 @[200px]:block"
-            />
+            <div className="mr-1">
+              <Icons
+                id={
+                  categories.find(
+                    (category) => category.id === action.category_id,
+                  )?.slug
+                }
+                className="hidden size-3 shrink-0 opacity-25 @[200px]:block"
+              />
+            </div>
           )}
+
+          {/* Title */}
 
           <div className="relative w-full shrink overflow-hidden">
             {edit ? (
@@ -217,7 +227,7 @@ export function ActionLine({
               <button
                 ref={buttonRef}
                 style={{ fontStretch: "85%" }}
-                className={`block w-full select-none overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`flex w-full select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                 onClick={(event) => {
                   if (event.shiftKey && !edit) {
                     flushSync(() => {
@@ -226,19 +236,31 @@ export function ActionLine({
                     inputRef.current?.select();
                   }
                 }}
+                onMouseMove={(event) => {
+                  setShift(event.shiftKey);
+                }}
               >
                 {action.title}
+                <div
+                  className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
+                >
+                  <Edit3Icon className="size-4" />
+                </div>
               </button>
             )}
           </div>
 
-          <div>
-            {action.priority_id === PRIORITIES.high ? (
-              <Icons id="high" className="size-3 text-red-500" />
-            ) : null}
-          </div>
+          {/* priority */}
 
-          <div className={` ${!allUsers ? "hidden @[200px]:flex" : "flex"}`}>
+          {action.priority_id === PRIORITIES.high && (
+            <Icons id="high" className="ml-1 size-3 text-red-500" />
+          )}
+
+          {/* Responsibles */}
+
+          <div
+            className={` ${!allUsers ? "hidden @[200px]:flex" : "flex"} pl-2`}
+          >
             {allUsers
               ? people
                   .filter(
@@ -269,7 +291,7 @@ export function ActionLine({
           </div>
 
           {date && (
-            <div className="hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 @[150px]:block md:text-[10px]">
+            <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 @[150px]:block md:text-[10px]">
               {formatActionDatetime({
                 date: action.date,
                 dateFormat: date.dateFormat,
@@ -296,9 +318,12 @@ export function ActionBlock({
   const submit = useSubmit();
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
+  const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
   const matches = useMatches();
+  const navigate = useNavigate();
+
   const { categories, states, partners, person } = matches[1]
     .data as DashboardDataType;
   const partner = partners.find(
@@ -333,7 +358,14 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action action-item flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm action-${state.slug} @container`}
+          className={`group/action action-item cursor-pointer flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm action-${state.slug} @container`}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!event.shiftKey && !edit) {
+              navigate(`/dashboard/action/${action.id}`);
+            }
+          }}
           onMouseEnter={() => {
             setHover(true);
           }}
@@ -349,60 +381,74 @@ export function ActionBlock({
           {/* Title */}
           <div className="leading-tighter relative text-lg font-semibold">
             {edit ? (
-              <Form
-                method="POST"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  flushSync(() => {
-                    setEdit(false);
-                    if (
-                      inputRef.current?.value !== undefined &&
-                      inputRef.current?.value !== action.title
-                    ) {
-                      handleActions({
-                        intent: INTENTS.updateAction,
-                        ...action,
-                        title: inputRef.current?.value,
-                      });
-                    }
-                  });
-                  buttonRef.current?.focus();
-                }}
-              >
-                <input
-                  ref={inputRef}
-                  type="text"
-                  defaultValue={action.title}
-                  style={{ fontStretch: "85%" }}
-                  className={`w-full overflow-hidden bg-transparent outline-none`}
-                  onBlur={() => {
-                    if (
-                      inputRef.current?.value !== undefined &&
-                      inputRef.current?.value !== action.title
-                    )
-                      handleActions({
-                        intent: INTENTS.updateAction,
-                        ...action,
-                        title: inputRef.current?.value,
+              <input
+                ref={inputRef}
+                type="text"
+                defaultValue={action.title}
+                style={{ fontStretch: "85%" }}
+                className={`w-full overflow-hidden bg-transparent outline-none`}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    flushSync(() => {
+                      setEdit(() => false);
+                    });
+                    buttonRef.current?.focus();
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    if (inputRef.current?.value !== action.title) {
+                      flushSync(() => {
+                        handleActions({
+                          intent: INTENTS.updateAction,
+                          ...action,
+                          title: String(inputRef.current?.value),
+                        });
                       });
 
+                      buttonRef.current?.focus();
+                    }
                     setEdit(() => false);
-                  }}
-                />
-              </Form>
+                  }
+                }}
+                onBlur={() => {
+                  if (
+                    inputRef.current?.value !== undefined &&
+                    inputRef.current?.value !== action.title
+                  )
+                    handleActions({
+                      intent: INTENTS.updateAction,
+                      ...action,
+                      title: inputRef.current?.value,
+                    });
+
+                  setEdit(() => false);
+                }}
+              />
             ) : (
               <button
                 ref={buttonRef}
                 style={{ fontStretch: "85%" }}
-                className={`block w-full cursor-text overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
-                onClick={() => {
-                  flushSync(() => {
-                    setEdit(true);
-                  });
-                  inputRef.current?.focus();
+                className={`group/text relative flex w-full items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                onClick={(event) => {
+                  if (event.shiftKey && !edit) {
+                    flushSync(() => {
+                      setEdit(true);
+                    });
+                    inputRef.current?.focus();
+                  }
+                }}
+                onMouseMove={(event) => {
+                  setShift(event.shiftKey);
+                }}
+                onMouseLeave={() => {
+                  setShift(false);
                 }}
               >
                 {action.title}
+                <div
+                  className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
+                >
+                  <Edit3Icon className="size-4" />
+                </div>
               </button>
             )}
           </div>
