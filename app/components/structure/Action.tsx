@@ -171,7 +171,7 @@ export function ActionLine({
                     (category) => category.id === action.category_id,
                   )?.slug
                 }
-                className="hidden size-3 shrink-0 opacity-25 @[200px]:block"
+                className="hidden size-3 shrink-0 opacity-50 @[200px]:block"
               />
             </div>
           )}
@@ -291,7 +291,7 @@ export function ActionLine({
           </div>
 
           {date && (
-            <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-25 @[150px]:block md:text-[10px]">
+            <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-50 @[150px]:block md:text-[10px]">
               {formatActionDatetime({
                 date: action.date,
                 dateFormat: date.dateFormat,
