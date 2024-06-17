@@ -178,7 +178,7 @@ export function ActionLine({
 
           {/* Title */}
 
-          <div className="relative w-full shrink overflow-hidden">
+          <div className="relative flex w-full shrink overflow-hidden">
             {edit ? (
               <input
                 ref={inputRef}
@@ -227,7 +227,7 @@ export function ActionLine({
               <button
                 ref={buttonRef}
                 style={{ fontStretch: "85%" }}
-                className={`flex w-full select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`group/text relative w-full select-none items-center text-nowrap text-left outline-none`}
                 onClick={(event) => {
                   if (event.shiftKey && !edit) {
                     flushSync(() => {
@@ -242,7 +242,7 @@ export function ActionLine({
               >
                 {action.title}
                 <div
-                  className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
+                  className={`absolute right-0 top-0 rounded-sm bg-gradient-to-l from-accent via-accent pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
                 >
                   <Edit3Icon className="size-4" />
                 </div>
