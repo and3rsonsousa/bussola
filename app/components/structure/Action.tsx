@@ -1,10 +1,4 @@
-import {
-  Form,
-  Link,
-  useMatches,
-  useNavigate,
-  useSubmit,
-} from "@remix-run/react";
+import { Link, useMatches, useNavigate, useSubmit } from "@remix-run/react";
 import {
   addDays,
   addHours,
@@ -24,7 +18,6 @@ import {
   ChevronRightIcon,
   CopyIcon,
   Edit3Icon,
-  EditIcon,
   ExpandIcon,
   PencilLineIcon,
   ShrinkIcon,
@@ -37,6 +30,7 @@ import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
+  ContextMenuGroup,
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuSeparator,
@@ -67,6 +61,7 @@ export function ActionLine({
   date,
   onDrag,
   short,
+  long,
   allUsers,
 }: {
   action: Action;
@@ -76,6 +71,7 @@ export function ActionLine({
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   onDrag?: (action: Action) => void;
   short?: boolean;
+  long?: boolean;
   allUsers?: boolean;
 }) {
   const navigate = useNavigate();
@@ -87,7 +83,7 @@ export function ActionLine({
   const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
-  const { states, categories, person, people } = matches[1]
+  const { states, categories, person, people, priorities } = matches[1]
     .data as DashboardDataType;
 
   const state = states.find((state) => state.id === action.state_id) as State;
@@ -121,7 +117,7 @@ export function ActionLine({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`group/action action-item items-center ${short ? "px-2 py-1" : "p-2"} cursor-pointer text-sm font-medium @container md:text-xs action-${state.slug} ${
+          className={`group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "px-2 py-1" : long ? "px-3 py-2" : "p-2"} cursor-pointer text-sm font-medium @container md:text-xs action-${state.slug} ${
             showDelay &&
             isBefore(action.date, new Date()) &&
             state.id !== STATES.finish
@@ -154,7 +150,7 @@ export function ActionLine({
           {partner && (
             <div className="mr-1">
               <Avatar
-                size="xs"
+                size={long ? "sm" : "xs"}
                 item={{
                   short: partner.short,
                   bg: partner.bg,
@@ -178,7 +174,9 @@ export function ActionLine({
 
           {/* Title */}
 
-          <div className="relative flex w-full shrink overflow-hidden">
+          <div
+            className={`relative flex w-full shrink overflow-hidden ${long ? "text-base" : ""}`}
+          >
             {edit ? (
               <input
                 ref={inputRef}
@@ -252,16 +250,28 @@ export function ActionLine({
 
           {/* priority */}
 
-          {action.priority_id === PRIORITIES.high && (
-            <Icons id="high" className="ml-1 size-3 text-red-500" />
+          {long ? (
+            <Icons
+              id={
+                priorities.find(
+                  (priority) => priority.id === action.priority_id,
+                )?.slug
+              }
+              className="size-3"
+              type="priority"
+            />
+          ) : (
+            action.priority_id === PRIORITIES.high && (
+              <Icons id="high" className="ml-1 size-3 text-red-500" />
+            )
           )}
 
           {/* Responsibles */}
 
           <div
-            className={` ${!allUsers ? "hidden @[200px]:flex" : "flex"} pl-2`}
+            className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} pl-2`}
           >
-            {allUsers
+            {allUsers || long
               ? people
                   .filter(
                     (person) =>
@@ -275,7 +285,7 @@ export function ActionLine({
                         image: person.image,
                         short: person.initials!,
                       }}
-                      size="xs"
+                      size={long ? "sm" : "xs"}
                       group
                     />
                   ))
@@ -285,19 +295,29 @@ export function ActionLine({
                       image: person.image,
                       short: person.initials!,
                     }}
-                    size="xs"
+                    size={long ? "sm" : "xs"}
                   />
                 )}
           </div>
 
-          {date && (
-            <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-50 @[150px]:block md:text-[10px]">
+          {long ? (
+            <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
               {formatActionDatetime({
                 date: action.date,
-                dateFormat: date.dateFormat,
-                timeFormat: date.timeFormat,
+                dateFormat: 4,
+                timeFormat: 1,
               })}
             </div>
+          ) : (
+            date && (
+              <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-50 @[150px]:block md:text-[10px]">
+                {formatActionDatetime({
+                  date: action.date,
+                  dateFormat: date.dateFormat,
+                  timeFormat: date.timeFormat,
+                })}
+              </div>
+            )
           )}
         </div>
       </ContextMenuTrigger>
@@ -606,6 +626,7 @@ export function ListOfActions({
   descending = false,
   orderBy = "state",
   short,
+  long,
 }: {
   actions?: Action[] | null;
   showCategory?: boolean;
@@ -616,11 +637,14 @@ export function ListOfActions({
   descending?: boolean;
   orderBy?: "state" | "priority" | "time";
   short?: boolean;
+  long?: boolean;
 }) {
   actions = actions
     ? orderBy === "state"
       ? getActionsByState(actions, descending)
-      : getActionsByPriority(actions, descending)
+      : orderBy === "priority"
+        ? getActionsByPriority(actions, descending)
+        : actions
     : [];
   const matches = useMatches();
   const { states, categories, priorities, partners } = matches[1]
@@ -646,6 +670,7 @@ export function ListOfActions({
           .map((action) => (
             <ActionLine
               short={short}
+              long={long}
               key={action.id}
               action={action}
               showCategory={showCategory}
@@ -1051,7 +1076,7 @@ function ContextMenuItems({
   }) => void;
 }) {
   const matches = useMatches();
-  const { people, states, categories, priorities } = matches[1]
+  const { people, states, categories, priorities, areas } = matches[1]
     .data as DashboardDataType;
   const [delay, setDelay] = useState({ hour: 0, day: 0, week: 0 });
 
@@ -1320,40 +1345,50 @@ function ContextMenuItems({
         </ContextMenuSubTrigger>
         <ContextMenuPortal>
           <ContextMenuSubContent className="bg-content">
-            {categories.map((category) => (
-              <ContextMenuItem
-                key={category.id}
-                className="bg-item flex items-center gap-2"
-                onSelect={() => {
-                  handleActions({
-                    ...action,
-                    category_id: category.id,
-                    intent: INTENTS.updateAction,
-                  });
-                }}
-              >
-                <Icons id={category.slug} className="size-3 opacity-50" />
-                {category.title}
-                <ContextMenuShortcut className="w-8 pl-2 text-left">
-                  ⇧+
-                  {
-                    [
-                      { id: CATEGORIES.ads, shortcut: "a" },
-                      { id: CATEGORIES.design, shortcut: "d" },
-                      { id: CATEGORIES.dev, shortcut: "c" },
-                      { id: CATEGORIES.finance, shortcut: "f" },
-                      { id: CATEGORIES.meeting, shortcut: "r" },
-                      { id: CATEGORIES.plan, shortcut: "n" },
-                      { id: CATEGORIES.post, shortcut: "p" },
-                      { id: CATEGORIES.print, shortcut: "i" },
-                      { id: CATEGORIES.sm, shortcut: "m" },
-                      { id: CATEGORIES.stories, shortcut: "s" },
-                      { id: CATEGORIES.todo, shortcut: "t" },
-                      { id: CATEGORIES.video, shortcut: "v" },
-                    ].find((s) => s.id === category.id)?.shortcut
-                  }
-                </ContextMenuShortcut>
-              </ContextMenuItem>
+            {areas.map((area, i) => (
+              <ContextMenuGroup>
+                {i > 0 && <ContextMenuSeparator />}
+                <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                  {area.title}
+                </h4>
+                {categories.map((category) =>
+                  category.area_id === area.id ? (
+                    <ContextMenuItem
+                      key={category.id}
+                      className="bg-item flex items-center gap-2"
+                      onSelect={() => {
+                        handleActions({
+                          ...action,
+                          category_id: category.id,
+                          intent: INTENTS.updateAction,
+                        });
+                      }}
+                    >
+                      <Icons id={category.slug} className="size-3 opacity-50" />
+                      {category.title}
+                      <ContextMenuShortcut className="w-8 pl-2 text-left">
+                        ⇧+
+                        {
+                          [
+                            { id: CATEGORIES.ads, shortcut: "a" },
+                            { id: CATEGORIES.design, shortcut: "d" },
+                            { id: CATEGORIES.dev, shortcut: "c" },
+                            { id: CATEGORIES.finance, shortcut: "f" },
+                            { id: CATEGORIES.meeting, shortcut: "r" },
+                            { id: CATEGORIES.plan, shortcut: "n" },
+                            { id: CATEGORIES.post, shortcut: "p" },
+                            { id: CATEGORIES.print, shortcut: "i" },
+                            { id: CATEGORIES.sm, shortcut: "m" },
+                            { id: CATEGORIES.stories, shortcut: "s" },
+                            { id: CATEGORIES.todo, shortcut: "t" },
+                            { id: CATEGORIES.video, shortcut: "v" },
+                          ].find((s) => s.id === category.id)?.shortcut
+                        }
+                      </ContextMenuShortcut>
+                    </ContextMenuItem>
+                  ) : null,
+                )}
+              </ContextMenuGroup>
             ))}
           </ContextMenuSubContent>
         </ContextMenuPortal>

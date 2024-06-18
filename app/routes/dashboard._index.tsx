@@ -40,7 +40,6 @@ import { INTENTS, STATES } from "~/lib/constants";
 import {
   Avatar,
   Icons,
-  getActionsByPriority,
   getActionsByState,
   getActionsForThisDay,
   getDelayedActions,
@@ -107,7 +106,7 @@ export default function DashboardIndex() {
     actions = [];
   }
 
-  const { states } = matches[1].data as DashboardDataType;
+  const { states, person } = matches[1].data as DashboardDataType;
 
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();
@@ -188,102 +187,106 @@ export default function DashboardIndex() {
           }))}
           total={actions?.length || 0}
         />
+
         {/* Ações em Atraso */}
         {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
         {/* Parceiros */}
 
         <Partners actions={lateActions} />
 
-        {/* Ações de Hoje */}
-        {todayActions?.length ? (
-          <div className="mb-8">
-            <div className="flex justify-between py-8">
-              <div className="relative flex">
-                <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
-                  Hoje
-                </h2>
-                <Badge
-                  value={todayActions?.length}
-                  className="-translate-y-1 translate-x-8"
-                />
-              </div>
-              <div className="flex gap-2">
-                {[
-                  {
-                    id: "kanban",
-                    title: "Kanban",
-                    description: "Ver o Kanban de progresso",
-                    Icon: <KanbanIcon className="w-6" />,
-                  },
-                  {
-                    id: "categories",
-                    title: "Categorias",
-                    description: "Ver por categorias",
-                    Icon: <ComponentIcon className="w-6" />,
-                  },
-                  {
-                    id: "hours",
-                    title: "Horas",
-                    description: "Ver por horas do dia",
-                    Icon: <CalendarClock className="w-6" />,
-                  },
-                ].map((button) => (
-                  <Button
-                    key={button.id}
-                    variant={todayView === button.id ? "accent" : "ghost"}
-                    size={"sm"}
-                    title={button.description}
-                    className="flex items-center gap-2"
-                    onClick={() => {
-                      setTodayView(
-                        button.id as "kanban" | "hours" | "categories",
-                      );
-                    }}
-                  >
-                    {button.Icon}
-                    <div className="hidden md:block">{button.title}</div>
-                  </Button>
-                ))}
-              </div>
-            </div>
+        {person.role === 1 && (
+          <>
+            {/* Ações de Hoje */}
+            {todayActions?.length ? (
+              <div className="mb-8">
+                <div className="flex justify-between py-8">
+                  <div className="relative flex">
+                    <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
+                      Hoje
+                    </h2>
+                    <Badge
+                      value={todayActions?.length}
+                      className="-translate-y-1 translate-x-8"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    {[
+                      {
+                        id: "kanban",
+                        title: "Kanban",
+                        description: "Ver o Kanban de progresso",
+                        Icon: <KanbanIcon className="w-6" />,
+                      },
+                      {
+                        id: "categories",
+                        title: "Categorias",
+                        description: "Ver por categorias",
+                        Icon: <ComponentIcon className="w-6" />,
+                      },
+                      {
+                        id: "hours",
+                        title: "Horas",
+                        description: "Ver por horas do dia",
+                        Icon: <CalendarClock className="w-6" />,
+                      },
+                    ].map((button) => (
+                      <Button
+                        key={button.id}
+                        variant={todayView === button.id ? "accent" : "ghost"}
+                        size={"sm"}
+                        title={button.description}
+                        className="flex items-center gap-2"
+                        onClick={() => {
+                          setTodayView(
+                            button.id as "kanban" | "hours" | "categories",
+                          );
+                        }}
+                      >
+                        {button.Icon}
+                        <div className="hidden md:block">{button.title}</div>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
 
-            {todayView === "kanban" ? (
-              <Kanban actions={todayActions} />
-            ) : todayView === "hours" ? (
-              <HoursView actions={todayActions} />
-            ) : (
-              <CategoriesView actions={todayActions} />
-            )}
-          </div>
-        ) : null}
-        {/* Ações de Amanhã */}
-        {tomorrowActions?.length ? (
-          <div className="mb-8">
-            <div className="relative inline-flex pb-4">
-              <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
-                Amanhã
-              </h2>
-              <Badge
-                value={tomorrowActions?.length}
-                className="-translate-y-1 translate-x-8"
+                {todayView === "kanban" ? (
+                  <Kanban actions={todayActions} />
+                ) : todayView === "hours" ? (
+                  <HoursView actions={todayActions} />
+                ) : (
+                  <CategoriesView actions={todayActions} />
+                )}
+              </div>
+            ) : null}
+            {/* Ações de Amanhã */}
+            {tomorrowActions?.length ? (
+              <div className="mb-8">
+                <div className="relative inline-flex pb-4">
+                  <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
+                    Amanhã
+                  </h2>
+                  <Badge
+                    value={tomorrowActions?.length}
+                    className="-translate-y-1 translate-x-8"
+                  />
+                </div>
+
+                <BlockOfActions actions={tomorrowActions} />
+              </div>
+            ) : null}
+
+            {/* Ações da Semana */}
+            {weekActions.reduce(
+              (acc, currentValue) => acc + currentValue.actions.length,
+              0,
+            ) ? (
+              <WeekView
+                weekActions={weekActions}
+                setDraggedAction={setDraggedAction}
               />
-            </div>
-
-            <BlockOfActions actions={tomorrowActions} />
-          </div>
-        ) : null}
-
-        {/* Ações da Semana */}
-        {weekActions.reduce(
-          (acc, currentValue) => acc + currentValue.actions.length,
-          0,
-        ) ? (
-          <WeekView
-            weekActions={weekActions}
-            setDraggedAction={setDraggedAction}
-          />
-        ) : null}
-
+            ) : null}
+          </>
+        )}
         <div className="mb-8">
           <div className="relative inline-flex pb-4">
             <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
@@ -295,9 +298,11 @@ export default function DashboardIndex() {
             />
           </div>
           <ListOfActions
-            actions={nextActions as Action[]}
-            columns={3}
-            isFoldable
+            actions={nextActions}
+            columns={person.role > 1 ? 1 : 3}
+            isFoldable={person.role === 1}
+            long
+            orderBy="time"
           />
         </div>
       </div>

@@ -269,16 +269,16 @@ export const Icons = ({
   ) : (
     <div className="relative">
       <SignalIcon
-        className={cn(["absolute left-0 top-0 z-0 opacity-20", className])}
+        className={cn(["absolute left-0 top-0 z-0 opacity-30", className])}
       />
       <View
         className={cn([
           "isolate",
           id === "low"
-            ? "text-green-400"
+            ? "text-success-500"
             : id === "mid"
-              ? "text-amber-500"
-              : "text-rose-600",
+              ? "text-alert-500"
+              : "text-error-600",
           className,
         ])}
       />
@@ -301,6 +301,7 @@ export function convertToAction(data: { [key: string]: unknown }): Action {
     updated_at: String(data["updated_at"]),
     user_id: String(data["user_id"]),
     date_to_post: String(data["date_to_post"]),
+    files: String(data["files"]).split(","),
   };
   return action;
 }
@@ -345,6 +346,7 @@ export function usePendingActions() {
         updated_at: String(fetcher.formData?.get("updated_at")),
         priority_id: String(fetcher.formData?.get("priority_id")),
         date_to_post: String(fetcher.formData?.get("date_to_post")),
+        files: [],
       };
 
       return { ...action };

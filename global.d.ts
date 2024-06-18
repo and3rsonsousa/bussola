@@ -14,6 +14,7 @@ declare global {
   type State = Database["public"]["Tables"]["states"]["Row"];
   type Priority = Database["public"]["Tables"]["priorities"]["Row"];
   type Action = Database["public"]["Tables"]["actions"]["Row"];
+  type Area = Database["public"]["Tables"]["areas"]["Row"];
 
   type DashboardDataType = {
     partners: Partner[];
@@ -23,6 +24,7 @@ declare global {
     person: Person;
     user: User;
     priorities: Priority[];
+    areas: Area[];
   };
 
   type DashboardPartnerType = {
