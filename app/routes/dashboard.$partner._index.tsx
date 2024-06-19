@@ -42,15 +42,23 @@ import {
   PlusIcon,
   UserIcon,
   UsersIcon,
+  XIcon,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
+import { flushSync } from "react-dom";
 import invariant from "tiny-invariant";
-import { ActionLine, GridOfActions } from "~/components/structure/Action";
+import {
+  ActionLine,
+  ContextMenuItems,
+  GridOfActions,
+  formatActionDatetime,
+} from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import Progress from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
+import { ContextMenu, ContextMenuTrigger } from "~/components/ui/context-menu";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -68,6 +76,8 @@ import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
 import {
   Avatar,
   Icons,
+  getActionNewDate,
+  getCleanAction,
   getDelayedActions,
   getInstagramActions,
   sortActions,
@@ -100,7 +110,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { data: partner } = await supabase
     .from("partners")
     .select("*")
-    .eq("slug", params["partner"] as string)
+    .eq("slug", params["partner"] as "")
     .single();
 
   invariant(partner);
@@ -560,8 +570,16 @@ export const CalendarDay = ({
 
   const submit = useSubmit();
   const matches = useMatches();
-  const { categories } = matches[1].data as DashboardDataType;
+  const { categories, states, people } = matches[1].data as DashboardDataType;
   const { partner } = matches[3].data as DashboardPartnerType;
+  const [newAction, setNewAction] = useState(
+    getCleanAction({
+      responsibles: [person.user_id],
+      user_id: person.user_id,
+      date: day.date,
+      partner_id: partner.id,
+    }),
+  );
 
   function handleActions(data: {
     [key: string]: string | number | null | string[];
@@ -576,35 +594,17 @@ export const CalendarDay = ({
     );
   }
 
-  const newAction = {
-    category_id: CATEGORIES.post,
-    partner_id: partner.id,
-    date: format(
-      (() => {
-        const date = day.date;
-        if (new Date().getHours() > 11) {
-          date.setHours(new Date().getHours() + 1, new Date().getMinutes());
-        } else {
-          date.setHours(11, 0);
-        }
-        return date;
-      })(),
-      "yyyy-MM-dd HH:mm:ss",
-    ),
-    title: "",
-    description: "",
-    priority_id: PRIORITIES.medium,
-    responsibles: [person.user_id],
-    user_id: person.user_id,
-    state_id: STATES.ideia,
-  };
+  function handleNewAction(data: {
+    [key: string]: string | number | null | string[];
+  }) {
+    console.log(data);
 
-  //   isBefore(
-  //     format(day.date, "yyyy-MM-dd"),
-  //     format(new Date(), "yyyy-MM-dd"),
-  //   )
-  // ? "opacity-25 hover:opacity-100"
-  // : ""
+    if (data["responsibles"]) {
+      data["responsibles"] = (data["responsibles"] as string).split(",");
+    }
+
+    setNewAction((action) => ({ ...action, ...data }));
+  }
 
   return (
     <div
@@ -629,8 +629,8 @@ export const CalendarDay = ({
       }}
       onFocus={() => setIsHover(true)}
       onBlur={() => setIsHover(false)}
-      // onMouseOver={() => setIsHover(true)}
-      // onMouseLeave={() => setIsHover(false)}
+      onMouseOver={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <div className="my-1 flex justify-between">
         <div
@@ -676,6 +676,114 @@ export const CalendarDay = ({
               </div>
             ) : null,
           )}
+        <button
+          className={`${isCreating ? "hidden" : isHover ? "action-item action-idea" : "opacity-0"}`}
+          onClick={() => setIsCreating(true)}
+        >
+          <PlusIcon className="mx-auto my-1 size-3" />
+        </button>
+        {isCreating && (
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <div
+                className={`action-item action-${states.find((state) => state.id === newAction.state_id)?.slug} flex flex-col bg-accent outline-none ring-offset-2 focus:ring-ring`}
+              >
+                <div className="flex items-center gap-2 px-2 py-1">
+                  <input
+                    type="text"
+                    placeholder="Nova ação"
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ fontStretch: "85%" }}
+                    value={newAction.title}
+                    onChange={(event) =>
+                      setNewAction((action) => ({
+                        ...action,
+                        title: event.target.value,
+                      }))
+                    }
+                    onKeyDown={(event) => {
+                      if (event.key.toLowerCase() === "escape") {
+                        setIsCreating(false);
+                      } else if (
+                        event.key.toLowerCase() === "enter" &&
+                        event.currentTarget.value.length > 3
+                      ) {
+                        flushSync(() => {
+                          handleActions({
+                            intent: INTENTS.createAction,
+                            ...newAction,
+                            id: window.crypto.randomUUID(),
+                          });
+                        });
+
+                        if (event.shiftKey) {
+                          setNewAction(
+                            getCleanAction({
+                              responsibles: [person.user_id],
+                              user_id: person.user_id,
+                              date: day.date,
+                              partner_id: partner.id,
+                            }),
+                          );
+                        } else {
+                          setIsCreating(false);
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => setIsCreating(false)}
+                    className="h-4 rounded-[4px] text-muted-foreground outline-none ring-ring focus:text-secondary-foreground focus:ring-2"
+                  >
+                    <XIcon className="size-4" />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between gap-2 px-2 py-1 text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Icons
+                      id={
+                        categories.find(
+                          (category) => category.id === newAction.category_id,
+                        )?.slug
+                      }
+                      className="size-3"
+                    />
+                    <div className="flex">
+                      {people
+                        .filter((person) =>
+                          newAction.responsibles.find(
+                            (responsible) => person.user_id === responsible,
+                          ),
+                        )
+                        .map((responsible) => (
+                          <Avatar
+                            className="-ml-1"
+                            key={responsible.id}
+                            size="xs"
+                            item={{
+                              image: responsible.image,
+                              short: responsible.initials!,
+                            }}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                  <div className="overflow-hidden whitespace-nowrap text-[10px]">
+                    {formatActionDatetime({
+                      date: newAction.date,
+                      dateFormat: 2,
+                      timeFormat: 1,
+                    })}
+                  </div>
+                </div>
+              </div>
+            </ContextMenuTrigger>
+            <ContextMenuItems
+              action={newAction as Action}
+              handleActions={handleNewAction}
+            />
+          </ContextMenu>
+        )}
       </div>
     </div>
   );

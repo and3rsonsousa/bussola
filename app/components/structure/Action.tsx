@@ -472,8 +472,10 @@ export function ActionBlock({
               </button>
             )}
           </div>
+
           <div className="flex items-center justify-between text-muted-foreground">
             <div className="flex items-center gap-2">
+              {/* Partners | Clientes  */}
               {partner ? (
                 <Avatar
                   item={{
@@ -1066,7 +1068,7 @@ export function formatActionDatetime({
     : format(date, formatString, { locale: ptBR });
 }
 
-function ContextMenuItems({
+export function ContextMenuItems({
   action,
   handleActions,
 }: {
@@ -1245,7 +1247,6 @@ function ContextMenuItems({
                     handleActions({
                       intent: INTENTS.updateAction,
                       ...action,
-
                       date,
                     });
                   }}
@@ -1346,7 +1347,7 @@ function ContextMenuItems({
         <ContextMenuPortal>
           <ContextMenuSubContent className="bg-content">
             {areas.map((area, i) => (
-              <ContextMenuGroup>
+              <ContextMenuGroup key={area.id}>
                 {i > 0 && <ContextMenuSeparator />}
                 <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
                   {area.title}

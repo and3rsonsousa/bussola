@@ -1,5 +1,5 @@
 import { useFetchers } from "@remix-run/react";
-import { isAfter, isBefore, isSameDay, parseISO } from "date-fns";
+import { format, isAfter, isBefore, isSameDay, parseISO } from "date-fns";
 import {
   BadgeCheckIcon,
   CircleFadingPlusIcon,
@@ -361,4 +361,66 @@ export function getResponsibles(people: Person[], users_ids?: string[] | null) {
 
 export function amIResponsible(responsibles: string[], user_id: string) {
   return responsibles.findIndex((id) => id === user_id) >= 0;
+}
+
+export function getActionNewDate(date: Date) {
+  return format(
+    (() => {
+      if (new Date().getHours() > 11) {
+        date.setHours(new Date().getHours() + 1, new Date().getMinutes());
+      } else {
+        date.setHours(11, 0);
+      }
+      return date;
+    })(),
+    "yyyy-MM-dd HH:mm:ss",
+  );
+}
+export function getCleanAction({
+  category_id,
+  partner_id,
+  date,
+  title,
+  description,
+  priority_id,
+  responsibles,
+  user_id,
+  state_id,
+  created_at,
+  date_to_post,
+  files,
+  id,
+  updated_at,
+}: {
+  category_id?: string;
+  partner_id?: string;
+  date?: Date;
+  title?: string;
+  description?: string;
+  priority_id?: string;
+  responsibles: string[];
+  user_id: string;
+  state_id?: string;
+  created_at?: string;
+  date_to_post?: string;
+  files?: string[];
+  id?: string;
+  updated_at?: string;
+}) {
+  return {
+    category_id: category_id || CATEGORIES.post,
+    partner_id: partner_id || null,
+    date: date ? getActionNewDate(date) : getActionNewDate(new Date()),
+    title: title || "",
+    description: description || "",
+    priority_id: priority_id || PRIORITIES.medium,
+    responsibles,
+    user_id,
+    state_id: state_id || STATES.ideia,
+    created_at: created_at || "",
+    date_to_post: date_to_post || "",
+    files: files || null,
+    id: id || "",
+    updated_at: updated_at || "",
+  };
 }
