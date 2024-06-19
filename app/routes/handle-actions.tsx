@@ -27,15 +27,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       priority_id: values["priority_id"].toString() || PRIORITIES.medium,
     };
 
-    console.log({ actionToInsert });
-
     const { data, error } = await supabase
       .from("actions")
       .insert(actionToInsert)
       .select()
       .single();
-
-    console.log({ data, error });
 
     return json({ data, error }, { headers });
   } else if (intent === INTENTS.updateAction) {

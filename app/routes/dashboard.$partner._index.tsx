@@ -597,13 +597,21 @@ export const CalendarDay = ({
   function handleNewAction(data: {
     [key: string]: string | number | null | string[];
   }) {
-    console.log(data);
-
-    if (data["responsibles"]) {
+    if (typeof data["responsibles"] === "string") {
       data["responsibles"] = (data["responsibles"] as string).split(",");
     }
 
-    setNewAction((action) => ({ ...action, ...data }));
+    let filteredData: {
+      [key: string]: string | number | null | string[];
+    } = {};
+
+    Object.entries(data).map((entry) => {
+      if (entry[0] !== "intent") {
+        filteredData[entry[0]] = entry[1];
+      }
+    });
+
+    setNewAction((action) => ({ ...action, ...filteredData }));
   }
 
   return (
@@ -716,18 +724,17 @@ export const CalendarDay = ({
                           });
                         });
 
-                        if (event.shiftKey) {
-                          setNewAction(
-                            getCleanAction({
-                              responsibles: [person.user_id],
-                              user_id: person.user_id,
-                              date: day.date,
-                              partner_id: partner.id,
-                            }),
-                          );
-                        } else {
+                        if (!event.shiftKey) {
                           setIsCreating(false);
                         }
+                        setNewAction(
+                          getCleanAction({
+                            responsibles: [person.user_id],
+                            user_id: person.user_id,
+                            date: day.date,
+                            partner_id: partner.id,
+                          }),
+                        );
                       }
                     }}
                   />
