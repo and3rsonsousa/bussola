@@ -685,7 +685,7 @@ export const CalendarDay = ({
             ) : null,
           )}
         <button
-          className={`${isCreating ? "hidden" : isHover ? "action-item action-idea" : "opacity-0"}`}
+          className={`${isCreating ? "hidden" : isHover ? "rounded-[4px] bg-accent p-1 transition hover:bg-muted" : "opacity-0"}`}
           onClick={() => setIsCreating(true)}
         >
           <PlusIcon className="mx-auto my-1 size-3" />
