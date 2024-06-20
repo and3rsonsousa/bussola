@@ -709,6 +709,8 @@ export const CalendarDay = ({
                         title: event.target.value,
                       }))
                     }
+                    tabIndex={0}
+                    autoFocus
                     onKeyDown={(event) => {
                       if (event.key.toLowerCase() === "escape") {
                         setIsCreating(false);
