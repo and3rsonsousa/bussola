@@ -21,7 +21,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { data: person } = await supabase
     .from("people")
     .select("*")
-    .eq("id", id)
+    .eq("user_id", id)
     .single();
 
   if (!person) throw redirect("/dashboard/admin/users");
