@@ -122,8 +122,19 @@ export default function UI() {
 
         <div>
           <h1 className="mb-4 text-3xl font-bold">Focus Ring</h1>
-          <Button className="focus:focus-ring">Focus Ring on use</Button>
+          <Button>Focus Ring on use</Button>
         </div>
+      </div>
+      <div>
+        <h1 className="text-3xl font-bold">Buttons</h1>
+      </div>
+      <div className="flex gap-4 *:w-full">
+        <Button variant={"default"}>Default</Button>
+        <Button variant={"accent"}>Accent</Button>
+        <Button variant={"destructive"}>Descructive</Button>
+        <Button variant={"ghost"}>Ghost</Button>
+        <Button variant={"link"}>Link</Button>
+        <Button variant={"outline"}>Outline</Button>
       </div>
       <div>
         <h1 className="text-3xl font-bold">Cores</h1>

@@ -36,23 +36,23 @@
   .dark {
     --background: 220 30% 2%;
     --foreground: 210 50% 95%;
-    --card: 220 30% 10%;
-    --card-foreground: 210 20% 98%;
-    --popover: 220 30% 10%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 250 30% 95%;
-    --primary-foreground: 250 90% 7%;
-    --secondary: 210 30% 10%;
+    --card: 220 20% 20%;
+    --card-foreground: 210 50% 95%;
+    --popover: 220 15% 25%;
+    --popover-foreground: 210 50% 95%;
+    --primary: 260 90 60%;
+    --primary-foreground: 250 90% 98%;
+    --secondary: 210 30% 15%;
     --secondary-foreground: 220 20% 80%;
-    --muted: 220 15% 30%;
-    --muted-foreground: 220 15% 60%;
-    --accent: 220 15% 20%;
-    --accent-foreground: 220 15% 98%;
+    --muted: 210 10% 35%;
+    --muted-foreground: 210 10% 60%;
+    --accent: 220 15% 30%;
+    --accent-foreground: 10 15% 98%;
     --destructive: 350 75% 45%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 250 20% 98%;
     --border: 215 15 90%;
     --input: 215 27.9% 16.9%;
-    --ring: 260 100% 60%;
+    --ring: 10 100 60;
   }
 }
 
@@ -70,7 +70,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-popover focus:ring-2;
 }
 
 .action-row {
@@ -276,7 +276,7 @@ body {
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-secondary transition hover:bg-accent;
+  @apply bg-card transition hover:bg-popover;
 }
 
 .bg-content {
@@ -366,33 +366,3 @@ ol {
 #calendar > * {
   @apply border-b;
 }
-/* 
-.focus-ring {
-  @apply ring-1 ring-offset-2;
-  animation: animate-ring 0.5s infinite;
-}
-
-@keyframes animate-ring {
-  0% {
-    @apply ring-idea-500;
-  }
-  18% {
-    @apply ring-do-500;
-  }
-  36% {
-    @apply ring-doing-500;
-  }
-  54% {
-    @apply ring-review-500;
-  }
-  62% {
-    @apply ring-done-500;
-  }
-
-  80% {
-    @apply ring-finished-500;
-  }
-  100% {
-    @apply ring-idea-500;
-  }
-} */

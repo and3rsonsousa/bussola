@@ -204,10 +204,7 @@ export default function DashboardIndex() {
                     <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
                       Hoje
                     </h2>
-                    <Badge
-                      value={todayActions?.length}
-                      className="-translate-y-1 translate-x-8"
-                    />
+                    <Badge value={todayActions?.length} />
                   </div>
                   <div className="flex gap-2">
                     {[
@@ -265,10 +262,7 @@ export default function DashboardIndex() {
                   <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
                     Amanhã
                   </h2>
-                  <Badge
-                    value={tomorrowActions?.length}
-                    className="-translate-y-1 translate-x-8"
-                  />
+                  <Badge value={tomorrowActions?.length} />
                 </div>
 
                 <BlockOfActions actions={tomorrowActions} />
@@ -292,10 +286,7 @@ export default function DashboardIndex() {
             <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
               Próximas Ações
             </h2>
-            <Badge
-              value={nextActions?.length || 0}
-              className="-translate-y-1 translate-x-8"
-            />
+            <Badge value={nextActions?.length || 0} />
           </div>
           <ListOfActions
             actions={nextActions}
@@ -431,10 +422,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
           <h2 className="text-3xl font-extrabold uppercase tracking-tighter">
             Atrasados
           </h2>
-          <Badge
-            value={actions.length}
-            className="-translate-y-1 translate-x-8"
-          />
+          <Badge value={actions.length} />
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -532,7 +520,7 @@ function Partners({ actions }: { actions: Action[] }) {
                     .length
                 }
                 isDynamic
-                className="-translate-y-2 translate-x-2"
+                className="-translate-y-1 translate-x-2"
               />
             </Link>
           ))}

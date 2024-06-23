@@ -581,7 +581,7 @@ export function ActionGrid({
           )} ${
             action.state_id === STATES.finish
               ? "bg-secondary opacity-50"
-              : "bg-secondary hover:bg-accent"
+              : "bg-secondary hover:bg-popover"
           }`}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
