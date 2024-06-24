@@ -56,7 +56,7 @@ export default function ReportPage() {
 
   return (
     <div className="min-h-[100vh] bg-slate-100 p-4 text-center text-gray-500 antialiased">
-      <h5 className="mb-4 text-xs font-bold uppercase tracking-wider ">
+      <h5 className="mb-4 text-xs font-bold uppercase tracking-wider">
         AGÊNCIA CNVT ®
       </h5>
       <h1 className="mb-2 text-5xl font-extrabold tracking-tighter text-gray-950">
@@ -109,12 +109,20 @@ export default function ReportPage() {
                   )}
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  {action.files.map((file, i) => (
-                    <div className="overflow-hidden rounded-sm" key={i}>
-                      <img src={file} />
-                    </div>
-                  ))}
+                <div className="snap-x snap-mandatory overflow-hidden overflow-x-auto">
+                  <div
+                    className={`flex gap-1`}
+                    style={{ width: action.files.length * 90 + "%" }}
+                  >
+                    {action.files.map((file, i) => (
+                      <div
+                        className="snap-center overflow-hidden rounded-sm border border-black/5"
+                        key={i}
+                      >
+                        <img src={file} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )
             ) : null}
