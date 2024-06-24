@@ -4,7 +4,13 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
-import { format, isSameMonth, isSameYear } from "date-fns";
+import {
+  endOfDay,
+  format,
+  isSameMonth,
+  isSameYear,
+  startOfDay,
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CATEGORIES } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
@@ -22,6 +28,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect("/dashboard");
   }
 
+  let [start, end] = [
+    format(
+      new Date(
+        Number(range[0].split("-")[0]),
+        Number(range[0].split("-")[1]) - 1,
+        Number(range[0].split("-")[2]),
+      ),
+      "yyyy-MM-dd 00:00:00",
+    ),
+    format(
+      new Date(
+        Number(range[1].split("-")[0]),
+        Number(range[1].split("-")[1]) - 1,
+        Number(range[1].split("-")[2]),
+      ),
+      "yyyy-MM-dd 23:59:59",
+    ),
+  ];
   const [{ data: actions }, { data: partner }, { data: categories }] =
     await Promise.all([
       supabase
@@ -34,12 +58,31 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
           CATEGORIES.carousel,
           CATEGORIES.stories,
         ])
-        .gte("date", range[0])
-        .lte("date", range[1])
+        .gte("date", start)
+        .lte("date", end)
         .order("date", { ascending: true }),
       supabase.from("partners").select().match({ id }).single(),
       supabase.from("categories").select(),
     ]);
+
+  console.log(
+    format(
+      new Date(
+        Number(range[0].split("-")[0]),
+        Number(range[0].split("-")[1]) - 1,
+        Number(range[0].split("-")[2]),
+      ),
+      "yyyy-MM-dd 00:00:00",
+    ),
+    format(
+      new Date(
+        Number(range[1].split("-")[0]),
+        Number(range[1].split("-")[1]) - 1,
+        Number(range[1].split("-")[2]),
+      ),
+      "yyyy-MM-dd 23:59:59",
+    ),
+  );
 
   return json({ actions, partner, categories, range }, { headers });
 };
@@ -126,16 +169,17 @@ export default function ReportPage() {
                 </div>
               )
             ) : null}
-            <h5 className="mt-4 text-sm font-bold uppercase tracking-wider text-gray-950">
+            <h5 className="mt-4 text-sm font-bold uppercase tracking-normal text-gray-950">
               Legenda
             </h5>
+
             <div
               className="mt-4"
               dangerouslySetInnerHTML={{
                 __html:
                   action.category_id === CATEGORIES.stories
                     ? action.description || ""
-                    : action.caption || "",
+                    : action.caption?.replace(/\n/gi, "<br>") || "",
               }}
             ></div>
           </div>

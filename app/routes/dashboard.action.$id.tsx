@@ -590,7 +590,7 @@ export default function ActionPage() {
             }
           />
         </Label>
-        <pre className="text-sm">{JSON.stringify(action, undefined, 2)}</pre>
+        {/* <pre className="text-sm">{JSON.stringify(action, undefined, 2)}</pre> */}
       </div>
     </div>
   );
