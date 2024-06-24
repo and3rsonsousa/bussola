@@ -105,8 +105,6 @@ export default function ActionPage() {
   const handleActions = (data: {
     [key: string]: string | number | string[] | null;
   }) => {
-    console.log({ data });
-
     submit(
       { ...data },
       {
@@ -551,9 +549,11 @@ export default function ActionPage() {
 
       <div
         className={`w-[400px] p-4 ${
-          InstagramFeedContent.find((content) => content === action.category_id)
-            ? ""
-            : "hidden"
+          !InstagramFeedContent.find(
+            (content) => content === action.category_id,
+          )
+            ? "hidden"
+            : ""
         }`}
       >
         <Label className="mb-8 flex flex-col gap-4">
@@ -590,6 +590,7 @@ export default function ActionPage() {
             }
           />
         </Label>
+        <pre className="text-sm">{JSON.stringify(action, undefined, 2)}</pre>
       </div>
     </div>
   );

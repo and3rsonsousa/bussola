@@ -131,7 +131,12 @@ export default function ReportPage() {
             </h5>
             <div
               className="mt-4"
-              dangerouslySetInnerHTML={{ __html: action.caption || "" }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  action.category_id === CATEGORIES.stories
+                    ? action.description || ""
+                    : action.caption || "",
+              }}
             ></div>
           </div>
         ))}

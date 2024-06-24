@@ -44,37 +44,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     delete values.slug;
     delete values.date_to_post;
 
-    if (values["files"]) {
+    if (values["files"] !== "null") {
       values["files"] = values["files"].toString().split(",");
-    }
-
-    console.log(values);
-
-    if (values["responsibles"]) {
-      const { data, error } = await supabase
-        .from("actions")
-        .update({
-          ...values,
-          responsibles: values["responsibles"].toString().split(","),
-          updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
-        })
-        .eq("id", id);
-
-      if (error) console.log({ from: "UPDATE IF RESPONSIBLES", error });
-      return { data, error };
     } else {
-      const { data, error } = await supabase
-        .from("actions")
-        .update({
-          ...values,
-          updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
-        })
-        .eq("id", id);
-
-      if (error) console.log({ from: "UPDATE IF NO RESPONSIBLES", error });
-
-      return { data, error };
+      values["files"] = null;
     }
+    if (values["responsibles"] !== "null") {
+      values["responsibles"] = values["responsibles"].toString().split(",");
+    }
+
+    const { data, error } = await supabase
+      .from("actions")
+      .update({
+        ...values,
+        updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
+      })
+      .eq("id", id);
+
+    if (error) console.log({ from: "UPDATE ACTION", error });
+
+    return { data, error };
   } else if (intent === INTENTS.duplicateAction) {
     const { data: oldAction } = await supabase
       .from("actions")
