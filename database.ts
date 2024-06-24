@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       actions: {
         Row: {
+          caption: string | null;
           category_id: string;
           created_at: string;
           date: string;
@@ -27,6 +28,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          caption?: string | null;
           category_id: string;
           created_at: string;
           date: string;
@@ -43,6 +45,7 @@ export type Database = {
           user_id?: string;
         };
         Update: {
+          caption?: string | null;
           category_id?: string;
           created_at?: string;
           date?: string;

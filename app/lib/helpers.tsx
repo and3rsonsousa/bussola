@@ -214,6 +214,12 @@ export function getActionsForThisDay({
     : [];
 }
 
+export const InstagramFeedContent = [
+  CATEGORIES.post,
+  CATEGORIES.video,
+  CATEGORIES.carousel,
+];
+
 export function getInstagramActions({
   actions,
 }: {
@@ -221,11 +227,7 @@ export function getInstagramActions({
 }) {
   return actions
     ? actions
-        .filter((action) =>
-          [CATEGORIES.post, CATEGORIES.video, CATEGORIES.carousel].includes(
-            action.category_id,
-          ),
-        )
+        .filter((action) => InstagramFeedContent.includes(action.category_id))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     : [];
 }
@@ -302,6 +304,7 @@ export function convertToAction(data: { [key: string]: unknown }): Action {
     user_id: String(data["user_id"]),
     date_to_post: String(data["date_to_post"]),
     files: String(data["files"]).split(","),
+    caption: String(data["caption"]),
   };
   return action;
 }
@@ -346,6 +349,7 @@ export function usePendingActions() {
         updated_at: String(fetcher.formData?.get("updated_at")),
         priority_id: String(fetcher.formData?.get("priority_id")),
         date_to_post: String(fetcher.formData?.get("date_to_post")),
+        caption: String(fetcher.formData?.get("caption")),
         files: [],
       };
 

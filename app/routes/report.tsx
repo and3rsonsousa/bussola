@@ -126,9 +126,12 @@ export default function ReportPage() {
                 </div>
               )
             ) : null}
+            <h5 className="mt-4 text-sm font-bold uppercase tracking-wider text-gray-950">
+              Legenda
+            </h5>
             <div
               className="mt-4"
-              dangerouslySetInnerHTML={{ __html: action.description || "" }}
+              dangerouslySetInnerHTML={{ __html: action.caption || "" }}
             ></div>
           </div>
         ))}

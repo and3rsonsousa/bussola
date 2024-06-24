@@ -42,6 +42,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     delete values.state;
     delete values.partner;
     delete values.slug;
+    delete values.date_to_post;
+
+    if (values["files"]) {
+      values["files"] = values["files"].toString().split(",");
+    }
+
+    console.log(values);
 
     if (values["responsibles"]) {
       const { data, error } = await supabase
@@ -53,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         })
         .eq("id", id);
 
-      if (error) console.log({ error });
+      if (error) console.log({ from: "UPDATE IF RESPONSIBLES", error });
       return { data, error };
     } else {
       const { data, error } = await supabase
@@ -64,7 +71,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         })
         .eq("id", id);
 
-      if (error) console.log({ error });
+      if (error) console.log({ from: "UPDATE IF NO RESPONSIBLES", error });
 
       return { data, error };
     }
