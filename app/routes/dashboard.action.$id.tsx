@@ -126,7 +126,7 @@ export default function ActionPage() {
     fetchers.filter((f) => f.formData).length > 0;
 
   return (
-    <div className="flex justify-center overflow-hidden">
+    <div className="flex h-full justify-center overflow-hidden">
       <div className="flex h-full flex-col overflow-hidden">
         <div className="flex w-full shrink grow-0 items-center justify-between p-4 text-sm">
           {/* Header */}
