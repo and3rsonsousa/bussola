@@ -564,7 +564,7 @@ export default function ActionPage() {
           <Textarea
             name="caption"
             className="text-base font-normal leading-tight"
-            value={action.caption || ""}
+            value={action.caption ? action.caption : ""}
             onChange={(event) =>
               setAction((action) => ({
                 ...action,

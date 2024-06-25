@@ -281,6 +281,7 @@ export function ActionLine({
                   )
                   .map((person) => (
                     <Avatar
+                      key={person.id}
                       item={{
                         image: person.image,
                         short: person.initials!,

@@ -24,7 +24,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       title: values["title"].toString(),
       responsibles: values["responsibles"].toString().split(","),
       user_id: values["user_id"].toString(),
-      priority_id: values["priority_id"].toString() || PRIORITIES.medium,
+      priority_id: PRIORITIES.medium,
+      caption: "",
     };
 
     const { data, error } = await supabase
