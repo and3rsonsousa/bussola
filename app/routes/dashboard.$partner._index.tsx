@@ -263,7 +263,6 @@ export default function Partner() {
           <Badge
             title={`${lateActions.length} ${lateActions.length === 1 ? "ação" : "ações"} em atraso.`}
             value={lateActions.length}
-            className="-right-8"
             isDynamic
           />
         </Link>
