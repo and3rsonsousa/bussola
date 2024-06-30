@@ -11,19 +11,19 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 5% 40%;
+    --background: 220 5% 95%;
+    --foreground: 220 15% 15%;
     --card: 0 0% 100%;
     --card-foreground: 224 20% 5%;
-    --popover: 0 0% 100%;
+    --popover: 220 5% 90%;
     --popover-foreground: 224 20% 5%;
     --primary: 260 100% 60%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 225 35% 96%;
+    --secondary: 225 15% 100%;
     --secondary-foreground: 224 20% 5%;
     --muted: 220 20% 90%;
     --muted-foreground: 220 9% 60%;
-    --accent: 240 15% 93%;
+    --accent: 220 15% 85%;
     --accent-foreground: 260 15% 20%;
     --destructive: 355 85% 55%;
     --destructive-foreground: 210 20% 98%;
@@ -44,7 +44,7 @@
     --primary-foreground: 250 90% 98%;
     --secondary: 210 30% 15%;
     --secondary-foreground: 220 20% 80%;
-    --muted: 210 10% 35%;
+    --muted: 215 25% 25%;
     --muted-foreground: 210 10% 60%;
     --accent: 220 15% 30%;
     --accent-foreground: 10 15% 98%;
@@ -70,7 +70,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-popover focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-muted focus:ring-2;
 }
 
 .action-row {

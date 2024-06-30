@@ -64,7 +64,7 @@ const config = {
         doing: "#f37",
         review: "#93e",
         done: "#38f",
-        finished: "#3d7",
+        finished: "#0d8",
 
         todo: colors.blue,
         post: colors.orange,

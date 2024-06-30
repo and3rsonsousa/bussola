@@ -7,6 +7,7 @@ import {
 } from "@remix-run/react";
 import {
   ArrowLeftIcon,
+  Divide,
   HandshakeIcon,
   HelpCircle,
   LogOutIcon,
@@ -196,7 +197,21 @@ export default function Header() {
         )}
       </div>
 
-      <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-muted"></div>
+      {/* <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-muted"></div> */}
+      {/* <div className="absolute bottom-0 left-0 h-[1px] w-full overflow-hidden">
+        <div className="flex w-full -translate-y-[50px] blur-[50px]">
+          {[
+            "bg-idea",
+            "bg-do",
+            "bg-doing",
+            "bg-review",
+            "bg-done",
+            "bg-finished",
+          ].map((className, i) => (
+            <div key={i} className={`${className} h-[100px] w-full`}></div>
+          ))}
+        </div>
+      </div> */}
     </header>
   );
 }

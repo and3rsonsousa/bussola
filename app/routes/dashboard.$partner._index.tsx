@@ -216,7 +216,7 @@ export default function Partner() {
         submit(
           {
             ...draggedAction,
-            date: date?.concat(`T${format(draggedAction.date, "HH:mm:ss")}`),
+            date: date?.concat(` ${format(draggedAction.date, "HH:mm:ss")}`),
             intent: INTENTS.updateAction,
           },
           {
