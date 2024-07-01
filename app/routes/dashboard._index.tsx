@@ -70,13 +70,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .from("get_full_actions")
     .select("*")
     .contains("responsibles", person?.admin ? [] : [user.id])
-    .gte(
-      "date",
-      format(
-        startOfDay(startOfWeek(startOfMonth(new Date()))),
-        "yyyy-MM-dd HH:mm:ss",
-      ),
-    )
+
     .returns<Action[]>();
 
   return json({ actions }, { headers });
