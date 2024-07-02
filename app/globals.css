@@ -35,20 +35,21 @@
 
   .dark {
     --background: 220 30% 2%;
-    --foreground: 210 50% 95%;
-    --card: 220 20% 20%;
-    --card-foreground: 210 50% 95%;
-    --popover: 220 15% 25%;
-    --popover-foreground: 210 50% 95%;
+    --card: 220 25% 10%;
+    --popover: 220 20% 15%;
     --primary: 260 90 60%;
-    --primary-foreground: 250 90% 98%;
-    --secondary: 210 30% 15%;
-    --secondary-foreground: 220 20% 80%;
-    --muted: 215 25% 25%;
-    --muted-foreground: 210 10% 60%;
-    --accent: 220 15% 30%;
-    --accent-foreground: 10 15% 98%;
+    --secondary: 220 15% 20%;
+    --muted: 220 10% 25%;
+    --accent: 220 10% 30%;
     --destructive: 350 75% 45%;
+
+    --primary-foreground: 0 0 100%;
+    --foreground: 210 50% 98%;
+    --card-foreground: 210 15% 85%;
+    --popover-foreground: 210 15% 85%;
+    --secondary-foreground: 210 15% 85%;
+    --muted-foreground: 210 10% 50%;
+    --accent-foreground: 210 15% 85%;
     --destructive-foreground: 250 20% 98%;
     --border: 215 15 90%;
     --input: 215 27.9% 16.9%;
@@ -70,7 +71,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-muted focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
 }
 
 .action-row {
