@@ -71,7 +71,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border border-l-4 border-transparent bg-secondary shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:border-border hover:bg-accent focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-secondary focus:ring-2;
 }
 
 .action-row {

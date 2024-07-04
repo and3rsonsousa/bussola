@@ -107,7 +107,7 @@ export default function UI() {
           ))}
         </div>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 text-white">
         {[
           {
             className: "bg-idea",
