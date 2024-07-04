@@ -4,6 +4,8 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
+import { MoonIcon, SunIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import Loader from "~/components/structure/Loader";
 import { Button } from "~/components/ui/button";
 import { Avatar, Icons } from "~/lib/helpers";
@@ -56,11 +58,41 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function UI() {
   const { categories } = useLoaderData<typeof loader>() as DashboardDataType;
+  const [mode, setMode] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    if (mode === "dark") {
+      document.querySelector("body")?.classList.add("dark");
+    } else {
+      document.querySelector("body")?.classList.remove("dark");
+    }
+  }, [mode]);
+
   return (
     <div className="flex flex-col gap-8 p-8">
-      <h1 className="text-5xl font-bold" style={{ fontStretch: "125%" }}>
-        UI
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-5xl font-bold" style={{ fontStretch: "125%" }}>
+          UI
+        </h1>
+        <div>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setMode((mode) => (mode === "dark" ? "light" : "dark"));
+            }}
+          >
+            {mode === "light" ? (
+              <>
+                <MoonIcon className="size-6" />
+              </>
+            ) : (
+              <>
+                <SunIcon className="size-6" />
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
       <div className="h-2 overflow-hidden rounded-sm">
         <div className="flex w-[110%] -translate-y-8 blur-xl">
           {[

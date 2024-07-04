@@ -82,8 +82,12 @@ export function Avatar({
             : size === "md"
               ? "h-8 w-8"
               : "h-12 w-12",
-        group ? "-ml-1" : "",
-        "block border",
+        group
+          ? size === "md" || size === "lg"
+            ? "-ml-2 border-2 border-background"
+            : "-ml-1 border border-background"
+          : "",
+        "block",
         className,
       ])}
       style={style}
@@ -94,7 +98,7 @@ export function Avatar({
         <AvatarFallback
           style={{
             backgroundColor: item.bg || "#778",
-            color: item.fg || "#dde",
+            color: item.fg || "#bbc",
           }}
         >
           <ShortText
