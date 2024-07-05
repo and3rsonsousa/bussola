@@ -11,20 +11,20 @@
 
 @layer base {
   :root {
-    --background: 220 0% 100%;
-    --card: 220 10% 97%;
-    --popover: 220 5% 100%;
+    --background: 220 10% 95%;
+    --card: 0 0 100%;
+    --popover: 0 0 100%;
     --primary: 260 100% 60%;
-    --secondary: 220 10% 93%;
-    --muted: 220 10% 90%;
+    --secondary: 220 15% 90%;
+    --muted: 220 12% 80%;
     --accent: 220 15% 89%;
     --destructive: 355 85% 60%;
-    --foreground: 220 10% 45%;
-    --card-foreground: 224 20% 5%;
-    --popover-foreground: 224 20% 5%;
+    --foreground: 220 10% 15%;
+    --card-foreground: 224 20% 35%;
+    --popover-foreground: 224 20% 35%;
     --primary-foreground: 210 20% 98%;
-    --secondary-foreground: 224 20% 5%;
-    --muted-foreground: 220 9% 60%;
+    --secondary-foreground: 220 10% 35%;
+    --muted-foreground: 220 10% 60%;
     --accent-foreground: 260 15% 20%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 50%;
@@ -45,11 +45,11 @@
 
     --primary-foreground: 0 0 100%;
     --foreground: 210 50% 98%;
-    --card-foreground: 210 15% 85%;
-    --popover-foreground: 210 15% 85%;
-    --secondary-foreground: 210 15% 85%;
+    --card-foreground: 210 15% 75%;
+    --popover-foreground: 210 15% 75%;
+    --secondary-foreground: 210 15% 75%;
     --muted-foreground: 210 10% 50%;
-    --accent-foreground: 210 15% 85%;
+    --accent-foreground: 210 15% 75%;
     --destructive-foreground: 250 20% 98%;
     --border: 215 15 90%;
     --input: 215 27.9% 16.9%;
@@ -71,7 +71,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-secondary focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card text-secondary-foreground shadow-sm outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-secondary focus:ring-2;
 }
 
 .action-row {
