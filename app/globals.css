@@ -361,7 +361,7 @@ ol {
 } */
 
 .dragover {
-  @apply bg-secondary/50;
+  @apply bg-secondary/25;
 }
 
 #calendar > * {
