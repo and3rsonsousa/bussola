@@ -34,9 +34,11 @@ export default function CreateAction({
   const { categories, states, partners, people, user } = useMatches()[1]
     .data as DashboardDataType;
   const match3 = useMatches()[3];
-  let partner = match3
-    ? (match3.data as DashboardPartnerType).partner
-    : undefined;
+
+  let partner =
+    match3 && match3.data
+      ? (match3.data as DashboardPartnerType).partner
+      : undefined;
 
   const [open, setOpen] = useState(false);
   const submit = useSubmit();

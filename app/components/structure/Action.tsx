@@ -240,7 +240,7 @@ export function ActionLine({
               >
                 {action.title}
                 <div
-                  className={`absolute right-0 top-0 rounded-sm bg-gradient-to-l from-accent via-accent pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
+                  className={`absolute right-0 top-0 rounded-sm bg-gradient-to-l from-secondary via-secondary pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
                 >
                   <Edit3Icon className="size-4" />
                 </div>
