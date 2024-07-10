@@ -13,6 +13,8 @@ import { Label } from "~/components/ui/label";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { supabase, headers } = await createClient(request);
 

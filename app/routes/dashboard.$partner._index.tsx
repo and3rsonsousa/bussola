@@ -86,6 +86,8 @@ import {
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let date = new URL(request.url).searchParams.get("date");
 

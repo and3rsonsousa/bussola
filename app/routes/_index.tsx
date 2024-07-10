@@ -2,6 +2,8 @@ import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
 import { Button } from "~/components/ui/button";
 
+export const config = { runtime: "edge" };
+
 export const meta: MetaFunction = () => {
   return [
     { title: "ʙússoʟa - Domine, Crie e Conquiste." },

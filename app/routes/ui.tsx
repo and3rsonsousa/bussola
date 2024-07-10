@@ -11,6 +11,8 @@ import { Button } from "~/components/ui/button";
 import { Avatar, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase } = createClient(request);
 

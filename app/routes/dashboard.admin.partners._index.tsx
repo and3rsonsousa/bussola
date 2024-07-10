@@ -4,6 +4,8 @@ import { Trash2Icon } from "lucide-react";
 import { Avatar, getResponsibles } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { supabase, headers } = await createClient(request);
 

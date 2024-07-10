@@ -1,16 +1,17 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import {
   MetaFunction,
   json,
   redirect,
   type LoaderFunctionArgs,
 } from "@vercel/remix";
-import { useState } from "react";
 import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+
+export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { supabase, headers } = await createClient(request);

@@ -1,13 +1,14 @@
-import { type ActionFunctionArgs, redirect } from "@vercel/remix";
 import { Form, useMatches } from "@remix-run/react";
+import { type ActionFunctionArgs, redirect } from "@vercel/remix";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { createClient } from "~/lib/supabase";
-import { Button } from "~/components/ui/button";
-import { useState } from "react";
-import { flushSync } from "react-dom";
+
+export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { supabase } = createClient(request);

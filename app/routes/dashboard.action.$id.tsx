@@ -48,6 +48,8 @@ import { INTENTS } from "~/lib/constants";
 import { Avatar, Icons, InstagramFeedContent } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { headers, supabase } = createClient(request);
   const { id } = params;

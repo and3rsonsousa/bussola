@@ -6,6 +6,8 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { supabase, headers } = await createClient(request);
 

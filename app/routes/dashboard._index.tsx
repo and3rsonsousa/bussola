@@ -49,6 +49,8 @@ import {
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { headers, supabase } = createClient(request);
 

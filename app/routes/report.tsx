@@ -1,4 +1,4 @@
-import { MetaFunction, useLoaderData } from "@remix-run/react";
+import { MetaFunction } from "@vercel/remix";
 import {
   json,
   redirect,
@@ -14,8 +14,9 @@ import {
 import { ptBR } from "date-fns/locale";
 import { CATEGORIES } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
+import { useLoaderData } from "@remix-run/react";
 
-// import "./app/globals.css";
+export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { headers, supabase } = createClient(request);

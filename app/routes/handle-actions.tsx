@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import { INTENTS, PRIORITIES } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
 
+export const config = { runtime: "edge" };
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { headers, supabase } = createClient(request);
 

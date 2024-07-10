@@ -3,6 +3,8 @@ import { Outlet } from "@remix-run/react";
 import { createClient } from "~/lib/supabase";
 import Layout from "~/components/structure/Layout";
 
+export const config = { runtime: "edge" };
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase } = createClient(request);
 
