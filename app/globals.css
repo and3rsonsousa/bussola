@@ -17,7 +17,7 @@
     --primary: 260 100% 60%;
     --secondary: 220 15% 90%;
     --muted: 220 12% 80%;
-    --accent: 220 15% 89%;
+    --accent: 220 15% 90%;
     --destructive: 355 85% 60%;
     --foreground: 220 10% 15%;
     --card-foreground: 224 20% 35%;
@@ -281,11 +281,11 @@ body {
 }
 
 .bg-content {
-  @apply border border-white/75 bg-popover/10 ring-1 ring-black/5 backdrop-blur-xl;
+  @apply border-none bg-popover/50 ring-1 ring-black/5 backdrop-blur-xl;
 }
 
 .dark .bg-content {
-  @apply border-border ring-black/50;
+  @apply border-border bg-popover/10 ring-black/50;
 }
 
 .bg-item {
