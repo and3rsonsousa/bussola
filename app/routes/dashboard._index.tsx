@@ -499,7 +499,7 @@ function Partners({ actions }: { actions: Action[] }) {
             <Link
               to={`/dashboard/${partner.slug}`}
               key={partner.id}
-              className="group relative rounded-full outline-none ring-ring focus:ring-2"
+              className="group relative rounded-full outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2"
             >
               <Avatar
                 item={{

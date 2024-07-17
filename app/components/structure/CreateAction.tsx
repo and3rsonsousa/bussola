@@ -264,13 +264,9 @@ export default function CreateAction({
               }
             >
               <SelectTrigger
-                className={`border-none bg-transparent font-bold focus:ring-offset-0`}
+                className={`rounded font-bold text-white ring-offset-1 bg-${state.slug} h-8`}
               >
-                <div
-                  className={`rounded-full border border-${state.slug} bg-${state.slug} px-2`}
-                >
-                  {state.title}
-                </div>
+                {state.title}
               </SelectTrigger>
               <SelectContent className="bg-content">
                 {states.map((state) => (

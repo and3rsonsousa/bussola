@@ -685,12 +685,12 @@ export const CalendarDay = ({
               </div>
             ) : null,
           )}
-        <button
+        {/* <button
           className={`${isCreating ? "hidden" : isHover ? "mx-auto grid scale-75 place-content-center rounded-sm bg-transparent transition hover:scale-100 hover:bg-muted" : "opacity-0"} h-8 w-8`}
           onClick={() => setIsCreating(true)}
         >
           <PlusIcon className="size-4" />
-        </button>
+        </button> */}
         {isCreating && (
           <ContextMenu>
             <ContextMenuTrigger>
