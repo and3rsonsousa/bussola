@@ -281,7 +281,7 @@ body {
 }
 
 .bg-content {
-  @apply border-none bg-popover/50 ring-1 ring-black/5 backdrop-blur-xl;
+  @apply border-white bg-popover/50 ring-1 ring-black/5 backdrop-blur-xl;
 }
 
 .dark .bg-content {
