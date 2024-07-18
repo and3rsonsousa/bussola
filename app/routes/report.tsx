@@ -55,7 +55,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .match({ partner_id: id })
         .in("category_id", [
           CATEGORIES.post,
-          CATEGORIES.reel,
+          CATEGORIES.reels,
           CATEGORIES.carousel,
           CATEGORIES.stories,
         ])

@@ -10,7 +10,7 @@ export const CATEGORIES = {
   todo: "1c2b1ccd-2a88-4f56-a1ce-83efbfaf8c25",
   post: "3ad13902-b636-4253-9111-e836b4716abf",
   carousel: "1d0d17d1-8aba-4708-ba4e-560b39a0d8b7",
-  reel: "4f5c76ee-6fe3-4855-ad5d-91af1c825b6d",
+  reels: "4f5c76ee-6fe3-4855-ad5d-91af1c825b6d",
   stories: "d4b57ba3-c895-4f1c-a6dd-fd13d501fc77",
   dev: "8aec1ddf-d2fc-4fb9-bec6-b17a7e37d30a",
   print: "4dfd0afa-572a-45fc-9d89-54a91dab63e6",

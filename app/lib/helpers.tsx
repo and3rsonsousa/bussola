@@ -220,7 +220,7 @@ export function getActionsForThisDay({
 
 export const InstagramFeedContent = [
   CATEGORIES.post,
-  CATEGORIES.reel,
+  CATEGORIES.reels,
   CATEGORIES.carousel,
 ];
 

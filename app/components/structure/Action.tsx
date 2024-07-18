@@ -848,7 +848,7 @@ function ShortcutActions({ action }: { action: Action }) {
             break;
 
           case "KeyV":
-            category_id = CATEGORIES.reel;
+            category_id = CATEGORIES.reels;
             break;
 
           case "KeyS":
@@ -1383,7 +1383,7 @@ export function ContextMenuItems({
                             { id: CATEGORIES.sm, shortcut: "m" },
                             { id: CATEGORIES.stories, shortcut: "s" },
                             { id: CATEGORIES.todo, shortcut: "t" },
-                            { id: CATEGORIES.reel, shortcut: "v" },
+                            { id: CATEGORIES.reels, shortcut: "v" },
                           ].find((s) => s.id === category.id)?.shortcut
                         }
                       </ContextMenuShortcut>
