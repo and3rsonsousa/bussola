@@ -242,7 +242,7 @@ const iconsList: { [key: string]: LucideIcon } = {
   todo: ListChecksIcon,
   post: ImageIcon,
   carousel: GalleryHorizontal,
-  reel: ClapperboardIcon,
+  reels: ClapperboardIcon,
   stories: CircleFadingPlusIcon,
   sm: BadgeCheckIcon,
   meeting: UsersIcon,
