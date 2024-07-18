@@ -110,8 +110,8 @@ body {
 .fg-carousel {
   @apply text-carousel-500;
 }
-.fg-video {
-  @apply text-video-600;
+.fg-reel {
+  @apply text-reel-600;
 }
 .fg-stories {
   @apply text-stories-500;
@@ -150,8 +150,8 @@ body {
 .border-carousel {
   @apply border-carousel-500;
 }
-.border-video {
-  @apply border-video-600;
+.border-reel {
+  @apply border-reel-600;
 }
 .border-stories {
   @apply border-stories-500;
@@ -190,8 +190,8 @@ body {
 .bg-carousel {
   @apply bg-carousel-500;
 }
-.bg-video {
-  @apply bg-video-600;
+.bg-reel {
+  @apply bg-reel-600;
 }
 .bg-stories {
   @apply bg-stories-500;

@@ -220,7 +220,7 @@ export function getActionsForThisDay({
 
 export const InstagramFeedContent = [
   CATEGORIES.post,
-  CATEGORIES.video,
+  CATEGORIES.reel,
   CATEGORIES.carousel,
 ];
 
@@ -242,7 +242,7 @@ const iconsList: { [key: string]: LucideIcon } = {
   todo: ListChecksIcon,
   post: ImageIcon,
   carousel: GalleryHorizontal,
-  video: ClapperboardIcon,
+  reel: ClapperboardIcon,
   stories: CircleFadingPlusIcon,
   sm: BadgeCheckIcon,
   meeting: UsersIcon,

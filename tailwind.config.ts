@@ -69,7 +69,7 @@ const config = {
         todo: colors.blue,
         post: colors.orange,
         carousel: colors.rose,
-        video: colors.amber,
+        reels: colors.amber,
         stories: colors.pink,
         sm: colors.red,
         meeting: colors.indigo,
