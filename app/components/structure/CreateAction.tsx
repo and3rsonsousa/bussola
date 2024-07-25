@@ -46,7 +46,7 @@ export default function CreateAction({
 
   const newDate = date || new Date();
 
-  if (isToday(newDate) && new Date().getHours() > 11) {
+  if (isToday(newDate) && new Date().getHours() >= 11) {
     newDate.setHours(new Date().getHours() + 1, new Date().getMinutes());
   } else {
     newDate.setHours(11, 0);
