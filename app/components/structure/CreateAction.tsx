@@ -479,6 +479,12 @@ export default function CreateAction({
                       date: format(action.date, "y-MM-dd HH:mm:ss", {
                         locale: ptBR,
                       }),
+                      created_at: format(Date.now(), "y-MM-dd HH:mm:ss", {
+                        locale: ptBR,
+                      }),
+                      updated_at: format(Date.now(), "y-MM-dd HH:mm:ss", {
+                        locale: ptBR,
+                      }),
                     },
                     {
                       action: "/handle-actions",

@@ -16,8 +16,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (intent === INTENTS.createAction) {
     const actionToInsert = {
       id: id.toString(),
-      created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-      updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+      created_at: values["created_at"].toString(),
+      updated_at: values["updated_at"].toString(),
+
       category_id: values["category_id"].toString(),
       state_id: values["state_id"].toString(),
       partner_id: values["partner_id"].toString(),
@@ -60,7 +61,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .from("actions")
       .update({
         ...values,
-        updated_at: format(Date.now(), "yyyy-MM-dd HH:mm:ss"),
       })
       .eq("id", id);
 
