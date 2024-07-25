@@ -761,6 +761,10 @@ export function GridOfActions({ actions }: { actions?: Action[] }) {
 function ShortcutActions({ action }: { action: Action }) {
   const navigate = useNavigate();
   const submit = useSubmit();
+  const matches = useMatches();
+
+  const { states, categories, priorities } = matches[1]
+    .data as DashboardDataType;
 
   function handleActions(data: {
     [key: string]: string | number | null | string[];
@@ -781,31 +785,9 @@ function ShortcutActions({ action }: { action: Action }) {
       const code = event.code;
 
       // Set States
-      if (
-        ["i", "f", "z", "a", "t", "c"].find((k) => k === key) &&
-        !event.shiftKey
-      ) {
-        let state_id = STATES.do;
-        switch (key) {
-          case "i":
-            state_id = STATES.ideia;
-            break;
-          case "f":
-            state_id = STATES.do;
-            break;
-          case "z":
-            state_id = STATES.doing;
-            break;
-          case "a":
-            state_id = STATES.review;
-            break;
-          case "t":
-            state_id = STATES.done;
-            break;
-          case "c":
-            state_id = STATES.finish;
-            break;
-        }
+      if (states.find((state) => state.shortcut === key) && !event.shiftKey) {
+        let state_id =
+          states.find((state) => state.shortcut === key)?.id || STATES.do;
 
         handleActions({
           intent: INTENTS.updateAction,
@@ -813,84 +795,29 @@ function ShortcutActions({ action }: { action: Action }) {
           state_id,
         });
       } else if (
-        [
-          "KeyT",
-          "KeyP",
-          "KeyL",
-          "KeyV",
-
-          "KeyS",
-          "KeyC",
-          "KeyI",
-
-          "KeyR",
-          "KeyF",
-          "KeyD",
-
-          "KeyA",
-          "KeyM",
-          "KeyN",
-        ].find((k) => k === code) &&
+        categories.find(
+          (category) => category.shortcut === code.toLowerCase().substring(3),
+        ) &&
         event.altKey
       ) {
-        let category_id = CATEGORIES.post;
-        switch (code) {
-          case "KeyT":
-            category_id = CATEGORIES.todo;
-            break;
-
-          case "KeyP":
-            category_id = CATEGORIES.post;
-            break;
-
-          case "KeyL":
-            category_id = CATEGORIES.carousel;
-            break;
-
-          case "KeyV":
-            category_id = CATEGORIES.reels;
-            break;
-
-          case "KeyS":
-            category_id = CATEGORIES.stories;
-            break;
-
-          case "KeyC":
-            category_id = CATEGORIES.dev;
-            break;
-
-          case "KeyI":
-            category_id = CATEGORIES.print;
-            break;
-
-          case "KeyR":
-            category_id = CATEGORIES.meeting;
-            break;
-
-          case "KeyF":
-            category_id = CATEGORIES.finance;
-            break;
-
-          case "KeyD":
-            category_id = CATEGORIES.design;
-            break;
-
-          case "KeyA":
-            category_id = CATEGORIES.ads;
-            break;
-          case "KeyM":
-            category_id = CATEGORIES.sm;
-            break;
-
-          case "KeyN":
-            category_id = CATEGORIES.plan;
-            break;
-        }
+        let category_id =
+          categories.find(
+            (category) => category.shortcut === code.toLowerCase().substring(3),
+          )?.id || CATEGORIES.post;
 
         handleActions({
           intent: INTENTS.updateAction,
           ...action,
           category_id,
+        });
+      } else if (priorities.find((priority) => priority.shortcut === key)) {
+        let priority_id =
+          priorities.find((priority) => priority.shortcut === key)?.id ||
+          PRIORITIES.medium;
+        handleActions({
+          ...action,
+          intent: INTENTS.updateAction,
+          priority_id,
         });
       } else if (key === "e" && event.shiftKey) {
         navigate(`/dashboard/action/${action.id}`);
@@ -909,24 +836,6 @@ function ShortcutActions({ action }: { action: Action }) {
             intent: INTENTS.deleteAction,
           });
         }
-      } else if (key === ",") {
-        handleActions({
-          ...action,
-          intent: INTENTS.updateAction,
-          priority_id: PRIORITIES.low,
-        });
-      } else if (key === ".") {
-        handleActions({
-          ...action,
-          intent: INTENTS.updateAction,
-          priority_id: PRIORITIES.medium,
-        });
-      } else if (key === "/") {
-        handleActions({
-          ...action,
-          intent: INTENTS.updateAction,
-          priority_id: PRIORITIES.high,
-        });
       }
       //em uma hora
       else if (code === "Digit1" && event.shiftKey) {
