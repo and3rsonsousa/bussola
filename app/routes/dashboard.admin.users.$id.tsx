@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
 import { json, redirect, type LoaderFunctionArgs } from "@vercel/remix";
+import { format } from "date-fns";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import invariant from "tiny-invariant";
@@ -45,7 +46,7 @@ export default function AdminPartners() {
     [key: string]: string | number | null | string[] | boolean;
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",

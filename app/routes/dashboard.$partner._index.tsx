@@ -586,7 +586,7 @@ export const CalendarDay = ({
     [key: string]: string | number | null | string[];
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",

@@ -95,7 +95,7 @@ export function ActionLine({
     [key: string]: string | number | null | string[];
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",
@@ -357,7 +357,7 @@ export function ActionBlock({
     [key: string]: string | number | null | string[];
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",
@@ -564,7 +564,7 @@ export function ActionGrid({
     [key: string]: string | number | null | string[];
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",
@@ -770,7 +770,7 @@ function ShortcutActions({ action }: { action: Action }) {
     [key: string]: string | number | null | string[];
   }) {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",
