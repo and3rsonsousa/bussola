@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  Form,
   Link,
   redirect,
   useLoaderData,
@@ -10,7 +9,7 @@ import {
 } from "@remix-run/react";
 import { MetaFunction, json, type LoaderFunctionArgs } from "@vercel/remix";
 import {
-  addHours,
+  addDays,
   addMonths,
   eachDayOfInterval,
   eachMonthOfInterval,
@@ -19,8 +18,6 @@ import {
   endOfWeek,
   endOfYear,
   format,
-  isAfter,
-  isBefore,
   isSameDay,
   isSameMonth,
   isToday,
@@ -39,7 +36,6 @@ import {
   ChevronsUpDownIcon,
   ClipboardCheckIcon,
   Grid3x3Icon,
-  PlusIcon,
   UserIcon,
   UsersIcon,
   XIcon,
@@ -71,12 +67,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { Toggle } from "~/components/ui/toggle";
-import { CATEGORIES, INTENTS, PRIORITIES, STATES } from "~/lib/constants";
+import { INTENTS } from "~/lib/constants";
 import {
   Avatar,
   Icons,
-  getActionNewDate,
   getCleanAction,
   getDelayedActions,
   getInstagramActions,
@@ -135,6 +129,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     )
     .returns<Action[]>();
 
+  console.log(startOfDay(startOfWeek(startOfMonth(date))));
+
   return json({ actions, partner, person }, { headers });
 };
 
@@ -161,20 +157,34 @@ export default function Partner() {
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
 
-  const { categories, priorities, states, person, people } = matches[1]
-    .data as DashboardDataType;
+  const { categories, states, person } = matches[1].data as DashboardDataType;
 
   const date = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
-  const currentDate = parseISO(date);
+
+  const currentDate = date;
 
   const actionsMap = new Map<string, Action>(
     actions?.map((action) => [action.id, action]),
   );
 
-  const days = eachDayOfInterval({
-    start: startOfWeek(startOfMonth(currentDate)),
-    end: endOfWeek(endOfMonth(currentDate)),
-  });
+  // const days = eachDayOfInterval({
+  //   start: startOfWeek(startOfMonth(currentDate)),
+  //   end: endOfWeek(endOfMonth(currentDate)),
+  // });
+
+  let days: Date[] = [];
+  let startDate = startOfWeek(startOfMonth(currentDate));
+  let endDate = endOfWeek(endOfMonth(currentDate));
+
+  while (
+    format(startDate, "yyyy-MM-dd") !==
+    format(addDays(endDate, 1), "yyyy-MM-dd")
+  ) {
+    days.push(startDate);
+    startDate = addDays(startDate, 1);
+  }
+
+  console.log(startOfWeek(startOfMonth(currentDate)), days);
 
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();
@@ -192,6 +202,8 @@ export default function Partner() {
   const lateActions = getDelayedActions({ actions });
 
   const calendar = days.map((day) => {
+    console.log(day);
+
     return {
       date: day,
       actions: actions?.filter(
@@ -560,7 +572,7 @@ export const CalendarDay = ({
   allUsers,
 }: {
   day: { date: Date; actions?: Action[] };
-  currentDate: Date;
+  currentDate: Date | string;
   setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
   person: Person;
   short?: boolean;
