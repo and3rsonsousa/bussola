@@ -66,24 +66,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       supabase.from("categories").select(),
     ]);
 
-  console.log(
-    format(
-      new Date(
-        Number(range[0].split("-")[0]),
-        Number(range[0].split("-")[1]) - 1,
-        Number(range[0].split("-")[2]),
-      ),
-      "yyyy-MM-dd 00:00:00",
-    ),
-    format(
-      new Date(
-        Number(range[1].split("-")[0]),
-        Number(range[1].split("-")[1]) - 1,
-        Number(range[1].split("-")[2]),
-      ),
-      "yyyy-MM-dd 23:59:59",
-    ),
-  );
+  // console.log(
+  //   format(
+  //     new Date(
+  //       Number(range[0].split("-")[0]),
+  //       Number(range[0].split("-")[1]) - 1,
+  //       Number(range[0].split("-")[2]),
+  //     ),
+  //     "yyyy-MM-dd 00:00:00",
+  //   ),
+  //   format(
+  //     new Date(
+  //       Number(range[1].split("-")[0]),
+  //       Number(range[1].split("-")[1]) - 1,
+  //       Number(range[1].split("-")[2]),
+  //     ),
+  //     "yyyy-MM-dd 23:59:59",
+  //   ),
+  // );
 
   return json({ actions, partner, categories, range }, { headers });
 };

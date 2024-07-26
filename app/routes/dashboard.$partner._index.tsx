@@ -129,8 +129,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     )
     .returns<Action[]>();
 
-  console.log(startOfDay(startOfWeek(startOfMonth(date))));
-
   return json({ actions, partner, person }, { headers });
 };
 
@@ -184,8 +182,6 @@ export default function Partner() {
     startDate = addDays(startDate, 1);
   }
 
-  console.log(startOfWeek(startOfMonth(currentDate)), days);
-
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();
 
@@ -202,8 +198,6 @@ export default function Partner() {
   const lateActions = getDelayedActions({ actions });
 
   const calendar = days.map((day) => {
-    console.log(day);
-
     return {
       date: day,
       actions: actions?.filter(

@@ -11,13 +11,13 @@
 
 @layer base {
   :root {
-    --background: 220 10% 95%;
-    --card: 0 0 100%;
+    --background: 220 10% 100%;
+    --card: 220 10% 96%;
     --popover: 0 0 100%;
     --primary: 260 100% 60%;
-    --secondary: 220 15% 90%;
+    --secondary: 220 12% 92%;
     --muted: 220 12% 80%;
-    --accent: 220 15% 90%;
+    --accent: 220 15% 88%;
     --destructive: 355 85% 60%;
     --foreground: 220 10% 15%;
     --card-foreground: 224 20% 35%;
