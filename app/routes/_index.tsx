@@ -18,7 +18,10 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="grid h-dvh w-full place-content-center">
-      <img src="logo.png" alt="" className="h-6" />
+      {/* <img src="logo.png" alt="" className="h-6" /> */}
+      <h1 className="text-5xl font-black tracking-tight">
+        BÚSSOL<span className="text-[66px] font-bold">a</span>
+      </h1>
       <div className="mt-8 text-center">
         <Button asChild>
           <Link to={"/dashboard"} prefetch="intent">
