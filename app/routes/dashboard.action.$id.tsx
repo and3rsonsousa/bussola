@@ -108,7 +108,7 @@ export default function ActionPage() {
     [key: string]: string | number | string[] | null;
   }) => {
     submit(
-      { ...data },
+      { ...data, updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss") },
       {
         action: "/handle-actions",
         method: "post",
