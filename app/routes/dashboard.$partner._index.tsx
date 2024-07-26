@@ -405,7 +405,7 @@ export default function Partner() {
                         }}
                       >
                         <div
-                          className={`h-3 w-3 rounded-full border-2 border-white`}
+                          className={`h-3 w-3 rounded-full border-2 border-foreground`}
                         ></div>
                         <div>Todos os Status</div>
                       </DropdownMenuCheckboxItem>
