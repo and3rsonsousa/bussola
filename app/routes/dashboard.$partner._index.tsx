@@ -649,8 +649,7 @@ export const CalendarDay = ({
             isToday(day.date) ? "bg-accent text-accent-foreground" : "-ml-1"
           } `}
         >
-          {day.date.toDateString()}
-          {/* {day.date.getDate()} */}
+          {day.date.getDate()}
         </div>
       </div>
       <div className="relative flex flex-col gap-3">
