@@ -566,7 +566,7 @@ export const CalendarDay = ({
   short?: boolean;
   allUsers?: boolean;
 }) => {
-  const [isHover, setIsHover] = useState(false);
+  // const [isHover, setIsHover] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const submit = useSubmit();
@@ -636,10 +636,10 @@ export const CalendarDay = ({
             .forEach((e) => e.classList.remove("dragover"));
         }, 500);
       }}
-      onFocus={() => setIsHover(true)}
-      onBlur={() => setIsHover(false)}
-      onMouseOver={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      // onFocus={() => setIsHover(true)}
+      // onBlur={() => setIsHover(false)}
+      // onMouseOver={() => setIsHover(true)}
+      // onMouseLeave={() => setIsHover(false)}
     >
       <div className="my-1 flex justify-between">
         <div
@@ -649,7 +649,8 @@ export const CalendarDay = ({
             isToday(day.date) ? "bg-accent text-accent-foreground" : "-ml-1"
           } `}
         >
-          {day.date.getDate()}
+          {day.date.toDateString()}
+          {/* {day.date.getDate()} */}
         </div>
       </div>
       <div className="relative flex flex-col gap-3">

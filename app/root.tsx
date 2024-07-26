@@ -35,7 +35,7 @@ export function Layout() {
         <Meta />
         <Links />
       </head>
-      <body className="dark">
+      <body>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

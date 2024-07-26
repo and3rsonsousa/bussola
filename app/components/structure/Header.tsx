@@ -7,7 +7,6 @@ import {
 } from "@remix-run/react";
 import {
   ArrowLeftIcon,
-  Divide,
   HandshakeIcon,
   HelpCircle,
   LogOutIcon,
@@ -16,6 +15,7 @@ import {
   SunIcon,
   Users2Icon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Avatar } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import {
@@ -25,7 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { SetStateAction, useEffect, useState } from "react";
 import Loader from "./Loader";
 
 export default function Header() {
@@ -33,7 +32,7 @@ export default function Header() {
   const navigation = useNavigation();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState<"dark" | "light">("dark");
+  const [mode, setMode] = useState<"dark" | "light">("light");
 
   const { partners, person } = matches[1].data as DashboardDataType;
   const { partner } = matches[1].params;
