@@ -16,7 +16,7 @@ import {
   Users2Icon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Avatar } from "~/lib/helpers";
+import { Avatar, Bussola } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -57,7 +57,7 @@ export default function Header() {
           unstable_viewTransition
           className="rounded-md p-2 outline-none ring-ring ring-offset-background focus:ring-2"
         >
-          <span className="text-2xl font-black tracking-tighter">BÚSSOLA</span>
+          <Bussola />
           {/* <img src="/logo.png" className="h-4 w-auto" alt="Bússola" /> */}
         </Link>
         <Button

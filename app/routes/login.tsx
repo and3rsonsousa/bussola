@@ -8,6 +8,7 @@ import { AlertCircleIcon, LogInIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Bussola } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const config = { runtime: "edge" };
@@ -45,8 +46,10 @@ export default function Login() {
   const actionData = useActionData<typeof action>();
   return (
     <div className="grid h-[100dvh] place-content-center">
-      <div className="w-full p-8 sm:w-80">
-        <img src="logo.png" alt="" className="mb-8 h-6 w-auto" />
+      <div className="w-full p-8 md:w-80">
+        <div className="mb-8">
+          <Bussola />
+        </div>
         {actionData && (
           <div className="my-8 flex items-center gap-4 rounded-lg bg-error-600 p-4 leading-none text-error-50">
             <AlertCircleIcon className="size-10" />

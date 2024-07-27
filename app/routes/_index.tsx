@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
 import { Button } from "~/components/ui/button";
+import { Bussola } from "~/lib/helpers";
 
 export const config = { runtime: "edge" };
 
@@ -19,9 +20,7 @@ export default function Index() {
   return (
     <div className="grid h-dvh w-full place-content-center">
       {/* <img src="logo.png" alt="" className="h-6" /> */}
-      <h1 className="text-5xl font-black tracking-tight">
-        BÚSSOL<span className="text-[66px] font-bold">a</span>
-      </h1>
+      <Bussola size={8} />
       <div className="mt-8 text-center">
         <Button asChild>
           <Link to={"/dashboard"} prefetch="intent">
