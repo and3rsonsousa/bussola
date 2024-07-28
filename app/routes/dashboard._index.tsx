@@ -491,10 +491,10 @@ function Partners({ actions }: { actions: Action[] }) {
   const { partners } = matches[1].data as DashboardDataType;
 
   return (
-    <div className="mx-auto my-16 w-auto rounded bg-gray-100 p-8">
+    <div className="mx-auto my-16 w-auto rounded bg-foreground p-8 text-background">
       <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
       {partners.length > 0 ? (
-        <div className="flow mx-auto flex w-auto flex-wrap justify-center gap-4">
+        <div className="mx-auto flex w-auto flex-wrap justify-center gap-4">
           {partners.map((partner) => (
             <Link
               to={`/dashboard/${partner.slug}`}
