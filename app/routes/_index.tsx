@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
+import { format } from "date-fns";
+import { useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Bussola } from "~/lib/helpers";
 
@@ -17,6 +19,10 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  useEffect(() => {
+    console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss X"));
+  }, []);
+
   return (
     <div className="grid h-dvh w-full place-content-center">
       {/* <img src="logo.png" alt="" className="h-6" /> */}
@@ -28,6 +34,7 @@ export default function Index() {
           </Link>
         </Button>
       </div>
+      <div className="py-4">{format(new Date(), "yyyy-MM-dd hh:mm:ss X")}</div>
     </div>
   );
 }

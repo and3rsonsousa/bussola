@@ -437,12 +437,18 @@ export function Bussola({ size = 1 }: { size?: number }) {
   size = 24 * (size / 10 + 1);
   return (
     <h1
-      className="font-black leading-none tracking-tight"
-      style={{ fontSize: size + "px", height: size + "px" }}
+      className="relative font-black leading-none tracking-tight"
+      style={{ fontSize: size + "px" }}
     >
-      BÚSSOL
+      <span>BUSSOL</span>
       <span className="font-bold" style={{ fontSize: 1.35 * size + "px" }}>
         a
+      </span>
+      <span
+        className="absolute"
+        style={{ top: size / 12 + "px", left: size / 1.2 + "px" }}
+      >
+        ´
       </span>
     </h1>
   );
