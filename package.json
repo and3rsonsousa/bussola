@@ -65,6 +65,7 @@
     "isbot": "5.1.9",
     "lucide-react": "0.394.0",
     "next-themes": "^0.3.0",
+    "openai": "^4.53.2",
     "react": "^18.2.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.2.0",

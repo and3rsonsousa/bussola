@@ -1,6 +1,6 @@
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
-import { format } from "date-fns-tz";
+import OpenAI from "openai";
 import { useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Bussola } from "~/lib/helpers";

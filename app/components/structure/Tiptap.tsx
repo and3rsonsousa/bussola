@@ -43,7 +43,7 @@ export default function Tiptap({
   ];
 
   return (
-    <div className="editor-tiptap">
+    <div className="editor-tiptap rounded bg-input p-4">
       <EditorProvider
         onBlur={({ editor }) => onBlur(editor.getHTML())}
         extensions={extensions}
@@ -51,7 +51,7 @@ export default function Tiptap({
         slotBefore={<Menu type={1} />}
       >
         <TiptapFloatingMenu />
-        <BubbleMenu className="rounded-lg border bg-background/50 p-1 backdrop-blur-lg">
+        <BubbleMenu className="rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border">
           <Menu type={3} />
         </BubbleMenu>
       </EditorProvider>
@@ -61,7 +61,7 @@ export default function Tiptap({
 
 const TiptapFloatingMenu = () => {
   return (
-    <FloatingMenu className="ml-4 rounded-lg border bg-background/50 p-1 backdrop-blur-lg">
+    <FloatingMenu className="ml-4 rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border">
       <Menu type={2} />
     </FloatingMenu>
   );
@@ -74,7 +74,9 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
   const { editor } = useCurrentEditor();
 
   return (
-    <div className={`flex flex-wrap gap-4`}>
+    <div
+      className={`${type === 1 ? "absolute -top-0 left-0 right-0" : ""} flex flex-wrap gap-4`}
+    >
       {/* Formating */}
       {type !== 2 && (
         <>
@@ -82,19 +84,19 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
             <Button
               variant={editor?.isActive("bold") ? "accent" : "ghost"}
               onClick={() => editor?.chain().focus().toggleBold().run()}
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
             >
               <BoldIcon className="size-4" />
             </Button>
             <Button
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={editor?.isActive("italic") ? "accent" : "ghost"}
               onClick={() => editor?.chain().focus().toggleItalic().run()}
             >
               <ItalicIcon className="size-4" />
             </Button>
             <Button
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={editor?.isActive("strike") ? "accent" : "ghost"}
               onClick={() => editor?.chain().focus().toggleStrike().run()}
             >
@@ -106,14 +108,14 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
           <div className="flex">
             <Button
               title="Destacar texto"
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={editor?.isActive("highlight") ? "default" : "ghost"}
               onClick={() => editor?.chain().focus().toggleHighlight().run()}
             >
               <HighlighterIcon className="size-4" />
             </Button>
             <Button
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={"ghost"}
               onClick={() => editor?.commands.clearNodes()}
               title="Limpar Formatação"
@@ -127,7 +129,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
       {type !== 3 && (
         <div className="flex">
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={
               editor?.isActive("heading", { level: 1 }) ? "default" : "ghost"
             }
@@ -138,7 +140,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
             <Heading1Icon className="size-4" />
           </Button>
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={
               editor?.isActive("heading", { level: 2 }) ? "default" : "ghost"
             }
@@ -149,7 +151,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
             <Heading2Icon className="size-4" />
           </Button>
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={
               editor?.isActive("heading", { level: 3 }) ? "default" : "ghost"
             }
@@ -160,7 +162,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
             <Heading3Icon className="size-4" />
           </Button>
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={
               editor?.isActive("heading", { level: 4 }) ? "default" : "ghost"
             }
@@ -171,7 +173,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
             <Heading4Icon className="size-4" />
           </Button>
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={
               editor?.isActive("heading", { level: 5 }) ? "default" : "ghost"
             }
@@ -187,7 +189,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
       <div className="flex">
         {type !== 3 && (
           <Button
-            className="grid size-8 place-content-center p-0"
+            className="grid size-8 place-content-center rounded p-0"
             variant={"ghost"}
             onClick={() => editor?.commands.toggleBulletList()}
           >
@@ -198,14 +200,14 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
         {type !== 2 && (
           <>
             <Button
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={editor?.isActive("subscript") ? "default" : "ghost"}
               onClick={() => editor?.chain().focus().toggleSubscript().run()}
             >
               <SubscriptIcon className="size-4" />
             </Button>
             <Button
-              className="grid size-8 place-content-center p-0"
+              className="grid size-8 place-content-center rounded p-0"
               variant={editor?.isActive("superscript") ? "default" : "ghost"}
               onClick={() => editor?.chain().focus().toggleSuperscript().run()}
             >

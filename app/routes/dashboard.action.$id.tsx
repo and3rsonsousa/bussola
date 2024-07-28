@@ -1,5 +1,6 @@
 import {
   Link,
+  useFetcher,
   useFetchers,
   useLoaderData,
   useMatches,
@@ -15,8 +16,13 @@ import {
 import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
+import {
+  CalendarIcon,
+  SparkleIcon,
+  SparklesIcon,
+  Trash2Icon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import Loader from "~/components/structure/Loader";
 import Tiptap from "~/components/structure/Tiptap";
@@ -27,7 +33,9 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
@@ -83,7 +91,7 @@ export default function ActionPage() {
   const submit = useSubmit();
   const matches = useMatches();
 
-  const { categories, partners, people, priorities, states } = matches[1]
+  const { categories, partners, people, priorities, states, areas } = matches[1]
     .data as DashboardDataType;
 
   const partner = partners.find(
@@ -120,10 +128,28 @@ export default function ActionPage() {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const fetchers = useFetchers();
+  const fetcher = useFetcher();
+  const caption = useRef<HTMLTextAreaElement>(null);
 
   const isWorking =
     navigation.state !== "idle" ||
     fetchers.filter((f) => f.formData).length > 0;
+
+  useEffect(() => {
+    if (fetcher.data) {
+      if (fetcher.formData?.get("intent") === "caption")
+        setAction({
+          ...action,
+          caption: (fetcher.data as { message: string }).message,
+        });
+
+      setTimeout(() => {
+        if (caption.current)
+          caption.current.style.height =
+            caption.current?.scrollHeight + 10 + "px";
+      }, 100);
+    }
+  }, [fetcher.data]);
 
   return (
     <div className="flex h-full justify-center overflow-hidden">
@@ -174,6 +200,7 @@ export default function ActionPage() {
 
         <div className="flex shrink grow flex-col gap-4 overflow-hidden px-4 lg:w-[600px]">
           {/* Título */}
+
           <div
             contentEditable="true"
             dangerouslySetInnerHTML={{
@@ -195,19 +222,21 @@ export default function ActionPage() {
               });
             }}
           />
+
           {/* Descrição */}
           <div className="flex shrink grow flex-col overflow-hidden">
             <div className="mb-2 flex items-center gap-4 text-xs font-medium uppercase tracking-wider">
               <div>Descrição</div>
             </div>
-
-            <div className="scrollbars">
-              <Tiptap
-                content={action.description}
-                onBlur={(text) => {
-                  setAction({ ...action, description: text });
-                }}
-              />
+            <div className="relative flex h-full flex-col pt-10">
+              <div className="scrollbars">
+                <Tiptap
+                  content={action.description}
+                  onBlur={(text) => {
+                    setAction({ ...action, description: text });
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
@@ -259,7 +288,37 @@ export default function ActionPage() {
                 <Icons id={category.slug} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-content">
-                {categories.map((category) => (
+                {areas.map((area, i) => (
+                  <DropdownMenuGroup key={area.id}>
+                    {i > 0 && <DropdownMenuSeparator />}
+                    <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                      {area.title}
+                    </h4>
+                    {categories.map((category) =>
+                      category.area_id === area.id ? (
+                        <DropdownMenuItem
+                          key={category.id}
+                          className="bg-item flex items-center gap-2"
+                          onSelect={async () => {
+                            if (category.id !== action.category_id) {
+                              setAction({
+                                ...action,
+                                category_id: category.id,
+                              });
+                            }
+                          }}
+                        >
+                          <Icons
+                            id={category.slug}
+                            className={`size-4 opacity-50`}
+                          />
+                          <span>{category.title}</span>
+                        </DropdownMenuItem>
+                      ) : null,
+                    )}
+                  </DropdownMenuGroup>
+                ))}
+                {/* {categories.map((category) => (
                   <DropdownMenuItem
                     key={category.id}
                     className="bg-item flex items-center gap-2"
@@ -276,7 +335,7 @@ export default function ActionPage() {
                     <Icons id={category.slug} className={`size-4 opacity-50`} />
                     <span>{category.title}</span>
                   </DropdownMenuItem>
-                ))}
+                ))} */}
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -413,7 +472,7 @@ export default function ActionPage() {
           </div>
 
           <div className="flex items-center justify-between pb-4">
-            <div className=" ">
+            <div>
               <Popover>
                 <PopoverTrigger asChild tabIndex={-7}>
                   <Button
@@ -559,11 +618,36 @@ export default function ActionPage() {
         }`}
       >
         <Label className="mb-8 flex flex-col gap-4">
-          <div className="text-xs font-medium uppercase tracking-wider">
-            Legenda
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-medium uppercase tracking-wider">
+              Legenda
+            </div>
+            <div>
+              <Button
+                className="h-7 w-7 rounded p-1"
+                variant="ghost"
+                onClick={async () => {
+                  fetcher.submit(
+                    {
+                      title: action.title,
+                      description: action.description,
+                      intent: "caption",
+                    },
+                    {
+                      action: "/handle-openai",
+                      method: "post",
+                      navigate: false,
+                    },
+                  );
+                }}
+              >
+                <SparklesIcon />
+              </Button>
+            </div>
           </div>
 
           <Textarea
+            ref={caption}
             name="caption"
             className="text-base font-normal leading-tight"
             value={action.caption ? action.caption : ""}
@@ -592,7 +676,10 @@ export default function ActionPage() {
             }
           />
         </Label>
-        {/* <pre className="text-sm">{JSON.stringify(action, undefined, 2)}</pre> */}
+
+        {/* <pre className="text-sm">
+          {JSON.stringify(action.caption, undefined, 2)}
+        </pre> */}
       </div>
     </div>
   );
