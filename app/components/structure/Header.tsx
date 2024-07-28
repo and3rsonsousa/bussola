@@ -55,7 +55,7 @@ export default function Header() {
         <Link
           to="/dashboard"
           unstable_viewTransition
-          className="rounded-md p-2 outline-none ring-ring ring-offset-background focus:ring-2"
+          className="-ml-2 rounded px-2 outline-none ring-ring ring-offset-background focus:ring-2"
         >
           <Bussola />
           {/* <img src="/logo.png" className="h-4 w-auto" alt="Bússola" /> */}

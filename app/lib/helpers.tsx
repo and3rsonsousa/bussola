@@ -437,7 +437,7 @@ export function Bussola({ size = 1 }: { size?: number }) {
   size = 24 * (size / 10 + 1);
   return (
     <h1
-      className="relative font-black leading-none tracking-tight"
+      className="relative select-none font-black leading-none tracking-tight"
       style={{ fontSize: size + "px" }}
     >
       <span>BUSSOL</span>

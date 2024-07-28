@@ -104,8 +104,8 @@ export default function CreateAction({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         {mode === "day" ? (
-          <Button size={"sm"} variant={"accent"}>
-            <PlusIcon className="size-4" />
+          <Button size={"sm"} variant={"accent"} className="h-6 w-6 p-0">
+            <PlusIcon className="size-3" />
           </Button>
         ) : mode === "button" ? (
           <Button>

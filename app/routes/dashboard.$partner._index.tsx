@@ -9,7 +9,6 @@ import {
 } from "@remix-run/react";
 import { MetaFunction, json, type LoaderFunctionArgs } from "@vercel/remix";
 import {
-  addDays,
   addMonths,
   eachDayOfInterval,
   eachMonthOfInterval,
@@ -17,7 +16,6 @@ import {
   endOfMonth,
   endOfWeek,
   endOfYear,
-  format,
   isSameDay,
   isSameMonth,
   isToday,
@@ -28,6 +26,7 @@ import {
   startOfYear,
   subMonths,
 } from "date-fns";
+import { format } from "date-fns-tz";
 import { ptBR } from "date-fns/locale";
 import {
   ChevronLeftIcon,
@@ -85,7 +84,7 @@ export const config = { runtime: "edge" };
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let date = new URL(request.url).searchParams.get("date");
 
-  date ||= format(new Date(), "yyyy-MM-dd");
+  date ||= format(new Date(), "yyyy-MM-dd", { timeZone: "America/Fortaleza" });
 
   const { headers, supabase } = createClient(request);
 
@@ -129,7 +128,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     )
     .returns<Action[]>();
 
-  return json({ actions, partner, person }, { headers });
+  return json({ actions, partner, person, date }, { headers });
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -141,9 +140,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function Partner() {
-  let { actions, partner } = useLoaderData<typeof loader>();
+  let { actions, partner, date } = useLoaderData<typeof loader>();
 
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
 
   const matches = useMatches();
   const submit = useSubmit();
@@ -157,7 +156,7 @@ export default function Partner() {
 
   const { categories, states, person } = matches[1].data as DashboardDataType;
 
-  const date = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
+  // const date = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
 
   const currentDate = date;
 
@@ -165,22 +164,10 @@ export default function Partner() {
     actions?.map((action) => [action.id, action]),
   );
 
-  // const days = eachDayOfInterval({
-  //   start: startOfWeek(startOfMonth(currentDate)),
-  //   end: endOfWeek(endOfMonth(currentDate)),
-  // });
-
-  let days: Date[] = [];
-  let startDate = startOfWeek(startOfMonth(currentDate));
-  let endDate = endOfWeek(endOfMonth(currentDate));
-
-  while (
-    format(startDate, "yyyy-MM-dd") !==
-    format(addDays(endDate, 1), "yyyy-MM-dd")
-  ) {
-    days.push(startDate);
-    startDate = addDays(startDate, 1);
-  }
+  const days = eachDayOfInterval({
+    start: startOfWeek(startOfMonth(currentDate)),
+    end: endOfWeek(endOfMonth(currentDate)),
+  });
 
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();

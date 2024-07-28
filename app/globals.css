@@ -281,7 +281,7 @@ body {
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-card transition hover:bg-popover;
+  @apply bg-foreground/10 transition hover:bg-foreground/25;
 }
 
 .bg-content {

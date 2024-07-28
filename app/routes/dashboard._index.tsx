@@ -311,10 +311,10 @@ export function WeekView({
           Semana
         </h2>
       </div>
-      <div className="grid grid-cols-7 gap-2">
+      <div className="flex max-h-[70dvh] flex-nowrap gap-2 overflow-hidden">
         {weekActions.map(({ date, actions }) => (
           <div
-            className="group"
+            className="group flex max-h-full w-full flex-col overflow-hidden"
             key={date.getDate()}
             data-date={format(date, "yyyy-MM-dd")}
             onDragOver={(e) => {
@@ -334,11 +334,16 @@ export function WeekView({
             }}
           >
             {/* Dia */}
-            <div
-              className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase leading-none"
-              style={{ fontStretch: "75%" }}
-            >
-              {format(date, "EEEE ", { locale: ptBR })}
+            <div className="flex shrink-0 items-center justify-between">
+              <div
+                className="overflow-hidden text-ellipsis text-nowrap font-bold uppercase leading-none"
+                style={{ fontStretch: "75%" }}
+              >
+                {format(date, "EEEE ", { locale: ptBR })}
+              </div>
+              <div className="text-center opacity-0 transition group-hover:opacity-100">
+                <CreateAction mode="day" date={date} />
+              </div>
             </div>
             {/* Data */}
             <div className="mb-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
@@ -346,16 +351,16 @@ export function WeekView({
                 locale: ptBR,
               })}
             </div>
+
             {/* Lista de Ações do dia */}
-            <ListOfActions
-              actions={actions}
-              date={{ timeFormat: 1 }}
-              showCategory={true}
-              onDrag={setDraggedAction}
-              short
-            />
-            <div className="mt-4 text-center opacity-0 transition group-hover:opacity-100">
-              <CreateAction mode="day" date={date} />
+            <div className="scrollbars scrollbars-thin overflow-hidden">
+              <ListOfActions
+                actions={actions}
+                date={{ timeFormat: 1 }}
+                showCategory={true}
+                onDrag={setDraggedAction}
+                short
+              />
             </div>
           </div>
         ))}
@@ -491,7 +496,7 @@ function Partners({ actions }: { actions: Action[] }) {
   const { partners } = matches[1].data as DashboardDataType;
 
   return (
-    <div className="mx-auto my-16 w-auto rounded bg-foreground p-8 text-background">
+    <div className="mx-auto my-16 w-auto rounded p-8">
       <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
       {partners.length > 0 ? (
         <div className="mx-auto flex w-auto flex-wrap justify-center gap-4">

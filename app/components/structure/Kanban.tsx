@@ -39,7 +39,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 
   return (
     <div className="overflow-hidden">
-      <div className="scrollbars-horizontal">
+      <div className="scrollbars-horizontal scrollbars-horizontal-thin">
         <div className="flex w-full pb-4">
           {states.map((state) => {
             const stateActions = actions.filter(
