@@ -19,9 +19,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss X"));
+  console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss z pppp"));
   useEffect(() => {
-    console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss X"));
+    console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss z pppp"));
   }, []);
 
   return (
@@ -35,7 +35,9 @@ export default function Index() {
           </Link>
         </Button>
       </div>
-      <div className="py-4">{format(new Date(), "yyyy-MM-dd hh:mm:ss X")}</div>
+      <div className="py-4">
+        {format(new Date(), "yyyy-MM-dd hh:mm:ss z pppp")}
+      </div>
     </div>
   );
 }
