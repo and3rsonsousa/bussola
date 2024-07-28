@@ -19,6 +19,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss X"));
   useEffect(() => {
     console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss X"));
   }, []);
