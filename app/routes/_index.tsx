@@ -20,12 +20,12 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  console.log(format(new Date(), "yyyy-MM-dd hh:mm:ss z pppp"));
+  console.log(format(new Date(), "'SERVER' yyyy-MM-dd hh:mm:ss z pppp"));
   console.log(
     formatInTimeZone(
       new Date(),
       "America/Fortaleza",
-      "yyyy-MM-dd hh:mm:ss z pppp",
+      "'CORRIGIDO' yyyy-MM-dd hh:mm:ss z pppp",
     ),
   );
   useEffect(() => {
