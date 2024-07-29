@@ -211,7 +211,7 @@ export default function ActionPage() {
           <div
             contentEditable="true"
             dangerouslySetInnerHTML={{
-              __html: action?.title as string,
+              __html: action.title,
             }}
             onBlur={(e) =>
               setAction({
@@ -219,7 +219,7 @@ export default function ActionPage() {
                 title: e.currentTarget.innerText,
               })
             }
-            className="bg-transparent text-5xl font-extrabold tracking-tighter outline-none transition"
+            className={`bg-transparent font-extrabold tracking-tighter outline-none transition ${action.title.length < 50 ? "text-5xl" : "text-4xl"}`}
             onPaste={(e) => {
               e.stopPropagation();
               e.preventDefault();
