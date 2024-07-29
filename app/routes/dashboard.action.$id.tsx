@@ -492,7 +492,7 @@ export default function ActionPage() {
 
             <DropdownMenu>
               <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-4 ring-offset-background focus:ring-2">
-                <div className="flex -space-x-2">
+                <div className="flex">
                   {responsibles.map((person) => (
                     <Avatar
                       item={{
@@ -501,6 +501,7 @@ export default function ActionPage() {
                       }}
                       key={person.id}
                       size="md"
+                      group
                     />
                   ))}
                 </div>
