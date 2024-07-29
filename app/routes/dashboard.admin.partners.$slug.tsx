@@ -71,7 +71,7 @@ export default function AdminPartners() {
       <div className="scrollbars">
         <div className="px-4 md:px-8">
           <div
-            className="flex items-center gap-2 rounded py-4 font-extrabold tracking-tighter text-gray-100"
+            className="flex items-center gap-2 rounded py-4 font-extrabold tracking-tighter"
             key={partner.id}
           >
             <Avatar

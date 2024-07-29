@@ -31,7 +31,7 @@ export default function AdminPartners() {
           {partners?.map((partner: Partner) => (
             <Link
               to={`/dashboard/admin/partners/${partner.slug}`}
-              className="group flex justify-between rounded-xl px-6 py-4 tracking-tight ring-ring transition focus-within:ring-2 hover:bg-gray-900 hover:text-gray-100"
+              className="group flex justify-between rounded-xl px-6 py-4 tracking-tight ring-ring transition focus-within:ring-2 hover:bg-secondary"
               key={partner.id}
               tabIndex={-1}
             >

@@ -52,7 +52,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
-import { INTENTS } from "~/lib/constants";
+import { CATEGORIES, INTENTS } from "~/lib/constants";
 import { Avatar, Icons, InstagramFeedContent } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -137,11 +137,11 @@ export default function ActionPage() {
 
   useEffect(() => {
     if (fetcher.data) {
-      if (fetcher.formData?.get("intent") === "caption")
-        setAction({
-          ...action,
-          caption: (fetcher.data as { message: string }).message,
-        });
+      // if (fetcher.formData?.get("intent") === "caption") {
+      setAction({
+        ...action,
+        caption: (fetcher.data as { message: string }).message,
+      });
 
       setTimeout(() => {
         if (caption.current)
@@ -225,7 +225,7 @@ export default function ActionPage() {
 
           {/* Descrição */}
           <div className="flex shrink grow flex-col overflow-hidden">
-            <div className="mb-2 flex items-center gap-4 text-xs font-medium uppercase tracking-wider">
+            <div className="mb-2 flex items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
               <div>Descrição</div>
             </div>
             <div className="relative flex h-full flex-col pt-10">
@@ -318,24 +318,6 @@ export default function ActionPage() {
                     )}
                   </DropdownMenuGroup>
                 ))}
-                {/* {categories.map((category) => (
-                  <DropdownMenuItem
-                    key={category.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={category.title}
-                    onSelect={async () => {
-                      if (category.id !== action.category_id) {
-                        setAction({
-                          ...action,
-                          category_id: category.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Icons id={category.slug} className={`size-4 opacity-50`} />
-                    <span>{category.title}</span>
-                  </DropdownMenuItem>
-                ))} */}
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -610,46 +592,72 @@ export default function ActionPage() {
 
       <div
         className={`w-[400px] p-4 ${
-          !InstagramFeedContent.find(
+          InstagramFeedContent.find(
             (content) => content === action.category_id,
-          )
-            ? "hidden"
-            : ""
+          ) || action.category_id === CATEGORIES.stories
+            ? ""
+            : "hidden"
         }`}
       >
-        <Label className="mb-8 flex flex-col gap-4">
+        <div className="mb-8 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="text-xs font-medium uppercase tracking-wider">
-              Legenda
+              {action.category_id === CATEGORIES.stories
+                ? "Sequência"
+                : "Legenda"}
             </div>
             <div>
-              <Button
-                className="h-7 w-7 rounded p-1"
-                variant="ghost"
-                onClick={async () => {
-                  fetcher.submit(
-                    {
-                      title: action.title,
-                      description: action.description,
-                      intent: "caption",
-                    },
-                    {
-                      action: "/handle-openai",
-                      method: "post",
-                      navigate: false,
-                    },
-                  );
-                }}
-              >
-                <SparklesIcon />
-              </Button>
+              {action.category_id === CATEGORIES.stories ? (
+                <Button
+                  className="h-7 w-7 rounded p-1"
+                  variant="ghost"
+                  title="Gerar Stories"
+                  onClick={async () => {
+                    fetcher.submit(
+                      {
+                        title: action.title,
+                        description: action.description,
+                        intent: "stories",
+                      },
+                      {
+                        action: "/handle-openai",
+                        method: "post",
+                        navigate: false,
+                      },
+                    );
+                  }}
+                >
+                  <SparklesIcon />
+                </Button>
+              ) : (
+                <Button
+                  className="h-7 w-7 rounded p-1"
+                  variant="ghost"
+                  onClick={async () => {
+                    fetcher.submit(
+                      {
+                        title: action.title,
+                        description: action.description,
+                        intent: "caption",
+                      },
+                      {
+                        action: "/handle-openai",
+                        method: "post",
+                        navigate: false,
+                      },
+                    );
+                  }}
+                >
+                  <SparklesIcon />
+                </Button>
+              )}
             </div>
           </div>
 
           <Textarea
             ref={caption}
             name="caption"
-            className="text-base font-normal leading-tight"
+            className="h-[50vh] max-h-[50vh] text-base font-normal leading-tight"
             value={action.caption ? action.caption : ""}
             onChange={(event) =>
               setAction((action) => ({
@@ -658,7 +666,7 @@ export default function ActionPage() {
               }))
             }
           />
-        </Label>
+        </div>
         <Label className="mb-2 flex flex-col text-xs font-medium tracking-wider">
           <div className="uppercase">Arquivos</div>
           <div className="mb-4 text-[12px] tracking-normal opacity-50">

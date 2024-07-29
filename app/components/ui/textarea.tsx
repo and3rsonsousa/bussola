@@ -10,16 +10,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <textarea
         className={cn(
-          "flex max-h-[50vh] min-h-[80px] w-full resize-none rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex min-h-[80px] w-full resize-none rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         ref={ref}
         {...props}
-        onInput={(event) => {
-          event.currentTarget.style.height = "";
-          event.currentTarget.style.height =
-            event.currentTarget.scrollHeight + 10 + "px";
-        }}
+        // onKeyUp={(event) => {
+        //   event.currentTarget.style.height = "";
+        //   event.currentTarget.style.height =
+        //     event.currentTarget.scrollHeight + 10 + "px";
+        // }}
       />
     );
   },
