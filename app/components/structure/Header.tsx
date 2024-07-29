@@ -32,7 +32,7 @@ export default function Header() {
   const navigation = useNavigation();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState<"dark" | "light">();
+  const [mode, setMode] = useState<"dark" | "light">("dark");
 
   const { partners, person } = matches[1].data as DashboardDataType;
   const { partner } = matches[1].params;
