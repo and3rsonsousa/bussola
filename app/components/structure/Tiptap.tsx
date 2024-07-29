@@ -26,6 +26,7 @@ import {
   SuperscriptIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
+import { useEffect } from "react";
 
 export default function Tiptap({
   content,
@@ -50,6 +51,7 @@ export default function Tiptap({
         content={content}
         slotBefore={<Menu type={1} />}
       >
+        <SetContent content={content} />
         <TiptapFloatingMenu />
         <BubbleMenu className="rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border">
           <Menu type={3} />
@@ -59,9 +61,26 @@ export default function Tiptap({
   );
 }
 
+const SetContent = ({ content }: { content: Content }) => {
+  const { editor } = useCurrentEditor();
+
+  if (!editor) return null;
+
+  useEffect(() => {
+    console.log({ editor, content });
+    editor?.commands.setContent(content);
+  }, [content]);
+
+  return <div></div>;
+};
+
 const TiptapFloatingMenu = () => {
+  const { editor } = useCurrentEditor();
   return (
-    <FloatingMenu className="ml-4 rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border">
+    <FloatingMenu
+      editor={editor}
+      className="ml-4 rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border"
+    >
       <Menu type={2} />
     </FloatingMenu>
   );
@@ -75,7 +94,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
 
   return (
     <div
-      className={`${type === 1 ? "absolute -top-0 left-0 right-0" : ""} flex flex-wrap gap-4`}
+      className={`${type === 1 ? "absolute left-0 top-0 w-full" : ""} flex flex-wrap gap-4`}
     >
       {/* Formating */}
       {type !== 2 && (

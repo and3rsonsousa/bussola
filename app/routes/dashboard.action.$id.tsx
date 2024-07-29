@@ -8,6 +8,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
+import { useCurrentEditor } from "@tiptap/react";
 import {
   json,
   type LoaderFunctionArgs,
@@ -137,17 +138,23 @@ export default function ActionPage() {
 
   useEffect(() => {
     if (fetcher.data) {
-      // if (fetcher.formData?.get("intent") === "caption") {
-      setAction({
-        ...action,
-        caption: (fetcher.data as { message: string }).message,
-      });
+      if (fetcher.formData?.get("intent") === "carousel") {
+        setAction(() => ({
+          ...action,
+          description: `${action.description}<hr/>${(fetcher.data as { message: string }).message}`,
+        }));
+      } else {
+        setAction({
+          ...action,
+          caption: (fetcher.data as { message: string }).message,
+        });
 
-      setTimeout(() => {
-        if (caption.current)
-          caption.current.style.height =
-            caption.current?.scrollHeight + 10 + "px";
-      }, 100);
+        setTimeout(() => {
+          if (caption.current)
+            caption.current.style.height =
+              caption.current?.scrollHeight + 10 + "px";
+        }, 100);
+      }
     }
   }, [fetcher.data]);
 
@@ -225,10 +232,32 @@ export default function ActionPage() {
 
           {/* Descrição */}
           <div className="flex shrink grow flex-col overflow-hidden">
-            <div className="mb-2 flex items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
+            <div className="mb-2 flex shrink-0 items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
               <div>Descrição</div>
+              {action.category_id === CATEGORIES.carousel && (
+                <Button
+                  className="h-7 w-7 rounded p-1"
+                  variant="ghost"
+                  onClick={async () => {
+                    fetcher.submit(
+                      {
+                        title: action.title,
+                        description: action.description,
+                        intent: "carousel",
+                      },
+                      {
+                        action: "/handle-openai",
+                        method: "post",
+                        navigate: false,
+                      },
+                    );
+                  }}
+                >
+                  <SparklesIcon />
+                </Button>
+              )}
             </div>
-            <div className="relative flex h-full flex-col pt-10">
+            <div className="relative flex h-full flex-col overflow-hidden pt-9">
               <div className="scrollbars">
                 <Tiptap
                   content={action.description}
@@ -686,7 +715,7 @@ export default function ActionPage() {
         </Label>
 
         {/* <pre className="text-sm">
-          {JSON.stringify(action.caption, undefined, 2)}
+          {JSON.stringify(action.description, undefined, 2)}
         </pre> */}
       </div>
     </div>
