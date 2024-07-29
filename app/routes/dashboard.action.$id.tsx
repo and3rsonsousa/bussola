@@ -706,27 +706,57 @@ export default function ActionPage() {
             </div>
             <div>
               {action.category_id === CATEGORIES.stories ? (
-                <Button
-                  className="h-7 w-7 rounded p-1"
-                  variant="ghost"
-                  title="Gerar Stories"
-                  onClick={async () => {
-                    fetcher.submit(
-                      {
-                        title: action.title,
-                        description: action.description,
-                        intent: "stories",
-                      },
-                      {
-                        action: "/handle-openai",
-                        method: "post",
-                        navigate: false,
-                      },
-                    );
-                  }}
-                >
-                  <SparklesIcon />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="h-7 w-7 rounded p-1"
+                      variant="ghost"
+                      title="Gerar Stories"
+                    >
+                      <SparklesIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-content">
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "stories",
+                            model: "static",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Roteiro de Stories estáticos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "stories",
+                            model: "video",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Roteiro de Stories em vídeo
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

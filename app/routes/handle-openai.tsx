@@ -46,7 +46,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
   // Se for Stories
   else if (intent === "stories") {
-    content = `Você é um estrategista de conteúdo experiente. 
+    if (model === "static") {
+      content = `Você é um estrategista de conteúdo experiente. 
     TAREFA: você vai criar uma sequência de stories usando técnicas de storytelling e finalizando sempre com um Stories com um CTA forte.
     REGRA: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
     MODELO: 
@@ -61,6 +62,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     Texto
     Texto de apoio com até 30 palavras
     CONTEXTO: ${title} - ${description}`;
+    } else if (model === "video") {
+      content = `Você é um estrategista de conteúdo e roteirista de video experiente. 
+    TAREFA: criar uma sequência de stories usando técnicas de storytelling. Traga as falas da pessoa que irá gravar. Cada texto de fala deve caber em um espaço de 15 a 30 segundos. Use o seguinte modelo: 
+    1 - SLIDE 1 deve ser com um texto chamativo para o problema apresentado.
+    2 - SLIDE 2 deve envolver a pessoa apresentando dados e situações que abordem esse problema, como drama pessoal do próprio profissional ou de pessoas conhecidas.
+    3 - SLIDE 3 ao penúltimo devem abordar a proposta única de solução para o problema. (determine a quantidade de acordo com o conteúdo a ser falado)
+    4 - O último stories deve sempre conter um CTA, caso não haja nada no contexto sugira na fala que a pessoa visite o link da bio, mas faça isso de forma criativa.
+    REGRA: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
+    TEMPLATE: 
+    [STORIES X]
+    
+    Fala:
+    Texto para a pessoa falar.
+
+    Interação:(opcional)
+    Sugira aqui algum elemento de interação nos stories de acordo com o conteúdo.
+    
+    CONTEXTO: ${title} - ${description}`;
+    }
   }
   // Se for carrossel
   else if (intent === "carousel") {

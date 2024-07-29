@@ -53,7 +53,7 @@ export default function Tiptap({
       >
         <SetContent content={content} />
         <TiptapFloatingMenu />
-        <BubbleMenu className="rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border">
+        <BubbleMenu className="rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border dark:border-white/15">
           <Menu type={3} />
         </BubbleMenu>
       </EditorProvider>
@@ -79,7 +79,7 @@ const TiptapFloatingMenu = () => {
   return (
     <FloatingMenu
       editor={editor}
-      className="ml-4 rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border"
+      className="ml-4 rounded-lg border border-white bg-background p-1 shadow-xl ring-1 ring-border dark:border-white/15"
     >
       <Menu type={2} />
     </FloatingMenu>
