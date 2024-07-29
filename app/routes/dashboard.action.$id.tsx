@@ -234,9 +234,9 @@ export default function ActionPage() {
           <div className="flex shrink grow flex-col overflow-hidden">
             <div className="mb-2 flex shrink-0 items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
               <div>Descrição</div>
-              {action.category_id === CATEGORIES.carousel && (
+              {/* {action.category_id === CATEGORIES.carousel && (
                 <Button
-                  className="h-7 w-7 rounded p-1"
+                  className="m-1 h-7 w-7 rounded p-1"
                   variant="ghost"
                   onClick={async () => {
                     fetcher.submit(
@@ -255,6 +255,74 @@ export default function ActionPage() {
                 >
                   <SparklesIcon />
                 </Button>
+              )} */}
+              {action.category_id === CATEGORIES.carousel && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="m-1 h-7 w-7 rounded p-1"
+                      variant="ghost"
+                      onClick={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "carousel",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      <SparklesIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="bg-content">
+                    <DropdownMenuItem
+                      className="bg-item"
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "carousel",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Modelo Comum
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="bg-item"
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "carousel",
+                            model: "twitter",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Modelo Twitter
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </div>
             <div className="relative flex h-full flex-col overflow-hidden pt-9">
@@ -659,26 +727,76 @@ export default function ActionPage() {
                   <SparklesIcon />
                 </Button>
               ) : (
-                <Button
-                  className="h-7 w-7 rounded p-1"
-                  variant="ghost"
-                  onClick={async () => {
-                    fetcher.submit(
-                      {
-                        title: action.title,
-                        description: action.description,
-                        intent: "caption",
-                      },
-                      {
-                        action: "/handle-openai",
-                        method: "post",
-                        navigate: false,
-                      },
-                    );
-                  }}
-                >
-                  <SparklesIcon />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="h-7 w-7 rounded p-1"
+                      variant="ghost"
+                      title="Gerar legenda"
+                    >
+                      <SparklesIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "caption",
+                            model: "short",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Legenda curta
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "caption",
+                            model: "medium",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Legenda Média de Reforço
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        fetcher.submit(
+                          {
+                            title: action.title,
+                            description: action.description,
+                            intent: "caption",
+                            model: "long",
+                          },
+                          {
+                            action: "/handle-openai",
+                            method: "post",
+                            navigate: false,
+                          },
+                        );
+                      }}
+                    >
+                      Legenda Longa e explicativa
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </div>
           </div>

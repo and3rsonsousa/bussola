@@ -5,17 +5,47 @@ export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  let { title, description, intent } = Object.fromEntries(formData.entries());
+  let { title, description, intent, model } = Object.fromEntries(
+    formData.entries(),
+  );
 
   const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
   });
 
-  intent ||= "caption";
+  if (!intent) {
+    return { message: "Defina a sua intenção nesse comando." };
+  }
 
-  let content = `Você é um redator experiente. Crie uma legenda para um post com as informações abaixo seguindo o modelo: Texto da legenda e hashtags. REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. Título do post: '${title}, descrição: ${description}'`;
+  let template = "";
+  let content = "";
+  // Se for legenda
+  if (intent === "caption") {
+    template = "Texto da legenda e hashtags";
 
-  if (intent === "stories") {
+    if (model === "short") {
+      template =
+        "Texto da legenda com até 100 caracteres bem criativo e reforçando o CONTEXTO.";
+    } else if (model === "medium") {
+      template =
+        "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 pagráfos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";
+    } else if (model === "long") {
+      template = `Texto da legenda explicando o CONTEXTO com até 1200 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
+    1 - Reforce o problema apresentado do CONTEXTO.
+    2 - Apresente dados e pontos que convençam o usuário a continuar lendo e deixe-o preparado para as próximas partes. Aqui você pode tanto usar dois parágrafos curtos, como também uma lista de itens com emojis para facilitar a leitura.
+    3 - Apresente a solução do problema de acordo com o CONTEXTO.
+    4 - Conclua com uma chamada para a ação, se não houver indicação no CONTEXTO, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
+    5 - Finalize a legenda com as principais hashtags e keywords relacionadas ao CONTEXTO."
+    `;
+    }
+
+    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO. 
+  REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
+  TEMPLATE: ${template}.
+  CONTEXTO: Título do post: '${title}, descrição: ${description}'`;
+  }
+  // Se for Stories
+  else if (intent === "stories") {
     content = `Você é um estrategista de conteúdo experiente. 
     TAREFA: você vai criar uma sequência de stories usando técnicas de storytelling e finalizando sempre com um Stories com um CTA forte.
     REGRA: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
@@ -31,8 +61,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     Texto
     Texto de apoio com até 30 palavras
     CONTEXTO: ${title} - ${description}`;
-  } else if (intent === "carousel") {
-    let model = `<h3>SLIDE 1</h3> (use um Gancho forte para chamar a atenção do usuário)
+  }
+  // Se for carrossel
+  else if (intent === "carousel") {
+    //base
+
+    let rules = "";
+
+    let template = `<h3>SLIDE 1</h3> (use um Gancho forte para chamar a atenção do usuário)
     <h4>Frase do título aqui.</h4> (Frase principal do Carrossel. Deve ser chamativa e apelar para um gatilho mental)
     
     
@@ -58,10 +94,29 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     Texto (Texto de apoio com até 60 palavras)
     Ação (Insira uma chamada de ação)
     `;
+    if (model === "twitter") {
+      rules =
+        "Insira sempre um emoji de acordo com a frase no final de cada frase. O texto deve ter no máximo 280 caracteres.";
+      template = `<h3>SLIDE 1</h3> 
+    <p>Frase do título aqui.</p> (Frase principal do Carrossel. Use um Gancho forte para chamar a atenção do usuário. Deve ser chamativo e apelar para um gatilho mental)
+    <p>Sugestão de imagem</p>
+    <h3>SLIDE 2</h3> (desenvolva o problema e retenha o usuário)
+    <p>Sugestão de imagem</p>
+    <p>Conteúdo do Texto aqui</p>
+    SLIDE X (de 3 a 8 - desenvolva a proposta única para esse tema.)
+    <p>Conteúdo do Texto aqui</p>
+    <p>Sugestão de imagem</p>
+    SLIDE X (penúltimo) ( Após apresentar a proposta única, crie desejo no usuário.)
+    <p>Sugestão de imagem</p>
+    <p>Conteúdo do Texto aqui</p>
+    SLIDE X (último) ( Finalize com uma chamada para a ação.)
+    <p>Conteúdo do Texto aqui</p>
+    `;
+    }
     content = `Você é um estrategista de conteúdo experiente e trabalha principalmente com técnicas de storytelling para envolver o usuário. 
 TAREFA: Criar posts em formato carrossel envolventes e que prendam o usuário.
-REGRAS: Retorne apenas o texto sem nenhuma sua e formatado com tags HTML. 
-MODELO: ${model}
+REGRAS: Retorne apenas o texto sem nenhuma informação sua e formatado com tags HTML. ${rules} 
+MODELO: ${template}
 CONTENT: ${title} - ${description}`;
   }
 

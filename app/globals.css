@@ -289,7 +289,7 @@ body {
 }
 
 .dark .bg-content {
-  @apply border-border bg-popover/10 ring-black/50;
+  @apply border-white/15 bg-popover/10 ring-black;
 }
 
 .bg-item {
