@@ -1278,7 +1278,7 @@ export function ContextMenuItems({
                       <Icons id={category.slug} className="size-3 opacity-50" />
                       {category.title}
                       <ContextMenuShortcut className="w-8 pl-2 text-left">
-                        ⇧+
+                        ⌥+
                         {
                           [
                             { id: CATEGORIES.ads, shortcut: "a" },
