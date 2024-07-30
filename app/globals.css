@@ -108,6 +108,9 @@ body {
   @apply border-l-finished hover:border-l-finished;
 }
 
+.fg-capture {
+  @apply text-capture-500;
+}
 .fg-post {
   @apply text-post-500;
 }
@@ -148,6 +151,9 @@ body {
   @apply text-plan-500;
 }
 
+.border-capture {
+  @apply border-capture-500;
+}
 .border-post {
   @apply border-post-500;
 }
@@ -188,6 +194,9 @@ body {
   @apply border-plan-500;
 }
 
+.bg-capture {
+  @apply bg-capture-500;
+}
 .bg-post {
   @apply bg-post-500;
 }

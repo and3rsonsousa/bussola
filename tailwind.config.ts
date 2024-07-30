@@ -66,6 +66,7 @@ const config = {
         done: "#38f",
         finished: "#0d8",
 
+        capture: colors.teal,
         todo: colors.blue,
         post: colors.orange,
         carousel: colors.rose,

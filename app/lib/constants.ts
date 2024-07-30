@@ -7,6 +7,7 @@ export const STATES = {
   finish: "dfa8b782-54af-46ef-befe-28dc0417276e",
 };
 export const CATEGORIES = {
+  capture: "c47bbfbf-352b-4016-ba3f-25659aec2c1a",
   todo: "1c2b1ccd-2a88-4f56-a1ce-83efbfaf8c25",
   post: "3ad13902-b636-4253-9111-e836b4716abf",
   carousel: "1d0d17d1-8aba-4708-ba4e-560b39a0d8b7",

@@ -559,7 +559,6 @@ export const CalendarDay = ({
   short?: boolean;
   allUsers?: boolean;
 }) => {
-  // const [isHover, setIsHover] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const submit = useSubmit();

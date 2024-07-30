@@ -2,6 +2,7 @@ import { useFetchers } from "@remix-run/react";
 import { format, isAfter, isBefore, isSameDay, parseISO } from "date-fns";
 import {
   BadgeCheckIcon,
+  CameraIcon,
   CircleFadingPlusIcon,
   ClapperboardIcon,
   Code2Icon,
@@ -239,6 +240,7 @@ export function getInstagramActions({
 const iconsList: { [key: string]: LucideIcon } = {
   all: ComponentIcon,
   //Category
+  capture: CameraIcon,
   todo: ListChecksIcon,
   post: ImageIcon,
   carousel: GalleryHorizontal,
