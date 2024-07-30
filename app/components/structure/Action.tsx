@@ -1277,24 +1277,11 @@ export function ContextMenuItems({
                     >
                       <Icons id={category.slug} className="size-3 opacity-50" />
                       {category.title}
-                      <ContextMenuShortcut className="w-8 pl-2 text-left">
+                      <ContextMenuShortcut className="flex w-12 pl-2 text-left">
                         ⌥+
-                        {
-                          [
-                            { id: CATEGORIES.ads, shortcut: "a" },
-                            { id: CATEGORIES.design, shortcut: "d" },
-                            { id: CATEGORIES.dev, shortcut: "c" },
-                            { id: CATEGORIES.finance, shortcut: "f" },
-                            { id: CATEGORIES.meeting, shortcut: "r" },
-                            { id: CATEGORIES.plan, shortcut: "n" },
-                            { id: CATEGORIES.post, shortcut: "p" },
-                            { id: CATEGORIES.print, shortcut: "i" },
-                            { id: CATEGORIES.sm, shortcut: "m" },
-                            { id: CATEGORIES.stories, shortcut: "s" },
-                            { id: CATEGORIES.todo, shortcut: "t" },
-                            { id: CATEGORIES.reels, shortcut: "v" },
-                          ].find((s) => s.id === category.id)?.shortcut
-                        }
+                        <div className="w-full text-center">
+                          {category.shortcut.toUpperCase()}
+                        </div>
                       </ContextMenuShortcut>
                     </ContextMenuItem>
                   ) : null,
