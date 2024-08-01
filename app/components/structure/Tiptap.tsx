@@ -67,7 +67,7 @@ const SetContent = ({ content }: { content: Content }) => {
   if (!editor) return null;
 
   useEffect(() => {
-    console.log({ editor, content });
+    // console.log({ editor, content });
     editor?.commands.setContent(content);
   }, [content]);
 

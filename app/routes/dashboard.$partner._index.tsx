@@ -121,8 +121,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
     .returns<Action[]>();
 
-  console.log(start, date, endOfMonth(date));
-
   return json({ actions, partner, person, date }, { headers });
 };
 
