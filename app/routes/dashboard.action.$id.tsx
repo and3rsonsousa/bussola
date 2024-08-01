@@ -234,48 +234,13 @@ export default function ActionPage() {
           <div className="flex shrink grow flex-col overflow-hidden">
             <div className="mb-2 flex shrink-0 items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
               <div>Descrição</div>
-              {/* {action.category_id === CATEGORIES.carousel && (
-                <Button
-                  className="m-1 h-7 w-7 rounded p-1"
-                  variant="ghost"
-                  onClick={async () => {
-                    fetcher.submit(
-                      {
-                        title: action.title,
-                        description: action.description,
-                        intent: "carousel",
-                      },
-                      {
-                        action: "/handle-openai",
-                        method: "post",
-                        navigate: false,
-                      },
-                    );
-                  }}
-                >
-                  <SparklesIcon />
-                </Button>
-              )} */}
+
               {action.category_id === CATEGORIES.carousel && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      className="m-1 h-7 w-7 rounded p-1"
+                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
                       variant="ghost"
-                      // onClick={async () => {
-                      //   fetcher.submit(
-                      //     {
-                      //       title: action.title,
-                      //       description: action.description,
-                      //       intent: "carousel",
-                      //     },
-                      //     {
-                      //       action: "/handle-openai",
-                      //       method: "post",
-                      //       navigate: false,
-                      //     },
-                      //   );
-                      // }}
                     >
                       <SparklesIcon />
                     </Button>
@@ -711,7 +676,7 @@ export default function ActionPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      className="h-7 w-7 rounded p-1"
+                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "stories").length > 0 && "animate-colors"}`}
                       variant="ghost"
                       title="Gerar Stories"
                     >
@@ -765,7 +730,7 @@ export default function ActionPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      className="h-7 w-7 rounded p-1"
+                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
                       variant="ghost"
                       title="Gerar legenda"
                     >

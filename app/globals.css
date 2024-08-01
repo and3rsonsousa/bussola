@@ -384,3 +384,31 @@ hr {
 #calendar > * {
   @apply border-b;
 }
+
+.animate-colors {
+  animation: animateColors 1000ms infinite;
+}
+
+@keyframes animateColors {
+  0% {
+    @apply text-idea;
+  }
+  15% {
+    @apply text-do;
+  }
+  32% {
+    @apply text-doing;
+  }
+  50% {
+    @apply text-review;
+  }
+  70% {
+    @apply text-done;
+  }
+  85% {
+    @apply text-finished;
+  }
+  100% {
+    @apply text-idea;
+  }
+}
