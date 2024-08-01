@@ -82,9 +82,11 @@ import { createClient } from "~/lib/supabase";
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  let date = new URL(request.url).searchParams.get("date");
+  let _date = new URL(request.url).searchParams.get("date");
 
-  date ||= format(new Date(), "yyyy-MM-dd", { timeZone: "America/Fortaleza" });
+  const date = _date ? parseISO(_date) : new Date();
+  let start = startOfWeek(startOfMonth(date));
+  let end = endOfDay(endOfWeek(endOfMonth(date)));
 
   const { headers, supabase } = createClient(request);
 
@@ -115,18 +117,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .select("*")
     .match({ slug: params["partner"] })
     .contains("responsibles", person?.admin ? [] : [user.id])
-    .gte(
-      "date",
-      format(
-        startOfDay(startOfWeek(startOfMonth(date))),
-        "yyyy-MM-dd HH:mm:ss",
-      ),
-    )
-    .lte(
-      "date",
-      format(endOfDay(endOfWeek(endOfMonth(date))), "yyyy-MM-dd HH:mm:ss"),
-    )
+    .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
+    .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
     .returns<Action[]>();
+
+  console.log(start, date, endOfMonth(date));
 
   return json({ actions, partner, person, date }, { headers });
 };
@@ -636,7 +631,9 @@ export const CalendarDay = ({
       <div className="my-1 flex justify-between">
         <div
           className={`grid h-6 w-6 place-content-center rounded-full text-xs font-medium ${
-            isSameMonth(day.date, currentDate) ? "" : "text-muted"
+            isSameMonth(day.date, currentDate) || isToday(day.date)
+              ? ""
+              : "text-muted"
           } ${
             isToday(day.date) ? "bg-accent text-accent-foreground" : "-ml-1"
           } `}
