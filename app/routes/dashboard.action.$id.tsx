@@ -262,20 +262,20 @@ export default function ActionPage() {
                     <Button
                       className="m-1 h-7 w-7 rounded p-1"
                       variant="ghost"
-                      onClick={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            intent: "carousel",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
+                      // onClick={async () => {
+                      //   fetcher.submit(
+                      //     {
+                      //       title: action.title,
+                      //       description: action.description,
+                      //       intent: "carousel",
+                      //     },
+                      //     {
+                      //       action: "/handle-openai",
+                      //       method: "post",
+                      //       navigate: false,
+                      //     },
+                      //   );
+                      // }}
                     >
                       <SparklesIcon />
                     </Button>
@@ -289,6 +289,7 @@ export default function ActionPage() {
                           {
                             title: action.title,
                             description: action.description,
+                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                             intent: "carousel",
                           },
                           {
@@ -308,6 +309,7 @@ export default function ActionPage() {
                           {
                             title: action.title,
                             description: action.description,
+                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                             intent: "carousel",
                             model: "twitter",
                           },
@@ -723,6 +725,7 @@ export default function ActionPage() {
                           {
                             title: action.title,
                             description: action.description,
+                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                             intent: "stories",
                             model: "static",
                           },
@@ -742,6 +745,7 @@ export default function ActionPage() {
                           {
                             title: action.title,
                             description: action.description,
+                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                             intent: "stories",
                             model: "video",
                           },

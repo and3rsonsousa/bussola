@@ -5,7 +5,7 @@ export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  let { title, description, intent, model } = Object.fromEntries(
+  let { title, description, intent, model, context } = Object.fromEntries(
     formData.entries(),
   );
 
@@ -28,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         "Texto da legenda com até 100 caracteres bem criativo e reforçando o CONTEXTO.";
     } else if (model === "medium") {
       template =
-        "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 pagráfos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";
+        "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 parágrafos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";
     } else if (model === "long") {
       template = `Texto da legenda explicando o CONTEXTO com até 1200 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
     1 - Reforce o problema apresentado do CONTEXTO.
@@ -39,16 +39,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     `;
     }
 
-    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO. 
+    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. 
+    
   REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
   TEMPLATE: ${template}.
+  EMPRESA: ${context}.
   CONTEXTO: Título do post: '${title}, descrição: ${description}'`;
   }
   // Se for Stories
   else if (intent === "stories") {
     if (model === "static") {
       content = `Você é um estrategista de conteúdo experiente. 
-    TAREFA: você vai criar uma sequência de stories usando técnicas de storytelling e finalizando sempre com um Stories com um CTA forte.
+    TAREFA: você vai criar uma sequência de stories usando técnicas de storytelling e finalizando sempre com um Stories com um CTA forte levando em conta o CONTEXTO e a descrição da EMPRESA.
     REGRA: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
     MODELO: 
     [STORIES X]
@@ -61,6 +63,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     
     Texto
     Texto de apoio com até 30 palavras
+
+    EMPRESA: ${context}.
     CONTEXTO: ${title} - ${description}`;
     } else if (model === "video") {
       content = `Você é um estrategista de conteúdo e roteirista de video experiente. 
@@ -133,10 +137,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     <p>Conteúdo do Texto aqui</p>
     `;
     }
-    content = `Você é um estrategista de conteúdo experiente e trabalha principalmente com técnicas de storytelling para envolver o usuário. 
+    content = `Você é um estrategista de conteúdo experiente e trabalha principalmente com técnicas de storytelling para envolver o usuário levando em conta o CONTENT e a descrição da EMPRESA. 
 TAREFA: Criar posts em formato carrossel envolventes e que prendam o usuário.
 REGRAS: Retorne apenas o texto sem nenhuma informação sua e formatado com tags HTML. ${rules} 
 MODELO: ${template}
+ EMPRESA: ${context}
 CONTENT: ${title} - ${description}`;
   }
 

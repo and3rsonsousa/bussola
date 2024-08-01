@@ -369,6 +369,10 @@ ol {
   list-style: decimal;
 }
 
+hr {
+  @apply border-t-border;
+}
+
 /* .main-container:hover .item-container:not(:hover) {
   opacity: 0.25;
 } */

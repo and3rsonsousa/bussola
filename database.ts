@@ -203,6 +203,7 @@ export type Database = {
       partners: {
         Row: {
           bg: string
+          context: string | null
           created_at: string
           fg: string
           id: string
@@ -213,6 +214,7 @@ export type Database = {
         }
         Insert: {
           bg?: string
+          context?: string | null
           created_at?: string
           fg?: string
           id?: string
@@ -223,6 +225,7 @@ export type Database = {
         }
         Update: {
           bg?: string
+          context?: string | null
           created_at?: string
           fg?: string
           id?: string
