@@ -94,7 +94,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
 
   return (
     <div
-      className={`${type === 1 ? "absolute left-0 top-0 w-full" : ""} flex flex-wrap gap-4`}
+      className={`${type === 1 ? "absolute left-1 top-1 w-full" : ""} flex flex-wrap gap-4`}
     >
       {/* Formating */}
       {type !== 2 && (
