@@ -34,12 +34,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       template =
         "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 parágrafos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";
     } else if (model === "long") {
-      template = `Texto da legenda explicando o CONTEXTO com até 1200 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
-    1 - Reforce o problema apresentado do CONTEXTO.
-    2 - Apresente dados e pontos que convençam o usuário a continuar lendo e deixe-o preparado para as próximas partes. Aqui você pode tanto usar dois parágrafos curtos, como também uma lista de itens com emojis para facilitar a leitura.
-    3 - Apresente a solução do problema de acordo com o CONTEXTO.
-    4 - Conclua com uma chamada para a ação, se não houver indicação no CONTEXTO, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
-    5 - Finalize a legenda com as principais hashtags e keywords relacionadas ao CONTEXTO."
+      template = `Texto da legenda explicando o CONTEXTO com até 800 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
+    1 - Reforce o problema apresentado do CONTEXTO em 120 caracteres.
+    2 - Comece a problematizar o assunto ao jogar o contexto para o usuário gerando conexão em 120 caracteres. 
+    3 - Aqui você usar uma lista de itens com emojis para facilitar a leitura apresentando os problemas que o usuário enfrenta, reforçando o parágrafo 2.
+    4 - Apresente a solução do problema de acordo com o CONTEXTO.
+    5 - Conclua com um CTA do CONTEXTO, se não houver indicação, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
+    6 - Finalize a legenda com as principais hashtags e keywords relacionadas ao CONTEXTO."
     `;
     }
 
