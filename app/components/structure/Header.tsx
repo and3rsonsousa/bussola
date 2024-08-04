@@ -49,7 +49,7 @@ export default function Header() {
 
   return (
     <header
-      className={`flex flex-shrink-0 flex-grow items-center justify-between p-4 backdrop-blur-xl md:px-8`}
+      className={`flex flex-shrink-0 flex-grow items-center justify-between p-4 md:px-8`}
     >
       <div className="flex items-center gap-2">
         <Link
@@ -58,7 +58,6 @@ export default function Header() {
           className="-ml-2 rounded px-2 outline-none ring-ring ring-offset-background focus:ring-2"
         >
           <Bussola />
-          {/* <img src="/logo.png" className="h-4 w-auto" alt="Bússola" /> */}
         </Link>
         <Button
           size="icon"
@@ -128,14 +127,7 @@ export default function Header() {
                   </>
                 )}
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-								className="bg-item"
-								id="account"
-								onSelect={() => navigate("/dashboard/account")}
-							>
-								<User2Icon className="size-4 opacity-50" />
-								<div>Minha Conta</div>
-							</DropdownMenuItem> */}
+
               <DropdownMenuItem
                 className="bg-item"
                 id="account"
@@ -195,22 +187,6 @@ export default function Header() {
           </DropdownMenu>
         )}
       </div>
-
-      {/* <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-muted"></div> */}
-      {/* <div className="absolute bottom-0 left-0 h-[1px] w-full overflow-hidden">
-        <div className="flex w-full -translate-y-[50px] blur-[50px]">
-          {[
-            "bg-idea",
-            "bg-do",
-            "bg-doing",
-            "bg-review",
-            "bg-done",
-            "bg-finished",
-          ].map((className, i) => (
-            <div key={i} className={`${className} h-[100px] w-full`}></div>
-          ))}
-        </div>
-      </div> */}
     </header>
   );
 }

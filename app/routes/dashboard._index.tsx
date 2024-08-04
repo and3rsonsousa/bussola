@@ -15,7 +15,9 @@ import {
   eachDayOfInterval,
   endOfWeek,
   format,
+  isBefore,
   isSameDay,
+  isSameMonth,
   startOfDay,
   startOfMonth,
   startOfWeek,
@@ -72,7 +74,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .from("get_full_actions")
     .select("*")
     .contains("responsibles", person?.admin ? [] : [user.id])
-
     .returns<Action[]>();
 
   return json({ actions }, { headers });
@@ -177,11 +178,17 @@ export default function DashboardIndex() {
           values={states.map((state) => ({
             id: state.id,
             title: state.title,
-            value: actions?.filter((action) => action.state_id === state.id)
-              .length,
+            value: actions?.filter(
+              (action) =>
+                action.state_id === state.id &&
+                isSameMonth(action.date, new Date()),
+            ).length,
             color: `bg-${state.slug}`,
           }))}
-          total={actions?.length || 0}
+          total={
+            actions?.filter((action) => isSameMonth(action.date, new Date()))
+              .length || 0
+          }
         />
 
         {/* Ações em Atraso */}
