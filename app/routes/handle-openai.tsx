@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (model === "short") {
       template =
-        "Texto da legenda com até 100 caracteres bem criativo e reforçando o CONTEXTO.";
+        "Texto da legenda com até 200 caracteres bem criativo e reforçando o CONTEXTO.";
     } else if (model === "medium") {
       template =
         "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 parágrafos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";
