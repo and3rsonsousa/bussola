@@ -20,12 +20,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   let template = "";
   let content = "";
   // Se for legenda
-  if (intent === "caption") {
+  if (intent === "shrink") {
+    content = `Reduza o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
+  } else if (intent === "expand") {
+    content = `Aumente o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
+  } else if (intent === "caption") {
     template = "Texto da legenda e hashtags";
 
     if (model === "short") {
       template =
-        "Texto da legenda com até 200 caracteres bem criativo e reforçando o CONTEXTO.";
+        "Texto da legenda com até 200 caracteres bem criativo e reforçando o CONTEXTO e com um CTA no final. Caso não haja nenhuma especificação no CONTEXTO, indique a pessoa a ir ao link da bio de modo que concorde com o CONTEXTO.";
     } else if (model === "medium") {
       template =
         "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 parágrafos curtos. Finalize com as hashtags e keywords relevantes ao CONTEXTO.";

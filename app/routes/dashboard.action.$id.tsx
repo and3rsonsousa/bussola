@@ -8,7 +8,6 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useCurrentEditor } from "@tiptap/react";
 import {
   json,
   type LoaderFunctionArgs,
@@ -18,8 +17,9 @@ import { format, formatDistanceToNow, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
 import {
+  ArrowDownNarrowWideIcon,
+  ArrowUpNarrowWideIcon,
   CalendarIcon,
-  SparkleIcon,
   SparklesIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -727,76 +727,128 @@ export default function ActionPage() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
-                      variant="ghost"
-                      title="Gerar legenda"
-                    >
-                      <SparklesIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            intent: "caption",
-                            model: "short",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Legenda curta
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            intent: "caption",
-                            model: "medium",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Legenda Média de Reforço
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            intent: "caption",
-                            model: "long",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Legenda Longa e explicativa
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex gap-4">
+                  {action.caption && action.caption.length > 0 && (
+                    <div className="flex gap-2">
+                      <Button
+                        variant={"ghost"}
+                        className="h-8 w-8 p-1"
+                        title="Reduzir o Texto"
+                        onClick={async (event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+
+                          fetcher.submit(
+                            {
+                              description: action.caption,
+                              intent: "shrink",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        <ArrowDownNarrowWideIcon className="size-4" />
+                      </Button>
+                      <Button
+                        variant={"ghost"}
+                        className="h-8 w-8 p-1"
+                        title="Aumentar o texto"
+                        onClick={async (event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+
+                          fetcher.submit(
+                            {
+                              description: action.caption,
+                              intent: "expand",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        <ArrowUpNarrowWideIcon className="size-4" />
+                      </Button>
+                    </div>
+                  )}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className={`h-8 w-8 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
+                        variant="ghost"
+                        title="Gerar legenda"
+                      >
+                        <SparklesIcon className="size-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              intent: "caption",
+                              model: "short",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        Legenda curta
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              intent: "caption",
+                              model: "medium",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        Legenda Média de Reforço
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              intent: "caption",
+                              model: "long",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        Legenda Longa e explicativa
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               )}
             </div>
           </div>
