@@ -648,7 +648,7 @@ export default function ActionPage() {
                 }}
                 disabled={isWorking}
               >
-                {isWorking ? <Loader size="sm" /> : "Atualizar"}
+                {isWorking ? <Loader size="sm" colors={false} /> : "Atualizar"}
               </Button>
             </div>
           </div>
