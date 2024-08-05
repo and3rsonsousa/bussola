@@ -235,7 +235,7 @@ export default function Partner() {
             }}
             size="lg"
           />
-          <div className="text-3xl font-extrabold tracking-tighter">
+          <div className="text-xl font-extrabold tracking-tighter md:text-3xl">
             <div>{partner?.title}</div>
             <Progress
               total={actions?.length || 1}
@@ -262,7 +262,8 @@ export default function Partner() {
             className="inline-flex gap-2"
             onClick={() => setFeed((v) => !v)}
           >
-            <Grid3x3Icon className="size-4" /> Mostrar Feed do Instagram
+            <Grid3x3Icon className="size-4" />{" "}
+            <span className="hidden md:block">Mostrar Feed do Instagram</span>
           </Button>
         </div>
       </div>
@@ -271,7 +272,7 @@ export default function Partner() {
         <div className="h-1/2 w-full lg:h-full lg:overflow-hidden">
           <div className="flex h-full flex-col overflow-hidden">
             <div id="daysheader" className="flex w-full flex-col border-b">
-              <div className="flex items-center justify-between py-2">
+              <div className="items-center justify-between py-2 md:flex">
                 <div className="flex items-center gap-1 text-xl font-bold">
                   <div className="mr-4">
                     <DropdownMenu>
@@ -374,7 +375,16 @@ export default function Partner() {
                             : "border-transparent"
                         } border-2 text-xs font-bold`}
                       >
-                        {stateFilter ? stateFilter.title : "Filtre pelo Status"}
+                        {stateFilter ? (
+                          stateFilter.title
+                        ) : (
+                          <>
+                            <span className="hidden md:inline">
+                              Filtrar pelo
+                            </span>
+                            Status
+                          </>
+                        )}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-content">
@@ -426,7 +436,12 @@ export default function Partner() {
                             </div>
                           </>
                         ) : (
-                          "Filtre pela Categoria"
+                          <>
+                            <span className="hidden md:inline">
+                              Filtrar pela
+                            </span>
+                            Categoria
+                          </>
                         )}
                       </Button>
                     </DropdownMenuTrigger>
@@ -797,7 +812,7 @@ export const ReportReview = ({ partner }: { partner: Partner }) => {
       <PopoverTrigger asChild>
         <Button variant={"ghost"} size={"sm"}>
           <ClipboardCheckIcon className="mr-2 size-4" />
-          Gerar Relatório
+          <span className="hidden md:block">Gerar Relatório</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="bg-content">

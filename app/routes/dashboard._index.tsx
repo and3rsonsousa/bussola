@@ -15,11 +15,8 @@ import {
   eachDayOfInterval,
   endOfWeek,
   format,
-  isBefore,
   isSameDay,
   isSameMonth,
-  startOfDay,
-  startOfMonth,
   startOfWeek,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -318,10 +315,10 @@ export function WeekView({
           Semana
         </h2>
       </div>
-      <div className="flex max-h-[70dvh] flex-nowrap gap-2 overflow-hidden">
+      <div className="flex-nowrap gap-2 md:flex md:overflow-hidden lg:max-h-[70dvh]">
         {weekActions.map(({ date, actions }) => (
           <div
-            className="group flex max-h-full w-full flex-col overflow-hidden"
+            className="group mb-8 flex max-h-full w-full flex-col overflow-hidden"
             key={date.getDate()}
             data-date={format(date, "yyyy-MM-dd")}
             onDragOver={(e) => {
@@ -503,7 +500,7 @@ function Partners({ actions }: { actions: Action[] }) {
   const { partners } = matches[1].data as DashboardDataType;
 
   return (
-    <div className="mx-auto my-16 w-auto rounded p-8">
+    <div className="mx-auto my-16 w-auto rounded p-2 md:p-8">
       <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
       {partners.length > 0 ? (
         <div className="mx-auto flex w-auto flex-wrap justify-center gap-4">
