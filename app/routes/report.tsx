@@ -141,7 +141,7 @@ export default function ReportPage() {
                 <div className="overflow-hidden rounded-sm">
                   {/.(png|jpe?g)/gi.test(action.files[0]) ? (
                     <img src={action.files[0]} />
-                  ) : (
+                  ) : /https:\/\/iframe/.test(action.files[0]) ? (
                     <div className="relative h-80 w-full">
                       <iframe
                         id="bunny-stream-embed"
@@ -150,6 +150,12 @@ export default function ReportPage() {
                         allowFullScreen={true}
                       ></iframe>
                     </div>
+                  ) : (
+                    <video
+                      src={action.files[0]}
+                      className="h-80 w-full"
+                      controls
+                    />
                   )}
                 </div>
               ) : (
