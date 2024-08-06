@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       className={`relative flex h-[100dvh] flex-col bg-background md:overflow-hidden`}
     >
       <Header />
-      <div className="flex h-full flex-col overflow-hidden">{children}</div>
+      <div className="flex h-full flex-col lg:overflow-hidden">{children}</div>
 
       <CreateAction mode="fixed" />
       <Search />

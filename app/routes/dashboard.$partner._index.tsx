@@ -221,7 +221,7 @@ export default function Partner() {
   }, [draggedAction, submit]);
 
   return (
-    <div className="flex flex-col overflow-hidden p-4 md:px-8">
+    <div className="flex flex-col p-4 md:px-8 lg:overflow-hidden">
       <div className="flex items-center justify-between">
         <Link
           to={`/dashboard/${partner.slug}`}
@@ -267,9 +267,9 @@ export default function Partner() {
           </Button>
         </div>
       </div>
-      <div className="h-full w-full gap-4 overflow-hidden lg:flex">
+      <div className="h-full w-full gap-4 lg:flex lg:overflow-hidden">
         {/* Calendar */}
-        <div className="h-1/2 w-full lg:h-full lg:overflow-hidden">
+        <div className="w-full lg:overflow-hidden">
           <div className="flex h-full flex-col overflow-hidden">
             <div id="daysheader" className="flex w-full flex-col border-b">
               <div className="items-center justify-between py-2 md:flex">
@@ -619,7 +619,7 @@ export const CalendarDay = ({
     <div
       className={`${
         !isSameMonth(day.date, currentDate) ? "hidden md:block" : ""
-      } item-container relative flex min-h-36 flex-col pb-4 pt-2 transition md:px-1 md:pt-0`}
+      } item-container relative flex flex-col pb-4 pt-2 transition md:min-h-36 md:px-1 md:pt-0`}
       data-date={format(day.date, "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
