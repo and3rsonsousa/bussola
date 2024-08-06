@@ -117,8 +117,8 @@ const ActionReport = ({ action }: { action: Action }) => {
   );
 
   return (
-    <div key={action.id} className="rounded-sm bg-white p-8">
-      <div className="mb-4 flex items-center justify-between gap-2 border-b border-black/10 pb-4 text-lg">
+    <div key={action.id} className="rounded-sm bg-white p-4 md:p-8">
+      <div className="mb-4 flex items-center justify-between gap-2 border-b border-black/10 pb-4 text-sm leading-none">
         <div className="first-letter:capitalize">
           {format(action.date, "E, d 'de' MMMM 'de' yyyy", {
             locale: ptBR,
@@ -187,12 +187,18 @@ const ActionReport = ({ action }: { action: Action }) => {
       <div
         className="mt-4"
         dangerouslySetInnerHTML={{
+          __html: action.caption?.replace(/\n/gi, "<br>") || "",
+        }}
+      ></div>
+      {/* <div
+        className="mt-4"
+        dangerouslySetInnerHTML={{
           __html:
             action.category_id === CATEGORIES.stories
               ? action.description || ""
               : action.caption?.replace(/\n/gi, "<br>") || "",
         }}
-      ></div>
+      ></div> */}
     </div>
   );
 };
