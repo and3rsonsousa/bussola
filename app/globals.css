@@ -204,10 +204,10 @@ body {
   @apply bg-carousel-500;
 }
 .bg-reels {
-  @apply bg-reels-600;
+  @apply bg-reels-500;
 }
 .bg-stories {
-  @apply bg-stories-500;
+  @apply bg-stories-400;
 }
 .bg-todo {
   @apply bg-todo-600;

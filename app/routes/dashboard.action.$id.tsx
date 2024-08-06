@@ -459,7 +459,7 @@ export default function ActionPage() {
 
             <DropdownMenu>
               <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-4 ring-offset-background focus:ring-2">
-                <div className="flex">
+                <div className="flex pl-1">
                   {responsibles.map((person) => (
                     <Avatar
                       item={{
