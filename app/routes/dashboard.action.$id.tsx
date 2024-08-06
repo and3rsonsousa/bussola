@@ -226,9 +226,9 @@ export default function ActionPage() {
         })}
       </div>
 
-      <div className="justify-center gap-4 lg:flex lg:h-full lg:overflow-hidden">
+      <div className="justify-center gap-4 p-1 lg:flex lg:h-full lg:overflow-hidden">
         {/* Descrição */}
-        <div className="flex shrink grow flex-col overflow-hidden">
+        <div className="mb-8 flex shrink grow flex-col overflow-hidden lg:mb-0 lg:w-3/5">
           <div className="mb-2 flex shrink-0 items-center justify-between gap-4">
             <div className="text-xs font-extrabold uppercase tracking-wider">
               Descrição
@@ -304,7 +304,7 @@ export default function ActionPage() {
         </div>
         {/* Legenda e Arquivos */}
         <div
-          className={`flex flex-col pb-1 lg:w-2/5 lg:pr-1 ${
+          className={`flex flex-col pb-1 lg:w-2/5 ${
             InstagramFeedContent.find(
               (content) => content === action.category_id,
             ) || action.category_id === CATEGORIES.stories
