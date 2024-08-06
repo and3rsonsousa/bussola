@@ -1,20 +1,14 @@
-import { MetaFunction } from "@vercel/remix";
+import { useLoaderData } from "@remix-run/react";
 import {
   json,
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
-import {
-  endOfDay,
-  format,
-  isSameMonth,
-  isSameYear,
-  startOfDay,
-} from "date-fns";
+import { MetaFunction } from "@vercel/remix";
+import { format, isSameMonth, isSameYear } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CATEGORIES } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
-import { useLoaderData } from "@remix-run/react";
 
 export const config = { runtime: "edge" };
 
@@ -150,7 +144,7 @@ const ActionReport = ({ action }: { action: Action }) => {
                 <iframe
                   id="bunny-stream-embed"
                   src={action.files[0]}
-                  className="absolute bottom-0 left-0 right-0 top-0 h-full w-full border border-red-500"
+                  className="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
                   allowFullScreen={true}
                 ></iframe>
               </div>

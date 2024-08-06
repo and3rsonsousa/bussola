@@ -7,7 +7,7 @@ import Search from "./Search";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div
-      className={`relative flex h-[100dvh] flex-col bg-background md:overflow-hidden`}
+      className={`relative flex h-[100dvh] flex-col bg-background lg:overflow-hidden`}
     >
       <Header />
       <div className="flex h-full flex-col lg:overflow-hidden">{children}</div>

@@ -159,734 +159,731 @@ export default function ActionPage() {
   }, [fetcher.data]);
 
   return (
-    <div className="flex h-full justify-center overflow-hidden">
-      <div className="flex h-full flex-col overflow-hidden">
-        <div className="flex w-full shrink grow-0 items-center justify-between p-4 text-sm">
-          {/* Header */}
-          <div className="flex items-center gap-2">
-            <Avatar
-              item={{
-                short: partner.short,
-                bg: partner.bg,
-                fg: partner.fg,
-              }}
-              size="md"
-              style={{
-                viewTransitionName: "avatar-partner",
-              }}
-            />
-            <div>
-              <Link
-                to={`/dashboard/${partner.slug}`}
-                className="font-extrabold uppercase tracking-wider transition"
-              >
-                {partner.title}
-              </Link>
-              <div className="text-[11px] leading-none tracking-wide">
-                {format(
-                  parseISO(baseAction?.updated_at as string),
-                  "yyyy-MM-dd HH:mm:ss",
-                ) ===
-                format(
-                  parseISO(baseAction?.created_at as string),
-                  "yyyy-MM-dd HH:mm:ss",
-                )
-                  ? "Criado "
-                  : "Atualizado "}
-                {formatDistanceToNow(
-                  parseISO(baseAction?.updated_at as string),
-                  {
-                    locale: ptBR,
-                    addSuffix: true,
-                  },
-                )}
-              </div>
+    <div className="container flex h-full max-w-5xl flex-col px-4 md:px-8 lg:overflow-hidden">
+      {/* Header */}
+      {/* <div className=" container flex w-full shrink grow-0 items-center justify-between p-4 text-sm">
+        
+        <div className="flex items-center gap-2">
+          <Avatar
+            item={{
+              short: partner.short,
+              bg: partner.bg,
+              fg: partner.fg,
+            }}
+            size="md"
+            style={{
+              viewTransitionName: "avatar-partner",
+            }}
+          />
+          <div>
+            <Link
+              to={`/dashboard/${partner.slug}`}
+              className="font-extrabold tracking-tight transition"
+            >
+              {partner.title}
+            </Link>
+          </div>
+        </div>
+      </div> */}
+
+      {/* Título */}
+      <div
+        contentEditable="true"
+        dangerouslySetInnerHTML={{
+          __html: action.title,
+        }}
+        onBlur={(e) =>
+          setAction({
+            ...action,
+            title: e.currentTarget.innerText,
+          })
+        }
+        className={`bg-transparent py-2 font-extrabold tracking-tighter outline-none transition ${action.title.length < 50 ? "text-5xl" : "text-4xl"}`}
+        onPaste={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setAction({
+            ...action,
+            title: e.clipboardData.getData("text"),
+          });
+        }}
+      />
+      {/* Tempo */}
+      <div className="mb-8 text-[11px] leading-none tracking-wide text-secondary-foreground">
+        {format(
+          parseISO(baseAction?.updated_at as string),
+          "yyyy-MM-dd HH:mm:ss",
+        ) ===
+        format(
+          parseISO(baseAction?.created_at as string),
+          "yyyy-MM-dd HH:mm:ss",
+        )
+          ? "Criado "
+          : "Atualizado "}
+        {formatDistanceToNow(parseISO(baseAction?.updated_at as string), {
+          locale: ptBR,
+          addSuffix: true,
+        })}
+      </div>
+
+      <div className="justify-center gap-4 lg:flex lg:h-full lg:overflow-hidden">
+        {/* Descrição */}
+        <div className="flex shrink grow flex-col overflow-hidden">
+          <div className="mb-2 flex shrink-0 items-center justify-between gap-4">
+            <div className="text-xs font-extrabold uppercase tracking-wider">
+              Descrição
+            </div>
+
+            {action.category_id === CATEGORIES.carousel && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
+                    variant="ghost"
+                  >
+                    <SparklesIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className="bg-content">
+                  <DropdownMenuItem
+                    className="bg-item"
+                    onSelect={async () => {
+                      fetcher.submit(
+                        {
+                          title: action.title,
+                          description: action.description,
+                          context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                          intent: "carousel",
+                        },
+                        {
+                          action: "/handle-openai",
+                          method: "post",
+                          navigate: false,
+                        },
+                      );
+                    }}
+                  >
+                    Modelo Comum
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="bg-item"
+                    onSelect={async () => {
+                      fetcher.submit(
+                        {
+                          title: action.title,
+                          description: action.description,
+                          context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                          intent: "carousel",
+                          model: "twitter",
+                        },
+                        {
+                          action: "/handle-openai",
+                          method: "post",
+                          navigate: false,
+                        },
+                      );
+                    }}
+                  >
+                    Modelo Twitter
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+          <div className="relative flex h-full flex-col overflow-hidden pt-9">
+            <div className="scrollbars">
+              <Tiptap
+                content={action.description}
+                onBlur={(text) => {
+                  setAction({ ...action, description: text });
+                }}
+              />
             </div>
           </div>
         </div>
-
-        <div className="flex shrink grow flex-col gap-4 overflow-hidden px-4 lg:w-[600px]">
-          {/* Título */}
-
-          <div
-            contentEditable="true"
-            dangerouslySetInnerHTML={{
-              __html: action.title,
-            }}
-            onBlur={(e) =>
-              setAction({
-                ...action,
-                title: e.currentTarget.innerText,
-              })
-            }
-            className={`bg-transparent font-extrabold tracking-tighter outline-none transition ${action.title.length < 50 ? "text-5xl" : "text-4xl"}`}
-            onPaste={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setAction({
-                ...action,
-                title: e.clipboardData.getData("text"),
-              });
-            }}
-          />
-
-          {/* Descrição */}
-          <div className="flex shrink grow flex-col overflow-hidden">
-            <div className="mb-2 flex shrink-0 items-center justify-between gap-4 text-xs font-medium uppercase tracking-wider">
-              <div>Descrição</div>
-
-              {action.category_id === CATEGORIES.carousel && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
-                      variant="ghost"
-                    >
-                      <SparklesIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent className="bg-content">
-                    <DropdownMenuItem
-                      className="bg-item"
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "carousel",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Modelo Comum
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="bg-item"
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "carousel",
-                            model: "twitter",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Modelo Twitter
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-            <div className="relative flex h-full flex-col overflow-hidden pt-9">
-              <div className="scrollbars">
-                <Tiptap
-                  content={action.description}
-                  onBlur={(text) => {
-                    setAction({ ...action, description: text });
-                  }}
-                />
+        {/* Legenda e Arquivos */}
+        <div
+          className={`flex flex-col pb-1 lg:w-2/5 lg:pr-1 ${
+            InstagramFeedContent.find(
+              (content) => content === action.category_id,
+            ) || action.category_id === CATEGORIES.stories
+              ? ""
+              : "hidden"
+          }`}
+        >
+          <div className="mb-4 flex h-60 flex-col gap-4 lg:h-full">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-extrabold uppercase tracking-wider">
+                {action.category_id === CATEGORIES.stories
+                  ? "Sequência"
+                  : "Legenda"}
               </div>
-            </div>
-          </div>
-          <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
-            {/* Partners */}
+              <div>
+                {action.category_id === CATEGORIES.stories ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "stories").length > 0 && "animate-colors"}`}
+                        variant="ghost"
+                        title="Gerar Stories"
+                      >
+                        <SparklesIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-content">
+                      <DropdownMenuItem
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                              intent: "stories",
+                              model: "static",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        Roteiro de Stories estáticos
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                              intent: "stories",
+                              model: "video",
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                              navigate: false,
+                            },
+                          );
+                        }}
+                      >
+                        Roteiro de Stories em vídeo
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="flex gap-4">
+                    {action.caption && action.caption.length > 0 && (
+                      <div className="flex gap-2">
+                        <Button
+                          variant={"ghost"}
+                          className="h-8 w-8 p-1"
+                          title="Reduzir o Texto"
+                          onClick={async (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
 
-            <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
-                <Avatar
-                  item={{
-                    short: partner.short,
-                    bg: partner.bg,
-                    fg: partner.fg,
-                  }}
-                  size="lg"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {partners.map((partner) => (
-                  <DropdownMenuItem
-                    key={partner.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={partner.title}
-                    onSelect={async () => {
-                      if (partner.id !== action.partner_id) {
-                        setAction({
-                          ...action,
-                          partner_id: partner.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Avatar
-                      item={{
-                        short: partner.short,
-                        bg: partner.bg,
-                        fg: partner.fg,
-                      }}
-                    />
-                    <span>{partner.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Categoria */}
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
-                <Icons id={category.slug} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {areas.map((area, i) => (
-                  <DropdownMenuGroup key={area.id}>
-                    {i > 0 && <DropdownMenuSeparator />}
-                    <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
-                      {area.title}
-                    </h4>
-                    {categories.map((category) =>
-                      category.area_id === area.id ? (
-                        <DropdownMenuItem
-                          key={category.id}
-                          className="bg-item flex items-center gap-2"
-                          onSelect={async () => {
-                            if (category.id !== action.category_id) {
-                              setAction({
-                                ...action,
-                                category_id: category.id,
-                              });
-                            }
+                            fetcher.submit(
+                              {
+                                description: action.caption,
+                                intent: "shrink",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                                navigate: false,
+                              },
+                            );
                           }}
                         >
-                          <Icons
-                            id={category.slug}
-                            className={`size-4 opacity-50`}
-                          />
-                          <span>{category.title}</span>
-                        </DropdownMenuItem>
-                      ) : null,
+                          <ArrowDownNarrowWideIcon className="size-4" />
+                        </Button>
+                        <Button
+                          variant={"ghost"}
+                          className="h-8 w-8 p-1"
+                          title="Aumentar o texto"
+                          onClick={async (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            fetcher.submit(
+                              {
+                                description: action.caption,
+                                intent: "expand",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                                navigate: false,
+                              },
+                            );
+                          }}
+                        >
+                          <ArrowUpNarrowWideIcon className="size-4" />
+                        </Button>
+                      </div>
                     )}
-                  </DropdownMenuGroup>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className={`h-8 w-8 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
+                          variant="ghost"
+                          title="Gerar legenda"
+                        >
+                          <SparklesIcon className="size-5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "short",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                                navigate: false,
+                              },
+                            );
+                          }}
+                        >
+                          Legenda curta
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "medium",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                                navigate: false,
+                              },
+                            );
+                          }}
+                        >
+                          Legenda Média de Reforço
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "long",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                                navigate: false,
+                              },
+                            );
+                          }}
+                        >
+                          Legenda Longa e explicativa
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                )}
+              </div>
+            </div>
 
-            {/* States */}
+            <Textarea
+              ref={caption}
+              name="caption"
+              className="h-full text-base font-normal leading-tight"
+              value={action.caption ? action.caption : ""}
+              onChange={(event) =>
+                setAction((action) => ({
+                  ...action,
+                  caption: event.target.value,
+                }))
+              }
+            />
+          </div>
+          <Label className="flex flex-col text-xs font-extrabold tracking-wider">
+            <div className="uppercase">Arquivos</div>
+            <div className="mb-4 text-[12px] tracking-normal opacity-50">
+              Coloque os arquivos separados por "," vírgula.
+            </div>
+            <Textarea
+              name="files"
+              className="text-base font-normal leading-tight tracking-tighter"
+              value={action.files?.join(", ")}
+              onChange={(event) =>
+                setAction((action) => ({
+                  ...action,
+                  files: event.target.value.split(","),
+                }))
+              }
+            />
+          </Label>
+        </div>
+      </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-ring ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug} text-white`}
-              >
-                {state.title}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {states.map((state) => (
-                  <DropdownMenuItem
-                    key={state.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={state.title}
-                    onSelect={async () => {
-                      if (state.id !== action.state_id) {
-                        setAction({
-                          ...action,
-                          state_id: state.id,
-                        });
-                      }
+      <div className="items-center justify-between p-4 md:flex">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
+          {/* Partners */}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+              <Avatar
+                item={{
+                  short: partner.short,
+                  bg: partner.bg,
+                  fg: partner.fg,
+                }}
+                size="lg"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-content">
+              {partners.map((partner) => (
+                <DropdownMenuItem
+                  key={partner.id}
+                  className="bg-item flex items-center gap-2"
+                  textValue={partner.title}
+                  onSelect={async () => {
+                    if (partner.id !== action.partner_id) {
+                      setAction({
+                        ...action,
+                        partner_id: partner.id,
+                      });
+                    }
+                  }}
+                >
+                  <Avatar
+                    item={{
+                      short: partner.short,
+                      bg: partner.bg,
+                      fg: partner.fg,
                     }}
-                  >
-                    <div
-                      className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
-                    ></div>
-                    <span>{state.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  />
+                  <span>{partner.title}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-            {/* Prioridade */}
+          {/* Categoria */}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
-                <Icons id={priority.slug} type="priority" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {priorities.map((priority) => (
-                  <DropdownMenuItem
-                    key={priority.id}
-                    className="bg-item flex items-center gap-2"
-                    textValue={priority.title}
-                    onSelect={async () => {
-                      if (priority.id !== action.priority_id) {
-                        // await handleActions({
-                        //   ...action,
-                        //   intent: INTENTS.updateAction,
-                        //   priority_id: Number(priority.id),
-                        // });
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+              <Icons id={category.slug} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-content">
+              {areas.map((area, i) => (
+                <DropdownMenuGroup key={area.id}>
+                  {i > 0 && <DropdownMenuSeparator />}
+                  <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                    {area.title}
+                  </h4>
+                  {categories.map((category) =>
+                    category.area_id === area.id ? (
+                      <DropdownMenuItem
+                        key={category.id}
+                        className="bg-item flex items-center gap-2"
+                        onSelect={async () => {
+                          if (category.id !== action.category_id) {
+                            setAction({
+                              ...action,
+                              category_id: category.id,
+                            });
+                          }
+                        }}
+                      >
+                        <Icons
+                          id={category.slug}
+                          className={`size-4 opacity-50`}
+                        />
+                        <span>{category.title}</span>
+                      </DropdownMenuItem>
+                    ) : null,
+                  )}
+                </DropdownMenuGroup>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-                        setAction({
-                          ...action,
-                          priority_id: priority.id,
-                        });
-                      }
-                    }}
-                  >
-                    <Icons
-                      id={priority.slug}
-                      type="priority"
-                      className="h-4 w-4"
-                    />
-                    <span>{priority.title}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {/* States */}
 
-            {/* Responsáveis */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={`flex items-center rounded border-none px-3 py-1 font-semibold outline-none ring-ring ring-offset-background focus:ring-2 focus:ring-offset-2 bg-${state.slug} text-white`}
+            >
+              {state.title}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-content">
+              {states.map((state) => (
+                <DropdownMenuItem
+                  key={state.id}
+                  className="bg-item flex items-center gap-2"
+                  textValue={state.title}
+                  onSelect={async () => {
+                    if (state.id !== action.state_id) {
+                      setAction({
+                        ...action,
+                        state_id: state.id,
+                      });
+                    }
+                  }}
+                >
+                  <div
+                    className={`my-1 h-3 w-3 rounded-full border-2 border-${state.slug}`}
+                  ></div>
+                  <span>{state.title}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-4 ring-offset-background focus:ring-2">
-                <div className="flex pl-1">
-                  {responsibles.map((person) => (
-                    <Avatar
-                      item={{
-                        image: person.image,
-                        short: person.initials!,
-                      }}
-                      key={person.id}
-                      size="md"
-                      group
-                    />
-                  ))}
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-content">
-                {people.map((person) => (
-                  <DropdownMenuCheckboxItem
-                    key={person.id}
-                    className="bg-select-item flex items-center gap-2"
-                    textValue={person.name}
-                    checked={action.responsibles.includes(person.user_id)}
-                    onCheckedChange={async (checked) => {
-                      if (!checked && action.responsibles.length < 2) {
-                        alert(
-                          "É necessário ter pelo menos um responsável pala ação",
-                        );
-                        return false;
-                      }
-                      const tempResponsibles = checked
-                        ? [...action.responsibles, person.user_id]
-                        : action.responsibles.filter(
-                            (id) => id !== person.user_id,
-                          );
+          {/* Prioridade */}
 
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+              <Icons id={priority.slug} type="priority" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-content">
+              {priorities.map((priority) => (
+                <DropdownMenuItem
+                  key={priority.id}
+                  className="bg-item flex items-center gap-2"
+                  textValue={priority.title}
+                  onSelect={async () => {
+                    if (priority.id !== action.priority_id) {
                       // await handleActions({
                       //   ...action,
                       //   intent: INTENTS.updateAction,
-                      //   responsibles: tempResponsibles,
+                      //   priority_id: Number(priority.id),
                       // });
 
                       setAction({
                         ...action,
-                        responsibles: tempResponsibles,
+                        priority_id: priority.id,
+                      });
+                    }
+                  }}
+                >
+                  <Icons
+                    id={priority.slug}
+                    type="priority"
+                    className="h-4 w-4"
+                  />
+                  <span>{priority.title}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Responsáveis */}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-4 ring-offset-background focus:ring-2">
+              <div className="flex pl-1">
+                {responsibles.map((person) => (
+                  <Avatar
+                    item={{
+                      image: person.image,
+                      short: person.initials!,
+                    }}
+                    key={person.id}
+                    size="md"
+                    group
+                  />
+                ))}
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-content">
+              {people.map((person) => (
+                <DropdownMenuCheckboxItem
+                  key={person.id}
+                  className="bg-select-item flex items-center gap-2"
+                  textValue={person.name}
+                  checked={action.responsibles.includes(person.user_id)}
+                  onCheckedChange={async (checked) => {
+                    if (!checked && action.responsibles.length < 2) {
+                      alert(
+                        "É necessário ter pelo menos um responsável pala ação",
+                      );
+                      return false;
+                    }
+                    const tempResponsibles = checked
+                      ? [...action.responsibles, person.user_id]
+                      : action.responsibles.filter(
+                          (id) => id !== person.user_id,
+                        );
+
+                    // await handleActions({
+                    //   ...action,
+                    //   intent: INTENTS.updateAction,
+                    //   responsibles: tempResponsibles,
+                    // });
+
+                    setAction({
+                      ...action,
+                      responsibles: tempResponsibles,
+                    });
+                  }}
+                >
+                  <Avatar
+                    item={{
+                      image: person.image,
+                      short: person.initials!,
+                    }}
+                  />
+                  <span>{`${person.name} ${person.surname}`}</span>
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="mb-10 flex items-center justify-between md:mb-0">
+          <div>
+            <Popover>
+              <PopoverTrigger asChild tabIndex={-7}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="-ml-3 flex items-center gap-2 focus-visible:ring-offset-0"
+                >
+                  <CalendarIcon className="size-4" />
+                  <span>
+                    {format(
+                      date,
+                      "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(
+                        date.getMinutes() > 0 ? "m" : "",
+                      ),
+                      {
+                        locale: ptBR,
+                      },
+                    )}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="bg-content">
+                <Calendar
+                  mode="single"
+                  selected={parseISO(action.date)}
+                  locale={ptBR}
+                  onSelect={(date) => {
+                    if (date) {
+                      date?.setHours(
+                        parseISO(action.date).getHours(),
+                        parseISO(action.date).getMinutes(),
+                      );
+
+                      setAction({
+                        ...action,
+                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                      });
+                    }
+                  }}
+                />
+                <div className="mx-auto flex w-40 gap-2">
+                  <Select
+                    value={parseISO(action.date).getHours().toString()}
+                    onValueChange={(value) => {
+                      const date = parseISO(action.date);
+                      date.setHours(Number(value));
+                      setAction({
+                        ...action,
+                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
                       });
                     }}
                   >
-                    <Avatar
-                      item={{
-                        image: person.image,
-                        short: person.initials!,
-                      }}
-                    />
-                    <span>{`${person.name} ${person.surname}`}</span>
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array(24)
+                        .fill(0)
+                        .map((i, j) => {
+                          return (
+                            <SelectItem value={j.toString()} key={j}>
+                              {j.toString()}
+                            </SelectItem>
+                          );
+                        })}
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={parseISO(action.date).getMinutes().toString()}
+                    onValueChange={(value) => {
+                      const date = parseISO(action.date);
+                      date.setMinutes(Number(value));
+                      setAction({
+                        ...action,
+                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                      });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array(60)
+                        .fill(0)
+                        .map((i, j) => {
+                          return (
+                            <SelectItem value={j.toString()} key={j}>
+                              {j.toString()}
+                            </SelectItem>
+                          );
+                        })}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
-          <div className="flex items-center justify-between pb-4">
-            <div>
-              <Popover>
-                <PopoverTrigger asChild tabIndex={-7}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="-ml-3 flex items-center gap-2 focus-visible:ring-offset-0"
-                  >
-                    <CalendarIcon className="size-4" />
-                    <span>
-                      {format(
-                        date,
-                        "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(
-                          date.getMinutes() > 0 ? "m" : "",
-                        ),
-                        {
-                          locale: ptBR,
-                        },
-                      )}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="bg-content">
-                  <Calendar
-                    mode="single"
-                    selected={parseISO(action.date)}
-                    locale={ptBR}
-                    onSelect={(date) => {
-                      if (date) {
-                        date?.setHours(
-                          parseISO(action.date).getHours(),
-                          parseISO(action.date).getMinutes(),
-                        );
-
-                        setAction({
-                          ...action,
-                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                        });
-                      }
-                    }}
-                  />
-                  <div className="mx-auto flex w-40 gap-2">
-                    <Select
-                      value={parseISO(action.date).getHours().toString()}
-                      onValueChange={(value) => {
-                        const date = parseISO(action.date);
-                        date.setHours(Number(value));
-                        setAction({
-                          ...action,
-                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                        });
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array(24)
-                          .fill(0)
-                          .map((i, j) => {
-                            return (
-                              <SelectItem value={j.toString()} key={j}>
-                                {j.toString()}
-                              </SelectItem>
-                            );
-                          })}
-                      </SelectContent>
-                    </Select>
-                    <Select
-                      value={parseISO(action.date).getMinutes().toString()}
-                      onValueChange={(value) => {
-                        const date = parseISO(action.date);
-                        date.setMinutes(Number(value));
-                        setAction({
-                          ...action,
-                          date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                        });
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array(60)
-                          .fill(0)
-                          .map((i, j) => {
-                            return (
-                              <SelectItem value={j.toString()} key={j}>
-                                {j.toString()}
-                              </SelectItem>
-                            );
-                          })}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant={"ghost"}
-                onClick={() => {
-                  if (
-                    confirm(
-                      "ESSA AÇÃO NÃO PODE SER DESFEITA! Deseja mesmo deletar essa ação?",
-                    )
-                  ) {
-                    handleActions({
-                      ...action,
-                      intent: INTENTS.deleteAction,
-                    });
-
-                    navigate(-1);
-                  }
-                }}
-              >
-                <Trash2Icon className="size-4" />
-              </Button>
-              <Button
-                onClick={() => {
+          <div className="flex gap-2">
+            <Button
+              variant={"ghost"}
+              onClick={() => {
+                if (
+                  confirm(
+                    "ESSA AÇÃO NÃO PODE SER DESFEITA! Deseja mesmo deletar essa ação?",
+                  )
+                ) {
                   handleActions({
                     ...action,
-                    responsibles: action.responsibles,
-                    intent: INTENTS.updateAction,
+                    intent: INTENTS.deleteAction,
                   });
-                }}
-                disabled={isWorking}
-              >
-                {isWorking ? <Loader size="sm" colors={false} /> : "Atualizar"}
-              </Button>
-            </div>
+
+                  navigate(-1);
+                }
+              }}
+            >
+              <Trash2Icon className="size-4" />
+            </Button>
+            <Button
+              onClick={() => {
+                handleActions({
+                  ...action,
+                  responsibles: action.responsibles,
+                  intent: INTENTS.updateAction,
+                });
+              }}
+              disabled={isWorking}
+            >
+              {isWorking ? <Loader size="sm" colors={false} /> : "Atualizar"}
+            </Button>
           </div>
         </div>
-      </div>
-
-      <div
-        className={`w-[400px] p-4 ${
-          InstagramFeedContent.find(
-            (content) => content === action.category_id,
-          ) || action.category_id === CATEGORIES.stories
-            ? ""
-            : "hidden"
-        }`}
-      >
-        <div className="mb-8 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-medium uppercase tracking-wider">
-              {action.category_id === CATEGORIES.stories
-                ? "Sequência"
-                : "Legenda"}
-            </div>
-            <div>
-              {action.category_id === CATEGORIES.stories ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "stories").length > 0 && "animate-colors"}`}
-                      variant="ghost"
-                      title="Gerar Stories"
-                    >
-                      <SparklesIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-content">
-                    <DropdownMenuItem
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "stories",
-                            model: "static",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Roteiro de Stories estáticos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "stories",
-                            model: "video",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                            navigate: false,
-                          },
-                        );
-                      }}
-                    >
-                      Roteiro de Stories em vídeo
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <div className="flex gap-4">
-                  {action.caption && action.caption.length > 0 && (
-                    <div className="flex gap-2">
-                      <Button
-                        variant={"ghost"}
-                        className="h-8 w-8 p-1"
-                        title="Reduzir o Texto"
-                        onClick={async (event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-
-                          fetcher.submit(
-                            {
-                              description: action.caption,
-                              intent: "shrink",
-                            },
-                            {
-                              action: "/handle-openai",
-                              method: "post",
-                              navigate: false,
-                            },
-                          );
-                        }}
-                      >
-                        <ArrowDownNarrowWideIcon className="size-4" />
-                      </Button>
-                      <Button
-                        variant={"ghost"}
-                        className="h-8 w-8 p-1"
-                        title="Aumentar o texto"
-                        onClick={async (event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-
-                          fetcher.submit(
-                            {
-                              description: action.caption,
-                              intent: "expand",
-                            },
-                            {
-                              action: "/handle-openai",
-                              method: "post",
-                              navigate: false,
-                            },
-                          );
-                        }}
-                      >
-                        <ArrowUpNarrowWideIcon className="size-4" />
-                      </Button>
-                    </div>
-                  )}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        className={`h-8 w-8 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
-                        variant="ghost"
-                        title="Gerar legenda"
-                      >
-                        <SparklesIcon className="size-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem
-                        onSelect={async () => {
-                          fetcher.submit(
-                            {
-                              title: action.title,
-                              description: action.description,
-                              intent: "caption",
-                              model: "short",
-                            },
-                            {
-                              action: "/handle-openai",
-                              method: "post",
-                              navigate: false,
-                            },
-                          );
-                        }}
-                      >
-                        Legenda curta
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={async () => {
-                          fetcher.submit(
-                            {
-                              title: action.title,
-                              description: action.description,
-                              intent: "caption",
-                              model: "medium",
-                            },
-                            {
-                              action: "/handle-openai",
-                              method: "post",
-                              navigate: false,
-                            },
-                          );
-                        }}
-                      >
-                        Legenda Média de Reforço
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={async () => {
-                          fetcher.submit(
-                            {
-                              title: action.title,
-                              description: action.description,
-                              intent: "caption",
-                              model: "long",
-                            },
-                            {
-                              action: "/handle-openai",
-                              method: "post",
-                              navigate: false,
-                            },
-                          );
-                        }}
-                      >
-                        Legenda Longa e explicativa
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <Textarea
-            ref={caption}
-            name="caption"
-            className="h-[50vh] max-h-[50vh] text-base font-normal leading-tight"
-            value={action.caption ? action.caption : ""}
-            onChange={(event) =>
-              setAction((action) => ({
-                ...action,
-                caption: event.target.value,
-              }))
-            }
-          />
-        </div>
-        <Label className="mb-2 flex flex-col text-xs font-medium tracking-wider">
-          <div className="uppercase">Arquivos</div>
-          <div className="mb-4 text-[12px] tracking-normal opacity-50">
-            Coloque os arquivos separados por "," vírgula.
-          </div>
-          <Textarea
-            name="files"
-            className="text-base font-normal leading-tight tracking-tighter"
-            value={action.files?.join(", ")}
-            onChange={(event) =>
-              setAction((action) => ({
-                ...action,
-                files: event.target.value.split(","),
-              }))
-            }
-          />
-        </Label>
-
-        {/* <pre className="text-sm">
-          {JSON.stringify(action.description, undefined, 2)}
-        </pre> */}
       </div>
     </div>
   );
