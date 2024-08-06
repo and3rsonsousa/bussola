@@ -155,7 +155,11 @@ const ActionReport = ({ action }: { action: Action }) => {
                 ></iframe>
               </div>
             ) : (
-              <video src={action.files[0]} className="h-80 w-full" controls />
+              <video
+                src={action.files[0]}
+                className="h-80 w-full bg-black"
+                controls
+              />
             )}
           </div>
         ) : (
