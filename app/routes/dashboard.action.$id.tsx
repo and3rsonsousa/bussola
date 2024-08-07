@@ -209,21 +209,30 @@ export default function ActionPage() {
         }}
       />
       {/* Tempo */}
-      <div className="mb-8 text-[11px] leading-none tracking-wide text-secondary-foreground">
-        {format(
-          parseISO(baseAction?.updated_at as string),
-          "yyyy-MM-dd HH:mm:ss",
-        ) ===
-        format(
-          parseISO(baseAction?.created_at as string),
-          "yyyy-MM-dd HH:mm:ss",
-        )
-          ? "Criado "
-          : "Atualizado "}
-        {formatDistanceToNow(parseISO(baseAction?.updated_at as string), {
-          locale: ptBR,
-          addSuffix: true,
-        })}
+      <div className="mb-8 flex gap-4 text-sm leading-none">
+        <div
+          className="text-secondary-foreground"
+          style={{ fontStretch: "75%" }}
+        >
+          {format(
+            parseISO(baseAction?.updated_at as string),
+            "yyyy-MM-dd HH:mm:ss",
+          ) ===
+          format(
+            parseISO(baseAction?.created_at as string),
+            "yyyy-MM-dd HH:mm:ss",
+          )
+            ? "Criado "
+            : "Atualizado "}
+          {formatDistanceToNow(parseISO(baseAction?.updated_at as string), {
+            locale: ptBR,
+            addSuffix: true,
+          })}
+        </div>
+
+        <Link className="font-bold" to={`/dashboard/${partner.slug}`}>
+          {partner.title}
+        </Link>
       </div>
 
       <div className="justify-center gap-4 p-1 lg:flex lg:h-full lg:overflow-hidden">
@@ -535,18 +544,18 @@ export default function ActionPage() {
       </div>
 
       <div className="items-center justify-between p-4 md:flex">
-        <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 lg:gap-4">
           {/* Partners */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
               <Avatar
                 item={{
                   short: partner.short,
                   bg: partner.bg,
                   fg: partner.fg,
                 }}
-                size="lg"
+                size="md"
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-content">
@@ -580,7 +589,7 @@ export default function ActionPage() {
           {/* Categoria */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
               <Icons id={category.slug} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-content">
@@ -652,7 +661,7 @@ export default function ActionPage() {
           {/* Prioridade */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="rounded-full border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
               <Icons id={priority.slug} type="priority" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-content">
