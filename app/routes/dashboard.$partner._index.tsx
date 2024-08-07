@@ -222,7 +222,7 @@ export default function Partner() {
 
   return (
     <div className="flex flex-col p-4 md:px-8 lg:overflow-hidden">
-      <div className="flex items-center justify-between">
+      <div className="left-52 top-3 flex items-center justify-between gap-4 lg:fixed lg:justify-start">
         <Link
           to={`/dashboard/${partner.slug}`}
           className="relative flex items-center gap-4"
@@ -263,281 +263,277 @@ export default function Partner() {
             onClick={() => setFeed((v) => !v)}
           >
             <Grid3x3Icon className="size-4" />{" "}
-            <span className="hidden md:block">Mostrar Feed do Instagram</span>
+            <span className="hidden md:block lg:hidden xl:block">
+              Mostrar Feed do Instagram
+            </span>
           </Button>
         </div>
       </div>
       <div className="h-full w-full gap-4 lg:flex lg:overflow-hidden">
         {/* Calendar */}
-        <div className="w-full lg:overflow-hidden">
-          <div className="flex h-full flex-col overflow-hidden">
-            <div id="daysheader" className="flex w-full flex-col border-b">
-              <div className="items-center justify-between py-2 md:flex">
-                <div className="flex items-center gap-1 text-xl font-bold">
-                  <div className="mr-4">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="capitalize outline-none">
-                        {format(currentDate, "MMMM", {
-                          locale: ptBR,
-                        })}
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-content">
-                        {eachMonthOfInterval({
-                          start: startOfYear(new Date()),
-                          end: endOfYear(new Date()),
-                        }).map((month) => (
-                          <DropdownMenuItem
-                            className="bg-item capitalize"
-                            key={month.getMonth()}
-                            onSelect={() => {}}
-                            asChild
-                          >
-                            <Link
-                              prefetch="intent"
-                              to={`/dashboard/${partner.slug}/?date=${format(
-                                new Date().setMonth(month.getMonth()),
-                                "yyyy-MM-'01'",
-                              )}`}
-                            >
-                              {format(month, "MMMM", {
-                                locale: ptBR,
-                              })}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                  <Button size="icon" variant="ghost" asChild>
-                    <Link
-                      prefetch="intent"
-                      to={`/dashboard/${partner?.slug}?date=${format(
-                        subMonths(currentDate, 1),
-                        "yyyy-MM-dd",
-                      )}`}
-                    >
-                      <ChevronLeftIcon className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button size="icon" variant="ghost" asChild>
-                    <Link
-                      prefetch="intent"
-                      to={`/dashboard/${partner?.slug}?date=${format(
-                        addMonths(currentDate, 1),
-                        "yyyy-MM-dd",
-                      )}`}
-                    >
-                      <ChevronRightIcon className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-                <div className="flex items-center gap-2 pr-1">
-                  <Button
-                    size={"sm"}
-                    variant={allUsers ? "accent" : "ghost"}
-                    onClick={() => setAllUsers((allUsers) => !allUsers)}
-                    title={
-                      allUsers
-                        ? "Mostrar todos os responsáveis"
-                        : "Exibir apenas 'eu' como responsável"
-                    }
-                  >
-                    {allUsers ? (
-                      <UsersIcon className="size-4" />
-                    ) : (
-                      <UserIcon className="size-4" />
-                    )}
-                  </Button>
-                  <Button
-                    variant={short ? "accent" : "ghost"}
-                    size={"sm"}
-                    onClick={() => setShort((short) => !short)}
-                    title={
-                      short
-                        ? "Aumentar o tamanho da ação"
-                        : "Diminuir o tamanho da ação"
-                    }
-                  >
-                    {short ? (
-                      <ChevronsUpDownIcon className="size-4" />
-                    ) : (
-                      <ChevronsDownUpIcon className="size-4" />
-                    )}
-                  </Button>
+        <div className="flex h-full w-full flex-col lg:overflow-hidden">
+          <div id="daysheader" className="flex w-full flex-col">
+            <div className="items-center justify-between py-2 md:flex">
+              <div className="flex items-center gap-1 text-xl font-bold">
+                <div className="mr-4">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        size={"sm"}
-                        variant={"ghost"}
-                        className={`${
-                          stateFilter
-                            ? `border-${stateFilter?.slug}`
-                            : "border-transparent"
-                        } border-2 text-xs font-bold`}
-                      >
-                        {stateFilter ? (
-                          stateFilter.title
-                        ) : (
-                          <>
-                            <span className="hidden md:inline">
-                              Filtrar pelo
-                            </span>
-                            Status
-                          </>
-                        )}
-                      </Button>
+                    <DropdownMenuTrigger className="capitalize outline-none">
+                      {format(currentDate, "MMMM", {
+                        locale: ptBR,
+                      })}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-content">
+                      {eachMonthOfInterval({
+                        start: startOfYear(new Date()),
+                        end: endOfYear(new Date()),
+                      }).map((month) => (
+                        <DropdownMenuItem
+                          className="bg-item capitalize"
+                          key={month.getMonth()}
+                          onSelect={() => {}}
+                          asChild
+                        >
+                          <Link
+                            prefetch="intent"
+                            to={`/dashboard/${partner.slug}/?date=${format(
+                              new Date().setMonth(month.getMonth()),
+                              "yyyy-MM-'01'",
+                            )}`}
+                          >
+                            {format(month, "MMMM", {
+                              locale: ptBR,
+                            })}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <Button size="icon" variant="ghost" asChild>
+                  <Link
+                    prefetch="intent"
+                    to={`/dashboard/${partner?.slug}?date=${format(
+                      subMonths(currentDate, 1),
+                      "yyyy-MM-dd",
+                    )}`}
+                  >
+                    <ChevronLeftIcon className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button size="icon" variant="ghost" asChild>
+                  <Link
+                    prefetch="intent"
+                    to={`/dashboard/${partner?.slug}?date=${format(
+                      addMonths(currentDate, 1),
+                      "yyyy-MM-dd",
+                    )}`}
+                  >
+                    <ChevronRightIcon className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+              <div className="flex items-center gap-2 pr-1">
+                <Button
+                  size={"sm"}
+                  variant={allUsers ? "accent" : "ghost"}
+                  onClick={() => setAllUsers((allUsers) => !allUsers)}
+                  title={
+                    allUsers
+                      ? "Mostrar todos os responsáveis"
+                      : "Exibir apenas 'eu' como responsável"
+                  }
+                >
+                  {allUsers ? (
+                    <UsersIcon className="size-4" />
+                  ) : (
+                    <UserIcon className="size-4" />
+                  )}
+                </Button>
+                <Button
+                  variant={short ? "accent" : "ghost"}
+                  size={"sm"}
+                  onClick={() => setShort((short) => !short)}
+                  title={
+                    short
+                      ? "Aumentar o tamanho da ação"
+                      : "Diminuir o tamanho da ação"
+                  }
+                >
+                  {short ? (
+                    <ChevronsUpDownIcon className="size-4" />
+                  ) : (
+                    <ChevronsDownUpIcon className="size-4" />
+                  )}
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size={"sm"}
+                      variant={"ghost"}
+                      className={`${
+                        stateFilter
+                          ? `border-${stateFilter?.slug}`
+                          : "border-transparent"
+                      } border-2 text-xs font-bold`}
+                    >
+                      {stateFilter ? (
+                        stateFilter.title
+                      ) : (
+                        <>
+                          <span className="hidden md:inline">Filtrar pelo</span>
+                          Status
+                        </>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-content">
+                    <DropdownMenuCheckboxItem
+                      className="bg-select-item flex gap-2"
+                      onCheckedChange={() => {
+                        setStateFilter(undefined);
+                      }}
+                    >
+                      <div
+                        className={`h-3 w-3 rounded-full border-2 border-foreground`}
+                      ></div>
+                      <div>Todos os Status</div>
+                    </DropdownMenuCheckboxItem>
+                    {states.map((state) => (
                       <DropdownMenuCheckboxItem
                         className="bg-select-item flex gap-2"
-                        onCheckedChange={() => {
-                          setStateFilter(undefined);
+                        key={state.id}
+                        checked={state.id === stateFilter?.id}
+                        onCheckedChange={(checked) => {
+                          if (!checked && state.id === stateFilter?.id) {
+                            setStateFilter(undefined);
+                          } else {
+                            setStateFilter(state);
+                          }
                         }}
                       >
                         <div
-                          className={`h-3 w-3 rounded-full border-2 border-foreground`}
+                          className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
                         ></div>
-                        <div>Todos os Status</div>
+                        <div>{state.title}</div>
                       </DropdownMenuCheckboxItem>
-                      {states.map((state) => (
-                        <DropdownMenuCheckboxItem
-                          className="bg-select-item flex gap-2"
-                          key={state.id}
-                          checked={state.id === stateFilter?.id}
-                          onCheckedChange={(checked) => {
-                            if (!checked && state.id === stateFilter?.id) {
-                              setStateFilter(undefined);
-                            } else {
-                              setStateFilter(state);
-                            }
-                          }}
-                        >
-                          <div
-                            className={`h-3 w-3 rounded-full border-2 border-${state.slug}`}
-                          ></div>
-                          <div>{state.title}</div>
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        size={"sm"}
-                        variant={categoryFilter.length > 0 ? "accent" : "ghost"}
-                        className={`text-xs font-bold`}
-                      >
-                        {categoryFilter.length > 0 ? (
-                          <>
-                            <div>
-                              {categoryFilter
-                                .map((category) => category.title)
-                                .join(", ")}
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <span className="hidden md:inline">
-                              Filtrar pela
-                            </span>
-                            Categoria
-                          </>
-                        )}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-content">
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size={"sm"}
+                      variant={categoryFilter.length > 0 ? "accent" : "ghost"}
+                      className={`text-xs font-bold`}
+                    >
+                      {categoryFilter.length > 0 ? (
+                        <>
+                          <div>
+                            {categoryFilter
+                              .map((category) => category.title)
+                              .join(", ")}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <span className="hidden md:inline">Filtrar pela</span>
+                          Categoria
+                        </>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-content">
+                    <DropdownMenuCheckboxItem
+                      className="bg-select-item flex gap-2"
+                      checked={categoryFilter?.length == 0}
+                      onCheckedChange={() => {
+                        setCategoryFilter([]);
+                      }}
+                    >
+                      <Icons className="h-3 w-3" id="all" />
+                      <div>Todas as Categorias</div>
+                    </DropdownMenuCheckboxItem>
+                    {categories.map((category) => (
                       <DropdownMenuCheckboxItem
                         className="bg-select-item flex gap-2"
-                        checked={categoryFilter?.length == 0}
-                        onCheckedChange={() => {
-                          setCategoryFilter([]);
-                        }}
-                      >
-                        <Icons className="h-3 w-3" id="all" />
-                        <div>Todas as Categorias</div>
-                      </DropdownMenuCheckboxItem>
-                      {categories.map((category) => (
-                        <DropdownMenuCheckboxItem
-                          className="bg-select-item flex gap-2"
-                          key={category.id}
-                          checked={
-                            categoryFilter
-                              ? categoryFilter?.findIndex(
-                                  (c) => category.id === c.id,
-                                ) >= 0
-                              : false
-                          }
-                          onCheckedChange={(checked) => {
-                            if (
-                              !checked &&
-                              categoryFilter?.findIndex(
+                        key={category.id}
+                        checked={
+                          categoryFilter
+                            ? categoryFilter?.findIndex(
                                 (c) => category.id === c.id,
                               ) >= 0
-                            ) {
-                              const filters = categoryFilter.filter(
-                                (c) => c.id != category.id,
-                              );
+                            : false
+                        }
+                        onCheckedChange={(checked) => {
+                          if (
+                            !checked &&
+                            categoryFilter?.findIndex(
+                              (c) => category.id === c.id,
+                            ) >= 0
+                          ) {
+                            const filters = categoryFilter.filter(
+                              (c) => c.id != category.id,
+                            );
 
-                              setCategoryFilter(filters);
-                            } else {
-                              setCategoryFilter(
-                                categoryFilter
-                                  ? [...categoryFilter, category]
-                                  : [category],
-                              );
-                            }
-                          }}
-                        >
-                          <Icons id={category.slug} className="h-3 w-3" />
-                          <div>{category.title}</div>
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                            setCategoryFilter(filters);
+                          } else {
+                            setCategoryFilter(
+                              categoryFilter
+                                ? [...categoryFilter, category]
+                                : [category],
+                            );
+                          }
+                        }}
+                      >
+                        <Icons id={category.slug} className="h-3 w-3" />
+                        <div>{category.title}</div>
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-              <div
-                className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider md:grid`}
-              >
-                {eachDayOfInterval({
-                  start: startOfWeek(new Date()),
-                  end: endOfWeek(new Date()),
-                }).map((day, j) => {
-                  return (
-                    <div
-                      key={j}
-                      className={
-                        day.getDay() === new Date().getDay()
-                          ? ""
-                          : "text-muted-foreground"
-                      }
-                    >
-                      {format(day, "EEE", {
-                        locale: ptBR,
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-              <div
-                id="divider"
-                className="absolute bottom-0 hidden h-[1px] w-full bg-gradient-to-r from-transparent via-muted"
-              ></div>
             </div>
-            <div className="scrollbars scrollbars-thin main-container h-full overflow-y-hidden">
-              <div id="calendar" className={`grid-cols-7 pb-4 md:grid`}>
-                {calendar.map((day, i) => (
-                  <CalendarDay
-                    currentDate={currentDate}
-                    day={day}
-                    setDraggedAction={setDraggedAction}
-                    person={person}
-                    short={short}
-                    allUsers={allUsers}
-                    key={i}
-                  />
-                ))}
-              </div>
+            <div
+              className={`hidden grid-cols-7 px-0 pb-2 text-center text-xs font-extrabold uppercase tracking-wider md:grid`}
+            >
+              {eachDayOfInterval({
+                start: startOfWeek(new Date()),
+                end: endOfWeek(new Date()),
+              }).map((day, j) => {
+                return (
+                  <div
+                    key={j}
+                    className={
+                      day.getDay() === new Date().getDay()
+                        ? ""
+                        : "text-muted-foreground"
+                    }
+                  >
+                    {format(day, "EEE", {
+                      locale: ptBR,
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+            <div
+              id="divider"
+              className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20"
+            ></div>
+          </div>
+          <div className="scrollbars scrollbars-thin main-container h-full overflow-y-hidden">
+            <div id="calendar" className={`grid-cols-7 pb-4 md:grid`}>
+              {calendar.map((day, i) => (
+                <CalendarDay
+                  currentDate={currentDate}
+                  day={day}
+                  setDraggedAction={setDraggedAction}
+                  person={person}
+                  short={short}
+                  allUsers={allUsers}
+                  key={i}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -812,7 +808,9 @@ export const ReportReview = ({ partner }: { partner: Partner }) => {
       <PopoverTrigger asChild>
         <Button variant={"ghost"} size={"sm"}>
           <ClipboardCheckIcon className="mr-2 size-4" />
-          <span className="hidden md:block">Gerar Relatório</span>
+          <span className="hidden md:block lg:hidden xl:block">
+            Gerar Relatório
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="bg-content">
