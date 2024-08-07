@@ -101,8 +101,6 @@ export const meta: MetaFunction = ({ data }) => {
 export default function ReportPage() {
   const { actions, partner, range } = useLoaderData<typeof loader>();
 
-  console.log(range);
-
   return (
     <div className="min-h-[100vh] bg-slate-100 p-4 text-center text-gray-500 antialiased">
       <h5 className="mb-4 text-xs font-bold uppercase tracking-wider">

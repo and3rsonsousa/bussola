@@ -23,7 +23,7 @@ import {
   SparklesIcon,
   Trash2Icon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { act, useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 import Loader from "~/components/structure/Loader";
 import Tiptap from "~/components/structure/Tiptap";
@@ -138,7 +138,14 @@ export default function ActionPage() {
 
   useEffect(() => {
     if (fetcher.data) {
-      if (fetcher.formData?.get("intent") === "carousel") {
+      if (fetcher.formData?.get("intent") === "title") {
+        setAction(() => ({
+          ...action,
+          title: action.title
+            .concat(" | ")
+            .concat((fetcher.data as { message: string }).message),
+        }));
+      } else if (fetcher.formData?.get("intent") === "carousel") {
         setAction(() => ({
           ...action,
           description: `${action.description}<hr/>${(fetcher.data as { message: string }).message}`,
@@ -187,27 +194,50 @@ export default function ActionPage() {
       </div> */}
 
       {/* Título */}
-      <div
-        contentEditable="true"
-        dangerouslySetInnerHTML={{
-          __html: action.title,
-        }}
-        onBlur={(e) =>
-          setAction({
-            ...action,
-            title: e.currentTarget.innerText,
-          })
-        }
-        className={`bg-transparent py-2 font-extrabold tracking-tighter outline-none transition ${action.title.length < 50 ? "text-5xl" : "text-4xl"}`}
-        onPaste={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setAction({
-            ...action,
-            title: e.clipboardData.getData("text"),
-          });
-        }}
-      />
+      <div className="flex justify-between gap-2">
+        <div
+          contentEditable="true"
+          dangerouslySetInnerHTML={{
+            __html: action.title,
+          }}
+          onBlur={(e) =>
+            setAction({
+              ...action,
+              title: e.currentTarget.innerText,
+            })
+          }
+          className={`bg-transparent py-2 font-extrabold tracking-tighter outline-none transition ${action.title.length < 50 ? "text-5xl" : "text-4xl"}`}
+          onPaste={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            setAction({
+              ...action,
+              title: e.clipboardData.getData("text"),
+            });
+          }}
+        />
+        <Button
+          className={`h-7 w-7 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
+          variant="ghost"
+          onClick={async () => {
+            fetcher.submit(
+              {
+                title: action.title,
+                description: action.description,
+                context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                intent: "title",
+              },
+              {
+                action: "/handle-openai",
+                method: "post",
+                navigate: false,
+              },
+            );
+          }}
+        >
+          <SparklesIcon />
+        </Button>
+      </div>
       {/* Tempo */}
       <div className="mb-8 flex gap-4 text-sm leading-none">
         <div
@@ -301,7 +331,7 @@ export default function ActionPage() {
             )}
           </div>
           <div className="relative flex h-full flex-col overflow-hidden pt-9">
-            <div className="scrollbars">
+            <div className="scrollbars scrollbars-thin">
               <Tiptap
                 content={action.description}
                 onBlur={(text) => {

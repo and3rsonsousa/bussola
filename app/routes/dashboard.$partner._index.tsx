@@ -222,7 +222,7 @@ export default function Partner() {
 
   return (
     <div className="flex flex-col p-4 md:px-8 lg:overflow-hidden">
-      <div className="left-1/2 top-3 flex -translate-x-1/2 items-center justify-between gap-4 lg:fixed lg:justify-start">
+      <div className="left-1/2 top-3 flex items-center justify-between gap-4 lg:fixed lg:-translate-x-1/2 lg:justify-start">
         <Link
           to={`/dashboard/${partner.slug}`}
           className="flex items-center gap-4"
@@ -243,8 +243,10 @@ export default function Partner() {
               className="-translate-y-1 translate-x-2"
             />
           </div>
-          <div className="text-xl font-extrabold tracking-tighter md:text-3xl">
-            <div>{partner?.title}</div>
+          <div>
+            <div className="mb-1 whitespace-nowrap text-xl font-extrabold leading-none tracking-tighter md:text-3xl">
+              {partner?.title}
+            </div>
             <Progress
               total={actions?.length || 1}
               values={states.map((state) => ({
@@ -257,7 +259,7 @@ export default function Partner() {
             />
           </div>
         </Link>
-        <div>
+        <div className="flex">
           <ReportReview partner={partner} />
           <Button
             size={"sm"}
