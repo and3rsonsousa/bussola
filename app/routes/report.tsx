@@ -5,7 +5,15 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
 import { MetaFunction } from "@vercel/remix";
-import { format, isSameMonth, isSameYear } from "date-fns";
+import {
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameMonth,
+  isSameYear,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CATEGORIES } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
@@ -16,10 +24,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { headers, supabase } = createClient(request);
 
   const searchParams = new URL(request.url).searchParams;
-  const range = searchParams.get("range")?.split("---");
+  const range =
+    searchParams.get("range") !== null
+      ? searchParams.get("range")!.split("---")
+      : [
+          format(startOfWeek(startOfMonth(new Date())), "yyyy-MM-dd"),
+          format(endOfWeek(endOfMonth(new Date())), "yyyy-MM-dd"),
+        ];
+
   const id = searchParams.get("partner_id");
 
-  if (!(range && id)) {
+  if (!id) {
     return redirect("/dashboard");
   }
 
@@ -65,7 +80,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     supabase.from("states").select(),
   ]);
 
-  return json({ actions, partner, categories, range, states }, { headers });
+  return json(
+    {
+      actions,
+      partner,
+      categories,
+      range: [range[0].replace(/-/g, "/"), range[1].replace(/-/g, "/")],
+      states,
+    },
+    { headers },
+  );
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -76,6 +100,8 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function ReportPage() {
   const { actions, partner, range } = useLoaderData<typeof loader>();
+
+  console.log(range);
 
   return (
     <div className="min-h-[100vh] bg-slate-100 p-4 text-center text-gray-500 antialiased">
@@ -90,6 +116,7 @@ export default function ReportPage() {
         <div style={{ fontStretch: "75%" }}>
           Aprovação de Conteúdo para o período de
         </div>
+
         <div className="text-2xl font-bold tracking-tighter text-gray-950">
           {`${format(range[0], "d".concat(!isSameMonth(range[0], range[1]) ? " 'de' MMMM".concat(!isSameYear(range[0], range[1]) ? " 'de' yyyy" : "") : ""), { locale: ptBR })} a
         ${format(range[1], "d 'de' MMMM 'de' yyyy", { locale: ptBR })}`}
