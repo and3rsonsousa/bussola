@@ -149,7 +149,7 @@ MODELO: ${template}
  EMPRESA: ${context}
 CONTENT: ${title} - ${description}`;
   } else if (intent === "title") {
-    template = `Inspire-se nos modelos abaixo e retorne apenas um resultado.
+    template = `Inspire-se nos modelos abaixo, escolha um e retorne apenas um resultado.
     1 - Como fazer [assunto x] mesmo se [alguma objeção desse assunto x]
     2 - Aprenda a fazer [assunto x] como o [autoridade no assunto x]
     3 - Porque [grupo de pessoas que praticam o assunto x] têm conquistado [alguma vantagem do assunto x]
