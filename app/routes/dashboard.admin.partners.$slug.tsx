@@ -10,6 +10,7 @@ import invariant from "tiny-invariant";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -46,6 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     slug: String(formData.get("slug")),
     bg: String(formData.get("bg")),
     fg: String(formData.get("fg")),
+    context: String(formData.get("context")),
     users_ids: String(formData.getAll("users_ids")).split(","),
   };
 
@@ -105,6 +107,14 @@ export default function AdminPartners() {
             <div className="mb-4">
               <Label className="mb-2 block">Short</Label>
               <Input defaultValue={partner.short} name="short" />
+            </div>
+            <div className="mb-4">
+              <Label className="mb-2 block">Contexto</Label>
+              <Textarea
+                name="context"
+                defaultValue={partner.context || ""}
+                style={{ fieldSizing: "content" }}
+              />
             </div>
             <div className="mb-4">
               <Label className="mb-2 block">Usuários</Label>
