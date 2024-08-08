@@ -12,6 +12,9 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Popover, PopoverContent } from "../ui/popover";
@@ -31,7 +34,7 @@ export default function CreateAction({
   date?: Date;
   mode: "fixed" | "day" | "button" | "plus";
 }) {
-  const { categories, states, partners, people, user } = useMatches()[1]
+  const { categories, states, partners, people, user, areas } = useMatches()[1]
     .data as DashboardDataType;
   const match3 = useMatches()[3];
 
@@ -177,7 +180,7 @@ export default function CreateAction({
         ></div>
         <hr className="-mx-4 mb-4 mt-2 border-gray-300/20 md:-mx-6" />
         <div className="flex flex-wrap justify-center gap-2 md:flex-nowrap md:justify-between">
-          <div className="flex w-full items-center justify-between gap-1">
+          <div className="flex w-full items-center justify-between gap-2">
             {/* Partners */}
             {/* {JSON.stringify(partner)} */}
             <Select
@@ -224,7 +227,46 @@ export default function CreateAction({
               </SelectContent>
             </Select>
             {/* Categoria */}
-            <Select
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="rounded border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+                <Icons id={category.slug} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-content">
+                {areas.map((area, i) => (
+                  <DropdownMenuGroup key={area.id}>
+                    {i > 0 && <DropdownMenuSeparator />}
+                    <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                      {area.title}
+                    </h4>
+                    {categories.map((category) =>
+                      category.area_id === area.id ? (
+                        <DropdownMenuItem
+                          key={category.id}
+                          className="bg-item flex items-center gap-2"
+                          onSelect={async () => {
+                            if (category.id !== action.category_id) {
+                              setAction({
+                                ...action,
+                                category_id: category.id,
+                              });
+                            }
+                          }}
+                        >
+                          <Icons
+                            id={category.slug}
+                            className={`size-4 opacity-50`}
+                          />
+                          <span>{category.title}</span>
+                        </DropdownMenuItem>
+                      ) : null,
+                    )}
+                  </DropdownMenuGroup>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* <Select
               value={action.category_id.toString()}
               onValueChange={(value) =>
                 setAction({
@@ -252,7 +294,7 @@ export default function CreateAction({
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
             {/* States */}
             <Select
               value={action.state_id.toString()}
