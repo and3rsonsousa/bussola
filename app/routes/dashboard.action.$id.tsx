@@ -141,7 +141,10 @@ export default function ActionPage() {
       if (fetcher.formData?.get("intent") === "title") {
         setAction(() => ({
           ...action,
-          title: action.title
+          title: (action.title.indexOf(" | ") > 0
+            ? action.title.substring(0, action.title.indexOf(" | "))
+            : action.title
+          )
             .concat(" | ")
             .concat((fetcher.data as { message: string }).message),
         }));
@@ -222,7 +225,10 @@ export default function ActionPage() {
           onClick={async () => {
             fetcher.submit(
               {
-                title: action.title,
+                title:
+                  action.title.indexOf(" | ") > 0
+                    ? action.title.substring(0, action.title.indexOf(" | "))
+                    : action.title,
                 description: action.description,
                 context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                 intent: "title",

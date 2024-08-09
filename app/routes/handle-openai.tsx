@@ -149,28 +149,28 @@ MODELO: ${template}
  EMPRESA: ${context}
 CONTENT: ${title} - ${description}`;
   } else if (intent === "title") {
-    template = `Inspire-se nos modelos abaixo, escolha um e retorne apenas um resultado.
-    1 - Como fazer [assunto x] mesmo se [alguma objeção desse assunto x]
-    2 - Aprenda a fazer [assunto x] como o [autoridade no assunto x]
-    3 - Porque [grupo de pessoas que praticam o assunto x] têm conquistado [alguma vantagem do assunto x]
+    template = `Use os modelos abaixo como inspiração e crie um novo título, retorne apenas um resultado.
+    1 - Como fazer [assunto] mesmo se [alguma objeção desse assunto];
+    2 - Aprenda a fazer [assunto] como o [autoridade no assunto];
+    3 - Porque [grupo de pessoas que praticam o assunto] têm conquistado [alguma vantagem do assunto];
     4 - Manual [do seu nicho]: Tudo o que você precisa saber antes de [começa
-    uma  etapa importante]!
-    5 - Aplique estas [número de estratégias] estratégias secretas e [alcance um benefício].
-    7 - [X número] motivos para você [começar a fazer algo] agora!
-    8 - O Guia Definitivo para [Assunto]
-    9 - 10 Dicas Práticas para [Assunto]
-    10 - Como [Fazer algo] em [Número] Passos Simples
-    11 - [Assunto]: Tudo o que Você Precisa Saber
-    12 - As Melhores Estratégias para [Alcançar um Objetivo]
-    13 - [Assunto] para Iniciantes: Por Onde Começar
-    14 - Por que [Assunto] é Importante e Como se Beneficiar Disso
-    15 - O Segredo para [Obter Resultado Desejado] Revelado
-    16 - [Assunto] vs. [Assunto]: Qual é Melhor?
-    17 - As Principais Tendências em [Assunto] em [Ano]
-    18 - Como [Assunto] Pode [Benefício Desejado]
-    19 - [Número] Mitos Comuns sobre [Assunto]
-    20 - [Assunto] e Seus Impactos em [Indústria ou Área Específica]
-    21 - A Fórmula Perfeita para [Conseguir um Resultado Desejado]
+    uma  etapa importante]!;
+    5 - Aplique estas [número de estratégias] estratégias secretas e [alcance um benefício].;
+    7 - [X número] motivos para você [começar a fazer algo] agora!;
+    8 - O Guia Definitivo para [Assunto];
+    9 - 10 Dicas Práticas para [Assunto];
+    10 - Como [Fazer algo] em [Número] Passos Simples;
+    11 - [Assunto]: Tudo o que Você Precisa Saber;
+    12 - As Melhores Estratégias para [Alcançar um Objetivo];
+    13 - [Assunto] para Iniciantes: Por Onde Começar;
+    14 - Por que [Assunto] é Importante e Como se Beneficiar Disso;
+    15 - O Segredo para [Obter Resultado Desejado] Revelado;
+    16 - [Assunto] vs. [Assunto]: Qual é Melhor?;
+    17 - As Principais Tendências em [Assunto] em [Ano];
+    18 - Como [Assunto] Pode [Benefício Desejado];
+    19 - [Número] Mitos Comuns sobre [Assunto];
+    20 - [Assunto] e Seus Impactos em [Indústria ou Área Específica];
+    21 - A Fórmula Perfeita para [Conseguir um Resultado Desejado];
     22 - A História de [Assunto]: Como Evoluiu ao Longo do Tempo`;
 
     content = `Você é um copywriter jovem e astuto. Sua missão é criar títulos chamativos para postagens no Instagram.
