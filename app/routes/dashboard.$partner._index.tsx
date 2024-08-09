@@ -4,7 +4,6 @@ import {
   redirect,
   useLoaderData,
   useMatches,
-  useSearchParams,
   useSubmit,
 } from "@remix-run/react";
 import { MetaFunction, json, type LoaderFunctionArgs } from "@vercel/remix";
@@ -66,6 +65,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+
 import { INTENTS } from "~/lib/constants";
 import {
   Avatar,
@@ -135,8 +135,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function Partner() {
   let { actions, partner, date } = useLoaderData<typeof loader>();
 
-  // const [searchParams] = useSearchParams();
-
   const matches = useMatches();
   const submit = useSubmit();
 
@@ -148,8 +146,6 @@ export default function Partner() {
   const [allUsers, setAllUsers] = useState(false);
 
   const { categories, states, person } = matches[1].data as DashboardDataType;
-
-  // const date = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
 
   const currentDate = date;
 
@@ -192,6 +188,8 @@ export default function Partner() {
       ),
     };
   });
+
+  // console.log(calendar);
 
   useEffect(() => {
     if (draggedAction) {

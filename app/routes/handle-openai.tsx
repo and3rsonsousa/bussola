@@ -149,7 +149,7 @@ MODELO: ${template}
  EMPRESA: ${context}
 CONTENT: ${title} - ${description}`;
   } else if (intent === "title") {
-    template = `Use os modelos abaixo como inspiração e crie um novo título, retorne apenas um resultado.
+    template = `Use um dos 22 modelos abaixo como inspiração e crie um novo título, retorne apenas um resultado.
     1 - Como fazer [assunto] mesmo se [alguma objeção desse assunto];
     2 - Aprenda a fazer [assunto] como o [autoridade no assunto];
     3 - Porque [grupo de pessoas que praticam o assunto] têm conquistado [alguma vantagem do assunto];
