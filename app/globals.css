@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @font-face {
+  font-family: "Compasso";
+  src: url("/compasso/compasso-vf.woff2?url") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+} */
+
+@layer base {
+  :root {
+    --background: 0 100% 100%;
+    --card: 220 10% 97%;
+    --popover: 0 100% 100%;
+    --primary: 215 100% 55%;
+    --secondary: 220 15% 92%;
+    --muted: 220 15% 80%;
+    --accent: 220 12% 94%;
+    --destructive: 355 85% 60%;
+    --foreground: 220 20% 15%;
+    --card-foreground: 224 20% 35%;
+    --popover-foreground: 224 20% 35%;
+    --primary-foreground: 210 20% 98%;
+    --secondary-foreground: 220 10% 35%;
+    --muted-foreground: 220 10% 60%;
+    --accent-foreground: 260 15% 20%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 80%;
+    --input: 220 10% 96%;
+    --ring: 230 100% 65%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 220 30% 2%;
+    --card: 220 25% 15%;
+    --popover: 220 12% 13%;
+    --primary: 215 100% 45%;
+    --secondary: 220 20% 25%;
+    --muted: 220 10% 25%;
+    --accent: 220 12% 22%;
+    --destructive: 350 75% 45%;
+    --primary-foreground: 0 0 100%;
+
+    --foreground: 210 12% 98%;
+    --card-foreground: 210 15% 90%;
+    --popover-foreground: 210 15% 90%;
+    --secondary-foreground: 220 15% 90%;
+    --muted-foreground: 210 10% 50%;
+    --accent-foreground: 210 15% 90%;
+    --destructive-foreground: 250 20% 98%;
+    --border: 220 10% 50%;
+    --input: 220 10% 10%;
+    --ring: 230 80% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+.font-inter {
+  font-family: Inter, sans-serif;
+  font-feature-settings:
+    "ss01" 1,
+    "cv05" 1,
+    "ss03" 1,
+    "cv11" 1,
+    "calt" 1; /* fix for Chrome */
+}
+
+:root {
+  @apply font-inter;
+}
+
+.ProseMirror {
+  font-feature-settings:
+    "ss01" 1,
+    "cv05" 1,
+    "ss03" 1,
+    "cv11" 1,
+    "calt" 1 !important; /* fix for Chrome */
+}
+
+body {
+  font-feature-settings:
+    "ss01" 1,
+    "cv05" 1,
+    "ss03" 1,
+    "cv11" 1;
+}
+
+.glass {
+  @apply border border-white/50 bg-popover/75 ring-1 ring-black/10 backdrop-blur-lg;
+}
+
+.dark .glass {
+  @apply border border-border ring-background;
+}
+
+.action-item {
+  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card text-secondary-foreground outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring-2 hover:bg-secondary focus:ring-2;
+}
+
+.action-row {
+  @apply px-3 py-2;
+}
+
+.dark .action-item.action-delayed {
+  @apply bg-error-950 text-error-100;
+}
+.action-item.action-delayed {
+  @apply bg-error-50 text-error-700;
+}
+
+.action-content-delayed > .late-border {
+  @apply block;
+}
+
+.action-content-delayed {
+  @apply bg-error-500;
+}
+
+.action-content-delayed .the-action-content {
+  @apply opacity-50;
+}
+
+.scrollbars {
+  @apply mr-1 h-full overflow-hidden overflow-y-auto px-1;
+  scrollbars-gutter: stable;
+}
+
+.scrollbars::-webkit-scrollbar {
+  @apply mr-4 block w-2;
+}
+.scrollbars-thin::-webkit-scrollbar {
+  @apply mr-4 block w-1;
+}
+.scrollbars::-webkit-scrollbar-button {
+  @apply hidden;
+}
+
+.scrollbars::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.scrollbars::-webkit-scrollbar-track-piece {
+  @apply mr-4 bg-transparent;
+}
+
+.scrollbars::-webkit-scrollbar-thumb {
+  @apply rounded-full;
+}
+
+.scrollbars-horizontal {
+  @apply mb-1 h-full overflow-x-auto overflow-y-hidden py-1;
+  scrollbars-gutter: stable;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar {
+  @apply mb-2 block h-2;
+}
+.scrollbars-horizontal-thin::-webkit-scrollbar {
+  @apply mb-1 block h-1;
+}
+.scrollbars-horizontal::-webkit-scrollbar-button {
+  @apply hidden;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.scrollbars-horizontal::-webkit-scrollbar-track-piece {
+  @apply mx-1 bg-transparent;
+}
+.scrollbars-horizontal::-webkit-scrollbar-thumb {
+  @apply mb-4 rounded-full;
+}
+
+.scrollbars-horizontal::-webkit-scrollbar-thumb,
+.scrollbars::-webkit-scrollbar-thumb {
+  @apply bg-foreground/20 hover:bg-foreground/35;
+}
+
+.bg-label {
+  @apply flex gap-2 px-4 text-xl font-semibold tracking-tighter;
+}
+.bg-item {
+  @apply flex gap-2 px-4;
+}
+
+.bg-select-item {
+  @apply pl-8 pr-4;
+}
+
+.debug-1 {
+  @apply border-2 border-red-500;
+}
+.debug-2 {
+  @apply border-2 border-yellow-500;
+}
+.debug-3 {
+  @apply border-2 border-green-500;
+}
+.debug-4 {
+  @apply border-2 border-sky-500;
+}
+.debug-5 {
+  @apply border-2 border-pink-500;
+}
+
+.editor-tiptap {
+  @apply flex min-h-[50vh] flex-col lg:min-h-full;
+}
+
+.editor-tiptap > div:nth-child(2) {
+  @apply flex flex-1 shrink-0 flex-col;
+}
+
+.tiptap {
+  @apply flex-1 shrink-0 text-lg tracking-tight outline-none;
+}
+
+.tiptap > * {
+  @apply mb-2;
+}
+
+.tiptap h1 {
+  @apply text-4xl font-bold tracking-tight;
+}
+.tiptap h2 {
+  @apply text-2xl font-bold tracking-tight;
+}
+.tiptap h3 {
+  @apply text-xl font-bold uppercase tracking-wide;
+}
+.tiptap h4 {
+  @apply text-xl font-bold tracking-tight;
+}
+.tiptap h5 {
+  @apply text-base font-bold uppercase tracking-wider;
+}
+
+.tiptap ul,
+ol {
+  padding: 0 2rem;
+}
+
+.tiptap ul {
+  list-style: disc;
+}
+.tiptap ol {
+  list-style: decimal;
+}
+
+.tiptap hr {
+  @apply border-t;
+}
+
+.dragover {
+  @apply bg-secondary;
+}
+
+#calendar > * {
+  @apply border-b;
+}
+
+/* .item-odd {
+  @apply bg-secondary/25;
+} */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
