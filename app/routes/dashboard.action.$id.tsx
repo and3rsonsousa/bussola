@@ -314,7 +314,7 @@ export default function ActionPage() {
             />
 
             <Button
-              className={`mr-1 h-12 w-12 rounded p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
+              className={`mr-1 h-12 w-12 rounded p-1 ${isWorking && fetcher.formData?.get("intent") === "title" && "animate-colors"}`}
               variant="ghost"
               title="Gerar legenda"
               onClick={async () => {
@@ -347,7 +347,7 @@ export default function ActionPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      className={`h-7 w-7 p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
+                      className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "carousel" && "animate-colors"}`}
                       variant="ghost"
                     >
                       <SparklesIcon />
@@ -398,7 +398,7 @@ export default function ActionPage() {
                 </DropdownMenu>
               ) : (
                 <Button
-                  className={`h-7 w-7 p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "caption").length > 0 && "animate-colors"}`}
+                  className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "develop" && "animate-colors"}`}
                   variant="ghost"
                   onClick={async () => {
                     fetcher.submit(
@@ -535,7 +535,7 @@ export default function ActionPage() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        className={`h-7 w-7 p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("carousel") === "stories").length > 0 && "animate-colors"}`}
+                        className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "stories" && "animate-colors"}`}
                         variant="ghost"
                         title="Gerar Stories"
                       >
@@ -636,7 +636,7 @@ export default function ActionPage() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
-                          className={`h-8 w-8 p-1 ${isWorking && fetchers.filter((fetcher) => fetcher.formData?.get("intent") === "caption").length > 0 && "animate-colors"}`}
+                          className={`h-8 w-8 p-1 ${isWorking && fetcher.formData?.get("intent") === "caption" && "animate-colors"}`}
                           variant="ghost"
                           title="Gerar legenda"
                         >

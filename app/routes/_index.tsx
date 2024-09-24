@@ -33,11 +33,11 @@ export default function Index() {
           "[mask-image:linear-gradient(to_bottom_right,white,transparent,white)]",
         )}
       />
-      <Waves
+      {/* <Waves
         size={600}
         speed={1}
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-      />
+      /> */}
       {/* <img src="logo.png" alt="" className="h-6" /> */}
       <Bussola size="md" className="text-white" />
       <div className="mt-8 text-center">
