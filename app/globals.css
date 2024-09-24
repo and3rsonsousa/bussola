@@ -280,3 +280,31 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.animate-colors {
+  animation: AnimateColors 1s linear;
+}
+
+@keyframes AnimateColors {
+  0% {
+    color: #fc0;
+  }
+  10% {
+    color: #f64;
+  }
+  30% {
+    color: #e6a;
+  }
+  50% {
+    color: #90f;
+  }
+  60% {
+    color: #06f;
+  }
+  90% {
+    color: #0e9;
+  }
+  100% {
+    color: #fc0;
+  }
+}

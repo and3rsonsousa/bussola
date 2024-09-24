@@ -304,7 +304,11 @@ const ActionReport = ({
         </div>
       </div>
       <div className="overflow-hidden rounded-sm">
-        <Content action={action} aspect="feed" partner={partner} />
+        <Content
+          action={action}
+          aspect={action.category === CATEGORIES.reels ? "full" : "feed"}
+          partner={partner}
+        />
       </div>
       <div className="flex gap-4 py-2">
         <Heart />
