@@ -4,13 +4,12 @@ import {
   redirect,
   type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
-import { MoonIcon, SunIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import Loader from "~/components/structure/Loader";
 import { ThemeToggle } from "~/components/structure/ThemeToggle";
 import { Button } from "~/components/ui/button";
-import { Avatar, Icons } from "~/lib/helpers";
+import { Avatar, AvatarGroup, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+import { Faker, pt_BR } from "@faker-js/faker";
 
 export const config = { runtime: "edge" };
 
@@ -60,7 +59,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function UI() {
-  const { categories } = useLoaderData<typeof loader>();
+  const { categories, states } = useLoaderData<typeof loader>();
+  const faker = new Faker({ locale: pt_BR });
 
   return (
     <div className="flex flex-col gap-8 p-8">
@@ -71,44 +71,23 @@ export default function UI() {
       </div>
       <div className="h-2 overflow-hidden rounded-sm">
         <div className="flex w-[110%] -translate-y-8 blur-xl">
-          {[
-            "bg-idea",
-            "bg-do",
-            "bg-doing",
-            "bg-review",
-            "bg-done",
-            "bg-finished",
-          ].map((bg) => (
-            <div key={bg} className={`${bg} h-20 grow -translate-x-8`}></div>
+          {states.map((state) => (
+            <div
+              key={state.id}
+              className={`h-20 grow -translate-x-8`}
+              style={{ backgroundColor: state.color }}
+            ></div>
           ))}
         </div>
       </div>
       <div className="flex gap-4 text-white">
-        {[
-          {
-            className: "bg-idea",
-            text: "Lorem ipsum dolor sit amet consectetur",
-          },
-          { className: "bg-do", text: "adipisicing elit" },
-          {
-            className: "bg-doing",
-            text: "Odio ratione placeat voluptas itaque.",
-          },
-          {
-            className: "bg-review",
-            text: "unde similique fugiat consequuntur officia",
-          },
-          { className: "bg-done", text: "provident eos quisquam" },
-          {
-            className: "bg-finished",
-            text: "ipsum dolor ab debitis dignissimos. Dolorem.",
-          },
-        ].map((item, i) => (
+        {states.map((item, i) => (
           <div
-            className={`${item.className} flex items-center rounded-sm border border-white/20 p-4 text-sm font-semibold leading-none tracking-tight`}
+            className={`flex items-center rounded-sm border border-white/20 p-4 text-sm leading-none tracking-tight`}
             key={i}
+            style={{ backgroundColor: item.color }}
           >
-            {item.text}
+            {faker.lorem.sentence(Math.max(3, Math.ceil(Math.random() * 5)))}
           </div>
         ))}
       </div>
@@ -188,12 +167,15 @@ export default function UI() {
           <Avatar item={{ short: "brenda" }} size="xs" />
           <Avatar item={{ short: "arc" }} size="xs" />
           <Avatar item={{ short: "smart" }} size="xs" />
-          <div className="flex">
-            <Avatar item={{ short: "cnvt" }} group size="xs" />
-            <Avatar item={{ short: "brenda" }} group size="xs" />
-            <Avatar item={{ short: "arc" }} group size="xs" />
-            <Avatar item={{ short: "smart" }} group size="xs" />
-          </div>
+          <AvatarGroup
+            avatars={[
+              { item: { short: "cnvt" } },
+              { item: { short: "brenda" } },
+              { item: { short: "arc" } },
+              { item: { short: "smart" } },
+            ]}
+            size="xs"
+          />
         </div>
 
         <div className="mt-4 flex gap-2">
@@ -201,12 +183,14 @@ export default function UI() {
           <Avatar item={{ short: "brenda" }} />
           <Avatar item={{ short: "arc" }} />
           <Avatar item={{ short: "smart" }} />
-          <div className="flex">
-            <Avatar item={{ short: "cnvt" }} group />
-            <Avatar item={{ short: "brenda" }} group />
-            <Avatar item={{ short: "arc" }} group />
-            <Avatar item={{ short: "smart" }} group />
-          </div>
+          <AvatarGroup
+            avatars={[
+              { item: { short: "cnvt" } },
+              { item: { short: "brenda" } },
+              { item: { short: "arc" } },
+              { item: { short: "smart" } },
+            ]}
+          />
         </div>
 
         <div className="mt-4 flex gap-2">
@@ -214,12 +198,15 @@ export default function UI() {
           <Avatar item={{ short: "brenda" }} size="md" />
           <Avatar item={{ short: "arc" }} size="md" />
           <Avatar item={{ short: "smart" }} size="md" />
-          <div className="flex">
-            <Avatar item={{ short: "cnvt" }} group size="md" />
-            <Avatar item={{ short: "brenda" }} group size="md" />
-            <Avatar item={{ short: "arc" }} group size="md" />
-            <Avatar item={{ short: "smart" }} group size="md" />
-          </div>
+          <AvatarGroup
+            avatars={[
+              { item: { short: "cnvt" } },
+              { item: { short: "brenda" } },
+              { item: { short: "arc" } },
+              { item: { short: "smart" } },
+            ]}
+            size="md"
+          />
         </div>
 
         <div className="mt-4 flex gap-2">
@@ -227,24 +214,27 @@ export default function UI() {
           <Avatar item={{ short: "brenda" }} size="lg" />
           <Avatar item={{ short: "arc" }} size="lg" />
           <Avatar item={{ short: "smart" }} size="lg" />
-          <div className="flex">
-            <Avatar item={{ short: "cnvt" }} group size="lg" />
-            <Avatar item={{ short: "brenda" }} group size="lg" />
-            <Avatar item={{ short: "arc" }} group size="lg" />
-            <Avatar item={{ short: "smart" }} group size="lg" />
-          </div>
+
+          <AvatarGroup
+            avatars={[
+              { item: { short: "cnvt" } },
+              { item: { short: "brenda" } },
+              { item: { short: "arc" } },
+              { item: { short: "smart" } },
+            ]}
+            size="lg"
+          />
         </div>
       </div>
       <div>
         <h1 className="text-3xl font-bold">Categorias</h1>
-        <div className="mt-4 grid grid-cols-3 gap-8">
+        <div className="mt-4 grid grid-cols-4 gap-4">
           {categories.map((category) => (
             <div
               key={category.slug}
-              className="font-regular flex items-center gap-4 text-2xl"
+              className="font-regular flex items-center gap-2 text-lg"
             >
-              <div className={`size-8 rounded-full border-8`}></div>
-              <Icons className="size-8" id={category.slug} />
+              <Icons className="size-4 opacity-50" id={category.slug} />
               <div>{category.title}</div>
             </div>
           ))}

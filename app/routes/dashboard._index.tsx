@@ -37,6 +37,7 @@ import {
   ListIcon,
   ListTodoIcon,
   SignalIcon,
+  TimerIcon,
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
 import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
@@ -745,16 +746,33 @@ function Sprint() {
   const { sprints } = matches[1].data as DashboardRootType;
   const ids = new Set(sprints?.map((s) => s.action_id));
 
-  actions = actions?.filter((a) => ids.has(a.id)) || null;
+  actions = actions?.filter((a) => ids.has(a.id)) || [];
 
   return (
     <div className="mb-4">
-      <div className="flex justify-between py-8">
+      <div className="flex items-start justify-between py-8">
         <div className="relative flex">
           <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
         </div>
+        {actions.length > 0 && (
+          <div
+            className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-error-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-success-500"}`}
+          >
+            <TimerIcon className="size-4 opacity-75" />
+            <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>
+          </div>
+        )}
       </div>
-      <BlockOfActions actions={actions} />
+      <div className="rounded-xl border-2 p-8">
+        {actions?.length > 0 ? (
+          <BlockOfActions actions={actions} />
+        ) : (
+          <div className="flex items-center gap-2">
+            <TimerIcon className="size-8 opacity-25" />
+            <span>Nenhuma ação no sprint atual</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

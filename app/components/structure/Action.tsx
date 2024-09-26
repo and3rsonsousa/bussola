@@ -782,7 +782,7 @@ function ShortcutActions({ action }: { action: Action }) {
   const submit = useSubmit();
   const matches = useMatches();
 
-  const { states, categories, priorities } = matches[1]
+  const { states, categories, priorities, person, sprints } = matches[1]
     .data as DashboardRootType;
 
   function handleActions(data: {
@@ -847,6 +847,16 @@ function ShortcutActions({ action }: { action: Action }) {
           created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
           updated_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
           intent: INTENTS.duplicateAction,
+        });
+      } else if (key === "u" && event.shiftKey) {
+        handleActions({
+          id: window.crypto.randomUUID(),
+          action_id: action.id,
+          user_id: person.user_id,
+          created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+          intent: isSprint(action.id, sprints)
+            ? INTENTS.unsetSprint
+            : INTENTS.setSprint,
         });
       } else if (key === "x" && event.shiftKey) {
         if (confirm("Deseja mesmo excluir essa ação?")) {
