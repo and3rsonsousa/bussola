@@ -22,9 +22,9 @@ import {
   Edit3Icon,
   ExpandIcon,
   PencilLineIcon,
+  RabbitIcon,
   ShrinkIcon,
   TimerIcon,
-  TimerOffIcon,
   TrashIcon,
 } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -89,7 +89,7 @@ export function ActionLine({
   const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
-  const { states, categories, person, people, priorities, partners } =
+  const { states, categories, person, people, priorities, partners, sprints } =
     matches[1].data as DashboardRootType;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -170,6 +170,11 @@ export function ActionLine({
             </div>
 
             <div className="absolute -top-3 right-2 flex gap-2">
+              {isSprint(action.id, sprints) && (
+                <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
+                  <RabbitIcon className="size-4" />
+                </div>
+              )}
               <div className={`-space-x-1 ${allUsers ? "flex" : "hidden"}`}>
                 {responsibles.map((responsible) => (
                   <Avatar
@@ -406,6 +411,15 @@ export function ActionLine({
                 </div>
               )
             )}
+
+            <div className="absolute -top-1 right-2 flex gap-1">
+              {isSprint(action.id, sprints) && (
+                // <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
+                //   <RabbitIcon className="size-4" />
+                // </div>
+                <div className="size-2 rounded bg-primary"></div>
+              )}
+            </div>
           </div>
         )}
       </ContextMenuTrigger>
@@ -1060,16 +1074,11 @@ export function ContextMenuItems({
           });
         }}
       >
+        <RabbitIcon className="size-3" />
         {isSprint(action.id, sprints) ? (
-          <>
-            <TimerOffIcon className="size-3" />
-            <span>Retirar do Sprint</span>
-          </>
+          <span>Retirar do Sprint</span>
         ) : (
-          <>
-            <TimerIcon className="size-3" />
-            <span>Colocar no Sprint</span>
-          </>
+          <span>Colocar no Sprint</span>
         )}
         <ContextMenuShortcut className="pl-2">⇧+U</ContextMenuShortcut>
       </ContextMenuItem>

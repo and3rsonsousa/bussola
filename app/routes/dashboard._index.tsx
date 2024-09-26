@@ -36,6 +36,7 @@ import {
   KanbanIcon,
   ListIcon,
   ListTodoIcon,
+  RabbitIcon,
   SignalIcon,
   TimerIcon,
 } from "lucide-react";
@@ -768,7 +769,7 @@ function Sprint() {
           <BlockOfActions actions={actions} />
         ) : (
           <div className="flex items-center gap-2">
-            <TimerIcon className="size-8 opacity-25" />
+            <RabbitIcon className="size-8 opacity-25" />
             <span>Nenhuma ação no sprint atual</span>
           </div>
         )}
