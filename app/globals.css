@@ -282,7 +282,7 @@ input::-webkit-inner-spin-button {
 }
 
 .animate-colors {
-  animation: AnimateColors 1s linear;
+  animation: AnimateColors 1s linear infinite;
 }
 
 @keyframes AnimateColors {

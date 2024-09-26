@@ -8,6 +8,7 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import {
+  ArchiveIcon,
   ArrowLeftIcon,
   Grid3x3Icon,
   HandshakeIcon,
@@ -237,6 +238,18 @@ export default function Header() {
 
               <DropdownMenuSeparator />
 
+              <DropdownMenuItem
+                className="bg-item"
+                id="account"
+                onSelect={() =>
+                  navigate(
+                    `/dashboard/${partner ? partner.slug.concat("/") : ""}archived`,
+                  )
+                }
+              >
+                <ArchiveIcon className="size-4 opacity-50" />
+                <div>Arquivados</div>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 className="bg-item"
                 id="account"

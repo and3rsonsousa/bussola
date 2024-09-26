@@ -55,6 +55,7 @@ export function App() {
           content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
         />
         <link rel="icon" href="/icon.png" />
+        <link rel="icon" href="/favicon.ico" />
         <Meta />
 
         <link rel="preconnect" href="https://rsms.me/" />

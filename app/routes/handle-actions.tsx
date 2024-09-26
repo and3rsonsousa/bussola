@@ -51,6 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // delete values.partner;
     // delete values.slug;
     delete values.instagram_date;
+    delete values.archived;
 
     if (values.color === "" || values.color === null) delete values.color;
 
@@ -100,11 +101,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return { newAction, error };
     }
   } else if (intent === INTENTS.deleteAction) {
-    // const data = await supabase.from("actions").delete().eq("id", id);
     const data = await supabase
       .from("actions")
       .update({ archived: true })
       .eq("id", id);
+
+    return { data };
+  } else if (intent === INTENTS.recoverAction) {
+    const data = await supabase
+      .from("actions")
+      .update({ archived: false })
+      .eq("id", id);
+
+    return { data };
+  } else if (intent === INTENTS.destroyAction) {
+    const data = await supabase.from("actions").delete().eq("id", id);
 
     return { data };
   } else if (intent === INTENTS.updatePerson) {

@@ -14,6 +14,7 @@ import {
 
 import { ptBR } from "date-fns/locale";
 import {
+  ArchiveRestoreIcon,
   CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -1207,16 +1208,25 @@ export function ContextMenuItems({
       <ContextMenuItem
         className="bg-item flex items-center gap-2"
         onSelect={() => {
-          if (confirm("Deseja mesmo excluir essa ação?")) {
-            handleActions({
-              ...action,
-              intent: INTENTS.deleteAction,
-            });
-          }
+          handleActions({
+            ...action,
+            intent: action.archived
+              ? INTENTS.recoverAction
+              : INTENTS.deleteAction,
+          });
         }}
       >
-        <TrashIcon className="size-3" />
-        <span>Deletar</span>
+        {action.archived ? (
+          <>
+            <ArchiveRestoreIcon className="size-3" />
+            <span>Restaurar</span>
+          </>
+        ) : (
+          <>
+            <TrashIcon className="size-3" />
+            <span>Deletar</span>
+          </>
+        )}
         <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
       <ContextMenuSeparator className="bg-border" />
