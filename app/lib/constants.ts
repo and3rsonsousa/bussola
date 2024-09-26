@@ -39,6 +39,8 @@ export const INTENTS = {
   deleteAction: "action-delete",
   recoverAction: "action-recover",
   destroyAction: "action-destroy",
+  setSprint: "sprint-set",
+  unsetSprint: "sprint-unset",
   duplicateAction: "action-duplicate",
   updatePerson: "person-update",
   updatePartner: "partner-update",

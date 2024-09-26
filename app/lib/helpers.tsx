@@ -735,3 +735,7 @@ export const ReportReview = ({ partner }: { partner: Partner }) => {
     </Popover>
   );
 };
+
+export function isSprint(action_id: string, sprints: Sprint[]) {
+  return sprints.filter((s) => s.action_id === action_id).length > 0;
+}

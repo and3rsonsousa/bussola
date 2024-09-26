@@ -29,7 +29,7 @@ import {
   startOfWeek,
   startOfYear,
 } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { id, ptBR } from "date-fns/locale";
 import {
   CalendarClock,
   ComponentIcon,
@@ -41,7 +41,11 @@ import {
 import { useEffect, useState, type SetStateAction } from "react";
 import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
 
-import { BlockOfActions, ListOfActions } from "~/components/structure/Action";
+import {
+  ActionBlock,
+  BlockOfActions,
+  ListOfActions,
+} from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
 import Kanban from "~/components/structure/Kanban";
@@ -107,7 +111,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .select("category, state, date")
       .is("archived", false)
       .contains("responsibles", person?.admin ? [] : [user.id])
-
       .returns<{ state: string; date: string }[]>(),
   ]);
 
@@ -214,6 +217,7 @@ export default function DashboardIndex() {
     <div className="scrollbars">
       <div className="px-2 md:px-8">
         <ActionsProgress />
+        <Sprint />
         {/* Ações em Atraso */}
         {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
         {/* Parceiros */}
@@ -733,3 +737,24 @@ const ActionsProgress = () => {
     </div>
   );
 };
+
+function Sprint() {
+  let { actions } = useLoaderData<typeof loader>();
+
+  const matches = useMatches();
+  const { sprints } = matches[1].data as DashboardRootType;
+  const ids = new Set(sprints?.map((s) => s.action_id));
+
+  actions = actions?.filter((a) => ids.has(a.id)) || null;
+
+  return (
+    <div className="mb-4">
+      <div className="flex justify-between py-8">
+        <div className="relative flex">
+          <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
+        </div>
+      </div>
+      <BlockOfActions actions={actions} />
+    </div>
+  );
+}

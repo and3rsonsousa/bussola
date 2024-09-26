@@ -24,6 +24,7 @@ import {
   PencilLineIcon,
   ShrinkIcon,
   TimerIcon,
+  TimerOffIcon,
   TrashIcon,
 } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -53,6 +54,7 @@ import {
   getResponsibles,
   Icons,
   isInstagramFeed,
+  isSprint,
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
@@ -1005,8 +1007,16 @@ export function ContextMenuItems({
   }) => void;
 }) {
   const matches = useMatches();
-  const { people, states, categories, priorities, areas, partners } = matches[1]
-    .data as DashboardRootType;
+  const {
+    people,
+    states,
+    categories,
+    priorities,
+    areas,
+    partners,
+    person,
+    sprints,
+  } = matches[1].data as DashboardRootType;
   const [delay, setDelay] = useState({ hour: 0, day: 0, week: 0 });
 
   const partner = partners.find((p) => p.slug === action.partner)!;
@@ -1025,7 +1035,34 @@ export function ContextMenuItems({
           <ContextMenuShortcut className="pl-2">⇧+E</ContextMenuShortcut>
         </Link>
       </ContextMenuItem>
-      {/* Duplicar */}
+      {/* Sprint */}
+      <ContextMenuItem
+        className="bg-item flex items-center gap-2"
+        onSelect={() => {
+          handleActions({
+            id: window.crypto.randomUUID(),
+            user_id: person.user_id,
+            action_id: action.id,
+            created_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+            intent: isSprint(action.id, sprints)
+              ? INTENTS.unsetSprint
+              : INTENTS.setSprint,
+          });
+        }}
+      >
+        {isSprint(action.id, sprints) ? (
+          <>
+            <TimerOffIcon className="size-3" />
+            <span>Retirar do Sprint</span>
+          </>
+        ) : (
+          <>
+            <TimerIcon className="size-3" />
+            <span>Colocar no Sprint</span>
+          </>
+        )}
+        <ContextMenuShortcut className="pl-2">⇧+U</ContextMenuShortcut>
+      </ContextMenuItem>
       <ContextMenuItem className="bg-item flex items-center gap-2">
         <CopyIcon className="size-3" />
         <span>Duplicar</span>

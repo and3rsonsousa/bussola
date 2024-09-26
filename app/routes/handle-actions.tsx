@@ -148,6 +148,39 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (error) console.log({ error });
 
     return { data, error };
+  } else if (intent === INTENTS.setSprint) {
+    const sprint = {
+      id: id.toString(),
+      created_at: values["created_at"].toString(),
+      action_id: values["action_id"].toString(),
+      user_id: values["user_id"].toString(),
+    };
+
+    const { data, error } = await supabase
+      .from("sprints")
+      .insert({ ...sprint })
+      .select()
+      .single();
+
+    if (error) console.log({ error });
+
+    return { data, error };
+  } else if (intent === INTENTS.unsetSprint) {
+    const sprint = {
+      action_id: values["action_id"].toString(),
+      user_id: values["user_id"].toString(),
+    };
+
+    const { data, error } = await supabase
+      .from("sprints")
+      .delete()
+      .match(sprint)
+      .select()
+      .single();
+
+    if (error) console.log({ error });
+
+    return { data, error };
   }
 
   return {};
