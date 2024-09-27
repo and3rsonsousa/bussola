@@ -50,7 +50,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { BASE_COLOR, CATEGORIES, INTENTS, PRIORITIES } from "./constants";
+import { BASE_COLOR, INTENTS, PRIORITIES } from "./constants";
 import { cn } from "./utils";
 
 export function ShortText({
@@ -658,11 +658,7 @@ export const Post = ({
 };
 
 export function isInstagramFeed(category: string) {
-  return (
-    [CATEGORIES.post, CATEGORIES.reels, CATEGORIES.carousel].find(
-      (c) => c === category,
-    ) !== undefined
-  );
+  return ["post", "reels", "carousel"].includes(category);
 }
 
 export const Heart = () => (
@@ -679,8 +675,9 @@ export const Heart = () => (
 );
 
 export function getCategoriesSortedByContent(categories: Category[]) {
-  const firsts = categories.filter((c) => isInstagramFeed(c.id));
-  const lasts = categories.filter((c) => !isInstagramFeed(c.id));
+  const firsts = categories.filter((c) => isInstagramFeed(c.slug));
+  const lasts = categories.filter((c) => !isInstagramFeed(c.slug));
+
   return [...firsts, ...lasts];
 }
 

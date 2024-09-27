@@ -106,7 +106,7 @@ body {
 }
 
 .action-item {
-  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card text-secondary-foreground outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring-2 hover:bg-secondary focus:ring-2;
+  @apply relative flex w-full select-none rounded-[4px] border-l-4 bg-card text-secondary-foreground outline-none ring-ring ring-offset-2 ring-offset-background transition focus-within:ring-2 hover:bg-secondary focus:ring-2;
 }
 
 .action-row {
@@ -263,8 +263,15 @@ ol {
   @apply border-t;
 }
 
+.item-container {
+  @apply transition;
+}
+
 .dragover {
-  @apply bg-secondary;
+  @apply border-primary bg-primary/10;
+}
+.dark .dragover {
+  @apply border-primary bg-primary/20;
 }
 
 #calendar > * {

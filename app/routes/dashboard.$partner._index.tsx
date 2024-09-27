@@ -622,7 +622,7 @@ export const CalendarDay = ({
   return (
     <div
       id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
-      className={`item-container group/day relative h-full px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
+      className={`item-container group/day relative h-full rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
       data-date={format(parseISO(day.date), "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();

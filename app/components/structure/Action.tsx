@@ -43,7 +43,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { CATEGORIES, INTENTS, PRIORITIES } from "~/lib/constants";
+import { INTENTS, PRIORITIES } from "~/lib/constants";
 import {
   amIResponsible,
   Avatar,
@@ -864,7 +864,7 @@ function ShortcutActions({ action }: { action: Action }) {
         let category =
           categories.find(
             (category) => category.shortcut === code.toLowerCase().substring(3),
-          )?.slug || CATEGORIES.post;
+          )?.slug || "post";
 
         handleActions({
           intent: INTENTS.updateAction,

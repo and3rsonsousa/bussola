@@ -1,23 +1,23 @@
-export const CATEGORIES = {
-  capture: "capture",
-  todo: "todo",
-  post: "post",
+// export const CATEGORIES = {
+//   capture: "capture",
+//   todo: "todo",
+//   post: "post",
 
-  carousel: "carousel",
-  reels: "reels",
-  stories: "stories",
+//   carousel: "carousel",
+//   reels: "reels",
+//   stories: "stories",
 
-  dev: "dev",
-  print: "print",
-  meeting: "meeting",
+//   dev: "dev",
+//   print: "print",
+//   meeting: "meeting",
 
-  finance: "finance",
-  design: "design",
-  ads: "ads",
+//   finance: "finance",
+//   design: "design",
+//   ads: "ads",
 
-  sm: "sm",
-  plan: "plan",
-};
+//   sm: "sm",
+//   plan: "plan",
+// };
 
 export const PRIORITIES = {
   low: "low",

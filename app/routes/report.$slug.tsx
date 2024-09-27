@@ -30,7 +30,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
-import { CATEGORIES } from "~/lib/constants";
 import {
   Avatar,
   Content,
@@ -114,12 +113,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .select("*")
         .is("archived", false)
         .match({ partner: slug })
-        .in("category", [
-          CATEGORIES.post,
-          CATEGORIES.reels,
-          CATEGORIES.carousel,
-          CATEGORIES.stories,
-        ])
+        .in("category", ["post", "reels", "carousel", "stories"])
         .gte("date", start)
         .lte("date", end)
         .order("date", { ascending: true }),
@@ -306,7 +300,7 @@ const ActionReport = ({
       <div className="overflow-hidden rounded-sm">
         <Content
           action={action}
-          aspect={action.category === CATEGORIES.reels ? "full" : "feed"}
+          aspect={action.category === "reels" ? "full" : "feed"}
           partner={partner}
         />
       </div>

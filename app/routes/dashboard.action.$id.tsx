@@ -64,7 +64,7 @@ import {
 } from "~/components/ui/select";
 import { ToastAction } from "~/components/ui/toast";
 import { useToast } from "~/components/ui/use-toast";
-import { CATEGORIES, INTENTS } from "~/lib/constants";
+import { INTENTS } from "~/lib/constants";
 import {
   Avatar,
   Content,
@@ -341,7 +341,7 @@ export default function ActionPage() {
                 Descrição
               </div>
 
-              {action.category === CATEGORIES.carousel ? (
+              {action.category === "carousel" ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -432,11 +432,10 @@ export default function ActionPage() {
         </div>
 
         {/* Arquivos e Legenda */}
-        {isInstagramFeed(action.category) ||
-        action.category === CATEGORIES.stories ? (
+        {isInstagramFeed(action.category) || action.category === "stories" ? (
           <div className="lg:scrollbars flex flex-col lg:w-2/6">
             {/* Arquivo */}
-            {action.category !== CATEGORIES.stories && (
+            {action.category !== "stories" && (
               <div>
                 <Form method="post" encType="multipart/form-data">
                   <div className="relative min-h-[50px] overflow-hidden rounded">
@@ -524,12 +523,10 @@ export default function ActionPage() {
             {/* Legenda */}
             <div className="flex items-center justify-between">
               <div className="text-xs font-bold uppercase tracking-wider">
-                {action.category === CATEGORIES.stories
-                  ? "Sequência"
-                  : "Legenda"}
+                {action.category === "stories" ? "Sequência" : "Legenda"}
               </div>
               <div className="pb-1 pr-1">
-                {action.category === CATEGORIES.stories ? (
+                {action.category === "stories" ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
