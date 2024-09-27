@@ -9,7 +9,7 @@ import { ThemeToggle } from "~/components/structure/ThemeToggle";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarGroup, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { Faker, pt_BR } from "@faker-js/faker";
+// import { Faker, pt_BR } from "@faker-js/faker";
 
 export const config = { runtime: "edge" };
 
@@ -60,7 +60,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function UI() {
   const { categories, states } = useLoaderData<typeof loader>();
-  const faker = new Faker({ locale: pt_BR });
+  // const faker = new Faker({ locale: pt_BR });
 
   return (
     <div className="flex flex-col gap-8 p-8">
@@ -80,7 +80,7 @@ export default function UI() {
           ))}
         </div>
       </div>
-      <div className="flex gap-4 text-white">
+      {/* <div className="flex gap-4 text-white">
         {states.map((item, i) => (
           <div
             className={`flex items-center rounded-sm border border-white/20 p-4 text-sm leading-none tracking-tight`}
@@ -90,7 +90,7 @@ export default function UI() {
             {faker.lorem.sentence(Math.max(3, Math.ceil(Math.random() * 5)))}
           </div>
         ))}
-      </div>
+      </div> */}
       <div className="grid gap-8 lg:grid-cols-2">
         <div>
           <h1 className="mb-4 text-3xl font-bold">Loaders</h1>
