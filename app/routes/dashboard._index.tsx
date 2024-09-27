@@ -29,8 +29,13 @@ import {
   startOfWeek,
   startOfYear,
 } from "date-fns";
-import { id, ptBR } from "date-fns/locale";
+import { ptBR } from "date-fns/locale";
 import {
+  ArrowDownAZIcon,
+  ArrowDownIcon,
+  ArrowDownZAIcon,
+  ArrowUp,
+  ArrowUpIcon,
   CalendarClock,
   ComponentIcon,
   KanbanIcon,
@@ -43,11 +48,7 @@ import {
 import { useEffect, useState, type SetStateAction } from "react";
 import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
 
-import {
-  ActionBlock,
-  BlockOfActions,
-  ListOfActions,
-} from "~/components/structure/Action";
+import { BlockOfActions, ListOfActions } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
 import Kanban from "~/components/structure/Kanban";
@@ -58,6 +59,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { Toggle } from "~/components/ui/toggle";
 import { INTENTS } from "~/lib/constants";
 import {
   Avatar,
@@ -144,7 +153,7 @@ export default function DashboardIndex() {
     actions = [];
   }
 
-  const { person } = matches[1].data as DashboardRootType;
+  const { person, states } = matches[1].data as DashboardRootType;
 
   const pendingActions = usePendingActions();
   const idsToRemove = useIDsToRemove();
@@ -172,6 +181,7 @@ export default function DashboardIndex() {
       actions,
       date: addDays(new Date(), 1),
     }),
+    states,
   );
 
   const weekActions = eachDayOfInterval({
@@ -289,7 +299,7 @@ export default function DashboardIndex() {
               <Badge value={tomorrowActions?.length} />
             </div>
 
-            <BlockOfActions actions={tomorrowActions} />
+            <BlockOfActions actions={tomorrowActions} sprint />
           </div>
         ) : null}
         {/* Ações da Semana */}
@@ -742,6 +752,8 @@ const ActionsProgress = () => {
 
 function Sprint() {
   let { actions } = useLoaderData<typeof loader>();
+  const [order, setOrder] = useState<ORDER>("state");
+  const [descending, setDescending] = useState(false);
 
   const matches = useMatches();
   const { sprints } = matches[1].data as DashboardRootType;
@@ -755,18 +767,49 @@ function Sprint() {
         <div className="relative flex">
           <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
         </div>
-        {actions.length > 0 && (
-          <div
-            className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-error-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-success-500"}`}
+
+        <div className="flex items-center gap-2">
+          <Select
+            value={order}
+            onValueChange={(value) => setOrder(value as ORDER)}
           >
-            <TimerIcon className="size-4 opacity-75" />
-            <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>
-          </div>
-        )}
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="glass">
+              <SelectItem value="state">Status</SelectItem>
+              <SelectItem value="priority">Prioridade</SelectItem>
+              <SelectItem value="time">Data</SelectItem>
+            </SelectContent>
+          </Select>
+          <Toggle
+            variant={"outline"}
+            pressed={descending}
+            onPressedChange={(pressed) => setDescending(pressed)}
+          >
+            {descending ? (
+              <ArrowDownIcon className="size-4" />
+            ) : (
+              <ArrowUpIcon className="size-4" />
+            )}
+          </Toggle>
+          {actions.length > 0 && (
+            <div
+              className={`flex items-center gap-1 whitespace-nowrap rounded p-1 px-4 text-sm font-semibold text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-error-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-success-500"}`}
+            >
+              <TimerIcon className="size-4 opacity-75" />
+              <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>
+            </div>
+          )}
+        </div>
       </div>
       <div className="rounded-xl border-2 p-8">
         {actions?.length > 0 ? (
-          <BlockOfActions actions={actions} />
+          <BlockOfActions
+            actions={actions}
+            orderBy={order}
+            descending={descending}
+          />
         ) : (
           <div className="flex items-center gap-2">
             <RabbitIcon className="size-8 opacity-25" />

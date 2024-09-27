@@ -50,13 +50,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import {
-  BASE_COLOR,
-  CATEGORIES,
-  INTENTS,
-  PRIORITIES,
-  STATES,
-} from "./constants";
+import { BASE_COLOR, CATEGORIES, INTENTS, PRIORITIES } from "./constants";
 import { cn } from "./utils";
 
 export function ShortText({
@@ -257,16 +251,26 @@ export function getActionsByPriority(actions: Action[], descending?: boolean) {
     _sorted.push(actions.filter((action) => action.priority === value));
   });
 
-  return descending ? _sorted.flat().reverse() : _sorted.flat();
+  return descending ? _sorted.reverse().flat() : _sorted.flat();
 }
 
-export function getActionsByState(actions: Action[], descending?: boolean) {
+export function getActionsByState(
+  actions: Action[],
+  states: State[],
+  descending?: boolean,
+) {
   let _sorted: Action[][] = [];
-  Object.entries(STATES).map(([, value]) => {
-    _sorted.push(actions.filter((action) => action.state === value));
+  Object.entries(states).map(([, value]) => {
+    _sorted.push(actions.filter((action) => action.state === value.slug));
   });
 
-  return descending ? _sorted.flat().reverse() : _sorted.flat();
+  return descending ? _sorted.reverse().flat() : _sorted.flat();
+}
+
+export function getActionsByTime(actions: Action[], descending?: boolean) {
+  let _sorted = actions.sort((a, b) => (isBefore(a.date, b.date) ? -1 : 1));
+
+  return descending ? _sorted.reverse() : _sorted;
 }
 
 export function getActionsForThisDay({

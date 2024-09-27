@@ -1,11 +1,3 @@
-export const STATES = {
-  ideia: "ideia",
-  do: "do",
-  doing: "doing",
-  review: "review",
-  done: "done",
-  finish: "finished",
-};
 export const CATEGORIES = {
   capture: "capture",
   todo: "todo",

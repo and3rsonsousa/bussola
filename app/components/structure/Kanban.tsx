@@ -82,6 +82,7 @@ export default function Kanban({ actions }: { actions: Action[] }) {
                     onDrag={onDrag}
                     max={1}
                     actions={stateActions}
+                    sprint
                   />
                 </div>
               </div>

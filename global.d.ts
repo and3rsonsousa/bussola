@@ -70,6 +70,7 @@ declare global {
     onSelect?: () => void;
   };
 
+  type ORDER = "state" | "priority" | "time";
   type PRIORITIES = "low" | "mid" | "high";
 
   type THEME = "dark" | "light";

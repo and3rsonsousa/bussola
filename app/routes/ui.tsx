@@ -9,7 +9,6 @@ import { ThemeToggle } from "~/components/structure/ThemeToggle";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarGroup, Icons } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-// import { Faker, pt_BR } from "@faker-js/faker";
 
 export const config = { runtime: "edge" };
 

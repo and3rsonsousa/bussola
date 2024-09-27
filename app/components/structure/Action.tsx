@@ -51,6 +51,7 @@ import {
   Content,
   getActionsByPriority,
   getActionsByState,
+  getActionsByTime,
   getResponsibles,
   Icons,
   isInstagramFeed,
@@ -316,7 +317,7 @@ export function ActionLine({
               ) : (
                 <button
                   ref={buttonRef}
-                  className={`group/text relative w-full select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                  className={`relative w-full select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                   onClick={(event) => {
                     if (event.shiftKey && !edit) {
                       flushSync(() => {
@@ -412,14 +413,9 @@ export function ActionLine({
               )
             )}
 
-            <div className="absolute -top-1 right-2 flex gap-1">
-              {isSprint(action.id, sprints) && (
-                // <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
-                //   <RabbitIcon className="size-4" />
-                // </div>
-                <div className="size-2 rounded bg-primary"></div>
-              )}
-            </div>
+            {isSprint(action.id, sprints) && (
+              <div className="absolute -top-1 right-2 size-2 rounded bg-primary"></div>
+            )}
           </div>
         )}
       </ContextMenuTrigger>
@@ -431,9 +427,11 @@ export function ActionLine({
 export function ActionBlock({
   action,
   onDrag,
+  sprint,
 }: {
   action: Action;
   onDrag?: (action: Action) => void;
+  sprint?: Boolean;
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -446,7 +444,7 @@ export function ActionBlock({
   const matches = useMatches();
   const navigate = useNavigate();
 
-  const { categories, states, partners, person } = matches[1]
+  const { categories, states, partners, sprints } = matches[1]
     .data as DashboardRootType;
   const partner = partners.find(
     (partner) => partner.slug === action.partner,
@@ -480,7 +478,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item cursor-pointer flex-col justify-between gap-2 overflow-hidden rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm @container`}
+          className={`action group/action action-item cursor-pointer flex-col justify-between gap-2 rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm @container`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
@@ -548,7 +546,7 @@ export function ActionBlock({
             ) : (
               <button
                 ref={buttonRef}
-                className={`group/text relative flex w-full items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`relative flex w-full items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                 onClick={(event) => {
                   if (event.shiftKey && !edit) {
                     flushSync(() => {
@@ -565,11 +563,6 @@ export function ActionBlock({
                 }}
               >
                 {action.title}
-                <div
-                  className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
-                >
-                  <Edit3Icon className="size-4" />
-                </div>
               </button>
             )}
           </div>
@@ -638,6 +631,16 @@ export function ActionBlock({
               </span>
             </div>
           </div>
+          {isSprint(action.id, sprints) && sprint && (
+            <div className="absolute -top-2 right-2 grid size-6 place-content-center gap-1 rounded border-2 border-background bg-primary text-primary-foreground">
+              <RabbitIcon className="size-4" />
+            </div>
+          )}
+          <div
+            className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/action:opacity-100" : ""}`}
+          >
+            <Edit3Icon className="size-4" />
+          </div>
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />
@@ -668,9 +671,12 @@ export function ListOfActions({
   short?: boolean;
   long?: boolean;
 }) {
+  const matches = useMatches();
+  const { states } = matches[1].data as DashboardRootType;
+
   actions = actions
     ? orderBy === "state"
-      ? getActionsByState(actions, descending)
+      ? getActionsByState(actions, states, descending)
       : orderBy === "priority"
         ? getActionsByPriority(actions, descending)
         : actions
@@ -736,11 +742,28 @@ export function BlockOfActions({
   actions,
   max,
   onDrag,
+  orderBy = "state",
+  descending = false,
+  sprint,
 }: {
   actions?: Action[] | null;
   max?: 1 | 2;
   onDrag?: (action: Action) => void;
+  orderBy?: "state" | "priority" | "time";
+  descending?: boolean;
+  sprint?: Boolean;
 }) {
+  const matches = useMatches();
+  const { states } = matches[1].data as DashboardRootType;
+
+  actions = actions
+    ? orderBy === "state"
+      ? getActionsByState(actions, states, descending)
+      : orderBy === "priority"
+        ? getActionsByPriority(actions, descending)
+        : getActionsByTime(actions, descending)
+    : [];
+
   return (
     <div className="@container">
       <div
@@ -753,7 +776,12 @@ export function BlockOfActions({
         } gap-2`}
       >
         {actions?.map((action) => (
-          <ActionBlock onDrag={onDrag} action={action} key={action.id} />
+          <ActionBlock
+            onDrag={onDrag}
+            action={action}
+            key={action.id}
+            sprint={sprint}
+          />
         ))}
       </div>
     </div>
