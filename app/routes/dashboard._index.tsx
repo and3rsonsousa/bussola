@@ -76,7 +76,7 @@ import {
   getDelayedActions,
   sortActions,
   useIDsToRemove,
-  usePendingActions,
+  usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -155,21 +155,23 @@ export default function DashboardIndex() {
 
   const { person, states } = matches[1].data as DashboardRootType;
 
-  const pendingActions = usePendingActions();
-  const idsToRemove = useIDsToRemove();
+  const pendingActions = usePendingData().actions;
+  const deletingIDsActions = useIDsToRemove().actions;
 
+  //Actions
+  // Transform into a Map
   const actionsMap = new Map<string, Action>(
     actions.map((action) => [action.id, action]),
   );
-
+  // Add pending Created/Updated Actions
   for (const action of pendingActions as Action[]) {
     actionsMap.set(action.id, action);
   }
-
-  for (const id of idsToRemove) {
+  // Remove pending deleting Actions
+  for (const id of deletingIDsActions) {
     actionsMap.delete(id);
   }
-
+  // transform and sort
   actions = sortActions(Array.from(actionsMap, ([, v]) => v));
 
   const lateActions = getDelayedActions({
@@ -751,12 +753,33 @@ const ActionsProgress = () => {
 };
 
 function Sprint() {
+  const matches = useMatches();
   let { actions } = useLoaderData<typeof loader>();
+  let { sprints } = matches[1].data as DashboardRootType;
+
+  const pendingSprints = usePendingData().sprints;
+  const deletingIDsSprints = useIDsToRemove().sprints;
+
+  console.log({ deletingIDsSprints, pendingSprints });
+
+  //Sprints
+  // Transform into a Map
+  const sprintsMap = new Map<string, Sprint>(
+    sprints.map((sprint) => [sprint.action_id, sprint]),
+  );
+  // Add pending Created/Updated Actions
+  for (const sprint of pendingSprints as Sprint[]) {
+    sprintsMap.set(sprint.action_id, sprint);
+  }
+  // Remove pending deleting Actions
+  for (const ids of deletingIDsSprints) {
+    sprintsMap.delete(ids.action_id);
+  }
+  // transform
+  sprints = Array.from(sprintsMap, ([, v]) => v);
+
   const [order, setOrder] = useState<ORDER>("state");
   const [descending, setDescending] = useState(false);
-
-  const matches = useMatches();
-  const { sprints } = matches[1].data as DashboardRootType;
   const ids = new Set(sprints?.map((s) => s.action_id));
 
   actions = actions?.filter((a) => ids.has(a.id)) || [];

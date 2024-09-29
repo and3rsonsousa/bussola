@@ -356,55 +356,94 @@ export const Icons = ({
   );
 };
 
-export function useIDsToRemove() {
-  return useFetchers()
-    .filter((fetcher) => {
-      if (!fetcher.formData) {
-        return false;
-      }
-      return fetcher.formData.get("intent") === INTENTS.deleteAction;
-    })
-    .map((fetcher) => {
-      return String(fetcher.formData?.get("id"));
-    });
+export function useIDsToRemove(): {
+  actions: string[];
+  sprints: { action_id: string; user_id: string }[];
+} {
+  return {
+    actions: useFetchers()
+      .filter((fetcher) => {
+        if (!fetcher.formData) {
+          return false;
+        }
+        return fetcher.formData.get("intent") === INTENTS.deleteAction;
+      })
+      .map((fetcher) => {
+        return String(fetcher.formData?.get("id"));
+      }),
+    sprints: useFetchers()
+      .filter((fetcher) => {
+        if (!fetcher.formData) {
+          return false;
+        }
+        return fetcher.formData.get("intent") === INTENTS.unsetSprint;
+      })
+      .map((fetcher) => {
+        return {
+          action_id: String(fetcher.formData?.get("action_id")),
+          user_id: String(fetcher.formData?.get("user_id")),
+        };
+      }),
+  };
 }
-export function usePendingActions() {
-  return useFetchers()
-    .filter((fetcher) => {
-      if (!fetcher.formData) {
-        return false;
-      }
-      return (
-        fetcher.formData.get("intent") === INTENTS.createAction ||
-        fetcher.formData.get("intent") === INTENTS.updateAction
-      );
-    })
-    .map((fetcher) => {
-      const action: Action = {
-        id: String(fetcher.formData?.get("id")),
-        title: String(fetcher.formData?.get("title")),
-        description: String(fetcher.formData?.get("description")),
-        user_id: String(fetcher.formData?.get("user_id")),
-        date: String(fetcher.formData?.get("date")),
-        instagram_date: String(fetcher.formData?.get("date")),
-        responsibles: String(fetcher.formData?.getAll("responsibles")).split(
-          ",",
-        ),
-        time: Number(fetcher.formData?.get("time")),
-        created_at: String(fetcher.formData?.get("created_at")),
-        updated_at: String(fetcher.formData?.get("updated_at")),
-        partner: String(fetcher.formData?.get("partner")),
-        category: String(fetcher.formData?.get("category")),
-        state: String(fetcher.formData?.get("state")),
-        priority: String(fetcher.formData?.get("priority")),
-        caption: String(fetcher.formData?.get("caption")),
-        color: String(fetcher.formData?.get("color")),
-        files: String(fetcher.formData?.get("files")).split(","),
-        archived: Boolean(fetcher.formData?.get("archived")),
-      };
+export function usePendingData(): { actions: Action[]; sprints: Sprint[] } {
+  return {
+    actions: useFetchers()
+      .filter((fetcher) => {
+        if (!fetcher.formData) {
+          return false;
+        }
+        return (
+          fetcher.formData.get("intent") === INTENTS.createAction ||
+          fetcher.formData.get("intent") === INTENTS.updateAction
+        );
+      })
+      .map((fetcher) => {
+        const action: Action = {
+          id: String(fetcher.formData?.get("id")),
+          title: String(fetcher.formData?.get("title")),
+          description: String(fetcher.formData?.get("description")),
+          user_id: String(fetcher.formData?.get("user_id")),
+          date: String(fetcher.formData?.get("date")),
+          instagram_date: String(fetcher.formData?.get("date")),
+          responsibles: String(fetcher.formData?.getAll("responsibles")).split(
+            ",",
+          ),
+          time: Number(fetcher.formData?.get("time")),
+          created_at: String(fetcher.formData?.get("created_at")),
+          updated_at: String(fetcher.formData?.get("updated_at")),
+          partner: String(fetcher.formData?.get("partner")),
+          category: String(fetcher.formData?.get("category")),
+          state: String(fetcher.formData?.get("state")),
+          priority: String(fetcher.formData?.get("priority")),
+          caption: String(fetcher.formData?.get("caption")),
+          color: String(fetcher.formData?.get("color")),
+          files: String(fetcher.formData?.get("files")).split(","),
+          archived: Boolean(fetcher.formData?.get("archived")),
+        };
 
-      return { ...action };
-    });
+        return { ...action };
+      }) as Action[],
+    sprints: useFetchers()
+      .filter((fetcher) => {
+        if (!fetcher.formData) {
+          return false;
+        }
+        return fetcher.formData.get("intent") === INTENTS.setSprint;
+      })
+      .map((fetcher) => {
+        const sprint: Sprint = {
+          id: String(fetcher.formData?.get("id")),
+          action_id: String(fetcher.formData?.get("action_id")),
+
+          user_id: String(fetcher.formData?.get("user_id")),
+
+          created_at: String(fetcher.formData?.get("created_at")),
+        };
+
+        return { ...sprint };
+      }) as Sprint[],
+  };
 }
 
 export function getResponsibles(users_ids?: string[] | null) {

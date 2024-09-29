@@ -61,7 +61,7 @@ import {
   isInstagramFeed,
   sortActions,
   useIDsToRemove,
-  usePendingActions,
+  usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -159,14 +159,14 @@ export default function Partner() {
     actions?.map((action) => [action.id, action]),
   );
 
-  const pendingActions = usePendingActions();
-  const idsToRemove = useIDsToRemove();
+  const pendingActions = usePendingData().actions;
+  const deletingIDsActions = useIDsToRemove().actions;
 
-  for (const action of pendingActions as Action[]) {
+  for (const action of pendingActions) {
     if (action.partner === partner.slug) actionsMap.set(action.id, action);
   }
 
-  for (const id of idsToRemove) {
+  for (const id of deletingIDsActions) {
     actionsMap.delete(id);
   }
 
