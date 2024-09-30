@@ -87,7 +87,6 @@ export function ActionLine({
 
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
-  const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
   const { states, categories, person, people, priorities, partners, sprints } =
@@ -210,7 +209,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "px-2 py-1" : long ? "px-3 py-2" : "p-2"} cursor-pointer text-sm font-medium @container md:text-xs ${
+            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "px-2 py-1" : long ? "px-3 py-2" : "p-2"} text-sm font-medium @container md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -221,7 +220,7 @@ export function ActionLine({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (!e.shiftKey && !edit) {
+              if (!edit) {
                 navigate(`/dashboard/action/${action.id}`);
               }
             }}
@@ -317,25 +316,24 @@ export function ActionLine({
               ) : (
                 <button
                   ref={buttonRef}
-                  className={`relative w-full select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                  className={`relative w-full cursor-text select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                   onClick={(event) => {
-                    if (event.shiftKey && !edit) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!edit) {
                       flushSync(() => {
                         setEdit(true);
                       });
                       inputRef.current?.select();
                     }
                   }}
-                  onMouseMove={(event) => {
-                    setShift(event.shiftKey);
-                  }}
                 >
                   {action.title}
-                  <div
+                  {/* <div
                     className={`absolute right-0 top-0 rounded-sm bg-gradient-to-l from-secondary via-secondary pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
                   >
                     <Edit3Icon className="size-4" />
-                  </div>
+                  </div> */}
                 </button>
               )}
             </div>
@@ -483,7 +481,7 @@ export function ActionBlock({
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            if (!event.shiftKey && !edit) {
+            if (!edit) {
               navigate(`/dashboard/action/${action.id}`);
             }
           }}
@@ -546,20 +544,16 @@ export function ActionBlock({
             ) : (
               <button
                 ref={buttonRef}
-                className={`relative flex w-full items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`relative flex w-full cursor-text items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
                 onClick={(event) => {
-                  if (event.shiftKey && !edit) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  if (!edit) {
                     flushSync(() => {
                       setEdit(true);
                     });
                     inputRef.current?.focus();
                   }
-                }}
-                onMouseMove={(event) => {
-                  setShift(event.shiftKey);
-                }}
-                onMouseLeave={() => {
-                  setShift(false);
                 }}
               >
                 {action.title}
@@ -636,11 +630,11 @@ export function ActionBlock({
               <RabbitIcon className="size-4" />
             </div>
           )}
-          <div
+          {/* <div
             className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/action:opacity-100" : ""}`}
           >
             <Edit3Icon className="size-4" />
-          </div>
+          </div> */}
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />
