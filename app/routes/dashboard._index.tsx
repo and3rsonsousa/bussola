@@ -760,8 +760,6 @@ function Sprint() {
   const pendingSprints = usePendingData().sprints;
   const deletingIDsSprints = useIDsToRemove().sprints;
 
-  console.log({ deletingIDsSprints, pendingSprints });
-
   //Sprints
   // Transform into a Map
   const sprintsMap = new Map<string, Sprint>(

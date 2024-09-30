@@ -151,7 +151,8 @@ export default function Partner() {
   const [params] = useSearchParams();
   const { showFeed, setShowFeed } = useOutletContext() as ContextType;
 
-  const { categories, states, person } = matches[1].data as DashboardRootType;
+  const { categories, states, person, celebrations } = matches[1]
+    .data as DashboardRootType;
 
   const currentDate = date;
 
@@ -190,6 +191,9 @@ export default function Partner() {
               )
             : true) &&
           (stateFilter ? action.state === stateFilter?.id : true),
+      ),
+      celebrations: celebrations.filter((celebration) =>
+        isSameDay(day, parseISO(celebration.date)),
       ),
     };
   });
@@ -607,7 +611,7 @@ export const CalendarDay = ({
   showContent,
   index,
 }: {
-  day: { date: string; actions?: Action[] };
+  day: { date: string; actions?: Action[]; celebrations?: Celebration[] };
   currentDate: Date | string;
   setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
   person: Person;
@@ -622,7 +626,7 @@ export const CalendarDay = ({
   return (
     <div
       id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
-      className={`item-container group/day relative h-full rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
+      className={`item-container group/day relative flex h-full flex-col rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
       data-date={format(parseISO(day.date), "yyyy-MM-dd")}
       onDragOver={(e) => {
         e.stopPropagation();
@@ -640,6 +644,7 @@ export const CalendarDay = ({
         }, 500);
       }}
     >
+      {/* Date */}
       <div className="my-2 flex items-center justify-between">
         <div
           className={`grid size-8 place-content-center rounded-full text-xl ${
@@ -654,42 +659,53 @@ export const CalendarDay = ({
           <CreateAction mode="day" date={day.date} />
         </div>
       </div>
-
-      <div className="relative flex flex-col gap-3">
-        {(showContent ? getCategoriesSortedByContent(categories) : categories)
-          .map((category) => ({
-            category,
-            actions: day.actions?.filter(
-              (action) => category.slug === action.category,
-            ),
-          }))
-          .map(({ category, actions }) =>
-            actions && actions.length > 0 ? (
-              <div key={category.slug} className="flex flex-col gap-3">
-                <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
-                  <div
-                    className={`size-1.5 rounded-full`}
-                    style={{ backgroundColor: category.color }}
-                  ></div>
-                  <div>{category.title}</div>
+      {/* Actions */}
+      <div className="flex h-full flex-col justify-between">
+        <div className="relative flex h-full grow flex-col gap-3">
+          {(showContent ? getCategoriesSortedByContent(categories) : categories)
+            .map((category) => ({
+              category,
+              actions: day.actions?.filter(
+                (action) => category.slug === action.category,
+              ),
+            }))
+            .map(({ category, actions }) =>
+              actions && actions.length > 0 ? (
+                <div key={category.slug} className="flex flex-col gap-3">
+                  <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
+                    <div
+                      className={`size-1.5 rounded-full`}
+                      style={{ backgroundColor: category.color }}
+                    ></div>
+                    <div>{category.title}</div>
+                  </div>
+                  {actions?.map((action) => (
+                    <ActionLine
+                      showContent={showContent}
+                      short={short}
+                      allUsers={allUsers}
+                      showDelay
+                      action={action}
+                      key={action.id}
+                      date={{
+                        timeFormat: 1,
+                      }}
+                      onDrag={setDraggedAction}
+                    />
+                  ))}
                 </div>
-                {actions?.map((action) => (
-                  <ActionLine
-                    showContent={showContent}
-                    short={short}
-                    allUsers={allUsers}
-                    showDelay
-                    action={action}
-                    key={action.id}
-                    date={{
-                      timeFormat: 1,
-                    }}
-                    onDrag={setDraggedAction}
-                  />
-                ))}
+              ) : null,
+            )}
+        </div>
+        {day.celebrations && day.celebrations.length > 0 && (
+          <div className="mt-2 space-y-2 text-[10px] opacity-50">
+            {day.celebrations?.map((celebration) => (
+              <div key={celebration.id} className="leading-none">
+                {celebration.title}
               </div>
-            ) : null,
-          )}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

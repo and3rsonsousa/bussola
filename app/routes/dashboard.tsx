@@ -25,6 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     { data: priorities },
     { data: areas },
     { data: sprints },
+    { data: celebrations },
   ] = await Promise.all([
     supabase
       .from("partners")
@@ -38,6 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     supabase.from("priorities").select("*").order("order", { ascending: true }),
     supabase.from("areas").select("*").order("order", { ascending: true }),
     supabase.from("sprints").select("*").eq("user_id", user.id),
+    supabase.from("celebrations").select("*"),
   ]);
 
   const person = people?.find((person) => person.user_id === user.id) as Person;
@@ -55,6 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       person,
       areas,
       sprints,
+      celebrations,
     } as DashboardRootType,
     200,
   );
