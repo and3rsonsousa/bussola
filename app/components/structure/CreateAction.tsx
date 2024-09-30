@@ -280,7 +280,7 @@ export default function CreateAction({
               }
             >
               <SelectTrigger
-                className={`h-7 w-auto rounded border-2 text-xs font-bold text-white ring-offset-1`}
+                className={`h-7 w-auto rounded border-2 text-xs font-bold ring-offset-1`}
                 style={{ borderColor: state.color }}
               >
                 {state.title}
