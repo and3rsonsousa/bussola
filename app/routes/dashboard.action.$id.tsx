@@ -16,7 +16,13 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@vercel/remix";
-import { format, formatDistanceToNow, isSameMonth, parseISO } from "date-fns";
+import {
+  format,
+  formatDistanceToNow,
+  formatDuration,
+  isSameMonth,
+  parseISO,
+} from "date-fns";
 
 import { ptBR } from "date-fns/locale";
 import {
@@ -75,6 +81,7 @@ import {
   isInstagramFeed,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+import { Input } from "~/components/ui/input";
 
 export const config = { runtime: "edge" };
 const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -103,7 +110,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const files = formData.getAll("files") as File[];
   const filenames = String(formData.get("filenames")).split(",");
   const partner = formData.get("partner") as string;
-  const title = formData.get("title") as string;
+  // const title = formData.get("title") as string;
 
   const urls = await Promise.all(
     files.map(async (file, i) => {
@@ -1039,7 +1046,124 @@ export default function ActionPage() {
                   }
                 }}
               />
-              <div className="mx-auto flex w-40 gap-2">
+              <div className="mx-auto flex gap-2">
+                <div className="flex shrink-0">
+                  <Input
+                    value={parseISO(action.date).getHours().toString()}
+                    className="w-1/2 rounded-r-none border border-r-0 border-border text-right focus:z-10"
+                    type="number"
+                    min={0}
+                    max={23}
+                    onChange={(event) => {
+                      const date = parseISO(action.date);
+                      date.setHours(Number(event.target.value));
+                      setAction({
+                        ...action,
+                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                      });
+                    }}
+                  />
+                  <Input
+                    value={parseISO(action.date).getMinutes().toString()}
+                    className="w-1/2 rounded-l-none border border-l-0 border-border text-left"
+                    type="number"
+                    min={0}
+                    max={59}
+                    onChange={(event) => {
+                      const date = parseISO(action.date);
+                      date.setMinutes(Number(event.target.value));
+                      setAction({
+                        ...action,
+                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                      });
+                    }}
+                  />
+                  {/* <Select
+                    value={
+                      action.date ? action.date.getHours().toString() : "11"
+                    }
+                    onValueChange={(value) => {
+                      if (action.date) {
+                        const date = action.date;
+                        date.setHours(Number(value));
+                        setAction({
+                          ...action,
+                          date: date,
+                        });
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-1/4">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array(24)
+                        .fill(0)
+                        .map((i, j) => {
+                          return (
+                            <SelectItem value={j.toString()} key={j}>
+                              {j.toString()}
+                            </SelectItem>
+                          );
+                        })}
+                    </SelectContent>
+                  </Select> */}
+                  {/* <Select
+                    value={
+                      action.date ? action.date.getMinutes().toString() : "12"
+                    }
+                    onValueChange={(value) => {
+                      if (action.date) {
+                        const date = action.date;
+                        date.setMinutes(Number(value));
+                        setAction({
+                          ...action,
+                          date: date,
+                        });
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-1/4">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array(60)
+                        .fill(0)
+                        .map((i, j) => {
+                          return (
+                            <SelectItem value={j.toString()} key={j}>
+                              {j.toString()}
+                            </SelectItem>
+                          );
+                        })}
+                    </SelectContent>
+                  </Select> */}
+                </div>
+                <Select
+                  value={action.time.toString()}
+                  onValueChange={(value) => {
+                    setAction({ ...action, time: Number(value) });
+                  }}
+                >
+                  <SelectTrigger className="w-full border border-border bg-input">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[5, 10, 15, 20, 30, 45, 60, 90, 120].map((i) => (
+                      <SelectItem value={i.toString()} key={i}>
+                        {formatDuration(
+                          {
+                            minutes: i < 60 ? i : i % 60,
+                            hours: i >= 60 ? Math.floor(i / 60) : 0,
+                          },
+                          { locale: ptBR, delimiter: " e " },
+                        )}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* <div className="mx-auto flex w-40 gap-2">
                 <Select
                   value={parseISO(action.date).getHours().toString()}
                   onValueChange={(value) => {
@@ -1092,7 +1216,7 @@ export default function ActionPage() {
                       })}
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </PopoverContent>
           </Popover>
 
