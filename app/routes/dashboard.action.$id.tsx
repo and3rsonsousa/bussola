@@ -82,6 +82,7 @@ import {
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 import { Input } from "~/components/ui/input";
+import { formatActionTime } from "~/components/structure/CreateAction";
 
 export const config = { runtime: "edge" };
 const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -1151,13 +1152,7 @@ export default function ActionPage() {
                   <SelectContent>
                     {[5, 10, 15, 20, 30, 45, 60, 90, 120].map((i) => (
                       <SelectItem value={i.toString()} key={i}>
-                        {formatDuration(
-                          {
-                            minutes: i < 60 ? i : i % 60,
-                            hours: i >= 60 ? Math.floor(i / 60) : 0,
-                          },
-                          { locale: ptBR, delimiter: " e " },
-                        )}
+                        {formatActionTime(i)}
                       </SelectItem>
                     ))}
                   </SelectContent>

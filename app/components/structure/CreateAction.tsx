@@ -1,6 +1,6 @@
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useLocation, useMatches, useSubmit } from "@remix-run/react";
-import { format, formatDistance, isToday, parseISO } from "date-fns";
+import { format, formatDistance, formatDuration, isToday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -605,11 +605,11 @@ export default function CreateAction({
 }
 
 export function formatActionTime(i: number) {
-  return i === 60
-    ? "1 hora"
-    : i === 90
-      ? "1 hora e meia"
-      : i === 120
-        ? "2 horas"
-        : i + " minutos";
+  return formatDuration(
+    {
+      minutes: i < 60 ? i : i % 60,
+      hours: i >= 60 ? Math.floor(i / 60) : 0,
+    },
+    { locale: ptBR, delimiter: " e " },
+  )
 }
