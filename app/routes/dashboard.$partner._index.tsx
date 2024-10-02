@@ -624,88 +624,93 @@ export const CalendarDay = ({
   const { categories } = matches[1].data as DashboardRootType;
 
   return (
-    <div
-      id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
-      className={`item-container group/day relative flex h-full flex-col rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
-      data-date={format(parseISO(day.date), "yyyy-MM-dd")}
-      onDragOver={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        document
-          .querySelectorAll(".dragover")
-          .forEach((e) => e.classList.remove("dragover"));
-        e.currentTarget.classList.add("dragover");
-      }}
-      onDragEnd={() => {
-        setTimeout(() => {
+    <div>
+      <div
+        id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
+        className={`item-container group/day relative flex h-full flex-col rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
+        data-date={format(parseISO(day.date), "yyyy-MM-dd")}
+        onDragOver={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
           document
             .querySelectorAll(".dragover")
             .forEach((e) => e.classList.remove("dragover"));
-        }, 500);
-      }}
-    >
-      {/* Date */}
-      <div className="my-2 flex items-center justify-between">
-        <div
-          className={`grid size-8 place-content-center rounded-full text-xl ${
-            isToday(parseISO(day.date))
-              ? "bg-primary font-bold text-primary-foreground"
-              : `${!isSameMonth(parseISO(day.date), currentDate) ? "text-muted" : ""} -ml-2 font-light`
-          }`}
-        >
-          {parseISO(day.date).getDate()}
-        </div>
-        <div className="scale-50 opacity-0 focus-within:scale-100 focus-within:opacity-100 group-hover/day:scale-100 group-hover/day:opacity-100">
-          <CreateAction mode="day" date={day.date} />
-        </div>
-      </div>
-      {/* Actions */}
-      <div className="flex h-full flex-col justify-between">
-        <div className="relative flex h-full grow flex-col gap-3">
-          {(showContent ? getCategoriesSortedByContent(categories) : categories)
-            .map((category) => ({
-              category,
-              actions: day.actions?.filter(
-                (action) => category.slug === action.category,
-              ),
-            }))
-            .map(({ category, actions }) =>
-              actions && actions.length > 0 ? (
-                <div key={category.slug} className="flex flex-col gap-3">
-                  <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
-                    <div
-                      className={`size-1.5 rounded-full`}
-                      style={{ backgroundColor: category.color }}
-                    ></div>
-                    <div>{category.title}</div>
-                  </div>
-                  {actions?.map((action) => (
-                    <ActionLine
-                      showContent={showContent}
-                      short={short}
-                      allUsers={allUsers}
-                      showDelay
-                      action={action}
-                      key={action.id}
-                      date={{
-                        timeFormat: 1,
-                      }}
-                      onDrag={setDraggedAction}
-                    />
-                  ))}
-                </div>
-              ) : null,
-            )}
-        </div>
-        {day.celebrations && day.celebrations.length > 0 && (
-          <div className="mt-4 space-y-2 text-[10px] opacity-50">
-            {day.celebrations?.map((celebration) => (
-              <div key={celebration.id} className="leading-none">
-                {celebration.title}
-              </div>
-            ))}
+          e.currentTarget.classList.add("dragover");
+        }}
+        onDragEnd={() => {
+          setTimeout(() => {
+            document
+              .querySelectorAll(".dragover")
+              .forEach((e) => e.classList.remove("dragover"));
+          }, 500);
+        }}
+      >
+        {/* Date */}
+        <div className="my-2 flex items-center justify-between">
+          <div
+            className={`grid size-8 place-content-center rounded-full text-xl ${
+              isToday(parseISO(day.date))
+                ? "bg-primary font-bold text-primary-foreground"
+                : `${!isSameMonth(parseISO(day.date), currentDate) ? "text-muted" : ""} -ml-2 font-light`
+            }`}
+          >
+            {parseISO(day.date).getDate()}
           </div>
-        )}
+          <div className="scale-50 opacity-0 focus-within:scale-100 focus-within:opacity-100 group-hover/day:scale-100 group-hover/day:opacity-100">
+            <CreateAction mode="day" date={day.date} />
+          </div>
+        </div>
+        {/* Actions */}
+        <div className="flex h-full flex-col justify-between">
+          <div className="relative flex h-full grow flex-col gap-3">
+            {(showContent
+              ? getCategoriesSortedByContent(categories)
+              : categories
+            )
+              .map((category) => ({
+                category,
+                actions: day.actions?.filter(
+                  (action) => category.slug === action.category,
+                ),
+              }))
+              .map(({ category, actions }) =>
+                actions && actions.length > 0 ? (
+                  <div key={category.slug} className="flex flex-col gap-3">
+                    <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
+                      <div
+                        className={`size-1.5 rounded-full`}
+                        style={{ backgroundColor: category.color }}
+                      ></div>
+                      <div>{category.title}</div>
+                    </div>
+                    {actions?.map((action) => (
+                      <ActionLine
+                        showContent={showContent}
+                        short={short}
+                        allUsers={allUsers}
+                        showDelay
+                        action={action}
+                        key={action.id}
+                        date={{
+                          timeFormat: 1,
+                        }}
+                        onDrag={setDraggedAction}
+                      />
+                    ))}
+                  </div>
+                ) : null,
+              )}
+          </div>
+          {day.celebrations && day.celebrations.length > 0 && (
+            <div className="mt-4 space-y-2 text-[10px] opacity-50">
+              {day.celebrations?.map((celebration) => (
+                <div key={celebration.id} className="leading-none">
+                  {celebration.title}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
