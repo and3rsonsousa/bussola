@@ -715,6 +715,7 @@ export default function ActionPage() {
             <textarea
               placeholder="Escreva sua legenda aqui ou peça à βIA para criar no botão superior direito."
               ref={caption}
+              key={`caption-${action.id}`}
               name="caption"
               onChange={(event) =>
                 setAction((action) => ({
@@ -725,7 +726,7 @@ export default function ActionPage() {
               className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-none lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
-              value={action.caption ? action.caption : ""}
+              value={action.caption ? action.caption : undefined}
             ></textarea>
           </div>
         ) : null}
