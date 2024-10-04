@@ -1,14 +1,30 @@
 import { Form, useMatches } from "@remix-run/react";
-import { type ActionFunctionArgs, redirect } from "@vercel/remix";
-import { useState } from "react";
+import {
+  type ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@vercel/remix";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { SOW } from "~/lib/constants";
 import { createClient } from "~/lib/supabase";
 
 export const config = { runtime: "edge" };
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return {};
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { supabase } = createClient(request);
@@ -19,11 +35,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     title: String(formData.get("title")),
     short: String(formData.get("short")),
     slug: String(formData.get("slug")),
-    colors: String(formData.get("colors")).split(","),
+    colors: [String(formData.get("bg")), String(formData.get("fg"))],
     sow: String(formData.get("sow")),
     context: String(formData.get("context")),
     users_ids: String(formData.getAll("user_id")).split(","),
-  };
+    archived: false,
+  } as Partner;
 
   const { data: partner, error } = await supabase
     .from("partners")
@@ -47,6 +64,10 @@ export default function NewPartners() {
 
   const { people } = matches[1].data as DashboardRootType;
 
+  useEffect(() => {
+    setSlug(() => name.replace(/ /g, "").toLowerCase());
+  }, [name]);
+
   return (
     <div className="overflow-hidden">
       <ScrollArea className="h-full w-full">
@@ -64,22 +85,23 @@ export default function NewPartners() {
                 value={name}
                 onChange={(event) => {
                   setName(() => event.target.value);
-                  setSlug(() => name.replace(/ /g, "").toLowerCase());
                 }}
                 autoFocus
               />
             </div>
-            <div className="mb-4">
-              <Label className="mb-2 block">Slug</Label>
-              <Input
-                name="slug"
-                value={slug}
-                onChange={(event) => setSlug(event.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <Label className="mb-2 block">Short</Label>
-              <Input name="short" />
+            <div className="mb-4 flex w-full gap-4">
+              <div className="w-full">
+                <Label className="mb-2 block">Slug</Label>
+                <Input
+                  name="slug"
+                  value={slug}
+                  onChange={(event) => setSlug(event.target.value)}
+                />
+              </div>
+              <div className="w-full">
+                <Label className="mb-2 block">Short</Label>
+                <Input name="short" />
+              </div>
             </div>
             <div className="mb-4">
               <Label className="mb-2 block">Usuários</Label>
@@ -93,13 +115,32 @@ export default function NewPartners() {
                 </div>
               ))}
             </div>
-            <div className="mb-4">
-              <Label className="mb-2 block">Background Color</Label>
-              <Input defaultValue={"#ffffff"} name="bg" type="color" />
-            </div>
-            <div className="mb-4">
-              <Label className="mb-2 block">Foreground Color</Label>
-              <Input defaultValue={"#000000"} name="fg" type="color" />
+            <div className="mb-4 flex w-full gap-4">
+              <div className="w-1/4">
+                <Label className="mb-2 block">BG </Label>
+                <Input defaultValue={"#ffffff"} name="bg" type="color" />
+              </div>
+              <div className="w-1/4">
+                <Label className="mb-2 block">FG</Label>
+                <Input defaultValue={"#000000"} name="fg" type="color" />
+              </div>
+              <div className="w-full">
+                <Label className="mb-2 block">Serviço Contratado</Label>
+                <Select name="sow">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={SOW.marketing}>
+                      Consultoria de Marketing
+                    </SelectItem>
+                    <SelectItem value={SOW.socialmedia}>
+                      Social Media
+                    </SelectItem>
+                    <SelectItem value={SOW.demand}>Demanda</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="mb-4 text-right">
               <Button type="submit">Adicionar</Button>
