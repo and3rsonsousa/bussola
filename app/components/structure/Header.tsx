@@ -207,7 +207,7 @@ export default function Header() {
         {/* Botão de criar ação */}
 
         {/* {!isActionPage && <CreateAction mode="plus" />} */}
-        <CreateAction mode="plus" />
+        <CreateAction mode="plus" shortcut />
         {/* menu de ações */}
         {person && (
           <DropdownMenu>

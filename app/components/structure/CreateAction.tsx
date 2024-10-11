@@ -38,9 +38,11 @@ import { Input } from "../ui/input";
 export default function CreateAction({
   date,
   mode,
+  shortcut,
 }: {
   date?: string;
   mode: "fixed" | "day" | "button" | "plus";
+  shortcut?: boolean;
 }) {
   const { categories, states, partners, people, user, areas } = useMatches()[1]
     .data as DashboardRootType;
@@ -120,7 +122,7 @@ export default function CreateAction({
   }, [open]);
 
   useEffect(() => {
-    if (mode === "fixed") {
+    if (shortcut) {
       const keyDown = (event: KeyboardEvent) => {
         if (
           (event.metaKey || event.ctrlKey) &&
@@ -135,7 +137,7 @@ export default function CreateAction({
       document.addEventListener("keydown", keyDown);
       return () => document.removeEventListener("keydown", keyDown);
     }
-  }, [mode]);
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
