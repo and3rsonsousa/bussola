@@ -59,6 +59,7 @@ import {
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
+import { formatActionTime } from "./CreateAction";
 
 export function ActionLine({
   action,
@@ -436,7 +437,6 @@ export function ActionBlock({
   const submit = useSubmit();
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
-  const [isShift, setShift] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
 
   const matches = useMatches();
@@ -601,7 +601,7 @@ export function ActionBlock({
                 }))}
               />
             </div>
-            <div className="whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
+            <div className="flex items-center gap-1 whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
               <span className="@[200px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
@@ -623,6 +623,7 @@ export function ActionBlock({
                   timeFormat: 1,
                 })}
               </span>
+              •<div>{action.time.toString().concat("m")}</div>
             </div>
           </div>
           {isSprint(action.id, sprints) && sprint && (
@@ -630,11 +631,6 @@ export function ActionBlock({
               <RabbitIcon className="size-4" />
             </div>
           )}
-          {/* <div
-            className={`absolute right-0 rounded-sm bg-gradient-to-l from-accent via-accent p-1 pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/action:opacity-100" : ""}`}
-          >
-            <Edit3Icon className="size-4" />
-          </div> */}
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />

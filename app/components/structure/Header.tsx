@@ -44,7 +44,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const fetchers = useFetchers();
-  const { setShowFeed } = useOutletContext() as ContextType;
+  const { showFeed, setShowFeed } = useOutletContext() as ContextType;
 
   const { partners, person } = matches[1].data as DashboardRootType;
   let { actions, actionsChart, partner } = (
@@ -193,7 +193,7 @@ export default function Header() {
           <>
             <ReportReview partner={partner} />
             <Button
-              variant={"ghost"}
+              variant={showFeed ? "default" : "ghost"}
               onClick={() => {
                 setShowFeed((value) => !value);
               }}
