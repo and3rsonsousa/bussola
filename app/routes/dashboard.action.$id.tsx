@@ -16,13 +16,7 @@ import {
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@vercel/remix";
-import {
-  format,
-  formatDistanceToNow,
-  formatDuration,
-  isSameMonth,
-  parseISO,
-} from "date-fns";
+import { format, formatDistanceToNow, isSameMonth, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
 import {
@@ -45,6 +39,7 @@ import invariant from "tiny-invariant";
 import Tiptap from "~/components/structure/Tiptap";
 
 import ButtonCNVT from "~/components/structure/Button";
+import { formatActionTime } from "~/components/structure/CreateAction";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import {
@@ -56,6 +51,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -81,8 +77,6 @@ import {
   isInstagramFeed,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { Input } from "~/components/ui/input";
-import { formatActionTime } from "~/components/structure/CreateAction";
 
 export const config = { runtime: "edge" };
 const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -238,17 +232,19 @@ export default function ActionPage() {
           ...action,
           description: `${action.description && action.description.indexOf("[---BIA---]") >= 0 ? action.description?.substring(0, action.description?.indexOf("<br/>[---BIA---]")) : action.description}<br/>[---BIA---]${(fetcher.data as { message: string }).message}`,
         }));
-      } else {
+      } else if (fetcher.formData?.get("intent") === "caption") {
+        console.log(fetcher.data.message);
+
         setAction({
           ...action,
           caption: (fetcher.data as { message: string }).message,
         });
 
-        setTimeout(() => {
-          if (caption.current)
-            caption.current.style.height =
-              caption.current?.scrollHeight + 10 + "px";
-        }, 100);
+        // setTimeout(() => {
+        //   if (caption.current)
+        //     caption.current.style.height =
+        //       caption.current?.scrollHeight + 10 + "px";
+        // }, 100);
       }
     }
   }, [fetcher.data]);
