@@ -654,6 +654,61 @@ export default function ActionPage() {
                                 title: action.title,
                                 description: action.description,
                                 intent: "caption",
+                                model: "aida",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                              },
+                            );
+                          }}
+                        >
+                          AIDA - Atenção, Interesse, Desejo e Ação
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "slap",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                              },
+                            );
+                          }}
+                        >
+                          SLAP - Pare, Olhe, Aja e Converta.
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "pas",
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                              },
+                            );
+                          }}
+                        >
+                          PAS - Problema, Agitação e Solução
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
                                 model: "short",
                               },
                               {
@@ -708,10 +763,6 @@ export default function ActionPage() {
               </div>
             </div>
 
-            {/* <div
-              dangerouslySetInnerHTML={{ __html: action.caption || "" }}
-            ></div> */}
-
             <textarea
               placeholder="Escreva sua legenda aqui ou peça à βIA para criar no botão superior direito."
               ref={caption}
@@ -726,7 +777,7 @@ export default function ActionPage() {
               className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-none lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
-              value={action.caption ? action.caption : undefined}
+              defaultValue={action.caption ? action.caption : undefined}
             ></textarea>
           </div>
         ) : null}

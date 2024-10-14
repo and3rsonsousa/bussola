@@ -32,7 +32,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } else if (intent === "caption") {
     template = "Texto da legenda e hashtags";
 
-    if (model === "short") {
+    if (model === "aida") {
+      template = `Texto da legenda seguindo o modelo AIDA bem criativo, usando técnicas de Storytelling e reforçando o CONTEXTO. Use as keywords relevantes ao CONTEXTO e encerre a legenda com 5 hashtags. Siga esse modelo de AIDA: Atenção - Use emojis, perguntas diretas ou estatísticas chocantes Interesse - Faça o público se identificar com o problema ou a situação Desejo - Gere expectativa sobre a solução. Ação - Finalize com um convite claro e uma CTA estratégica.`;
+    } else if (model === "slap") {
+      template = `Texto da legenda seguindo o modelo SLAP bem criativo, usando técnicas de Storytelling e reforçando o CONTEXTO. Use as keywords relevantes ao CONTEXTO e encerre a legenda com 5 hashtags. Siga esse modelo de SLAP: Stop - Uma frase impactante ou provocativa para interromper o "scroll" do usuário. Look - Explique o problema de forma que o público se identifique. Act - Mostre uma ação específica que o público pode tomar para resolver o problema. Purchase - Finalize com uma chamada para a ação clara e forte.`;
+    } else if (model === "pas") {
+      template = `Texto da legenda seguindo o modelo PAS bem criativo, usando técnicas de Storytelling e reforçando o CONTEXTO. Use as keywords relevantes ao CONTEXTO e encerre a legenda com 5 hashtags. Siga esse modelo de PAS: Problem - Introduza o problema de forma direta, para que o público se identifique rapidamente. Agitate - Aprofunde a dor, fazendo com que o público sinta a necessidade urgente de resolver o problema. Solution - Mostre como você pode resolver esse problema com uma solução clara e atrativa. CTA - Finalize com um convite claro para agir.`;
+    } else if (model === "short") {
       template =
         "Texto da legenda com até 200 caracteres bem criativo e reforçando o CONTEXTO e com um CTA no final. Caso não haja nenhuma especificação no CONTEXTO, indique a pessoa a ir ao link da bio de modo que concorde com o CONTEXTO.";
     } else if (model === "medium") {
