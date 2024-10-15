@@ -66,3 +66,30 @@ export const TIMES = {
   sm: 15,
   plan: 50,
 };
+
+export const TRIGGERS = [
+  {
+    value: "Escassez",
+  },
+  {
+    value: "Urgência",
+  },
+  {
+    value: "Autoridade",
+  },
+  {
+    value: "Prova Social",
+  },
+  {
+    value: "Comunidade",
+  },
+  {
+    value: "Reciprocidade",
+  },
+  {
+    value: "Novidade",
+  },
+  {
+    value: "Antecipação",
+  },
+];

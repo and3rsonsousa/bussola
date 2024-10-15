@@ -5,9 +5,8 @@ export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  let { title, description, intent, model, context } = Object.fromEntries(
-    formData.entries(),
-  );
+  let { title, description, intent, model, context, trigger } =
+    Object.fromEntries(formData.entries());
 
   const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
@@ -19,6 +18,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   let template = "";
   let content = "";
+  trigger = trigger || "Comunidade";
+
   // Se for legenda
   if (intent === "shrink") {
     content = `Reduza o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
@@ -55,7 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     `;
     }
 
-    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. 
+    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. Use o gatilho mental da: ${trigger}. 
     
   REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
   TEMPLATE: ${template}.
@@ -109,7 +110,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     let rules = "";
 
     let template = `<h3>SLIDE 1</h3> (use um Gancho forte para chamar a atenção do usuário)
-    <h4>Frase do título aqui.</h4> (Frase principal do Carrossel. Deve ser chamativa e apelar para um gatilho mental)
+    <h4>Frase do título aqui.</h4> (Frase principal do Carrossel. Deve ser chamativa e apelar para o gatilho mental: ${trigger})
     
     
     <h3>SLIDE 2</h3> (desenvolva o problema e retenha o usuário)
@@ -138,7 +139,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       rules =
         "Insira sempre um emoji de acordo com a frase no final de cada frase. O texto deve ter no máximo 280 caracteres.";
       template = `<h3>SLIDE 1</h3> 
-    <p>Frase do título aqui.</p> (Frase principal do Carrossel. Use um Gancho forte para chamar a atenção do usuário. Deve ser chamativo e apelar para um gatilho mental)
+    <p>Frase do título aqui.</p> (Frase principal do Carrossel. Use um Gancho forte para chamar a atenção do usuário. Deve ser chamativo e apelar para o gatilho mental: ${trigger})
     <p>Sugestão de imagem</p>
     <h3>SLIDE 2</h3> (desenvolva o problema e retenha o usuário)
     <p>Sugestão de imagem</p>
@@ -154,7 +155,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     `;
     }
     content = `Você é um estrategista de conteúdo experiente e trabalha principalmente com técnicas de storytelling para envolver o usuário levando em conta o CONTENT e a descrição da EMPRESA. 
-TAREFA: Criar posts em formato carrossel envolventes e que prendam o usuário.
+TAREFA: Criar um post em formato carrossel envolvente e que prendam o usuário usando o gatilho mental: ${trigger}.
 REGRAS: Retorne apenas o texto sem nenhuma informação sua e formatado com tags HTML. ${rules} 
 MODELO: ${template}
  EMPRESA: ${context}

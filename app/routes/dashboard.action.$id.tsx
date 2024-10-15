@@ -23,6 +23,8 @@ import {
   ArrowDownNarrowWideIcon,
   ArrowUpNarrowWideIcon,
   CalendarIcon,
+  ChevronsDownUpIcon,
+  ChevronsUpDownIcon,
   ImageIcon,
   Link2Icon,
   MessageCircleIcon,
@@ -31,6 +33,7 @@ import {
   SparklesIcon,
   Trash,
   Trash2Icon,
+  ZapIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone-esm";
@@ -66,7 +69,7 @@ import {
 } from "~/components/ui/select";
 import { ToastAction } from "~/components/ui/toast";
 import { useToast } from "~/components/ui/use-toast";
-import { INTENTS } from "~/lib/constants";
+import { INTENTS, TRIGGERS } from "~/lib/constants";
 import {
   Avatar,
   Content,
@@ -144,6 +147,7 @@ export default function ActionPage() {
   const data = useActionData<{ urls: string[] }>();
 
   const [action, setAction] = useState(baseAction);
+  const [trigger, setTrigger] = useState("Comunidade");
   const [files, setFiles] = useState<{
     previews: { type: string; preview: string }[];
     files: string[];
@@ -232,19 +236,14 @@ export default function ActionPage() {
           ...action,
           description: `${action.description && action.description.indexOf("[---BIA---]") >= 0 ? action.description?.substring(0, action.description?.indexOf("<br/>[---BIA---]")) : action.description}<br/>[---BIA---]${(fetcher.data as { message: string }).message}`,
         }));
-      } else if (fetcher.formData?.get("intent") === "caption") {
-        console.log(fetcher.data.message);
-
+      } else if (
+        fetcher.formData?.get("intent") === "caption" ||
+        fetcher.formData?.get("intent") === "stories"
+      ) {
         setAction({
           ...action,
           caption: (fetcher.data as { message: string }).message,
         });
-
-        // setTimeout(() => {
-        //   if (caption.current)
-        //     caption.current.style.height =
-        //       caption.current?.scrollHeight + 10 + "px";
-        // }, 100);
       }
     }
   }, [fetcher.data]);
@@ -259,7 +258,7 @@ export default function ActionPage() {
     <div className="container flex h-full max-w-5xl flex-col p-0 lg:overflow-hidden">
       <div className="gap-4 overflow-y-auto px-4 pt-4 md:px-8 lg:flex lg:h-full lg:overflow-hidden">
         <div
-          className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category) ? "lg:w-4/6" : ""}`}
+          className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category) || action.category === "stories" ? "lg:w-3/5" : ""}`}
         >
           {/* Header */}
           <div className="flex w-full shrink grow-0 items-center justify-between text-sm">
@@ -437,7 +436,7 @@ export default function ActionPage() {
 
         {/* Arquivos e Legenda */}
         {isInstagramFeed(action.category) || action.category === "stories" ? (
-          <div className="lg:scrollbars flex flex-col lg:w-2/6">
+          <div className="lg:scrollbars flex flex-col lg:w-2/5">
             {/* Arquivo */}
             {action.category !== "stories" && (
               <div>
@@ -529,16 +528,23 @@ export default function ActionPage() {
               <div className="text-xs font-bold uppercase tracking-wider">
                 {action.category === "stories" ? "Sequência" : "Legenda"}
               </div>
-              <div className="pb-1 pr-1">
+              <div className="flex gap-2 pb-1 pr-1">
+                {/* <Button size="sm" variant={"ghost"}>
+                  <ZapIcon className="size-4" />
+                </Button> */}
+
+                <Triggers trigger={trigger} setTrigger={setTrigger} />
+
                 {action.category === "stories" ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "stories" && "animate-colors"}`}
+                        size="sm"
+                        className={`${isWorking && fetcher.formData?.get("intent") === "stories" && "animate-colors"}`}
                         variant="ghost"
                         title="Gerar Stories"
                       >
-                        <SparklesIcon />
+                        <SparklesIcon className="size-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="glass">
@@ -551,6 +557,7 @@ export default function ActionPage() {
                               context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                               intent: "stories",
                               model: "static",
+                              trigger: trigger,
                             },
                             {
                               action: "/handle-openai",
@@ -570,6 +577,7 @@ export default function ActionPage() {
                               context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                               intent: "stories",
                               model: "video",
+                              trigger: trigger,
                             },
                             {
                               action: "/handle-openai",
@@ -583,12 +591,12 @@ export default function ActionPage() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <div className="flex gap-4">
+                  <div className="flex gap-1">
                     {action.caption && action.caption.length > 0 && (
-                      <div className="flex gap-2">
+                      <div className="flex gap-1">
                         <Button
                           variant={"ghost"}
-                          className="h-8 w-8 p-1"
+                          size="sm"
                           title="Reduzir o Texto"
                           onClick={async (event) => {
                             event.preventDefault();
@@ -606,11 +614,11 @@ export default function ActionPage() {
                             );
                           }}
                         >
-                          <ArrowDownNarrowWideIcon className="size-4" />
+                          <ChevronsUpDownIcon className="size-4" />
                         </Button>
                         <Button
                           variant={"ghost"}
-                          className="h-8 w-8 p-1"
+                          size={"sm"}
                           title="Aumentar o texto"
                           onClick={async (event) => {
                             event.preventDefault();
@@ -628,14 +636,15 @@ export default function ActionPage() {
                             );
                           }}
                         >
-                          <ArrowUpNarrowWideIcon className="size-4" />
+                          <ChevronsDownUpIcon className="size-4" />
                         </Button>
                       </div>
                     )}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
-                          className={`h-8 w-8 p-1 ${isWorking && fetcher.formData?.get("intent") === "caption" && "animate-colors"}`}
+                          size="sm"
+                          className={` ${isWorking && fetcher.formData?.get("intent") === "caption" && "animate-colors"}`}
                           variant="ghost"
                           title="Gerar legenda"
                         >
@@ -651,6 +660,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "aida",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -669,6 +679,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "slap",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -687,6 +698,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "pas",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -706,6 +718,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "short",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -724,6 +737,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "medium",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -742,6 +756,7 @@ export default function ActionPage() {
                                 description: action.description,
                                 intent: "caption",
                                 model: "long",
+                                trigger: trigger,
                               },
                               {
                                 action: "/handle-openai",
@@ -774,6 +789,7 @@ export default function ActionPage() {
               //@ts-ignore
               style={{ fieldSizing: "content" }}
               defaultValue={action.caption ? action.caption : undefined}
+              value={action.caption ? action.caption : undefined}
             ></textarea>
           </div>
         ) : null}
@@ -1306,3 +1322,27 @@ export default function ActionPage() {
     </div>
   );
 }
+
+export const Triggers = ({
+  trigger,
+  setTrigger,
+}: {
+  trigger: string;
+  setTrigger: React.Dispatch<React.SetStateAction<string>>;
+}) => (
+  <Select value={trigger} onValueChange={(value) => setTrigger(value)}>
+    <SelectTrigger
+      className="h-auto gap-1 px-3 py-0.5 text-xs"
+      title="Gatilho Mental"
+    >
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent className="glass">
+      {TRIGGERS.map((trigger) => (
+        <SelectItem key={trigger.value} value={trigger.value}>
+          {trigger.value}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);
