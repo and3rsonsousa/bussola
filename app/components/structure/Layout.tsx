@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext } from "@remix-run/react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Header from "./Header";
 import Search from "./Search";
 import Loader from "./Loader";
@@ -7,6 +7,8 @@ import { Toaster } from "../ui/toaster";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
   const { isTransitioning, setTransitioning } =
     useOutletContext() as ContextType;
   useEffect(() => {
@@ -34,8 +36,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         <Loader />
       </div>
-      <Header />
-      <Search />
+      <Header open={open} setOpen={setOpen} />
+      <Search open={open} setOpen={setOpen} />
       <Toaster />
     </div>
   );

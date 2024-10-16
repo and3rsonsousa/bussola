@@ -85,6 +85,18 @@ export default function CreateAction({
 
   const [action, setAction] = useState<RawAction>(cleanAction);
 
+  const category = categories.find(
+    (category) => category.slug === action.category,
+  ) as Category;
+
+  const state = states.find((state) => state.slug === action.state) as State;
+  const responsibles: Person[] = [];
+  action.responsibles.filter((user_id) =>
+    responsibles.push(
+      people.find((person) => person.user_id === user_id) as Person,
+    ),
+  );
+
   useEffect(() => {
     if (action.partner) {
       const newPartner = partners.find((p) => p.slug === action.partner);
@@ -102,18 +114,6 @@ export default function CreateAction({
         : undefined,
     );
   }, [location]);
-
-  const category = categories.find(
-    (category) => category.slug === action.category,
-  ) as Category;
-
-  const state = states.find((state) => state.slug === action.state) as State;
-  const responsibles: Person[] = [];
-  action.responsibles.filter((user_id) =>
-    responsibles.push(
-      people.find((person) => person.user_id === user_id) as Person,
-    ),
-  );
 
   useEffect(() => {
     if (open) {

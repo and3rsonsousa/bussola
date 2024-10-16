@@ -3,7 +3,7 @@ import { useMatches, useNavigate } from "@remix-run/react";
 import { useDebounce } from "use-debounce";
 import { createBrowserClient } from "@supabase/ssr";
 import { CommandLoading } from "cmdk";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PRIORITIES } from "~/lib/constants";
 import { Avatar, Icons } from "~/lib/helpers";
 import {
@@ -16,11 +16,16 @@ import {
 } from "../ui/command";
 import Loader from "./Loader";
 
-export default function Search() {
+export default function Search({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const navigate = useNavigate();
   const matches = useMatches();
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [query] = useDebounce(value, 300);

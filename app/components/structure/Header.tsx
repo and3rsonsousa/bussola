@@ -15,6 +15,7 @@ import {
   HelpCircle,
   LogOutIcon,
   PlusIcon,
+  SearchIcon,
   Users2Icon,
 } from "lucide-react";
 import { SOW } from "~/lib/constants";
@@ -38,7 +39,13 @@ import Loader from "./Loader";
 import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
 
-export default function Header() {
+export default function Header({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const matches = useMatches();
   const navigation = useNavigation();
   const location = useLocation();
@@ -204,9 +211,20 @@ export default function Header() {
           </>
         ) : null}
 
+        {/* Busca Search */}
+
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setOpen((value) => !value);
+          }}
+          size={"icon"}
+        >
+          <SearchIcon className="size-6" />
+        </Button>
+
         {/* Botão de criar ação */}
 
-        {/* {!isActionPage && <CreateAction mode="plus" />} */}
         <CreateAction mode="plus" shortcut />
         {/* menu de ações */}
         {person && (
