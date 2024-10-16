@@ -1311,9 +1311,12 @@ export default function ActionPage() {
               disabled={isWorking}
             >
               {isWorking ? (
-                <div className="size-4 animate-spin rounded-full border-2 border-white border-b-transparent"></div>
+                <div className="size-4 animate-spin rounded-full border-2 border-background border-b-transparent"></div>
               ) : (
-                <span className="z-10">Salvar</span>
+                <>
+                  <SaveIcon className="size-4" />
+                  <span>Atualizar</span>
+                </>
               )}
             </ButtonCNVT>
           </div>
