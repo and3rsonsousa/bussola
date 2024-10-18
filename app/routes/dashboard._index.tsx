@@ -21,13 +21,16 @@ import {
   endOfWeek,
   endOfYear,
   format,
+  formatRelative,
   isAfter,
   isBefore,
   isSameDay,
   isSameMonth,
+  isToday,
   startOfMonth,
   startOfWeek,
   startOfYear,
+  subDays,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -37,6 +40,8 @@ import {
   ArrowUp,
   ArrowUpIcon,
   CalendarClock,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ComponentIcon,
   KanbanIcon,
   ListIcon,
@@ -148,6 +153,7 @@ export default function DashboardIndex() {
   const [todayView, setTodayView] = useState<"kanban" | "hours" | "categories">(
     "kanban",
   );
+  const [currentDay, setCurrentDay] = useState(new Date());
 
   if (!actions) {
     actions = [];
@@ -177,7 +183,7 @@ export default function DashboardIndex() {
   const lateActions = getDelayedActions({
     actions: actions as Action[],
   }) as Action[];
-  const todayActions = getActionsForThisDay({ actions });
+  const currentActions = getActionsForThisDay({ actions, date: currentDay });
   const tomorrowActions = getActionsByState(
     getActionsForThisDay({
       actions,
@@ -237,13 +243,38 @@ export default function DashboardIndex() {
         {/* Parceiros */}
         <Partners actions={actions as Action[]} />
         {/* Ações de Hoje */}
-        {todayActions?.length ? (
+        {currentActions?.length ? (
           <div className="mb-8">
             <div className="flex justify-between py-8">
-              <div className="relative flex">
-                <h2 className="text-3xl font-semibold tracking-tight">Hoje</h2>
-                <Badge value={todayActions?.length} />
+              <div className="flex">
+                <div className="relative flex">
+                  <h2 className="text-3xl font-semibold capitalize tracking-tight">
+                    {isToday(currentDay)
+                      ? "hoje"
+                      : formatRelative(currentDay, new Date(), {
+                          locale: ptBR,
+                        }).split("às")[0]}
+                  </h2>
+                  <Badge value={currentActions?.length} />
+                </div>
+                <Button
+                  onClick={() => setCurrentDay(subDays(currentDay, 1))}
+                  size={"icon"}
+                  variant={"ghost"}
+                  className="ml-12"
+                >
+                  <ChevronLeftIcon className="size-4" />
+                </Button>
+                <Button
+                  onClick={() => setCurrentDay(addDays(currentDay, 1))}
+                  size={"icon"}
+                  variant={"ghost"}
+                  className=""
+                >
+                  <ChevronRightIcon className="size-4" />
+                </Button>
               </div>
+
               <div className="flex gap-2">
                 {[
                   {
@@ -285,11 +316,11 @@ export default function DashboardIndex() {
             </div>
 
             {todayView === "kanban" ? (
-              <Kanban actions={todayActions} />
+              <Kanban actions={currentActions} />
             ) : todayView === "hours" ? (
-              <HoursView actions={todayActions} />
+              <HoursView actions={currentActions} />
             ) : (
-              <CategoriesView actions={todayActions} />
+              <CategoriesView actions={currentActions} />
             )}
           </div>
         ) : null}
