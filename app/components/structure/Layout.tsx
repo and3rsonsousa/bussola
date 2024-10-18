@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         event.preventDefault();
         event.stopPropagation();
         setTransitioning(true);
-        navigate("/dashboard", { unstable_viewTransition: true });
+        navigate("/dashboard", { viewTransition: true });
       }
     };
 

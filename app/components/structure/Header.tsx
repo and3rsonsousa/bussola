@@ -99,7 +99,7 @@ export default function Header({
         {/* Logo */}
         <Link
           to="/dashboard"
-          unstable_viewTransition
+          viewTransition
           className="rounded-lg p-4 outline-none ring-ring ring-offset-background focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
@@ -108,7 +108,7 @@ export default function Header({
         {/* Atrasados */}
         {lateActions.length > 0 && (
           <Link
-            unstable_viewTransition
+            viewTransition
             to={`/dashboard/${partner ? partner.slug.concat("/") : ""}late/`}
             className="-ml-2 grid size-5 place-content-center rounded-full bg-error-600 text-xs font-bold text-white"
           >
