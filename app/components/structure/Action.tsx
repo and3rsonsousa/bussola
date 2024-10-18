@@ -165,8 +165,8 @@ export function ActionLine({
             <div className="absolute bottom-1.5 right-2 text-xs font-semibold text-white drop-shadow-sm">
               {formatActionDatetime({
                 date: action.date,
-                dateFormat: 0,
-                timeFormat: 1,
+                dateFormat: date?.dateFormat,
+                timeFormat: date?.timeFormat,
               })}
             </div>
 

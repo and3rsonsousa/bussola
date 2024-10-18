@@ -596,6 +596,7 @@ export const Content = ({
   aspect,
   partner,
   className,
+
 }: {
   action:
     | Action
@@ -605,6 +606,7 @@ export const Content = ({
   aspect: "feed" | "full" | "squared";
   partner: Partner;
   className?: string;
+  
 }) => {
   let files =
     "previews" in action && action.previews

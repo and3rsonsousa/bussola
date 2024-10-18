@@ -158,8 +158,8 @@ export default function DashboardIndex() {
   const [draggedAction, setDraggedAction] = useState<Action>();
   const [todayView, setTodayView] = useState<
     "kanban" | "hours" | "categories" | "feed"
-  >("feed");
-  const [currentDay, setCurrentDay] = useState(addDays(new Date(), 1));
+  >("kanban");
+  const [currentDay, setCurrentDay] = useState(new Date());
 
   if (!actions) {
     actions = [];
@@ -341,7 +341,7 @@ export default function DashboardIndex() {
                     (p) => p.slug === action.partner,
                   )[0];
                   return (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4" key={action.id}>
                       <div className="flex justify-between gap-4">
                         <div className="flex items-center gap-1 overflow-hidden">
                           <Avatar
@@ -361,7 +361,11 @@ export default function DashboardIndex() {
                           className="size-4 shrink-0 opacity-25"
                         />
                       </div>
-                      <ActionLine action={action} key={action.id} showContent />
+                      <ActionLine
+                        action={action}
+                        date={{ timeFormat: 1 }}
+                        showContent
+                      />
                     </div>
                   );
                 })}
