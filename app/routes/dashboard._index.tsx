@@ -43,6 +43,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ComponentIcon,
+  GridIcon,
   KanbanIcon,
   ListIcon,
   ListTodoIcon,
@@ -53,7 +54,11 @@ import {
 import { useEffect, useState, type SetStateAction } from "react";
 import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
 
-import { BlockOfActions, ListOfActions } from "~/components/structure/Action";
+import {
+  ActionLine,
+  BlockOfActions,
+  ListOfActions,
+} from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
 import Kanban from "~/components/structure/Kanban";
@@ -79,6 +84,7 @@ import {
   getActionsByState,
   getActionsForThisDay,
   getDelayedActions,
+  getInstagramFeed,
   sortActions,
   useIDsToRemove,
   usePendingData,
@@ -150,10 +156,10 @@ export default function DashboardIndex() {
   const submit = useSubmit();
   const { setTransitioning } = useOutletContext() as ContextType;
   const [draggedAction, setDraggedAction] = useState<Action>();
-  const [todayView, setTodayView] = useState<"kanban" | "hours" | "categories">(
-    "kanban",
-  );
-  const [currentDay, setCurrentDay] = useState(new Date());
+  const [todayView, setTodayView] = useState<
+    "kanban" | "hours" | "categories" | "feed"
+  >("feed");
+  const [currentDay, setCurrentDay] = useState(addDays(new Date(), 1));
 
   if (!actions) {
     actions = [];
@@ -284,6 +290,12 @@ export default function DashboardIndex() {
                     Icon: <KanbanIcon className="w-6" />,
                   },
                   {
+                    id: "feed",
+                    title: "Feed",
+                    description: "Ver as ações do feed do Instagram",
+                    Icon: <GridIcon className="w-6" />,
+                  },
+                  {
                     id: "categories",
                     title: "Categorias",
                     description: "Ver por categorias",
@@ -298,7 +310,7 @@ export default function DashboardIndex() {
                 ].map((button) => (
                   <Button
                     key={button.id}
-                    variant={todayView === button.id ? "secondary" : "ghost"}
+                    variant={todayView === button.id ? "default" : "ghost"}
                     size={"sm"}
                     title={button.description}
                     className="flex items-center gap-2"
@@ -319,6 +331,18 @@ export default function DashboardIndex() {
               <Kanban actions={currentActions} />
             ) : todayView === "hours" ? (
               <HoursView actions={currentActions} />
+            ) : todayView === "feed" ? (
+              <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+                {getActionsByState(
+                  getInstagramFeed({ actions: currentActions }) as Action[],
+                  states,
+                ).map((action) => (
+                  <div className="flex flex-col gap-4">
+                    <div className="text-xs font-medium">@{action.partner}</div>
+                    <ActionLine action={action} key={action.id} showContent />
+                  </div>
+                ))}
+              </div>
             ) : (
               <CategoriesView actions={currentActions} />
             )}
