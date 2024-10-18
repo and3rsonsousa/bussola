@@ -165,7 +165,7 @@ export default function DashboardIndex() {
     actions = [];
   }
 
-  const { person, states } = matches[1].data as DashboardRootType;
+  const { person, states, partners } = matches[1].data as DashboardRootType;
 
   const pendingActions = usePendingData().actions;
   const deletingIDsActions = useIDsToRemove().actions;
@@ -336,12 +336,35 @@ export default function DashboardIndex() {
                 {getActionsByState(
                   getInstagramFeed({ actions: currentActions }) as Action[],
                   states,
-                ).map((action) => (
-                  <div className="flex flex-col gap-4">
-                    <div className="text-xs font-medium">@{action.partner}</div>
-                    <ActionLine action={action} key={action.id} showContent />
-                  </div>
-                ))}
+                ).map((action) => {
+                  const partner = partners.filter(
+                    (p) => p.slug === action.partner,
+                  )[0];
+                  return (
+                    <div className="flex flex-col gap-4">
+                      <div className="flex justify-between gap-4">
+                        <div className="flex items-center gap-1 overflow-hidden">
+                          <Avatar
+                            item={{
+                              short: partner.short,
+                              bg: partner.colors[0],
+                              fg: partner.colors[1],
+                            }}
+                            size="xs"
+                          />
+                          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-xs font-medium">
+                            {partner.title}
+                          </div>
+                        </div>
+                        <Icons
+                          id={action.category}
+                          className="size-4 shrink-0 opacity-25"
+                        />
+                      </div>
+                      <ActionLine action={action} key={action.id} showContent />
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <CategoriesView actions={currentActions} />
