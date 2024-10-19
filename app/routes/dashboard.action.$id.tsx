@@ -109,31 +109,36 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const filenames = String(formData.get("filenames")).split(",");
   const partner = formData.get("partner") as string;
   // const title = formData.get("title") as string;
+  try {
+    const urls = await Promise.all(
+      files.map(async (file, i) => {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const fileUrl = `${partner}/${new Date().getFullYear()}/${new Date().getMonth() + 1}/${format(new Date(), "yyyy-MM-dd_hh-mm-ss")}_${i}${filenames[i].substring(filenames[i].lastIndexOf("."))}`;
+        const url = `https://br.storage.bunnycdn.com/agencia-cnvt/${fileUrl}`;
+        const downloadUrl = `https://agenciacnvt.b-cdn.net/${fileUrl}`;
 
-  const urls = await Promise.all(
-    files.map(async (file, i) => {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const fileUrl = `${partner}/${new Date().getFullYear()}/${new Date().getMonth() + 1}/${format(new Date(), "yyyy-MM-dd_hh-mm-ss")}_${i}${filenames[i].substring(filenames[i].lastIndexOf("."))}`;
-      const url = `https://br.storage.bunnycdn.com/agencia-cnvt/${fileUrl}`;
-      const downloadUrl = `https://agenciacnvt.b-cdn.net/${fileUrl}`;
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            AccessKey: ACCESS_KEY!,
+            "Content-Type": "application/octet-stream",
+          },
+          body: buffer,
+        });
 
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          AccessKey: ACCESS_KEY!,
-          "Content-Type": "application/octet-stream",
-        },
-        body: buffer,
-      });
+        return { downloadUrl, status: response.statusText };
+      }),
+    );
 
-      return { downloadUrl, status: response.statusText };
-    }),
-  );
+    console.log({ urls });
 
-  console.log({ urls });
+    return json({ urls: urls.map((url) => url.downloadUrl) });
+  } catch (error) {
+    console.log(error);
+  }
 
-  return json({ urls: urls.map((url) => url.downloadUrl) });
+  return {};
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
