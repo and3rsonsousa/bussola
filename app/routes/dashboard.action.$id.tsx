@@ -127,11 +127,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         body: buffer,
       });
 
-      return downloadUrl;
+      return { downloadUrl, status: response.statusText };
     }),
   );
 
-  return json({ urls });
+  console.log({ urls });
+
+  return json({ urls: urls.map((url) => url.downloadUrl) });
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
