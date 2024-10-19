@@ -621,12 +621,12 @@ export const Content = ({
   let isPreview = !(action.files !== null && action.files[0] !== "");
 
   return files && !["", "null", null].find((p) => p === files[0].preview) ? (
+    
     // Se for carrossel ou Stories
-
     files.length > 1 && aspect !== "squared" ? (
       <div
         className={clsx(
-          `flex snap-x snap-mandatory gap-[1px] overflow-hidden overflow-x-auto transition-opacity ${isPreview && "opacity-50"}`,
+          `flex snap-x snap-mandatory gap-[1px] overflow-hidden overflow-x-auto transition-opacity ${isPreview && "opacity-50"} `,
           className,
         )}
       >

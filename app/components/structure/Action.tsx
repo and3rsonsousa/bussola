@@ -158,7 +158,7 @@ export function ActionLine({
               action={action}
               partner={partner!}
               aspect="squared"
-              className={`the-action-content overflow-hidden rounded hover:opacity-75`}
+              className={`the-action-content aspect-square overflow-hidden rounded hover:opacity-75`}
             />
             <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
 
