@@ -683,20 +683,24 @@ export const CalendarDay = ({
                       ></div>
                       <div>{category.title}</div>
                     </div>
-                    {actions?.map((action) => (
-                      <ActionLine
-                        showContent={showContent}
-                        short={short}
-                        allUsers={allUsers}
-                        showDelay
-                        action={action}
-                        key={action.id}
-                        date={{
-                          timeFormat: 1,
-                        }}
-                        onDrag={setDraggedAction}
-                      />
-                    ))}
+                    <div
+                      className={`flex flex-col ${showContent ? "gap-3" : "gap-1"}`}
+                    >
+                      {actions?.map((action) => (
+                        <ActionLine
+                          showContent={showContent}
+                          short={short}
+                          allUsers={allUsers}
+                          showDelay
+                          action={action}
+                          key={action.id}
+                          date={{
+                            timeFormat: 1,
+                          }}
+                          onDrag={setDraggedAction}
+                        />
+                      ))}
+                    </div>
                   </div>
                 ) : null,
               )}
