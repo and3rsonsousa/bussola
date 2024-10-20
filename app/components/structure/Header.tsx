@@ -16,6 +16,7 @@ import {
   LogOutIcon,
   PlusIcon,
   SearchIcon,
+  UserIcon,
   Users2Icon,
 } from "lucide-react";
 import { SOW } from "~/lib/constants";
@@ -258,7 +259,15 @@ export default function Header({
 
               <DropdownMenuItem
                 className="bg-item"
-                id="account"
+                id="archived"
+                onSelect={() => navigate(`/dashboard/me`)}
+              >
+                <UserIcon className="size-4 opacity-50" />
+                <div>Minha conta</div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="bg-item"
+                id="archived"
                 onSelect={() =>
                   navigate(
                     `/dashboard/${partner ? partner.slug.concat("/") : ""}archived`,
@@ -270,7 +279,7 @@ export default function Header({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="bg-item"
-                id="account"
+                id="help"
                 onSelect={() => navigate("/dashboard/help")}
               >
                 <HelpCircle className="size-4 opacity-50" />
