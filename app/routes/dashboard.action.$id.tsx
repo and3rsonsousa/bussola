@@ -131,8 +131,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     );
 
-    console.log({ urls });
-
     return json({ urls: urls.map((url) => url.downloadUrl) });
   } catch (error) {
     console.log(error);

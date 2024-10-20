@@ -596,7 +596,6 @@ export const Content = ({
   aspect,
   partner,
   className,
-
 }: {
   action:
     | Action
@@ -606,7 +605,6 @@ export const Content = ({
   aspect: "feed" | "full" | "squared";
   partner: Partner;
   className?: string;
-  
 }) => {
   let files =
     "previews" in action && action.previews
@@ -621,7 +619,6 @@ export const Content = ({
   let isPreview = !(action.files !== null && action.files[0] !== "");
 
   return files && !["", "null", null].find((p) => p === files[0].preview) ? (
-    
     // Se for carrossel ou Stories
     files.length > 1 && aspect !== "squared" ? (
       <div
@@ -779,5 +776,7 @@ export const ReportReview = ({ partner }: { partner: Partner }) => {
 };
 
 export function isSprint(action_id: string, sprints: Sprint[]) {
-  return sprints.filter((s) => s.action_id === action_id).length > 0;
+  return sprints
+    ? sprints.filter((s) => s.action_id === action_id).length > 0
+    : false;
 }

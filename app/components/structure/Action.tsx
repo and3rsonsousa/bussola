@@ -63,24 +63,26 @@ import { formatActionTime } from "./CreateAction";
 
 export function ActionLine({
   action,
-  showCategory,
-  showDelay,
   date,
   onDrag,
   short,
   long,
   allUsers,
+  showCategory,
+  showDelay,
   showContent,
+  showPartner,
 }: {
   action: Action;
-  showCategory?: boolean;
-  showDelay?: boolean;
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   onDrag?: (action: Action) => void;
   short?: boolean;
   long?: boolean;
   allUsers?: boolean;
+  showCategory?: boolean;
+  showDelay?: boolean;
   showContent?: boolean;
+  showPartner?: boolean;
 }) {
   const navigate = useNavigate();
   const submit = useSubmit();
@@ -241,7 +243,7 @@ export function ActionLine({
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
-            {partner && (
+            {partner && showPartner && (
               <div className="mr-1">
                 <Avatar
                   size={long ? "sm" : "xs"}

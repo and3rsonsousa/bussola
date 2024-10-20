@@ -34,6 +34,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       env: {
         SUPABASE_URL: process.env.SUPABASE_URL!,
         SUPABASE_KEY: process.env.SUPABASE_KEY!,
+        CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
+        CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET!,
       },
     },
     200,
@@ -64,6 +66,10 @@ export function App() {
         <Links />
       </head>
       <body className="selection:bg-foreground selection:text-background">
+        <script
+          src="https://upload-widget.cloudinary.com/latest/global/all.js"
+          type="text/javascript"
+        ></script>
         <Outlet
           context={{ showFeed, setShowFeed, isTransitioning, setTransitioning }}
         />
