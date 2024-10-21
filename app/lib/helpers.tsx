@@ -16,6 +16,8 @@ import {
 import { ptBR } from "date-fns/locale";
 import {
   BadgeCheckIcon,
+  BookMarkedIcon,
+  BookmarkIcon,
   CameraIcon,
   CircleFadingPlusIcon,
   ClapperboardIcon,
@@ -24,6 +26,7 @@ import {
   ComponentIcon,
   DollarSignIcon,
   GalleryHorizontal,
+  HeartIcon,
   ImageIcon,
   ListChecksIcon,
   MegaphoneIcon,
@@ -38,7 +41,7 @@ import {
   UsersIcon,
   type LucideIcon,
 } from "lucide-react";
-import { useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { DateRange } from "react-day-picker";
 import {
   AvatarFallback,
@@ -781,7 +784,13 @@ export function isSprint(action_id: string, sprints: Sprint[]) {
     : false;
 }
 
-export function LikeFooter({ size = "md" }: { size?: "sm" | "md" }) {
+export function LikeFooter({
+  size = "md",
+  liked,
+}: {
+  size?: "sm" | "md";
+  liked?: boolean;
+}) {
   const sizes = {
     sm: {
       parentClassName: "gap-2",
@@ -795,16 +804,31 @@ export function LikeFooter({ size = "md" }: { size?: "sm" | "md" }) {
     },
   };
 
+  // const likes = useMemo(() => Math.ceil(Math.random() * 200) + 50, []);
+
   return (
-    <div className={`flex py-2 ${sizes[size].parentClassName}`}>
-      <div className="flex items-center gap-1">
-        <Heart className={cn(sizes[size].className)} />
-        <div className={`${sizes[size].textClassName} font-bold`}>
-          {Math.ceil(Math.random() * 200) + 50}
+    <div className={`flex justify-between py-2`}>
+      <div className={`flex ${sizes[size].parentClassName}`}>
+        <div className="flex gap-1">
+          {liked ? (
+            <>
+              <Heart className={cn(sizes[size].className)} />
+              {/* <div className={`${sizes[size].textClassName} font-bold`}>
+                {likes}
+              </div> */}
+            </>
+          ) : (
+            <HeartIcon className={cn(sizes[size].className)} />
+          )}
         </div>
+        <MessageCircleIcon
+          className={cn(sizes[size].className, "-scale-x-100")}
+        />
+        <SendIcon className={cn(sizes[size].className)} />
       </div>
-      <MessageCircleIcon className={cn(sizes[size].className)} />
-      <SendIcon className={cn(sizes[size].className)} />
+      <div>
+        <BookmarkIcon className={cn(sizes[size].className)} />
+      </div>
     </div>
   );
 }

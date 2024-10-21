@@ -522,7 +522,7 @@ export default function ActionPage() {
                     </div>
                   </div>
                 </Form>
-                <LikeFooter />
+                <LikeFooter liked={state.slug === "finished"} />
               </div>
             )}
             {/* Legenda */}
