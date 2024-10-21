@@ -209,7 +209,7 @@ export function ActionLine({
                 </div>
               )}
             </div>
-            <LikeFooter size="sm" />
+            <LikeFooter size="sm" liked={state.slug === "finished"} />
           </div>
         ) : (
           <div
