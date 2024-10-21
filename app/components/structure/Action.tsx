@@ -56,6 +56,7 @@ import {
   Icons,
   isInstagramFeed,
   isSprint,
+  LikeFooter,
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
@@ -208,6 +209,7 @@ export function ActionLine({
                 </div>
               )}
             </div>
+            <LikeFooter size="sm" />
           </div>
         ) : (
           <div

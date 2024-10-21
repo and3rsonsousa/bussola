@@ -78,6 +78,7 @@ import {
   Heart,
   Icons,
   isInstagramFeed,
+  LikeFooter,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
@@ -521,11 +522,7 @@ export default function ActionPage() {
                     </div>
                   </div>
                 </Form>
-                <div className="flex gap-4 py-2">
-                  <Heart />
-                  <MessageCircleIcon className="size-6" />
-                  <SendIcon className="size-6" />
-                </div>
+                <LikeFooter />
               </div>
             )}
             {/* Legenda */}
@@ -793,7 +790,6 @@ export default function ActionPage() {
               className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-none lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
-              defaultValue={action.caption ? action.caption : undefined}
               value={action.caption ? action.caption : undefined}
             ></textarea>
           </div>

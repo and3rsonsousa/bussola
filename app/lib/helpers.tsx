@@ -27,9 +27,11 @@ import {
   ImageIcon,
   ListChecksIcon,
   MegaphoneIcon,
+  MessageCircleIcon,
   PenToolIcon,
   PrinterIcon,
   RouteIcon,
+  SendIcon,
   SignalIcon,
   SignalLowIcon,
   SignalMediumIcon,
@@ -699,14 +701,12 @@ export function isInstagramFeed(category: string) {
   return ["post", "reels", "carousel"].includes(category);
 }
 
-export const Heart = () => (
+export const Heart = ({ className }: { className?: string }) => (
   <svg
-    width="24px"
-    height="24px"
     viewBox="0 0 32 32"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
-    className="fill-rose-500"
+    className={`fill-rose-500 ${cn(className)}`}
   >
     <path d="M0.256 12.16q0.544 2.080 2.080 3.616l13.664 14.144 13.664-14.144q1.536-1.536 2.080-3.616t0-4.128-2.080-3.584-3.584-2.080-4.16 0-3.584 2.080l-2.336 2.816-2.336-2.816q-1.536-1.536-3.584-2.080t-4.128 0-3.616 2.080-2.080 3.584 0 4.128z"></path>
   </svg>
@@ -779,4 +779,32 @@ export function isSprint(action_id: string, sprints: Sprint[]) {
   return sprints
     ? sprints.filter((s) => s.action_id === action_id).length > 0
     : false;
+}
+
+export function LikeFooter({ size = "md" }: { size?: "sm" | "md" }) {
+  const sizes = {
+    sm: {
+      parentClassName: "gap-2",
+      className: "size-4",
+      textClassName: "text-xs",
+    },
+    md: {
+      parentClassName: "gap-4",
+      className: "size-6",
+      textClassName: "text-sm",
+    },
+  };
+
+  return (
+    <div className={`flex py-2 ${sizes[size].parentClassName}`}>
+      <div className="flex items-center gap-1">
+        <Heart className={cn(sizes[size].className)} />
+        <div className={`${sizes[size].textClassName} font-bold`}>
+          {Math.ceil(Math.random() * 200) + 50}
+        </div>
+      </div>
+      <MessageCircleIcon className={cn(sizes[size].className)} />
+      <SendIcon className={cn(sizes[size].className)} />
+    </div>
+  );
 }
