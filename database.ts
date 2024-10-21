@@ -22,7 +22,7 @@ export type Database = {
           id: string
           instagram_date: string
           partner: string
-          partners: string[] | null
+          partners: string[]
           priority: string
           responsibles: string[]
           state: string
@@ -43,7 +43,7 @@ export type Database = {
           id?: string
           instagram_date: string
           partner: string
-          partners?: string[] | null
+          partners: string[]
           priority: string
           responsibles: string[]
           state: string
@@ -64,7 +64,7 @@ export type Database = {
           id?: string
           instagram_date?: string
           partner?: string
-          partners?: string[] | null
+          partners?: string[]
           priority?: string
           responsibles?: string[]
           state?: string

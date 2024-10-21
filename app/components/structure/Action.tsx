@@ -21,6 +21,7 @@ import {
   CopyIcon,
   Edit3Icon,
   ExpandIcon,
+  Link2Icon,
   PencilLineIcon,
   RabbitIcon,
   ShrinkIcon,
@@ -52,6 +53,7 @@ import {
   getActionsByPriority,
   getActionsByState,
   getActionsByTime,
+  getPartners,
   getResponsibles,
   Icons,
   isInstagramFeed,
@@ -245,7 +247,7 @@ export function ActionLine({
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
-            {partner && showPartner && (
+            {showPartner ? (
               <div className="mr-1">
                 <Avatar
                   size={long ? "sm" : "xs"}
@@ -256,7 +258,14 @@ export function ActionLine({
                   }}
                 />
               </div>
+            ) : (
+              action.partners.length > 1 && (
+                <div className="mr-1" title={partners.join(", ")}>
+                  <Link2Icon className="size-4" />
+                </div>
+              )
             )}
+
             {showCategory && (
               <div className="mr-1">
                 <Icons
@@ -1104,6 +1113,7 @@ export function ContextMenuItems({
         )}
         <ContextMenuShortcut className="pl-2">⇧+U</ContextMenuShortcut>
       </ContextMenuItem>
+      {/* Duplicar */}
       <ContextMenuItem className="bg-item flex items-center gap-2">
         <CopyIcon className="size-3" />
         <span>Duplicar</span>
@@ -1239,46 +1249,45 @@ export function ContextMenuItems({
                 </Button>
               </div>
             </ContextMenuItem>
-            {delay.day + delay.hour + delay.week > 0 && (
-              <>
-                <ContextMenuSeparator className="bg-border" />
-                <ContextMenuItem
-                  disabled={delay.day + delay.hour + delay.week === 0}
-                  className="justify-center"
-                  asChild
-                  onSelect={() => {
-                    const date = format(
-                      addWeeks(
-                        addDays(addHours(action.date, delay.hour), delay.day),
-                        delay.week,
-                      ),
-                      "yyyy-MM-dd HH:mm:ss",
-                    );
-                    handleActions({
-                      intent: INTENTS.updateAction,
-                      ...action,
-                      date,
-                    });
-                  }}
-                >
-                  <div className="flex flex-col">
-                    <div className="text-[10px] uppercase tracking-wider">
-                      Confirmar adiamento para
-                    </div>
-                    <div className="px-2 text-base">
-                      {formatActionDatetime({
-                        date: addWeeks(
-                          addDays(addHours(action.date, delay.hour), delay.day),
-                          delay.week,
-                        ),
-                        dateFormat: 4,
-                        timeFormat: 1,
-                      })}
-                    </div>
-                  </div>
-                </ContextMenuItem>
-              </>
-            )}
+
+            <ContextMenuSeparator className="bg-border" />
+            <ContextMenuItem
+              disabled={delay.day + delay.hour + delay.week === 0}
+              className="justify-center"
+              asChild
+              onSelect={() => {
+                const date = format(
+                  addWeeks(
+                    addDays(addHours(action.date, delay.hour), delay.day),
+                    delay.week,
+                  ),
+                  "yyyy-MM-dd HH:mm:ss",
+                );
+                handleActions({
+                  intent: INTENTS.updateAction,
+                  ...action,
+                  date,
+                });
+              }}
+            >
+              <div className="flex flex-col">
+                <div className="text-[10px] uppercase tracking-wider">
+                  {delay.day + delay.hour + delay.week > 0
+                    ? "Data atual"
+                    : "Confirmar adiamento para"}
+                </div>
+                <div className="px-2 text-base">
+                  {formatActionDatetime({
+                    date: addWeeks(
+                      addDays(addHours(action.date, delay.hour), delay.day),
+                      delay.week,
+                    ),
+                    dateFormat: 4,
+                    timeFormat: 1,
+                  })}
+                </div>
+              </div>
+            </ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuPortal>
       </ContextMenuSub>
@@ -1308,6 +1317,80 @@ export function ContextMenuItems({
         <ContextMenuShortcut className="pl-2">⇧+X</ContextMenuShortcut>
       </ContextMenuItem>
       <ContextMenuSeparator className="bg-border" />
+      {/* Parceiros */}
+      <ContextMenuSub>
+        <ContextMenuSubTrigger className="bg-item">
+          <div
+            className={`flex items-center ${action.partners.length === 1 ? "gap-2" : "-space-x-1"}`}
+          >
+            {getPartners(action.partners).map((partner) => (
+              <Fragment key={partner.id}>
+                <Avatar
+                  item={{
+                    short: partner.short,
+                    bg: partner.colors[0],
+                    fg: partner.colors[1],
+                  }}
+                  size="sm"
+                  key={partner.id}
+                  group
+                />
+                {action.partners.length === 1 ? partner.title : null}
+              </Fragment>
+            ))}
+          </div>
+        </ContextMenuSubTrigger>
+        <ContextMenuPortal>
+          <ContextMenuSubContent className="glass">
+            {partners.map((partner) => (
+              <ContextMenuCheckboxItem
+                checked={
+                  action.partners?.find(
+                    (partner_slug) => partner_slug === partner.slug,
+                  )
+                    ? true
+                    : false
+                }
+                key={partner.id}
+                className="bg-select-item flex items-center gap-2"
+                onCheckedChange={(e) => {
+                  let r = action.partners || [partner.slug];
+                  flushSync(() => {
+                    if (e) {
+                      r = action.partners
+                        ? [...action.partners, partner.slug]
+                        : [partner.slug];
+                    } else {
+                      r = action.partners
+                        ? action.partners.filter(
+                            (partner_slug) => partner_slug !== partner.slug,
+                          )
+                        : [partner.slug];
+                    }
+                  });
+
+                  handleActions({
+                    ...action,
+                    partners: r.join(","),
+
+                    intent: INTENTS.updateAction,
+                  });
+                }}
+              >
+                <Avatar
+                  item={{
+                    bg: partner.colors[0],
+                    fg: partner.colors[1],
+                    short: partner.short,
+                  }}
+                  size="sm"
+                />
+                {partner.title}
+              </ContextMenuCheckboxItem>
+            ))}
+          </ContextMenuSubContent>
+        </ContextMenuPortal>
+      </ContextMenuSub>
       {/* States */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">

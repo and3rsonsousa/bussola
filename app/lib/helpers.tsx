@@ -460,6 +460,14 @@ export function getResponsibles(users_ids?: string[] | null) {
     users_ids?.find((user) => person.user_id === user),
   );
 }
+export function getPartners(partners_slug: string[]) {
+  const matches = useMatches();
+  const { partners } = matches[1].data as DashboardRootType;
+
+  return partners.filter((partner) =>
+    partners_slug?.find((p) => partner.slug === p),
+  );
+}
 
 export function amIResponsible(responsibles: string[], user_id: string) {
   return responsibles.findIndex((id) => id === user_id) >= 0;
