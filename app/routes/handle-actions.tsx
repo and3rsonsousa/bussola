@@ -30,6 +30,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       description: values["description"].toString(),
       title: values["title"].toString(),
       responsibles: values["responsibles"].toString().split(","),
+      // partners: values["partners"].toString().split(","),
+      partners: [values["partner"].toString()],
       user_id: values["user_id"].toString(),
       color: values["color"].toString(),
       caption: "",
@@ -66,6 +68,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       //@ts-ignore
       values["responsibles"] = values["responsibles"].toString().split(",");
     }
+
+    //@ts-ignore
+    values["partners"] = values["partners"].toString().split(",");
 
     const { data, error } = await supabase
       .from("actions")

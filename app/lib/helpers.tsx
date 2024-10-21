@@ -425,6 +425,7 @@ export function usePendingData(): { actions: Action[]; sprints: Sprint[] } {
           color: String(fetcher.formData?.get("color")),
           files: String(fetcher.formData?.get("files")).split(","),
           archived: Boolean(fetcher.formData?.get("archived")),
+          partners: String(fetcher.formData?.get("partners")).split(","),
         };
 
         return { ...action };
