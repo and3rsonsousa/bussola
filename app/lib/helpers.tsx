@@ -57,6 +57,7 @@ import {
 } from "~/components/ui/popover";
 import { BASE_COLOR, INTENTS, PRIORITIES } from "./constants";
 import { cn } from "./utils";
+import invariant from "tiny-invariant";
 
 export function ShortText({
   text,
@@ -87,16 +88,36 @@ export function ShortText({
 
 export function AvatarGroup({
   avatars,
+  people,
+  partners,
   size = "sm",
 }: {
-  avatars: {
+  avatars?: {
     item: { image?: string | null; bg?: string; fg?: string; short: string };
 
     style?: CSSProperties;
     className?: string;
   }[];
+  people?: Person[];
+  partners?: Partner[];
   size?: "xs" | "sm" | "md" | "lg" | "xl";
 }) {
+  if (people) {
+    avatars = people.map((person) => ({
+      item: { short: person.initials, image: person.image },
+    }));
+  } else if (partners) {
+    avatars = partners.map((partner) => ({
+      item: {
+        short: partner.short,
+        bg: partner.colors[0],
+        fg: partner.colors[1],
+      },
+    }));
+  }
+
+  invariant(avatars, "Nenhum Avatar foi definido");
+
   return (
     <div
       className={`flex ${["xs", "sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : "-space-x-4"}`}

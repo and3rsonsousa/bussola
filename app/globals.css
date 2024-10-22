@@ -316,3 +316,7 @@ input::-webkit-inner-spin-button {
     color: #fc0;
   }
 }
+
+.button-trigger {
+  @apply rounded border-none p-2 text-sm font-medium outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2;
+}

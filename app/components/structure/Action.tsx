@@ -490,6 +490,8 @@ export function ActionBlock({
     (partner) => partner.slug === action.partner,
   ) as Partner;
 
+  const actionPartners = getPartners(action.partners);
+
   const state = states.find((state) => state.slug === action.state) as State;
 
   function handleActions(data: {
@@ -603,10 +605,10 @@ export function ActionBlock({
             )}
           </div>
 
-          <div className="flex items-center justify-between text-muted-foreground">
+          <div className="flex items-center justify-between gap-4 overflow-x-hidden text-muted-foreground">
             <div className="flex items-center gap-2">
               {/* Partners | Clientes  */}
-              {partner ? (
+              {/* {partner ? (
                 <Avatar
                   item={{
                     short: partner.short,
@@ -614,7 +616,8 @@ export function ActionBlock({
                     fg: partner.colors[1],
                   }}
                 />
-              ) : null}
+              ) : null} */}
+              <AvatarGroup partners={actionPartners} />
               {/* Category - Categoria */}
               <div>
                 <Icons
@@ -633,32 +636,24 @@ export function ActionBlock({
                 </div>
               ) : null}
               {/* Responsibles -  Responsáveis */}
-              <AvatarGroup
-                size="sm"
-                avatars={getResponsibles(action.responsibles).map((r) => ({
-                  item: {
-                    image: r.image,
-                    short: r.initials!,
-                  },
-                }))}
-              />
+              <AvatarGroup people={getResponsibles(action.responsibles)} />
             </div>
-            <div className="flex items-center gap-1 whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
-              <span className="@[200px]:hidden">
+            <div className="flex flex-wrap items-center justify-end gap-1 text-right text-sm font-medium text-muted-foreground md:text-xs">
+              <span className="@[240px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 2,
                   timeFormat: 1,
                 })}
               </span>
-              <span className="hidden @[200px]:block @[300px]:hidden">
+              <span className="hidden @[240px]:block @[360px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 3,
                   timeFormat: 1,
                 })}
               </span>
-              <span className="hidden @[300px]:block">
+              <span className="hidden @[360px]:block">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 4,

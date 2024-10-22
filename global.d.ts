@@ -62,6 +62,7 @@ declare global {
     responsibles: string[];
     color: string;
     time: number;
+    partners: string[];
   };
 
   type GenericItem = {

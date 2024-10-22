@@ -11,7 +11,13 @@ import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BASE_COLOR, INTENTS, TIMES } from "~/lib/constants";
-import { Avatar, getInstagramFeed, Icons } from "~/lib/helpers";
+import {
+  Avatar,
+  AvatarGroup,
+  getInstagramFeed,
+  getPartners,
+  Icons,
+} from "~/lib/helpers";
 import ButtonCNVT from "../structure/Button";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -34,6 +40,7 @@ import {
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
 import { Input } from "../ui/input";
+import colors from "tailwindcss/colors";
 
 export default function CreateAction({
   date,
@@ -76,6 +83,7 @@ export default function CreateAction({
     date: newDate,
     description: "",
     responsibles: [user.id],
+    partners: [],
     state: "idea",
     title: "",
     user_id: user.id,
@@ -96,6 +104,8 @@ export default function CreateAction({
       people.find((person) => person.user_id === user_id) as Person,
     ),
   );
+
+  const actionPartners = getPartners(action.partners);
 
   useEffect(() => {
     if (action.partner) {
@@ -193,7 +203,55 @@ export default function CreateAction({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             {/* Partners */}
-            <Select
+            <DropdownMenu>
+              <DropdownMenuTrigger className="button-trigger">
+                {action.partners?.length > 0 ? (
+                  <AvatarGroup
+                    avatars={actionPartners.map((partner) => ({
+                      item: {
+                        short: partner.short,
+                        bg: partner.colors[0],
+                        fg: partner.colors[1],
+                      },
+                    }))}
+                  />
+                ) : (
+                  "Parceiros"
+                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="glass">
+                {partners.map((partner) => (
+                  <DropdownMenuCheckboxItem
+                    key={partner.id}
+                    checked={action.partners.includes(partner.slug)}
+                    className="bg-select-item"
+                    onCheckedChange={(checked) => {
+                      const tempPartners = checked
+                        ? [...action.partners, partner.slug]
+                        : action.partners.filter((p) => p !== partner.slug);
+
+                      setAction({
+                        ...action,
+                        partners: tempPartners,
+                      });
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Avatar
+                        item={{
+                          short: partner.short,
+                          bg: partner.colors[0],
+                          fg: partner.colors[1],
+                        }}
+                      />
+                      <div>{partner.title}</div>
+                    </div>
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* <Select
               value={action.partner}
               onValueChange={(value) => {
                 setAction({
@@ -235,11 +293,11 @@ export default function CreateAction({
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
 
             {/* Categoria */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="rounded border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+              <DropdownMenuTrigger className="button-trigger">
                 <Icons id={category.slug} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="glass">
@@ -313,16 +371,15 @@ export default function CreateAction({
             </Select>
             {/* Responsáveis */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex -space-x-1 rounded-full border-none p-1 outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
-                {responsibles.map((person) => (
-                  <Avatar
-                    item={{
+              <DropdownMenuTrigger className="button-trigger">
+                <AvatarGroup
+                  avatars={responsibles.map((person) => ({
+                    item: {
                       image: person.image,
                       short: person.initials!,
-                    }}
-                    key={person.id}
-                  />
-                ))}
+                    },
+                  }))}
+                />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="glass">
                 {people.map((person) => (
@@ -333,7 +390,7 @@ export default function CreateAction({
                     onCheckedChange={(checked) => {
                       if (!checked && action.responsibles.length < 2) {
                         alert(
-                          "É necessário ter pelo menos um responsável pala ação",
+                          "É necessário ter pelo menos um responsável pela ação",
                         );
                         return false;
                       }
@@ -362,6 +419,8 @@ export default function CreateAction({
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Cor da ação */}
             {getInstagramFeed({ actions: [action] }).length > 0 && partner ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="rounded outline-none ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
@@ -569,11 +628,12 @@ export default function CreateAction({
                   });
                   return false;
                 }
-                if (!action.partner) {
+                if (action.partners.length === 0) {
                   toast({
                     variant: "destructive",
-                    title: "Ação sem Parceiro.",
-                    description: "Selecione o Parceiro dessa ação.",
+                    title: "Ação sem nenhum Parceiro.",
+                    description:
+                      "Selecione pelo menos um Parceiro para essa ação.",
                   });
                 } else {
                   submit(

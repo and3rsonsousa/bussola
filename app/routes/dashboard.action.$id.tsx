@@ -72,8 +72,10 @@ import { useToast } from "~/components/ui/use-toast";
 import { INTENTS, TRIGGERS } from "~/lib/constants";
 import {
   Avatar,
+  AvatarGroup,
   Content,
   getInstagramFeed,
+  getPartners,
   getTypeOfTheContent,
   Heart,
   Icons,
@@ -168,6 +170,7 @@ export default function ActionPage() {
   const partner = partners.find(
     (partner) => partner.slug === action.partner,
   ) as Partner;
+  const actionPartners = getPartners(action.partners);
   const category = categories.find(
     (category) => category.slug === action.category,
   ) as Category;
@@ -800,8 +803,56 @@ export default function ActionPage() {
         {/* Parceiros Categorias States Prioridade Responsável Cores */}
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 lg:gap-4">
           {/* Partners */}
-
           <DropdownMenu>
+            <DropdownMenuTrigger className="button-trigger">
+              {action.partners?.length > 0 ? (
+                <AvatarGroup
+                  size="md"
+                  avatars={actionPartners.map((partner) => ({
+                    item: {
+                      short: partner.short,
+                      bg: partner.colors[0],
+                      fg: partner.colors[1],
+                    },
+                  }))}
+                />
+              ) : (
+                "Parceiros"
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="glass">
+              {partners.map((partner) => (
+                <DropdownMenuCheckboxItem
+                  key={partner.id}
+                  checked={action.partners.includes(partner.slug)}
+                  className="bg-select-item"
+                  onCheckedChange={(checked) => {
+                    const tempPartners = checked
+                      ? [...action.partners, partner.slug]
+                      : action.partners.filter((p) => p !== partner.slug);
+
+                    setAction({
+                      ...action,
+                      partners: tempPartners,
+                    });
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      item={{
+                        short: partner.short,
+                        bg: partner.colors[0],
+                        fg: partner.colors[1],
+                      }}
+                    />
+                    <div>{partner.title}</div>
+                  </div>
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* <DropdownMenu>
             <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
               <Avatar
                 item={{
@@ -838,7 +889,7 @@ export default function ActionPage() {
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
 
           {/* Categoria */}
 
