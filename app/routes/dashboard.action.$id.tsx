@@ -1060,12 +1060,12 @@ export default function ActionPage() {
                     style={{
                       backgroundColor: action.color
                         ? action.color
-                        : partner.colors[0],
+                        : actionPartners[0].colors[0],
                     }}
                   ></div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="glass">
-                  {partner.colors.map(
+                  {actionPartners[0].colors.map(
                     (color, i) =>
                       i !== 1 && (
                         <DropdownMenuItem
