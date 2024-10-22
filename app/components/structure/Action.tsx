@@ -638,7 +638,7 @@ export function ActionBlock({
               {/* Responsibles -  Responsáveis */}
               <AvatarGroup people={getResponsibles(action.responsibles)} />
             </div>
-            <div className="flex flex-wrap items-center justify-end gap-1 text-right text-sm font-medium text-muted-foreground md:text-xs">
+            <div className="flex items-center justify-end gap-1 overflow-hidden whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
               <span className="@[240px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
