@@ -289,7 +289,12 @@ export function ActionLine({
               </div>
             ) : (
               action.partners.length > 1 && (
-                <div className="mr-1" title={partners.join(", ")}>
+                <div
+                  className="mr-1"
+                  title={getPartners(action.partners)
+                    .map((partner) => partner.title)
+                    .join(" • ")}
+                >
                   <HeartHandshakeIcon className="size-4" />
                 </div>
               )
