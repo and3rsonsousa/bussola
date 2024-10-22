@@ -1592,7 +1592,7 @@ export function ContextMenuItems({
           </ContextMenuSubTrigger>
           <ContextMenuPortal>
             <ContextMenuSubContent className="glass">
-              {partner?.colors.map(
+              {getPartners(action.partners)[0].colors.map(
                 (color, i) =>
                   i !== 1 && (
                     <ContextMenuItem
