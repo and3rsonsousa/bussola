@@ -34,10 +34,7 @@ import {
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
-  ArrowDownAZIcon,
   ArrowDownIcon,
-  ArrowDownZAIcon,
-  ArrowUp,
   ArrowUpIcon,
   CalendarClock,
   ChevronLeftIcon,
@@ -53,6 +50,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
 import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
+import invariant from "tiny-invariant";
 
 import {
   ActionLine,
@@ -111,11 +109,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect("/login");
   }
 
-  const { data: person } = await supabase
-    .from("people")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+  const [{ data: person }, { data: partners }] = await Promise.all([
+    supabase.from("people").select("*").eq("user_id", user.id).single(),
+    supabase.from("partners").select("slug").eq("archived", false),
+  ]);
+
+  invariant(person);
+  invariant(partners);
 
   let start = startOfWeek(startOfMonth(new Date()));
   let end = endOfDay(endOfWeek(endOfMonth(addMonths(new Date(), 1))));
@@ -124,7 +124,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .from("actions")
       .select("*")
       .is("archived", false)
-      .contains("responsibles", person?.admin ? [] : [user.id])
+      .contains("responsibles", person.admin ? [] : [user.id])
+      .containedBy("partners", partners.map((p) => p.slug)!)
       .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
       .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
       .returns<Action[]>(),
@@ -596,6 +597,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
           date={{ dateFormat: 1 }}
           descending
           orderBy={order}
+          showPartner
         />
       ) : (
         <CategoriesView actions={actions} />
@@ -695,6 +697,7 @@ function CategoriesView({ actions }: { actions: Action[] }) {
               (action) => action.category === category.slug,
             )}
             isFoldable
+            showPartner
           />
         </div>
       ))}

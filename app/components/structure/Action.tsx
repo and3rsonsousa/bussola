@@ -19,9 +19,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CopyIcon,
-  Edit3Icon,
   ExpandIcon,
-  Link2Icon,
+  HeartHandshakeIcon,
   PencilLineIcon,
   RabbitIcon,
   ShrinkIcon,
@@ -62,7 +61,6 @@ import {
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
-import { formatActionTime } from "./CreateAction";
 
 export function ActionLine({
   action,
@@ -107,7 +105,11 @@ export function ActionLine({
   ) as Partner;
 
   const responsibles = getResponsibles(action.responsibles);
+  const action_partners = getPartners(action.partners);
 
+  // <div className="grid size-6 place-content-center rounded-full bg-background">
+  //                   <HeartHandshakeIcon className="size-4" />
+  //                 </div>
   function handleActions(data: {
     [key: string]: string | number | null | string[] | boolean;
   }) {
@@ -133,83 +135,95 @@ export function ActionLine({
     <ContextMenu>
       <ContextMenuTrigger>
         {isInstagramFeed(action.category) && showContent ? (
-          <div
-            title={action.title}
-            className={`action relative cursor-pointer rounded outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring ${
-              showDelay &&
-              isBefore(action.date, new Date()) &&
-              state.slug !== "finished"
-                ? "action-content-delayed rounded"
-                : " "
-            }`}
-            onClick={() => {
-              navigate(`/dashboard/action/${action.id}`);
-            }}
-            role="button"
-            tabIndex={0}
-            draggable={!!onDrag && !isMobile}
-            onDragEnd={() => {
-              if (onDrag) onDrag(action);
-            }}
-            onMouseEnter={() => {
-              setHover(true);
-            }}
-            onMouseLeave={() => {
-              setHover(false);
-            }}
-          >
-            {isHover && !edit ? <ShortcutActions action={action} /> : null}
-            <Content
-              action={action}
-              partner={partner!}
-              aspect="squared"
-              className={`the-action-content aspect-square overflow-hidden rounded hover:opacity-75`}
-            />
-            <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
+          <div>
+            <div
+              title={action.title}
+              className={`action relative cursor-pointer rounded outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring ${
+                showDelay &&
+                isBefore(action.date, new Date()) &&
+                state.slug !== "finished"
+                  ? "action-content-delayed rounded"
+                  : " "
+              }`}
+              onClick={() => {
+                navigate(`/dashboard/action/${action.id}`);
+              }}
+              role="button"
+              tabIndex={0}
+              draggable={!!onDrag && !isMobile}
+              onDragEnd={() => {
+                if (onDrag) onDrag(action);
+              }}
+              onMouseEnter={() => {
+                setHover(true);
+              }}
+              onMouseLeave={() => {
+                setHover(false);
+              }}
+            >
+              {isHover && !edit ? <ShortcutActions action={action} /> : null}
+              <Content
+                action={action}
+                partner={partner!}
+                aspect="squared"
+                className={`the-action-content aspect-square overflow-hidden rounded hover:opacity-75`}
+              />
+              <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
 
-            <div className="absolute bottom-1.5 right-2 text-xs font-semibold text-white drop-shadow-sm">
-              {formatActionDatetime({
-                date: action.date,
-                dateFormat: date?.dateFormat,
-                timeFormat: date?.timeFormat,
-              })}
-            </div>
-
-            <div className="absolute -top-3 right-2 flex gap-2">
-              {isSprint(action.id, sprints) && (
-                <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
-                  <RabbitIcon className="size-4" />
-                </div>
-              )}
-              <div className={`-space-x-1 ${allUsers ? "flex" : "hidden"}`}>
-                {responsibles.map((responsible) => (
-                  <Avatar
-                    item={{
-                      short: responsible.short,
-                      image: responsible.image,
-                    }}
-                    key={responsible.id}
-                    size="sm"
-                    className="border-2 border-background"
-                  />
-                ))}
+              <div className="absolute bottom-1.5 right-2 text-xs font-semibold text-white drop-shadow-sm">
+                {formatActionDatetime({
+                  date: action.date,
+                  dateFormat: date?.dateFormat,
+                  timeFormat: date?.timeFormat,
+                })}
               </div>
 
-              {state.slug !== "finished" ? (
-                <div
-                  className={`rounded border-2 border-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white`}
-                  style={{ backgroundColor: state.color }}
-                >
-                  <span>{state.title}</span>
-                </div>
-              ) : (
-                <div
-                  className="mt-1 grid size-4 place-content-center rounded border-2 border-background text-black"
-                  style={{ backgroundColor: state.color }}
-                >
-                  <CheckIcon className="size-3" />
-                </div>
-              )}
+              <div className="absolute -top-3 right-2 flex gap-2">
+                {isSprint(action.id, sprints) && (
+                  <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
+                    <RabbitIcon className="size-4" />
+                  </div>
+                )}
+                {action.partners.length > 1 && (
+                  <AvatarGroup
+                    avatars={action_partners.map((partner) => ({
+                      item: {
+                        short: partner.short,
+                        bg: partner.colors[0],
+                        fg: partner.colors[1],
+                      },
+                      className: "border-2",
+                    }))}
+                  />
+                )}
+                {allUsers && (
+                  <AvatarGroup
+                    avatars={responsibles.map((responsible) => ({
+                      item: {
+                        short: responsible.initials,
+                        image: responsible.image,
+                      },
+                      className: "border-2",
+                    }))}
+                  />
+                )}
+
+                {state.slug !== "finished" ? (
+                  <div
+                    className={`rounded border-2 border-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white`}
+                    style={{ backgroundColor: state.color }}
+                  >
+                    <span>{state.title}</span>
+                  </div>
+                ) : (
+                  <div
+                    className="mt-1 grid size-4 place-content-center rounded border-2 border-background text-black"
+                    style={{ backgroundColor: state.color }}
+                  >
+                    <CheckIcon className="size-3" />
+                  </div>
+                )}
+              </div>
             </div>
             <LikeFooter size="sm" liked={state.slug === "finished"} />
           </div>
@@ -247,21 +261,36 @@ export function ActionLine({
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
-            {showPartner ? (
-              <div className="mr-1">
-                <Avatar
+            {partner && showPartner ? (
+              <div
+                className="mr-2"
+                title={getPartners(action.partners)
+                  .map((partner) => partner.title)
+                  .join(" • ")}
+              >
+                <AvatarGroup
+                  size="xs"
+                  avatars={getPartners(action.partners).map((partner) => ({
+                    item: {
+                      short: partner.short,
+                      bg: partner.colors[0],
+                      fg: partner.colors[1],
+                    },
+                  }))}
+                />
+                {/* <Avatar
                   size={long ? "sm" : "xs"}
                   item={{
                     short: partner.short,
                     bg: partner.colors[0],
                     fg: partner.colors[1],
                   }}
-                />
+                /> */}
               </div>
             ) : (
               action.partners.length > 1 && (
                 <div className="mr-1" title={partners.join(", ")}>
-                  <Link2Icon className="size-4" />
+                  <HeartHandshakeIcon className="size-4" />
                 </div>
               )
             )}
@@ -654,6 +683,7 @@ export function ActionBlock({
 export function ListOfActions({
   actions,
   showCategory,
+  showPartner,
   date,
   columns = 1,
   onDrag,
@@ -665,6 +695,7 @@ export function ListOfActions({
 }: {
   actions?: Action[] | null;
   showCategory?: boolean;
+  showPartner?: boolean;
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   columns?: 1 | 2 | 3 | 6;
   onDrag?: (action: Action) => void;
@@ -709,6 +740,7 @@ export function ListOfActions({
               key={action.id}
               action={action}
               showCategory={showCategory}
+              showPartner={showPartner}
               date={date}
               onDrag={onDrag}
             />

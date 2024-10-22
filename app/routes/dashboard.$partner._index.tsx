@@ -35,6 +35,7 @@ import {
   ChevronsDownUpIcon,
   ChevronsUpDownIcon,
   Grid3x3Icon,
+  HomeIcon,
   ImageIcon,
   UserIcon,
   UsersIcon,
@@ -276,6 +277,9 @@ export default function Partner() {
         >
           <div className="items-center justify-between px-4 py-2 md:flex md:px-8">
             <div className="flex items-center gap-1">
+              <Link to="/dashboard" viewTransition>
+                <HomeIcon />
+              </Link>
               <div className="mr-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger

@@ -616,7 +616,7 @@ export default function ActionPage() {
                             );
                           }}
                         >
-                          <ChevronsUpDownIcon className="size-4" />
+                          <ChevronsDownUpIcon className="size-4" />
                         </Button>
                         <Button
                           variant={"ghost"}
@@ -638,7 +638,7 @@ export default function ActionPage() {
                             );
                           }}
                         >
-                          <ChevronsDownUpIcon className="size-4" />
+                          <ChevronsUpDownIcon className="size-4" />
                         </Button>
                       </div>
                     )}
