@@ -224,6 +224,7 @@ export default function ActionPage() {
     navigation.state !== "idle" ||
     fetchers.filter((f) => f.formData).length > 0;
 
+  // Atualizar a Inserir o conteúdo da IA
   useEffect(() => {
     if (fetcher.data) {
       if (fetcher.formData?.get("intent") === "title") {
@@ -243,7 +244,9 @@ export default function ActionPage() {
       ) {
         setAction(() => ({
           ...action,
-          description: `${action.description && action.description.indexOf("[---BIA---]") >= 0 ? action.description?.substring(0, action.description?.indexOf("<br/>[---BIA---]")) : action.description}<br/>[---BIA---]${(fetcher.data as { message: string }).message}`,
+          description: (action.description || "").concat(
+            `<h2>βIA às ${format(new Date(), "HH:mm:ss")}</h2> ${(fetcher.data as { message: string }).message}`,
+          ),
         }));
       } else if (
         fetcher.formData?.get("intent") === "caption" ||
