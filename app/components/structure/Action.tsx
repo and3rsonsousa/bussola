@@ -269,7 +269,7 @@ export function ActionLine({
                   .join(" • ")}
               >
                 <AvatarGroup
-                  size="xs"
+                  size={long ? "sm" : "xs"}
                   avatars={getPartners(action.partners).map((partner) => ({
                     item: {
                       short: partner.short,
@@ -295,7 +295,7 @@ export function ActionLine({
                     .map((partner) => partner.title)
                     .join(" • ")}
                 >
-                  <HeartHandshakeIcon className="size-4" />
+                  <HeartHandshakeIcon className={long ? "size-6" : "size-4"} />
                 </div>
               )
             )}
@@ -308,7 +308,7 @@ export function ActionLine({
                       (category) => category.slug === action.category,
                     )?.slug
                   }
-                  className="hidden size-3 shrink-0 opacity-50 @[200px]:block"
+                  className={`hidden shrink-0 opacity-50 @[200px]:block ${long ? "size-4" : "size-3"}`}
                 />
               </div>
             )}
@@ -395,19 +395,22 @@ export function ActionLine({
                     (priority) => priority.slug === action.priority,
                   )?.slug
                 }
-                className="size-3"
+                className={long ? "size-5" : "size-3"}
                 type="priority"
               />
             ) : (
               action.priority === PRIORITIES.high && (
-                <Icons id="high" className="ml-1 size-3 text-red-500" />
+                <Icons
+                  id="high"
+                  className={`ml-1 text-red-500 ${long ? "size-5" : "size-3"}`}
+                />
               )
             )}
 
             {/* Responsibles */}
 
             <div
-              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} pl-2`}
+              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} debug-4 w-32 justify-end`}
             >
               {allUsers || long
                 ? people
@@ -440,7 +443,7 @@ export function ActionLine({
             </div>
 
             {long ? (
-              <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
+              <div className="debug-5 hidden w-72 overflow-x-hidden whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 4,

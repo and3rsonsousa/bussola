@@ -99,6 +99,8 @@ export default function AdminPartners() {
               )}
               long
               orderBy="time"
+              showCategory
+              showPartner
             />
           </div>
         </div>
