@@ -410,7 +410,7 @@ export function ActionLine({
             {/* Responsibles */}
 
             <div
-              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} debug-4 w-32 justify-end`}
+              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} justify-end ${long && "w-32"}`}
             >
               {allUsers || long
                 ? people
@@ -443,7 +443,7 @@ export function ActionLine({
             </div>
 
             {long ? (
-              <div className="debug-5 hidden w-72 overflow-x-hidden whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
+              <div className="hidden w-72 overflow-x-hidden whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 4,
