@@ -134,6 +134,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .select("category, state, date")
       .is("archived", false)
       .contains("responsibles", person?.admin ? [] : [user.id])
+      .containedBy("partners", partners.map((p) => p.slug)!)
       .returns<{ state: string; date: string }[]>(),
   ]);
 
