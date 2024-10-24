@@ -610,7 +610,7 @@ function Partners({ actions }: { actions?: Action[] }) {
   const matches = useMatches();
   const { partners } = matches[1].data as DashboardRootType;
   const lateActions = getDelayedActions({ actions }) as (ActionChart & {
-    partner: string;
+    partners: string[];
   })[];
 
   actions = actions || [];
@@ -651,8 +651,8 @@ function Partners({ actions }: { actions?: Action[] }) {
               />
               <Badge
                 value={
-                  lateActions.filter(
-                    (action) => action.partner === partner.slug,
+                  lateActions.filter((action) =>
+                    action.partners.find((p) => p === partner.slug),
                   ).length
                 }
                 isDynamic
