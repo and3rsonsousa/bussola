@@ -26,10 +26,47 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } else if (intent === "expand") {
     content = `Aumente o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
   } else if (intent === "develop") {
-    content = `Você é um estrategista de marketing com anos de experiência em todas as àreas estratégicas de mercado e de conteúdo para redes sociais. Sua missão é desenvolver o CONTEXTO de acordo com o que for pedido, se for extratégia de marketing, faça da melhor forma a fom de alcançar os objetivos da empresa, se for conteúdo de redes sociais, desenvolva o melhor conteúdo.  
+    template = "Pesquisar sobre o assunto.";
+    content = `Você é um estrategista de marketing com anos de experiência em todas as àreas estratégicas de mercado e de conteúdo para redes sociais. Sua missão é pesquisar sobre o assunto e retornar uma lista ordenada resumida, porém completa sobre o assunto.  
     REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
     EMPRESA: ${context}.
     CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+  } else if (intent === "hook") {
+    template =
+      "Lista com 5 Ganchos Virais para iniciar vídeos no Instagram/TikTok. Cada frase deve ter no máximo 2 segundos.";
+    content = `Pegue o CONTEXTO e crie 5 opções de ganchos virais impossíveis de serem ignorados e retorne uma lista. Use o gatilho da ${trigger}
+    EMPRESA: ${context}.
+    REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas.
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+  } else if (intent === "reels") {
+    template = "Roteiro de vídeo viral.";
+
+    if (model === "viral") {
+      content = `Crie um roteiro de vídeo viral seguindo essa lógica e identificando cada uma das partes (GANCHO, DESENVOLVIMENTO, CTA INICIAL, DESENVOLVIMENTO, CTA FINAL) Após cada um desse subtítulo, insira um parágrafo. 
+    GANCHO: 
+    (Frase chamativa baseada no CONTEXTO impossível de ser ignorada com 2 segundos)
+    DESENVOLVIMENTO 1: 
+    (Problematize o contexto, apresentando por um lado onde o expectador conhece essa situação. De 5 a 10 segundos.)
+    CTA INICIAL: 
+    (Insira aqui um gancho criativo pedindo para a pessoa curtir o vídeo e seguir o perfil em até 3 segundos).
+    DESENVOLVIMENTO 2: 
+    (Apresente uma solução ou desfecho para a problematização de acordo com o CONTEXTO em no máximo 10 segundos)
+    CTA FINAL: 
+    (Incentive o expectador a interagir, comentando ou compartilhando o vídeo em 5 segundos)
+    REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
+    EMPRESA: ${context}.
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+    } else {
+      content = `Crie um roteiro de vídeo viral em formato de lista seguindo essa lógica e identificando cada uma das partes (GANCHO, DESENVOLVIMENTO, DICA N, CTA INICIAL, DESENVOLVIMENTO, CTA FINAL) Após cada um desse subtítulo, insira um parágrafo. 
+    GANCHO - Frase chamativa baseada no CONTEXTO impossível de ser ignorada indicando quantas dicas teremos no vídeo. (2 segundos)
+    DESENVOLVIMENTO 1 - Apresente metade das dicas. (10 a 20 segundos)
+    CTA INICIAL - Insira aqui um gancho criativo pedindo para a pessoa curtir o vídeo e seguir o perfil. (3 segundos)
+    DESENVOLVIMENTO 2 - Apresente as outras dicas. (10 segundos)
+    CTA FINAL - Incentive o expectador a interagir, comentando ou compartilhando o vídeo. (5 segundos)
+    REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
+    EMPRESA: ${context}.
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+    }
   } else if (intent === "caption") {
     template = "Texto da legenda e hashtags";
 
@@ -154,6 +191,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     <p>Conteúdo do Texto aqui</p>
     `;
     }
+
     content = `Você é um estrategista de conteúdo experiente e trabalha principalmente com técnicas de storytelling para envolver o usuário levando em conta o CONTENT e a descrição da EMPRESA. 
 TAREFA: Criar um post em formato carrossel envolvente e que prendam o usuário usando o gatilho mental: ${trigger}.
 REGRAS: Retorne apenas o texto sem nenhuma informação sua e formatado com tags HTML. ${rules} 
@@ -170,6 +208,12 @@ CONTENT: ${title} - ${description}`;
   TEMPLATE: ${template}.
   EMPRESA: ${context}.
   CONTEXTO: Título do post: '${title}, descrição: ${description}'`;
+  }
+
+  if (template === "") {
+    throw new Error(
+      `Solicitação imcompleta. Confira os dados enviados:${JSON.stringify({ title, description, intent, model, context, trigger }, undefined, 2)}`,
+    );
   }
 
   const chatCompletion = await openai.chat.completions.create({

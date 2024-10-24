@@ -35,7 +35,7 @@ import {
   Trash2Icon,
   ZapIcon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { act, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone-esm";
 import invariant from "tiny-invariant";
 
@@ -111,7 +111,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const files = formData.getAll("files") as File[];
   const filenames = String(formData.get("filenames")).split(",");
   const partner = formData.get("partner") as string;
-  // const title = formData.get("title") as string;
   try {
     const urls = await Promise.all(
       files.map(async (file, i) => {
@@ -238,7 +237,7 @@ export default function ActionPage() {
             .concat((fetcher.data as { message: string }).message),
         }));
       } else if (
-        ["carousel", "develop"].find(
+        ["carousel", "develop", "hook", "reels"].find(
           (category) => category === fetcher.formData?.get("intent"),
         )
       ) {
@@ -345,7 +344,7 @@ export default function ActionPage() {
                 );
               }}
             >
-              <SparklesIcon className="size-6" />
+              <SparklesIcon className="size-4" />
             </Button>
           </div>
 
@@ -357,80 +356,192 @@ export default function ActionPage() {
               </div>
 
               {action.category === "carousel" ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "carousel" && "animate-colors"}`}
-                      variant="ghost"
-                    >
-                      <SparklesIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
+                <div className="flex gap-2">
+                  <Triggers setTrigger={setTrigger} trigger={trigger} />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "carousel" && "animate-colors"}`}
+                        variant="ghost"
+                      >
+                        <SparklesIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                  <DropdownMenuContent className="glass">
-                    <DropdownMenuItem
-                      className="bg-item"
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "carousel",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                          },
-                        );
-                      }}
-                    >
-                      Modelo Comum
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="bg-item"
-                      onSelect={async () => {
-                        fetcher.submit(
-                          {
-                            title: action.title,
-                            description: action.description,
-                            context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                            intent: "carousel",
-                            model: "twitter",
-                          },
-                          {
-                            action: "/handle-openai",
-                            method: "post",
-                          },
-                        );
-                      }}
-                    >
-                      Modelo Twitter
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    <DropdownMenuContent className="glass">
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                              intent: "carousel",
+                              trigger,
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Modelo Comum
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+                              intent: "carousel",
+                              model: "twitter",
+                              trigger,
+                            },
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Modelo Twitter
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ) : action.category === "reels" ? (
+                <div className="flex gap-2">
+                  <Triggers setTrigger={setTrigger} trigger={trigger} />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size={"sm"}
+                        className={` ${
+                          isWorking &&
+                          ["hook", "reels"].find(
+                            (category) =>
+                              category === fetcher.formData?.get("intent"),
+                          ) &&
+                          "animate-colors"
+                        }`}
+                        variant="ghost"
+                      >
+                        <SparklesIcon className="size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent className="glass">
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - CONTEXTO: ${partner.context}`,
+                              intent: "hook",
+                            },
+
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Opções de ganchos virais
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - CONTEXTO: ${partner.context}`,
+                              intent: "reels",
+                              model: "viral",
+                              trigger,
+                            },
+
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Roteiro de Vídeo Viral
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - CONTEXTO: ${partner.context}`,
+                              intent: "reels",
+                              model: "list",
+                              trigger,
+                            },
+
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Roteiro de Vídeo em Lista
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               ) : (
-                <Button
-                  className={`h-7 w-7 p-1 ${isWorking && fetcher.formData?.get("intent") === "develop" && "animate-colors"}`}
-                  variant="ghost"
-                  onClick={async () => {
-                    fetcher.submit(
-                      {
-                        title: action.title,
-                        description: action.description,
-                        context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
-                        intent: "develop",
-                      },
+                <div className="flex gap-2">
+                  {action.category === "post" && (
+                    <Triggers setTrigger={setTrigger} trigger={trigger} />
+                  )}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size={"sm"}
+                        className={` ${isWorking && fetcher.formData?.get("intent") === "develop" && "animate-colors"}`}
+                        variant="ghost"
+                      >
+                        <SparklesIcon className="size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                      {
-                        action: "/handle-openai",
-                        method: "post",
-                      },
-                    );
-                  }}
-                >
-                  <SparklesIcon />
-                </Button>
+                    <DropdownMenuContent className="glass">
+                      <DropdownMenuItem
+                        className="bg-item"
+                        onSelect={async () => {
+                          fetcher.submit(
+                            {
+                              title: action.title,
+                              description: action.description,
+                              context: `EMPRESA: ${partner.title} - CONTEXTO: ${partner.context}`,
+                              intent: "develop",
+                            },
+
+                            {
+                              action: "/handle-openai",
+                              method: "post",
+                            },
+                          );
+                        }}
+                      >
+                        Pesquisar sobre o assunto
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               )}
             </div>
             <div className="relative flex h-full flex-col overflow-hidden">

@@ -69,27 +69,44 @@ export const TIMES = {
 
 export const TRIGGERS = [
   {
-    value: "Escassez",
-  },
-  {
-    value: "Urgência",
+    value: "Antecipação",
   },
   {
     value: "Autoridade",
   },
   {
-    value: "Prova Social",
-  },
-  {
     value: "Comunidade",
   },
   {
-    value: "Reciprocidade",
+    value: "Curiosidade",
+  },
+  {
+    value: "Escassez",
+  },
+  {
+    value: "Esclusividade",
+  },
+  {
+    value: "Humanização",
+  },
+  {
+    value: "Inimigo Comum",
   },
   {
     value: "Novidade",
   },
   {
-    value: "Antecipação",
+    value: "Pertencimento",
+  },
+  {
+    value: "Prova Social",
+  },
+
+  {
+    value: "Reciprocidade",
+  },
+
+  {
+    value: "Urgência",
   },
 ];
