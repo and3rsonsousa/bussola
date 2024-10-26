@@ -668,47 +668,57 @@ export const CalendarDay = ({
         {/* Actions */}
         <div className="flex h-full flex-col justify-between">
           <div className="relative flex h-full grow flex-col gap-3">
-            {(showContent
-              ? getCategoriesSortedByContent(categories)
-              : categories
-            )
-              .map((category) => ({
-                category,
-                actions: day.actions?.filter(
-                  (action) => category.slug === action.category,
-                ),
-              }))
-              .map(({ category, actions }) =>
-                actions && actions.length > 0 ? (
-                  <div key={category.slug} className="flex flex-col gap-3">
-                    <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
-                      <div
-                        className={`size-1.5 rounded-full`}
-                        style={{ backgroundColor: category.color }}
-                      ></div>
-                      <div>{category.title}</div>
-                    </div>
-                    <div
-                      className={`flex flex-col ${showContent ? "gap-3" : "gap-1"}`}
-                    >
-                      {actions?.map((action) => (
-                        <ActionLine
-                          showContent={showContent}
-                          short={short}
+            {showContent
+              ? getCategoriesSortedByContent(categories).map((section, i) => (
+                  <div key={i}>
+                    {i === 0 &&
+                      day.actions?.filter((action) =>
+                        isInstagramFeed(action.category),
+                      ).length !== 0 && (
+                        <div className="mb-2 flex items-center gap-1 text-[12px] font-medium">
+                          <Grid3x3Icon className="size-4" />
+                          <div>Feed</div>
+                        </div>
+                      )}
+                    {section
+                      .map((category) => ({
+                        category,
+                        actions: day.actions?.filter(
+                          (action) => action.category === category.slug,
+                        ),
+                      }))
+                      .map(({ actions, category }) => (
+                        <CategoryActions
                           allUsers={allUsers}
-                          showDelay
-                          action={action}
-                          key={action.id}
-                          date={{
-                            timeFormat: 1,
-                          }}
-                          onDrag={setDraggedAction}
+                          category={category}
+                          setDraggedAction={setDraggedAction}
+                          actions={actions}
+                          short={short}
+                          showContent
                         />
                       ))}
-                    </div>
                   </div>
-                ) : null,
-              )}
+                ))
+              : categories
+                  .map((category) => ({
+                    category,
+                    actions: day.actions?.filter(
+                      (action) => category.slug === action.category,
+                    ),
+                  }))
+                  .map(
+                    ({ category, actions }, i) =>
+                      actions &&
+                      actions.length > 0 && (
+                        <CategoryActions
+                          allUsers={allUsers}
+                          category={category}
+                          setDraggedAction={setDraggedAction}
+                          actions={actions}
+                          short={short}
+                        />
+                      ),
+                  )}
           </div>
           {day.celebrations && day.celebrations.length > 0 && (
             <div className="mt-4 space-y-2 text-[10px] opacity-50">
@@ -724,3 +734,49 @@ export const CalendarDay = ({
     </div>
   );
 };
+
+function CategoryActions({
+  category,
+  actions,
+  showContent,
+  short,
+  allUsers,
+  setDraggedAction,
+}: {
+  category: Category;
+  actions?: Action[];
+  showContent?: boolean;
+  short?: boolean;
+  allUsers?: boolean;
+  setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
+}) {
+  return actions && actions.length > 0 ? (
+    <div key={category.slug} className="flex flex-col gap-3">
+      {!(showContent && isInstagramFeed(category.slug)) && (
+        <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
+          <div
+            className={`size-1.5 rounded-full`}
+            style={{ backgroundColor: category.color }}
+          ></div>
+          <div>{category.title}</div>
+        </div>
+      )}
+      <div className={`flex flex-col ${showContent ? "gap-3" : "gap-1"}`}>
+        {actions?.map((action) => (
+          <ActionLine
+            showContent={showContent}
+            short={short}
+            allUsers={allUsers}
+            showDelay
+            action={action}
+            key={action.id}
+            date={{
+              timeFormat: 1,
+            }}
+            onDrag={setDraggedAction}
+          />
+        ))}
+      </div>
+    </div>
+  ) : null;
+}

@@ -91,6 +91,7 @@ export function AvatarGroup({
   people,
   partners,
   size = "sm",
+  className,
 }: {
   avatars?: {
     item: { image?: string | null; bg?: string; fg?: string; short: string };
@@ -101,6 +102,7 @@ export function AvatarGroup({
   people?: Person[];
   partners?: Partner[];
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  className?: string;
 }) {
   if (people) {
     avatars = people.map((person) => ({
@@ -120,7 +122,10 @@ export function AvatarGroup({
 
   return (
     <div
-      className={`flex ${["xs", "sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : "-space-x-4"}`}
+      className={cn(
+        `flex ${["sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : size === "lg" ? "-space-x-4" : "space-x-1"}`,
+        className,
+      )}
     >
       {avatars.map(({ item, className, style }, i) => (
         <Avatar
@@ -749,7 +754,7 @@ export function getCategoriesSortedByContent(categories: Category[]) {
   const firsts = categories.filter((c) => isInstagramFeed(c.slug));
   const lasts = categories.filter((c) => !isInstagramFeed(c.slug));
 
-  return [...firsts, ...lasts];
+  return [firsts, lasts];
 }
 
 export function getTypeOfTheContent(content: string) {

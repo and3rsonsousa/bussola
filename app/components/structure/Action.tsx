@@ -170,22 +170,14 @@ export function ActionLine({
               />
               <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
 
-              <div className="absolute bottom-1.5 right-2 text-xs font-semibold text-white drop-shadow-sm">
-                {formatActionDatetime({
-                  date: action.date,
-                  dateFormat: date?.dateFormat,
-                  timeFormat: date?.timeFormat,
-                })}
-              </div>
-
-              <div className="absolute -top-3 right-2 flex gap-2">
-                {isSprint(action.id, sprints) && (
-                  <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
-                    <RabbitIcon className="size-4" />
-                  </div>
-                )}
+              <div className="absolute bottom-1.5 left-2 right-2 flex justify-between text-xs font-semibold text-white drop-shadow-sm">
+                <Icons id={action.category} className="size-4" />
+                {/* {action.partners.length > 1 && (
+                    <HeartHandshakeIcon className="size-4" />
+                  )} */}
                 {action.partners.length > 1 && (
                   <AvatarGroup
+                    size="xs"
                     avatars={action_partners.map((partner) => ({
                       item: {
                         short: partner.short,
@@ -196,6 +188,23 @@ export function ActionLine({
                     }))}
                   />
                 )}
+
+                <div>
+                  {formatActionDatetime({
+                    date: action.date,
+                    dateFormat: date?.dateFormat,
+                    timeFormat: date?.timeFormat,
+                  })}
+                </div>
+              </div>
+
+              <div className="absolute -top-3 right-2 flex gap-2">
+                {isSprint(action.id, sprints) && (
+                  <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
+                    <RabbitIcon className="size-4" />
+                  </div>
+                )}
+
                 {allUsers && (
                   <AvatarGroup
                     avatars={responsibles.map((responsible) => ({
