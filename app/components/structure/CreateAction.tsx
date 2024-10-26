@@ -83,7 +83,7 @@ export default function CreateAction({
     date: newDate,
     description: "",
     responsibles: [user.id],
-    partners: [],
+    partners: partner ? [partner.slug] : [],
     state: "idea",
     title: "",
     user_id: user.id,
