@@ -670,7 +670,7 @@ export const CalendarDay = ({
           <div className="relative flex h-full grow flex-col gap-3">
             {showContent
               ? getCategoriesSortedByContent(categories).map((section, i) => (
-                  <div key={i}>
+                  <div key={i} className={i === 0 ? "flex flex-col gap-3" : ""}>
                     {i === 0 &&
                       day.actions?.filter((action) =>
                         isInstagramFeed(action.category),
