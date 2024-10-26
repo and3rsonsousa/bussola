@@ -112,7 +112,7 @@ export type Database = {
       }
       categories: {
         Row: {
-          area_id: string
+          area: string
           color: string
           created_at: string
           id: string
@@ -122,7 +122,7 @@ export type Database = {
           title: string
         }
         Insert: {
-          area_id: string
+          area: string
           color?: string
           created_at?: string
           id?: string
@@ -132,7 +132,7 @@ export type Database = {
           title: string
         }
         Update: {
-          area_id?: string
+          area?: string
           color?: string
           created_at?: string
           id?: string
@@ -141,15 +141,7 @@ export type Database = {
           slug?: string
           title?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "categories_area_id_fkey"
-            columns: ["area_id"]
-            isOneToOne: false
-            referencedRelation: "areas"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       celebrations: {
         Row: {

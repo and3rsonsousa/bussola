@@ -82,7 +82,8 @@ export default function CreateAction({
     partner: partner ? partner.slug : undefined,
     date: newDate,
     description: "",
-    responsibles: [user.id],
+    responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
+    // responsibles: [user.id],
     partners: partner ? [partner.slug] : [],
     state: "idea",
     title: "",
@@ -116,6 +117,24 @@ export default function CreateAction({
       }
     }
   }, [action.partner]);
+
+  useEffect(() => {
+    console.log("TESTE 1");
+    if (
+      areas.find(
+        (area) =>
+          categories.find((category) => category.slug === action.category)
+            ?.area === "creative",
+      )
+    ) {
+      console.log("TESTE 2");
+
+      setAction({
+        ...action,
+        responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
+      });
+    }
+  }, [action.category]);
 
   useEffect(() => {
     setPartner(() =>
@@ -251,50 +270,6 @@ export default function CreateAction({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* <Select
-              value={action.partner}
-              onValueChange={(value) => {
-                setAction({
-                  ...action,
-                  partner: value,
-                });
-              }}
-            >
-              <SelectTrigger
-                className={`w-auto focus:ring-offset-0 ${
-                  action.partner ? "-ml-1 p-1 pl-2" : "px-2 py-1"
-                }`}
-              >
-                {action.partner ? (
-                  <Avatar
-                    item={(() => {
-                      let partner = partners.find(
-                        (p) => p.slug === action.partner,
-                      ) as Partner;
-                      return {
-                        short: partner.short,
-                        bg: partner.colors[0],
-                        fg: partner.colors[1],
-                      };
-                    })()}
-                  />
-                ) : (
-                  "Parceiros"
-                )}
-              </SelectTrigger>
-              <SelectContent className="glass">
-                {partners.map((partner) => (
-                  <SelectItem
-                    key={partner.slug}
-                    value={`${partner.slug}`}
-                    className="bg-select-item"
-                  >
-                    {partner.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select> */}
-
             {/* Categoria */}
             <DropdownMenu>
               <DropdownMenuTrigger className="button-trigger">
@@ -308,7 +283,7 @@ export default function CreateAction({
                       {area.title}
                     </h4>
                     {categories.map((category) =>
-                      category.area_id === area.id ? (
+                      category.area === area.slug ? (
                         <DropdownMenuItem
                           key={category.slug}
                           className="bg-item flex items-center gap-2"

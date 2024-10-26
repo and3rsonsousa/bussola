@@ -695,6 +695,7 @@ export const CalendarDay = ({
                           actions={actions}
                           short={short}
                           showContent
+                          key={category.id}
                         />
                       ))}
                   </div>
@@ -716,6 +717,7 @@ export const CalendarDay = ({
                           setDraggedAction={setDraggedAction}
                           actions={actions}
                           short={short}
+                          key={category.id}
                         />
                       ),
                   )}
