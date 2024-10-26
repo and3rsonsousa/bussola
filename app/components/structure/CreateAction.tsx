@@ -119,7 +119,6 @@ export default function CreateAction({
   }, [action.partner]);
 
   useEffect(() => {
-    console.log("TESTE 1");
     if (
       areas.find(
         (area) =>
@@ -127,11 +126,14 @@ export default function CreateAction({
             ?.area === "creative",
       )
     ) {
-      console.log("TESTE 2");
-
       setAction({
         ...action,
         responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
+      });
+    } else {
+      setAction({
+        ...action,
+        responsibles: [user.id],
       });
     }
   }, [action.category]);

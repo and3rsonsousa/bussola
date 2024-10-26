@@ -1498,7 +1498,7 @@ export function ContextMenuItems({
                   {area.title}
                 </h4>
                 {categories.map((category) =>
-                  category.area_id === area.id ? (
+                  category.area === area.slug ? (
                     <ContextMenuItem
                       key={category.slug}
                       className="bg-item flex items-center gap-2"
