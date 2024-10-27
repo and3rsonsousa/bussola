@@ -966,45 +966,6 @@ export default function ActionPage() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
-              <Avatar
-                item={{
-                  short: partner.short,
-                  bg: partner.colors[0],
-                  fg: partner.colors[1],
-                }}
-                size="md"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="glass">
-              {partners.map((partner) => (
-                <DropdownMenuItem
-                  key={partner.slug}
-                  className="bg-item flex items-center gap-2"
-                  textValue={partner.title}
-                  onSelect={async () => {
-                    if (partner.slug !== action.partner) {
-                      setAction({
-                        ...action,
-                        partner: partner.slug,
-                      });
-                    }
-                  }}
-                >
-                  <Avatar
-                    item={{
-                      short: partner.short,
-                      bg: partner.colors[0],
-                      fg: partner.colors[1],
-                    }}
-                  />
-                  <span>{partner.title}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu> */}
-
           {/* Categoria */}
 
           <DropdownMenu>
@@ -1019,7 +980,7 @@ export default function ActionPage() {
                     {area.title}
                   </h4>
                   {categories.map((category) =>
-                    category.area_id === area.id ? (
+                    category.area === area.slug ? (
                       <DropdownMenuItem
                         key={category.slug}
                         className="bg-item flex items-center gap-2"
