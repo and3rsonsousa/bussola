@@ -1,5 +1,14 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useFetcher,
+  useLoaderData,
+  useMatches,
+  useNavigation,
+  useSubmit,
+} from "@remix-run/react";
+import { createBrowserClient } from "@supabase/ssr";
 // @ts-ignore
 import {
   json,
@@ -14,12 +23,21 @@ import { Enums } from "database";
 import { InfoIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+import { useDebounce } from "use-debounce";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { Slider } from "~/components/ui/slider";
 import { Textarea } from "~/components/ui/textarea";
+import { archetypes } from "~/lib/constants";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 import { cn } from "~/lib/utils";
@@ -97,12 +115,48 @@ export default function AdminPartners() {
   const { people, voices } = matches[1].data as DashboardRootType;
 
   const [colors, setColors] = useState(partner.colors);
-  const [vx, setVX] = useState(voices);
+  const [vx, setVX] = useState([1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
+
+  const [text, setText] = useState("");
+
+  const fetcher = useFetcher();
+  const navigation = useNavigation();
+
+  const isWorking = navigation.state !== "idle";
+
+  // const supabase = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_KEY);
+
+  useEffect(() => {
+    setText("Atualizando...");
+    fetcher.submit(
+      {
+        title: partner.title,
+        context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
+        intent: "caption",
+        model: "medium",
+        trigger: "Novidade",
+        voice: vx,
+      },
+      {
+        action: "/handle-openai",
+        method: "post",
+      },
+    );
+  }, [vx]);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      if (fetcher.formData?.get("intent") === "caption") {
+        setText((fetcher.data as { message: string }).message);
+      }
+    }
+  }, [fetcher.data]);
 
   return (
     <div className="overflow-hidden">
       <div className="scrollbars px-x lg:px-8">
         <div className="px-4 md:px-8">
+          {/* {voices.map((voice) => voice.name).join(`: \${vx[0]} - `)} */}
           <div
             className="flex items-center gap-2 rounded py-4 font-bold tracking-tighter"
             key={partner.slug}
@@ -241,15 +295,58 @@ export default function AdminPartners() {
                 </div>
               </div>
             </div>
-            <div>
-              <div className="font-bold">Tom de voz</div>
+            <div id="voices">
+              <div className="flex items-center justify-between">
+                <div className="font-bold">Tom de voz</div>
+                <div>
+                  <Select
+                    onValueChange={(value) => {
+                      let _temp = archetypes.filter((a) => a.name === value)[0]
+                        .voice;
+                      setVX(() => _temp);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={"Modelo de voz"} />
+                    </SelectTrigger>
+                    <SelectContent className="glass">
+                      {archetypes.map((archetype, i) => (
+                        <SelectItem key={archetype.name} value={archetype.name}>
+                          {archetype.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
               <div>
-                {voices.map((voice) => (
-                  <Voice key={voice.id} voice={voice} />
+                <div className="absolute right-4 top-4 w-96">
+                  <h2 className="mb-4 text-xl font-bold">Exemplo de texto</h2>
+                  <div
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: text === "" ? "Carregando..." : text,
+                    }}
+                  ></div>
+                </div>
+                {voices.map((voice, i) => (
+                  <Voice
+                    onChange={(value) => {
+                      let _temp = [...vx];
+                      _temp[i] = value[0];
+
+                      setVX(_temp);
+                    }}
+                    key={voice.id}
+                    voice={voice}
+                    defaultValue={vx[i]}
+                  />
                 ))}
               </div>
+              <div>{vx}</div>
             </div>
-            <div className="pb-24 text-right">
+
+            <div className="pb-28 text-right">
               <Button type="submit">Atualizar</Button>
             </div>
           </Form>
@@ -259,11 +356,24 @@ export default function AdminPartners() {
   );
 }
 
-function Voice({ voice }: { voice: Voice }) {
+function Voice({
+  voice,
+  defaultValue,
+  onChange,
+}: {
+  voice: Voice;
+  defaultValue: number;
+  onChange: (value: number[]) => void;
+}) {
   const examples = [voice.n3, voice.n2, voice.n1, voice.p1, voice.p2, voice.p3];
-  const [value, setValue] = useState([3]);
+
+  const [value, setValue] = useState([defaultValue]);
   const [viewDescription, setViewDescription] = useState(false);
   const [alert, setAlert] = useState(0);
+
+  useEffect(() => {
+    setValue([defaultValue]);
+  }, [defaultValue]);
 
   useEffect(() => {
     if (viewDescription) {
@@ -323,10 +433,14 @@ function Voice({ voice }: { voice: Voice }) {
           <div key={value}>{value}</div>
         ))}
       </div>
+
       <div>
         <Slider
           className="text-error-500"
-          onValueChange={(value) => setValue(value)}
+          onValueChange={(value) => {
+            setValue(value);
+            onChange(value);
+          }}
           value={value}
           max={5}
           min={0}
@@ -334,7 +448,10 @@ function Voice({ voice }: { voice: Voice }) {
           name={`voice${voice.priority}`}
         />
       </div>
-      <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div>
+      <div>
+        {value} - {defaultValue}
+      </div>
+      {/* <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div> */}
     </div>
   );
 }

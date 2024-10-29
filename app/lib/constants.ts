@@ -110,3 +110,54 @@ export const TRIGGERS = [
     value: "Urgência",
   },
 ];
+
+export const archetypes = [
+  {
+    name: "Criador",
+    voice: [2, 5, 4, 5, 3, 5, 6, 4, 6, 5, 3, 6, 1, 4, 6],
+  },
+  {
+    name: "Prestativo",
+    voice: [3, 6, 3, 2, 2, 6, 5, 2, 2, 3, 3, 6, 4, 2, 6],
+  },
+  {
+    name: "Governante",
+    voice: [6, 2, 1, 6, 6, 1, 3, 6, 2, 6, 5, 3, 6, 6, 2],
+  },
+  {
+    name: "Bobo da Corte",
+    voice: [1, 5, 6, 2, 2, 6, 6, 2, 6, 4, 4, 5, 1, 3, 5],
+  },
+  {
+    name: "Cara Comum",
+    voice: [3, 4, 4, 3, 3, 6, 4, 3, 3, 3, 3, 6, 4, 3, 5],
+  },
+  {
+    name: "Amante",
+    voice: [2, 6, 5, 2, 3, 6, 6, 3, 4, 6, 4, 5, 3, 3, 6],
+  },
+  {
+    name: "Herói",
+    voice: [4, 6, 3, 5, 5, 4, 6, 4, 4, 6, 6, 5, 3, 6, 5],
+  },
+  {
+    name: "Fora da Lei",
+    voice: [1, 4, 5, 3, 2, 3, 5, 3, 6, 5, 5, 4, 1, 5, 3],
+  },
+  {
+    name: "Mago",
+    voice: [5, 4, 3, 6, 6, 3, 5, 6, 5, 5, 4, 4, 2, 5, 4],
+  },
+  {
+    name: "Inocente",
+    voice: [2, 5, 5, 1, 2, 5, 6, 1, 3, 3, 2, 6, 4, 2, 5],
+  },
+  {
+    name: "Explorador",
+    voice: [2, 5, 4, 4, 3, 4, 6, 3, 5, 4, 5, 4, 1, 4, 4],
+  },
+  {
+    name: "Sábio",
+    voice: [5, 3, 2, 6, 6, 3, 3, 6, 3, 4, 3, 5, 5, 5, 4],
+  },
+];

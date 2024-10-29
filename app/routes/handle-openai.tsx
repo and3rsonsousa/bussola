@@ -5,8 +5,12 @@ export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  let { title, description, intent, model, context, trigger } =
+  let { title, description, intent, model, context, trigger, voice } =
     Object.fromEntries(formData.entries());
+
+  let vx = String(voice).split(",");
+
+  let tone = `Use o tom de voz de acordo com os seguintes atributos e suas notas. A escala vai de 0 a 5, onde 5 é o valor máximo e 0 é o extremo oposto desse atributo. Não existe neutralidade. Formalidade: ${vx[0]} - Emocionalidade: ${vx[1]} - Humor: ${vx[2]} - Tecnicidade: ${vx[3]} - Autoridade: ${vx[4]} - Proximidade: ${vx[5]} - Entusiasmo: ${vx[6]} - Complexidade: ${vx[7]} - Inovação Linguística: ${vx[8]} - Persuasão: ${vx[9]} - Urgência: ${vx[10]} - Inclusividade: ${vx[11]} - Tradicionalismo: ${vx[12]} - Assertividade: ${vx[13]} - Empatia: ${vx[14]}`;
 
   const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
@@ -37,7 +41,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     content = `Pegue o CONTEXTO e crie 5 opções de ganchos virais impossíveis de serem ignorados e retorne uma lista. Use o gatilho da ${trigger}
     EMPRESA: ${context}.
     REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas.
-    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'
+    TOM DE VOZ: ${tone}`;
   } else if (intent === "reels") {
     template = "Roteiro de vídeo viral.";
 
@@ -55,7 +60,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     (Incentive o expectador a interagir, comentando ou compartilhando o vídeo em 5 segundos)
     REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
     EMPRESA: ${context}.
-    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'
+    TOM DE VOZ: ${tone}`;
     } else {
       content = `Crie um roteiro de vídeo viral em formato de lista seguindo essa lógica e identificando cada uma das partes (GANCHO, DESENVOLVIMENTO, DICA N, CTA INICIAL, DESENVOLVIMENTO, CTA FINAL) Após cada um desse subtítulo, insira um parágrafo. 
     GANCHO - Frase chamativa baseada no CONTEXTO impossível de ser ignorada indicando quantas dicas teremos no vídeo. (2 segundos)
@@ -65,7 +71,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     CTA FINAL - Incentive o expectador a interagir, comentando ou compartilhando o vídeo. (5 segundos)
     REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
     EMPRESA: ${context}.
-    CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
+    CONTEXTO: Título da ação: '${title}, descrição: ${description}'
+    TOM DE VOZ: ${tone}`;
     }
   } else if (intent === "caption") {
     template = "Texto da legenda e hashtags";
@@ -98,7 +105,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
   TEMPLATE: ${template}.
   EMPRESA: ${context}.
-  CONTEXTO: Título do post: '${title}, descrição: ${description}'`;
+  CONTEXTO: Título do post: '${title}, descrição: ${description}'
+  TOM DE VOZ: ${tone}`;
   }
   // Se for Stories
   else if (intent === "stories") {
@@ -119,7 +127,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     Texto de apoio com até 30 palavras
 
     EMPRESA: ${context}.
-    CONTEXTO: ${title} - ${description}`;
+    CONTEXTO: ${title} - ${description}
+    TOM DE VOZ: ${tone}`;
     } else if (model === "video") {
       content = `Você é um estrategista de conteúdo e roteirista de video experiente. 
     TAREFA: criar uma sequência de stories usando técnicas de storytelling. Traga as falas da pessoa que irá gravar. Cada texto de fala deve caber em um espaço de 15 a 30 segundos. Use o seguinte modelo: 
@@ -137,7 +146,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     Interação:(opcional)
     Sugira aqui algum elemento de interação nos stories de acordo com o conteúdo.
     
-    CONTEXTO: ${title} - ${description}`;
+    CONTEXTO: ${title} - ${description}
+    TOM DE VOZ: ${tone}`;
     }
   }
   // Se for carrossel
@@ -197,7 +207,8 @@ TAREFA: Criar um post em formato carrossel envolvente e que prendam o usuário u
 REGRAS: Retorne apenas o texto sem nenhuma informação sua e formatado com tags HTML. ${rules} 
 MODELO: ${template}
  EMPRESA: ${context}
-CONTENT: ${title} - ${description}`;
+CONTENT: ${title} - ${description}
+TOM DE VOZ: ${tone}`;
   } else if (intent === "title") {
     template = `Use esses 3 princípios: Princípio da especificidade, Princípio da curiosidade e Princípio do “sequestro da atenção”. Evite palavras genéricas como: Descubra, Aprenda, método, segredo, dica.
 `;
@@ -207,7 +218,8 @@ CONTENT: ${title} - ${description}`;
   REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. Retorne apenas uma frase sem aspas. O título deve ter no máximo 12 palavras. 
   TEMPLATE: ${template}.
   EMPRESA: ${context}.
-  CONTEXTO: Título do post: '${title}, descrição: ${description}'`;
+  CONTEXTO: Título do post: '${title}, descrição: ${description}'
+  TOM DE VOZ: ${tone}`;
   }
 
   if (template === "") {

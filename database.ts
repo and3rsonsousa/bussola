@@ -219,6 +219,7 @@ export type Database = {
           sow: Database["public"]["Enums"]["sow"]
           title: string
           users_ids: string[]
+          voice: number[] | null
         }
         Insert: {
           archived?: boolean
@@ -232,6 +233,7 @@ export type Database = {
           sow?: Database["public"]["Enums"]["sow"]
           title: string
           users_ids: string[]
+          voice?: number[] | null
         }
         Update: {
           archived?: boolean
@@ -245,6 +247,7 @@ export type Database = {
           sow?: Database["public"]["Enums"]["sow"]
           title?: string
           users_ids?: string[]
+          voice?: number[] | null
         }
         Relationships: []
       }
