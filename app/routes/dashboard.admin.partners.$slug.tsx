@@ -132,7 +132,7 @@ export default function AdminPartners() {
     setText("Atualizando...");
     fetcher.submit(
       {
-        title: "Apresente a empresa",
+        title: "Apresente a empresa ou profissional.",
         context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
         intent: "caption",
         model: "medium",
@@ -323,9 +323,9 @@ export default function AdminPartners() {
               </div>
               <div>
                 <div className="absolute right-4 top-4 w-96">
-                  <h2 className="mb-4 text-xl font-bold">Exemplo de texto</h2>
+                  <h2 className="mb-4 text-2xl font-bold">Exemplo de texto</h2>
                   <div
-                    className="text-sm"
+                    className="leading-relaxed"
                     dangerouslySetInnerHTML={{
                       __html: text === "" ? "Carregando..." : text,
                     }}
