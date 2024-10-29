@@ -11,16 +11,18 @@ import {
 // @ts-ignore
 import Color from "color";
 import { Enums } from "database";
-import { PlusIcon, TrashIcon } from "lucide-react";
-import { useState } from "react";
+import { InfoIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Slider } from "~/components/ui/slider";
 import { Textarea } from "~/components/ui/textarea";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+import { cn } from "~/lib/utils";
 
 export const config = { runtime: "edge" };
 
@@ -60,6 +62,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const id = String(formData.get("id"));
 
+  const entries = Object.fromEntries(formData);
+
+  let voice = Object.keys(entries)
+    .map((entry) => (/voice\d*/.test(entry) ? Number(entries[entry]) : null))
+    .filter((n) => n !== null);
+
   const data = {
     title: String(formData.get("title")),
     short: String(formData.get("short")),
@@ -68,6 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     context: String(formData.get("context")),
     sow: formData.get("sow") as "marketing" | "socialmedia" | "demand",
     users_ids: String(formData.getAll("users_ids")).split(","),
+    voice,
   };
 
   const { error } = await supabase.from("partners").update(data).eq("id", id);
@@ -85,13 +94,14 @@ export default function AdminPartners() {
   const matches = useMatches();
 
   const { partner } = useLoaderData<typeof loader>();
-  const { people } = matches[1].data as DashboardRootType;
+  const { people, voices } = matches[1].data as DashboardRootType;
 
   const [colors, setColors] = useState(partner.colors);
+  const [vx, setVX] = useState(voices);
 
   return (
     <div className="overflow-hidden">
-      <div className="scrollbars">
+      <div className="scrollbars px-x lg:px-8">
         <div className="px-4 md:px-8">
           <div
             className="flex items-center gap-2 rounded py-4 font-bold tracking-tighter"
@@ -231,12 +241,100 @@ export default function AdminPartners() {
                 </div>
               </div>
             </div>
-            <div className="mb-4 text-right">
+            <div>
+              <div className="font-bold">Tom de voz</div>
+              <div>
+                {voices.map((voice) => (
+                  <Voice key={voice.id} voice={voice} />
+                ))}
+              </div>
+            </div>
+            <div className="pb-24 text-right">
               <Button type="submit">Atualizar</Button>
             </div>
           </Form>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Voice({ voice }: { voice: Voice }) {
+  const examples = [voice.n3, voice.n2, voice.n1, voice.p1, voice.p2, voice.p3];
+  const [value, setValue] = useState([3]);
+  const [viewDescription, setViewDescription] = useState(false);
+  const [alert, setAlert] = useState(0);
+
+  useEffect(() => {
+    if (viewDescription) {
+      setTimeout(() => {
+        setViewDescription(false);
+        setAlert(0);
+      }, 15000);
+      setTimeout(() => {
+        setAlert(1);
+      }, 9000);
+      setTimeout(() => {
+        setAlert(2);
+      }, 12000);
+    }
+  }, [viewDescription]);
+
+  return (
+    <div className="py-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h4 className="text-xl font-semibold">{voice.name}</h4>
+          <button
+            className="opacity-50 hover:opacity-100"
+            onClick={(event) => {
+              event.preventDefault();
+              setViewDescription(true);
+            }}
+          >
+            <InfoIcon className="size-4" />
+          </button>
+          {viewDescription && (
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              className="-rotate-90"
+            >
+              <circle
+                className={`timer-circle transition-colors duration-500 ${alert === 1 ? "stroke-alert-500" : alert === 2 ? "stroke-error-500" : "stroke-primary"}`}
+                cx="8"
+                cy="8"
+                r="7"
+                fill="none"
+                stroke-width="2"
+              />
+            </svg>
+          )}
+        </div>
+        <div className="text-sm opacity-50">{voice.priority}/15</div>
+      </div>
+
+      {viewDescription && (
+        <div className="my-4 rounded bg-card p-4">{voice.description}</div>
+      )}
+      <div className="flex justify-between py-2 text-center text-sm">
+        {[-3, -2, -1, 1, 2, 3].map((value) => (
+          <div key={value}>{value}</div>
+        ))}
+      </div>
+      <div>
+        <Slider
+          className="text-error-500"
+          onValueChange={(value) => setValue(value)}
+          value={value}
+          max={5}
+          min={0}
+          step={1}
+          name={`voice${voice.priority}`}
+        />
+      </div>
+      <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div>
     </div>
   );
 }

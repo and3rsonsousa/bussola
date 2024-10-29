@@ -108,7 +108,7 @@ export default function Search({
                       (category) => category.slug === action.category,
                     )!,
                     partner: partners.find(
-                      (partner) => partner.slug === action.partner,
+                      (partner) => partner.slug === action.partners[0],
                     )!,
                     priority: priorities.find(
                       (priority) => priority.slug === action.priority,

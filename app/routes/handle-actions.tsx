@@ -20,7 +20,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       category: values["category"].toString(),
       state: values["state"].toString(),
-      partner: values["partners"].toString().split(",")[0],
+
       priority: PRIORITIES.medium,
       date: values["date"].toString(),
       instagram_date: values["date"].toString(),
@@ -31,7 +31,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       title: values["title"].toString(),
       responsibles: values["responsibles"].toString().split(","),
       partners: values["partners"].toString().split(","),
-      // partners: [values["partner"].toString()],
       user_id: values["user_id"].toString(),
       color: values["color"].toString(),
       caption: "",
@@ -42,6 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .insert(actionToInsert)
       .select()
       .single();
+    if (error) console.log({ error });
 
     return json({ data, error }, { headers });
   } else if (intent === INTENTS.updateAction) {
