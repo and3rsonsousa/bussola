@@ -132,7 +132,7 @@ export default function AdminPartners() {
     setText("Atualizando...");
     fetcher.submit(
       {
-        title: partner.title,
+        title: "Apresente a empresa",
         context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
         intent: "caption",
         model: "medium",
@@ -452,7 +452,7 @@ function Voice({
       {/* <div>
         {value} - {defaultValue}
       </div> */}
-      {/* <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div> */}
+      <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div>
     </div>
   );
 }
