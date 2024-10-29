@@ -115,7 +115,9 @@ export default function AdminPartners() {
   const { people, voices } = matches[1].data as DashboardRootType;
 
   const [colors, setColors] = useState(partner.colors);
-  const [vx, setVX] = useState([1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
+  const [vx, setVX] = useState(
+    partner.voice || [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  );
 
   const [text, setText] = useState("");
 
@@ -343,7 +345,6 @@ export default function AdminPartners() {
                   />
                 ))}
               </div>
-              <div>{vx}</div>
             </div>
 
             <div className="pb-28 text-right">
@@ -448,9 +449,9 @@ function Voice({
           name={`voice${voice.priority}`}
         />
       </div>
-      <div>
+      {/* <div>
         {value} - {defaultValue}
-      </div>
+      </div> */}
       {/* <div className="mt-4 rounded py-4 text-2xl">{examples[value[0]]}</div> */}
     </div>
   );
