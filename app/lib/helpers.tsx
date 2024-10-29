@@ -443,7 +443,6 @@ export function usePendingData(): { actions: Action[]; sprints: Sprint[] } {
           time: Number(fetcher.formData?.get("time")),
           created_at: String(fetcher.formData?.get("created_at")),
           updated_at: String(fetcher.formData?.get("updated_at")),
-          partner: String(fetcher.formData?.get("partner")),
           category: String(fetcher.formData?.get("category")),
           state: String(fetcher.formData?.get("state")),
           priority: String(fetcher.formData?.get("priority")),
@@ -612,22 +611,6 @@ export function Bussola({
         </svg>
       )}
     </div>
-
-    // <h1
-    //   className="relative select-none font-black leading-none tracking-tight"
-    //   style={{ fontSize: size + "px" }}
-    // >
-    //   <span>BUSSOL</span>
-    //   <span className="font-bold" style={{ fontSize: 1.35 * size + "px" }}>
-    //     a
-    //   </span>
-    //   <span
-    //     className="absolute"
-    //     style={{ top: size / 12 + "px", left: size / 1.2 + "px" }}
-    //   >
-    //     ´
-    //   </span>
-    // </h1>
   );
 }
 

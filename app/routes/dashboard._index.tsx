@@ -340,7 +340,7 @@ export default function DashboardIndex() {
                   states,
                 ).map((action) => {
                   const partner = partners.filter(
-                    (p) => p.slug === action.partner,
+                    (p) => p.slug === action.partners[0],
                   )[0];
                   return (
                     <div className="flex flex-col gap-4" key={action.id}>
@@ -632,7 +632,7 @@ function Partners({ actions }: { actions?: Action[] }) {
               <CircularProgress
                 actions={actions.filter(
                   (action) =>
-                    action.partner === partner.slug &&
+                    action.partners[0] === partner.slug &&
                     new Date(action.date).getTime() >=
                       startOfWeek(new Date()).getTime() &&
                     new Date(action.date).getTime() <=

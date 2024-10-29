@@ -101,7 +101,7 @@ export function ActionLine({
 
   const state = states.find((state) => state.slug === action.state) as State;
   const partner = partners.find(
-    (partner) => partner.slug === action.partner,
+    (partner) => partner.slug === action.partners[0],
   ) as Partner;
 
   const responsibles = getResponsibles(action.responsibles);
@@ -503,9 +503,9 @@ export function ActionBlock({
 
   const { categories, states, partners, sprints } = matches[1]
     .data as DashboardRootType;
-  const partner = partners.find(
-    (partner) => partner.slug === action.partner,
-  ) as Partner;
+  // const partner = partners.find(
+  //   (partner) => partner.slug === action.partners[0],
+  // ) as Partner;
 
   const actionPartners = getPartners(action.partners);
 
@@ -1118,7 +1118,7 @@ export function ContextMenuItems({
   } = matches[1].data as DashboardRootType;
   const [delay, setDelay] = useState({ hour: 0, day: 0, week: 0 });
 
-  const partner = partners.find((p) => p.slug === action.partner)!;
+  // const partner = partners.find((p) => p.slug === action.partners[0]);
   const state = states.find((state) => state.slug === action.state);
 
   return (

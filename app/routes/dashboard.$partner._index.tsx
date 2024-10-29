@@ -166,7 +166,7 @@ export default function Partner() {
   const deletingIDsActions = useIDsToRemove().actions;
 
   for (const action of pendingActions) {
-    if (action.partner === partner.slug) actionsMap.set(action.id, action);
+    if (action.partners[0] === partner.slug) actionsMap.set(action.id, action);
   }
 
   for (const id of deletingIDsActions) {

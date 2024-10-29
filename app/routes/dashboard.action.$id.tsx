@@ -167,7 +167,7 @@ export default function ActionPage() {
     .data as DashboardRootType;
 
   const partner = partners.find(
-    (partner) => partner.slug === action.partner,
+    (partner) => partner.slug === action.partners[0],
   ) as Partner;
   const actionPartners = getPartners(action.partners);
   const category = categories.find(

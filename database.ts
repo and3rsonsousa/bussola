@@ -21,7 +21,6 @@ export type Database = {
           files: string[] | null
           id: string
           instagram_date: string
-          partner: string
           partners: string[]
           priority: string
           responsibles: string[]
@@ -42,7 +41,6 @@ export type Database = {
           files?: string[] | null
           id?: string
           instagram_date: string
-          partner: string
           partners: string[]
           priority: string
           responsibles: string[]
@@ -63,7 +61,6 @@ export type Database = {
           files?: string[] | null
           id?: string
           instagram_date?: string
-          partner?: string
           partners?: string[]
           priority?: string
           responsibles?: string[]
@@ -73,15 +70,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "actions_partner_slug_fkey"
-            columns: ["partner"]
-            isOneToOne: false
-            referencedRelation: "partners"
-            referencedColumns: ["slug"]
-          },
-        ]
+        Relationships: []
       }
       areas: {
         Row: {
@@ -161,6 +150,30 @@ export type Database = {
           date?: string
           id?: string
           title?: string
+        }
+        Relationships: []
+      }
+      config: {
+        Row: {
+          account: string | null
+          adm: string | null
+          created_at: string
+          creative: string | null
+          id: number
+        }
+        Insert: {
+          account?: string | null
+          adm?: string | null
+          created_at?: string
+          creative?: string | null
+          id?: number
+        }
+        Update: {
+          account?: string | null
+          adm?: string | null
+          created_at?: string
+          creative?: string | null
+          id?: number
         }
         Relationships: []
       }
