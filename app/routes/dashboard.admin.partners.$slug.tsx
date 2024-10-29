@@ -400,7 +400,7 @@ function Voice({
             className="opacity-50 hover:opacity-100"
             onClick={(event) => {
               event.preventDefault();
-              setViewDescription(true);
+              setViewDescription((v) => !v);
             }}
           >
             <InfoIcon className="size-4" />

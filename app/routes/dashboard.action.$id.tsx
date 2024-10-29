@@ -336,6 +336,7 @@ export default function ActionPage() {
                     description: action.description,
                     context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                     intent: "title",
+                    voice: partner.voice,
                   },
                   {
                     action: "/handle-openai",
@@ -379,6 +380,7 @@ export default function ActionPage() {
                               context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                               intent: "carousel",
                               trigger,
+                              voice: partner.voice,
                             },
                             {
                               action: "/handle-openai",
@@ -400,6 +402,7 @@ export default function ActionPage() {
                               intent: "carousel",
                               model: "twitter",
                               trigger,
+                              voice: partner.voice,
                             },
                             {
                               action: "/handle-openai",
@@ -466,6 +469,7 @@ export default function ActionPage() {
                               intent: "reels",
                               model: "viral",
                               trigger,
+                              voice: partner.voice,
                             },
 
                             {
@@ -488,6 +492,7 @@ export default function ActionPage() {
                               intent: "reels",
                               model: "list",
                               trigger,
+                              voice: partner.voice,
                             },
 
                             {
@@ -675,6 +680,7 @@ export default function ActionPage() {
                               description: action.description,
                               context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                               intent: "stories",
+                              voice: partner.voice,
                               model: "static",
                               trigger: trigger,
                             },
@@ -695,6 +701,7 @@ export default function ActionPage() {
                               description: action.description,
                               context: `EMPRESA: ${partner.title} - DESCRIÇÃO: ${partner.context}`,
                               intent: "stories",
+                              voice: partner.voice,
                               model: "video",
                               trigger: trigger,
                             },
@@ -780,6 +787,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "aida",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
@@ -799,6 +807,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "slap",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
@@ -818,6 +827,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "pas",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
@@ -838,6 +848,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "short",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
@@ -857,6 +868,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "medium",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
@@ -876,6 +888,7 @@ export default function ActionPage() {
                                 intent: "caption",
                                 model: "long",
                                 trigger: trigger,
+                                voice: partner.voice,
                               },
                               {
                                 action: "/handle-openai",
