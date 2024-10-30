@@ -31,8 +31,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     content = `Aumente o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
   } else if (intent === "develop") {
     template = "Pesquisar sobre o assunto.";
-    content = `Você é um estrategista de marketing com anos de experiência em todas as àreas estratégicas de mercado e de conteúdo para redes sociais. Sua missão é pesquisar sobre o assunto e retornar uma lista ordenada resumida, porém completa sobre o assunto.  
-    REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
+    content = `Pesquise sobre o CONTEXTO. REGRAS: Retorne apenas o texto sem nenhuma observação. Texto com parágrafos e tags html. Retorne apenas uma frase sem aspas. Traga o texto com no máximo 300 palavras. 
     EMPRESA: ${context}.
     CONTEXTO: Título da ação: '${title}, descrição: ${description}'`;
   } else if (intent === "hook") {
@@ -156,7 +155,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     let rules = "";
 
-    let template = `<h3>SLIDE 1</h3> (use um Gancho forte para chamar a atenção do usuário)
+    template = `<h3>SLIDE 1</h3> (use um Gancho forte para chamar a atenção do usuário)
     <h4>Frase do título aqui.</h4> (Frase principal do Carrossel. Deve ser chamativa e apelar para o gatilho mental: ${trigger})
     
     

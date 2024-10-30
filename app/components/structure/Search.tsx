@@ -151,7 +151,7 @@ export default function Search({
         onValueChange={setValue}
       />
 
-      <CommandList className="scrollbars scrollbars-thin">
+      <CommandList className="scrollbars scrollbars-thin pb-2">
         <CommandEmpty>Nenhum resultado encontrado. 😬</CommandEmpty>
         {loading && (
           <CommandLoading className="flex justify-center p-4">

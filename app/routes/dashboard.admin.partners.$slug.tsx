@@ -336,7 +336,6 @@ export default function AdminPartners() {
                     onChange={(value) => {
                       let _temp = [...vx];
                       _temp[i] = value[0];
-
                       setVX(_temp);
                     }}
                     key={voice.id}
