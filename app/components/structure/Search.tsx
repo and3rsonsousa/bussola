@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import { useMatches, useNavigate } from "@remix-run/react";
+import { useMatches, useNavigate, useOutletContext } from "@remix-run/react";
 import { useDebounce } from "use-debounce";
 import { createBrowserClient } from "@supabase/ssr";
 import { CommandLoading } from "cmdk";
@@ -16,12 +16,31 @@ import {
 } from "../ui/command";
 import Loader from "./Loader";
 
+type CommandItemType = {
+  name: string;
+  items: {
+    id: string | number;
+    title: string;
+    href?: string;
+    click?: () => void;
+    options: string[];
+    obs?: {
+      state: State;
+      category: Category;
+      priority: Priority;
+      partner: Partner;
+      responsibles: Person[];
+    };
+  }[];
+};
+
 export default function Search({
-  open,
-  setOpen,
+  search,
 }: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  search: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 }) {
   const navigate = useNavigate();
   const matches = useMatches();
@@ -31,25 +50,11 @@ export default function Search({
   const [query] = useDebounce(value, 300);
   const { partners, states, categories, people, priorities, person } =
     matches[1].data as DashboardRootType;
+  const { partner } = matches[3].data as DashboardPartnerType;
+  const { setCategoryFilter, categoryFilter, setStateFilter } =
+    useOutletContext() as ContextType;
 
-  const [sections, setSections] = useState<
-    Array<{
-      name: string;
-      items: {
-        id: string | number;
-        title: string;
-        href: string;
-        options: string[];
-        obs?: {
-          state: State;
-          category: Category;
-          priority: Priority;
-          partner: Partner;
-          responsibles: Person[];
-        };
-      }[];
-    }>
-  >([
+  let startSections: CommandItemType[] = [
     {
       name: "Parceiros",
       items: partners.map((partner) => ({
@@ -59,10 +64,76 @@ export default function Search({
         href: `/dashboard/${partner.slug}`,
       })),
     },
+  ];
+
+  startSections =
+    partner !== undefined
+      ? [
+          ...startSections,
+          {
+            name: "Filtrar pelo Status",
+            items: [
+              {
+                id: "clean-status",
+                title: "Remover filtro de Status",
+                click: () => {
+                  setStateFilter(undefined);
+                },
+                options: ["status remover", "status limpar", "status clean"],
+              },
+              ...states.map((state) => ({
+                id: state.id,
+                title: state.title,
+                click: () => {
+                  setStateFilter(state);
+                },
+                options: [
+                  "status ".concat(state.title),
+                  "status ".concat(state.slug),
+                ],
+              })),
+            ],
+          },
+          {
+            name: "Filtrar pela Categoria",
+            items: [
+              {
+                id: "clean-category",
+                title: "Remover filtro de Categoria",
+                click: () => {
+                  setCategoryFilter([]);
+                },
+                options: [
+                  "categoria remover",
+                  "categoria limpar",
+                  "categoria clean",
+                ],
+              },
+              ...categories.map((category) => ({
+                id: category.id,
+                title: category.title,
+
+                click: () => {
+                  console.log([category, categoryFilter]);
+
+                  setCategoryFilter([category, ...categoryFilter]);
+                },
+                options: [
+                  "categoria ".concat(category.title),
+                  "categoria ".concat(category.slug),
+                ],
+              })),
+            ],
+          },
+        ]
+      : startSections;
+
+  const [sections, setSections] = useState<CommandItemType[]>([
     {
       name: "Ações",
       items: [],
     },
+    ...startSections,
   ]);
 
   const { env } = matches[0].data as {
@@ -75,7 +146,7 @@ export default function Search({
     const keyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
         event.preventDefault();
-        setOpen((open) => !open);
+        search.setOpen((open) => !open);
       }
     };
 
@@ -134,17 +205,17 @@ export default function Search({
       getActions();
     } else {
       setSections([
-        sections[0],
         {
           name: "Ações",
           items: [],
         },
+        ...startSections,
       ]);
     }
   }, [query]);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog open={search.open} onOpenChange={search.setOpen}>
       <CommandInput
         className={`text-xl font-medium`}
         value={value}
@@ -159,15 +230,16 @@ export default function Search({
           </CommandLoading>
         )}
         {sections.map((section, i) =>
-          section.items.length > 0 && (i === 1 ? value.length > 1 : true) ? (
+          section.items.length > 0 && (i === 0 ? value.length > 1 : true) ? (
             <CommandGroup key={section.name} heading={section.name}>
               {section.items.map((item, i) => (
                 <CommandItem
                   key={i}
-                  value={[item.title, ...item.options].join(" ")}
+                  value={item.options.join(" ")}
                   onSelect={() => {
-                    navigate(item.href);
-                    setOpen(false);
+                    if (item.href) navigate(item.href);
+                    else if (item.click) item.click();
+                    search.setOpen(false);
                   }}
                   className="flex justify-between gap-8 overflow-hidden"
                 >

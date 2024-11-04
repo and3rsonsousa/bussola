@@ -46,6 +46,9 @@ export function App() {
   const [theme] = useTheme();
   const [showFeed, setShowFeed] = useState(false);
   const [isTransitioning, setTransitioning] = useState(false);
+  const [stateFilter, setStateFilter] = useState<State>();
+  const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
+
   const data = useLoaderData<typeof loader>();
 
   return (
@@ -66,12 +69,17 @@ export function App() {
         <Links />
       </head>
       <body className="selection:bg-foreground selection:text-background">
-        <script
-          src="https://upload-widget.cloudinary.com/latest/global/all.js"
-          type="text/javascript"
-        ></script>
         <Outlet
-          context={{ showFeed, setShowFeed, isTransitioning, setTransitioning }}
+          context={{
+            showFeed,
+            isTransitioning,
+            stateFilter,
+            categoryFilter,
+            setShowFeed,
+            setTransitioning,
+            setStateFilter,
+            setCategoryFilter,
+          }}
         />
         <ScrollRestoration />
         <Scripts />

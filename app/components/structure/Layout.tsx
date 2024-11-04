@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Loader />
       </div>
       <Header open={open} setOpen={setOpen} />
-      <Search open={open} setOpen={setOpen} />
+      <Search search={{ open, setOpen }} />
       <Toaster />
     </div>
   );

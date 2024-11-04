@@ -67,13 +67,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Dashboard() {
-  const { setShowFeed, showFeed, isTransitioning, setTransitioning } =
-    useOutletContext() as ContextType;
+  const {
+    setShowFeed,
+    showFeed,
+    isTransitioning,
+    setTransitioning,
+    stateFilter,
+    categoryFilter,
+
+    setStateFilter,
+    setCategoryFilter,
+  } = useOutletContext() as ContextType;
 
   return (
     <Layout>
       <Outlet
-        context={{ setShowFeed, showFeed, isTransitioning, setTransitioning }}
+        context={{
+          setShowFeed,
+          showFeed,
+          isTransitioning,
+          setTransitioning,
+          stateFilter,
+          categoryFilter,
+
+          setStateFilter,
+          setCategoryFilter,
+        }}
       />
     </Layout>
   );

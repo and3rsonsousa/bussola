@@ -85,5 +85,9 @@ declare global {
     setShowFeed: React.Dispatch<React.SetStateAction<boolean>>;
     isTransitioning: boolean;
     setTransitioning: React.Dispatch<React.SetStateAction<boolean>>;
+    stateFilter: State;
+    categoryFilter: Category[];
+    setStateFilter: React.Dispatch<React.SetStateAction<State | undefined>>;
+    setCategoryFilter: React.Dispatch<React.SetStateAction<Category[]>>;
   };
 }

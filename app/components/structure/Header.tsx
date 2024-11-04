@@ -39,15 +39,6 @@ import CreateAction from "./CreateAction";
 import Loader from "./Loader";
 import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command";
-import { useState } from "react";
 
 export default function Header({
   open,
@@ -80,15 +71,6 @@ export default function Header({
     matches[2].data && !partner
       ? (matches[2].data as { partner: Partner }).partner
       : partner;
-
-  const partnersSOW = [
-    { sow: SOW.marketing, title: "Consultoria de Marketing" },
-    { sow: SOW.socialmedia, title: "Social Media" },
-    { sow: SOW.demand, title: "Demanda" },
-  ].map((sow) => ({
-    sow,
-    partners: partners.filter((partner) => partner.sow === sow.sow),
-  }));
 
   const lateActions = getDelayedActions({ actions: actionsChart });
   const isActionPage = /\/dashboard\/action\//.test(location.pathname);

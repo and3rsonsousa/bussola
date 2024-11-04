@@ -144,14 +144,19 @@ export default function Partner() {
   const submit = useSubmit();
 
   const [draggedAction, setDraggedAction] = useState<Action>();
-  const [stateFilter, setStateFilter] = useState<State>();
-  const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
 
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [params] = useSearchParams();
-  const { showFeed, setShowFeed } = useOutletContext() as ContextType;
+  const {
+    showFeed,
+    setShowFeed,
+    categoryFilter,
+    setCategoryFilter,
+    stateFilter,
+    setStateFilter,
+  } = useOutletContext() as ContextType;
 
   const { categories, states, person, celebrations } = matches[1]
     .data as DashboardRootType;
@@ -192,7 +197,7 @@ export default function Partner() {
                 (category) => category.slug === action.category,
               )
             : true) &&
-          (stateFilter ? action.state === stateFilter?.id : true),
+          (stateFilter ? action.state === stateFilter?.slug : true),
       ),
       celebrations: celebrations.filter((celebration) =>
         isSameDay(day, parseISO(celebration.date)),
