@@ -50,7 +50,9 @@ export default function Search({
   const [query] = useDebounce(value, 300);
   const { partners, states, categories, people, priorities, person } =
     matches[1].data as DashboardRootType;
-  const { partner } = matches[3].data as DashboardPartnerType;
+  const { partner } = matches[3]
+    ? (matches[3].data as DashboardPartnerType)
+    : {};
   const { setCategoryFilter, categoryFilter, setStateFilter } =
     useOutletContext() as ContextType;
 
