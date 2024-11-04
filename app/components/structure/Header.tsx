@@ -39,6 +39,15 @@ import CreateAction from "./CreateAction";
 import Loader from "./Loader";
 import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { useState } from "react";
 
 export default function Header({
   open,
@@ -71,6 +80,15 @@ export default function Header({
     matches[2].data && !partner
       ? (matches[2].data as { partner: Partner }).partner
       : partner;
+
+  const partnersSOW = [
+    { sow: SOW.marketing, title: "Consultoria de Marketing" },
+    { sow: SOW.socialmedia, title: "Social Media" },
+    { sow: SOW.demand, title: "Demanda" },
+  ].map((sow) => ({
+    sow,
+    partners: partners.filter((partner) => partner.sow === sow.sow),
+  }));
 
   const lateActions = getDelayedActions({ actions: actionsChart });
   const isActionPage = /\/dashboard\/action\//.test(location.pathname);
@@ -118,6 +136,7 @@ export default function Header({
         )}
 
         {/* parceiros         */}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -339,3 +358,53 @@ export default function Header({
     </div>
   );
 }
+
+// function PartnerCombobox({partner, }) {
+//   const [open, setOpen] = useState(false)
+//   return <Popover open={open} onOpenChange={setOpen}>
+//   <PopoverTrigger asChild>
+//     <Button
+//       variant={"ghost"}
+//       className={
+//         partner ? "rounded-full p-1" : `text-ellipsis whitespace-nowrap`
+//       }
+//     >
+//       {partner ? (
+//         <div className="relative" tabIndex={-1}>
+//           <Avatar
+//             item={{
+//               bg: partner.colors[0],
+//               fg: partner.colors[1],
+//               short: partner.short,
+//             }}
+//             size="md"
+//           />
+//           <CircularProgress actions={actions} />
+//         </div>
+//       ) : (
+//         "Parceiros"
+//       )}
+//     </Button>
+//   </PopoverTrigger>
+//   <PopoverContent className="glass p-0">
+//     <Command>
+//       <CommandInput placeholder="Selecione um parceiro" />
+//       <CommandList className="scrollbars scrollbars-thin">
+//         {partnersSOW.map((sow) => (
+//           <CommandGroup key={sow.sow.sow} heading={sow.sow.title}>
+//             {sow.partners.map((partner) => (
+//               <CommandItem
+//                 key={partner.id}
+//                 className="px-4"
+//                 onSelect={() => { navigate(`/dashboard/${partner.slug}`)}}
+//               >
+//                 {partner.title}
+//               </CommandItem>
+//             ))}
+//           </CommandGroup>
+//         ))}
+//       </CommandList>
+//     </Command>
+//   </PopoverContent>
+// </Popover>
+// }

@@ -22,7 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   let template = "";
   let content = "";
-  trigger = trigger || "Comunidade";
+  trigger = trigger || "Autoridade";
 
   // Se for legenda
   if (intent === "shrink") {

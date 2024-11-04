@@ -154,7 +154,7 @@ export default function ActionPage() {
   const data = useActionData<{ urls: string[] }>();
 
   const [action, setAction] = useState(baseAction);
-  const [trigger, setTrigger] = useState("Comunidade");
+  const [trigger, setTrigger] = useState("Autoridade");
   const [files, setFiles] = useState<{
     previews: { type: string; preview: string }[];
     files: string[];

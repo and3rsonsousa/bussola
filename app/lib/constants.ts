@@ -75,9 +75,6 @@ export const TRIGGERS = [
     value: "Autoridade",
   },
   {
-    value: "Comunidade",
-  },
-  {
     value: "Curiosidade",
   },
   {
@@ -101,11 +98,9 @@ export const TRIGGERS = [
   {
     value: "Prova Social",
   },
-
   {
     value: "Reciprocidade",
   },
-
   {
     value: "Urgência",
   },
