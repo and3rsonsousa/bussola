@@ -246,6 +246,7 @@ export function ActionLine({
                 ? "action-delayed"
                 : ""
             }`}
+            // style={{ backgroundColor: state.color }}
             style={{ borderLeftColor: state.color }}
             onClick={(e) => {
               e.preventDefault();

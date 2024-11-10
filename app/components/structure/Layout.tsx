@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`relative mx-auto flex h-[100dvh] max-w-screen-2xl flex-col bg-background lg:overflow-hidden`}
+      className={`relative mx-auto flex h-[100dvh] flex-col bg-background lg:overflow-hidden`}
     >
       <div className="flex h-full flex-col overflow-hidden">{children}</div>
       <div
