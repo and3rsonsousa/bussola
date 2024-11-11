@@ -1164,6 +1164,36 @@ export function ContextMenuItems({
         <span>Duplicar</span>
         <ContextMenuShortcut className="pl-2">⇧+D</ContextMenuShortcut>
       </ContextMenuItem>
+      {/* Hora */}
+      <ContextMenuSub>
+        <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
+          <TimerIcon className="size-3" />
+          <span>Mudar horário</span>
+        </ContextMenuSubTrigger>
+        <ContextMenuPortal>
+          <ContextMenuSubContent className="glass font-medium">
+            {Array(12)
+              .fill(1)
+              .map((a, i) => (
+                <ContextMenuItem
+                  key={i}
+                  onSelect={() => {
+                    handleActions({
+                      intent: INTENTS.updateAction,
+                      ...action,
+                      date: format(
+                        new Date(action.date).setHours(i + 6, 0),
+                        "yyyy-MM-dd HH:mm:ss",
+                      ),
+                    });
+                  }}
+                >
+                  {`${i + 6}h`}
+                </ContextMenuItem>
+              ))}
+          </ContextMenuSubContent>
+        </ContextMenuPortal>
+      </ContextMenuSub>
       {/* Adiar */}
       <ContextMenuSub>
         <ContextMenuSubTrigger className="bg-item flex items-center gap-2">
