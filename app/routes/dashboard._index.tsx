@@ -926,30 +926,3 @@ function Sprint() {
     </div>
   );
 }
-
-console.log(
-  [
-    "MUSSARELA",
-    "MARGUERITA",
-    "FRANGO",
-    "HAVAIANA",
-    "AMERICANA",
-    "CALABRESA",
-    "CARNE DE SOL",
-    "QUATRO QUEIJOS",
-    "FRANGO COM CATUPIRY",
-    "CROCANTE",
-    "PORTUGUESA",
-    "À MODA DA CASA",
-    "CAICÓ",
-    "CALABRESA COM PROVOLONE",
-    "PEPPERONI",
-    "FILÉ COM CHEDDAR",
-    "CAMARÃO COM CATUPIRY",
-    "KitKat",
-    "M&M's",
-    "BRIGADEIRO",
-  ]
-    .map((i) => `${i[0]}${i.substring(1).toLowerCase()}`)
-    .join(","),
-);
