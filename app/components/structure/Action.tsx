@@ -239,15 +239,13 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "px-2 py-1" : long ? "px-3 py-2" : "p-2"} text-sm font-medium @container md:text-xs ${
+            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "rounded-[4px] px-2 py-1" : long ? "rounded-sm px-4 py-3" : "rounded-sm p-3"} overflow-hidden text-sm font-medium @container md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
                 ? "action-delayed"
                 : ""
             }`}
-            // style={{ backgroundColor: state.color }}
-            style={{ borderLeftColor: state.color }}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -268,6 +266,10 @@ export function ActionLine({
               if (onDrag) onDrag(action);
             }}
           >
+            <div
+              className="absolute left-0 top-0 h-full w-1"
+              style={{ backgroundColor: state.color }}
+            ></div>
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
@@ -817,7 +819,7 @@ export function BlockOfActions({
       <div
         className={`grid ${
           !max
-            ? "@[500px]:grid-cols-2 @[750px]:grid-cols-3 @[1000px]:grid-cols-4 @[1300px]:grid-cols-6"
+            ? "@[600px]:grid-cols-2 @[1000px]:grid-cols-3 @[1300px]:grid-cols-4"
             : max === 2
               ? "grid-cols-2"
               : ""
