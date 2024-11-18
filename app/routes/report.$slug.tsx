@@ -112,7 +112,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .from("actions")
         .select("*")
         .is("archived", false)
-        .match({ partner: slug })
+        .contains("partners", [slug])
         .in("category", ["post", "reels", "carousel", "stories"])
         .gte("date", start)
         .lte("date", end)
