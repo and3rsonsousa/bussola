@@ -63,7 +63,7 @@ export default function AdminPartners() {
                   size="lg"
                 />
                 <div className="w-full overflow-hidden">
-                  <div className="mb-1 flex w-[90%] gap-2 overflow-hidden text-2xl font-bold leading-none outline-none">
+                  <div className="mb-1 flex w-[90%] gap-2 overflow-hidden text-2xl font-bold leading-none outline-hidden">
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                       {partner.title}
                     </div>

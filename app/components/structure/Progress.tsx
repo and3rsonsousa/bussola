@@ -34,7 +34,7 @@ export default function Progress({
               <div
                 key={item.id}
                 style={{ width: percentage + "%", backgroundColor: item.color }}
-                className={cn("h-full flex-shrink grow-0 bg-primary")}
+                className={cn("h-full shrink grow-0 bg-primary")}
               ></div>
             );
           } else return null;

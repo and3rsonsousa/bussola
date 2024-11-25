@@ -51,7 +51,7 @@ export default function Login() {
           <Bussola />
         </div>
         {actionData && (
-          <div className="my-8 flex items-center gap-4 rounded-lg bg-error-600 p-4 leading-none text-error-50">
+          <div className="text-error-50 my-8 flex items-center gap-4 rounded-lg bg-rose-600 p-4 leading-none">
             <AlertCircleIcon className="size-10" />
             <div>{actionData.errors.email}</div>
           </div>

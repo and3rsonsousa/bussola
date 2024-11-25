@@ -256,7 +256,7 @@ export default function DashboardIndex() {
             <div className="flex justify-between py-8">
               <div className="flex">
                 <div className="relative flex">
-                  <h2 className="text-3xl font-semibold capitalize tracking-tight">
+                  <h2 className="text-3xl font-semibold tracking-tight capitalize">
                     {isToday(currentDay)
                       ? "hoje"
                       : formatRelative(currentDay, new Date(), {
@@ -354,7 +354,7 @@ export default function DashboardIndex() {
                             }}
                             size="xs"
                           />
-                          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-xs font-medium">
+                          <div className="overflow-hidden text-xs font-medium text-ellipsis whitespace-nowrap">
                             {partner.title}
                           </div>
                         </div>
@@ -455,7 +455,7 @@ export function WeekView({
           >
             {/* Dia */}
             <div className="flex shrink-0 items-center justify-between">
-              <div className="text-ellipsis text-nowrap font-semibold first-letter:capitalize">
+              <div className="font-semibold text-nowrap text-ellipsis first-letter:capitalize">
                 {format(date, "EEEE ", { locale: ptBR })}
               </div>
               <div className="text-center opacity-0 group-hover:opacity-100">
@@ -463,7 +463,7 @@ export function WeekView({
               </div>
             </div>
             {/* Data */}
-            <div className="mb-4 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+            <div className="text-muted-foreground mb-4 text-[10px] font-medium tracking-widest uppercase">
               {format(date, "d 'de' MMMM", {
                 locale: ptBR,
               })}
@@ -542,7 +542,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="hidden text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:block">
+            <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
               Ordenar por
             </div>
             <Button
@@ -565,7 +565,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <div className="hidden text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:block">
+            <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
               Categorizar por
             </div>
             <Button
@@ -626,7 +626,7 @@ function Partners({ actions }: { actions?: Action[] }) {
               tabIndex={0}
               to={`/dashboard/${partner.slug}`}
               key={partner.slug}
-              className="group/avatar relative cursor-pointer rounded-full outline-none"
+              className="group/avatar relative cursor-pointer rounded-full outline-hidden"
             >
               {/* ring-ring ring-offset-2 ring-offset-background focus:ring-2 */}
               <CircularProgress
@@ -657,14 +657,14 @@ function Partners({ actions }: { actions?: Action[] }) {
                   ).length
                 }
                 isDynamic
-                className="-translate-y-1 translate-x-2 border-2 border-background"
+                className="border-background -translate-y-1 translate-x-2 border-2"
               />
             </Link>
           ))}
         </div>
       ) : (
         <div className="grid place-content-center p-4 text-center">
-          <div className="mb-2 text-4xl font-semibold tracking-tighter text-error-600">
+          <div className="text-error-600 mb-2 text-4xl font-semibold tracking-tighter">
             Nenhum <span className="font-bold">PARCEIRO</span> está designado
             para você.
           </div>
@@ -755,12 +755,12 @@ const ActionsProgress = () => {
 
   return (
     <div>
-      <h2 className="my-8 text-3xl font-semibold leading-none tracking-tight">
+      <h2 className="my-8 text-3xl leading-none font-semibold tracking-tight">
         <span className="hidden md:block">Acompanhamento do progresso</span>
         <span className="md:hidden">Progresso</span>
       </h2>
       <div className="gap-8 lg:flex">
-        <div className="grid w-full select-none grid-cols-3 gap-2">
+        <div className="grid w-full grid-cols-3 gap-2 select-none">
           {[
             {
               title: "Semana",
@@ -776,7 +776,7 @@ const ActionsProgress = () => {
             },
           ].map(({ actions, title }, i) => (
             <div key={i}>
-              <h3 className="mb-2 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xl font-semibold capitalize leading-none">
+              <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
                 {title}
               </h3>
               <div className="flex gap-4">
@@ -812,7 +812,7 @@ const ActionsProgress = () => {
           ))}
         </div>
         <div className="w-full">
-          <h3 className="mb-2 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xl font-semibold leading-none">
+          <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap">
             Durante o ano
           </h3>
           <ChartContainer config={{}} className="max-h-40 min-h-20 w-full">
@@ -902,7 +902,7 @@ function Sprint() {
           </Toggle>
           {actions.length > 0 && (
             <div
-              className={`flex items-center gap-1 whitespace-nowrap rounded p-1 px-4 text-sm font-semibold text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-error-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-success-500"}`}
+              className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold whitespace-nowrap text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-rose-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-lime-500"}`}
             >
               <TimerIcon className="size-4 opacity-75" />
               <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>

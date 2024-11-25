@@ -316,7 +316,7 @@ export default function ActionPage() {
           <div className="flex gap-4">
             <textarea
               value={action.title}
-              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold outline-none ${action.title.length > 50 ? "md:text-4xl" : "md:text-5xl"}`}
+              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold outline-hidden ${action.title.length > 50 ? "md:text-4xl" : "md:text-5xl"}`}
               rows={1}
               // @ts-ignore
               style={{ fieldSizing: "content", resize: "none" }}
@@ -604,7 +604,7 @@ export default function ActionPage() {
                       <input {...getInputProps()} name="files" multiple />
 
                       {isDragActive ? (
-                        <div className="grid h-full w-full place-content-center bg-gradient-to-b from-background/80">
+                        <div className="grid h-full w-full place-content-center bg-linear-to-b from-background/80">
                           <ImageIcon className="size-12 opacity-75" />
                         </div>
                       ) : (
@@ -917,7 +917,7 @@ export default function ActionPage() {
                   caption: event.target.value,
                 }))
               }
-              className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-none lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+              className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-hidden lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
               value={action.caption ? action.caption : undefined}
@@ -982,7 +982,7 @@ export default function ActionPage() {
           {/* Categoria */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+            <DropdownMenuTrigger className="rounded border-none p-2 outline-hidden ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
               <Icons id={category.slug} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1023,7 +1023,7 @@ export default function ActionPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`flex items-center rounded border-2 px-3 py-1 text-xs font-semibold outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2 lg:text-sm`}
+              className={`flex items-center rounded border-2 px-3 py-1 text-xs font-semibold outline-hidden ring-ring ring-offset-2 ring-offset-background focus:ring-2 lg:text-sm`}
               style={{ borderColor: state.color }}
             >
               {state.title}
@@ -1056,7 +1056,7 @@ export default function ActionPage() {
           {/* Prioridade */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded border-none p-2 outline-none ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+            <DropdownMenuTrigger className="rounded border-none p-2 outline-hidden ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
               <Icons id={priority.slug} type="priority" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1088,7 +1088,7 @@ export default function ActionPage() {
           {/* Responsáveis */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex -space-x-1 rounded-full border-none outline-none ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="flex -space-x-1 rounded-full border-none outline-hidden ring-ring ring-offset-2 ring-offset-background focus:ring-2">
               {responsibles.map((person, i) => (
                 <Avatar
                   item={{
@@ -1142,7 +1142,7 @@ export default function ActionPage() {
           {getInstagramFeed({ actions: [action] }).length > 0 ? (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded outline-none ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
+                <DropdownMenuTrigger className="rounded outline-hidden ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
                   <div
                     className="size-8 rounded border"
                     style={{

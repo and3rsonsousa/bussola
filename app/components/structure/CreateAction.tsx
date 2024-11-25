@@ -196,7 +196,7 @@ export default function CreateAction({
         {/* Título */}
         <textarea
           defaultValue={action.title}
-          className="mb-1 w-full resize-none bg-transparent text-2xl font-semibold tracking-tighter text-foreground outline-none placeholder:text-muted-foreground"
+          className="mb-1 w-full resize-none bg-transparent text-2xl font-semibold tracking-tighter text-foreground outline-hidden placeholder:text-muted-foreground"
           rows={1}
           onChange={(event) => {
             setAction({ ...action, title: event.target.value });
@@ -207,7 +207,7 @@ export default function CreateAction({
         />
         <textarea
           defaultValue={action.description}
-          className="font-regular relative w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          className="font-regular relative w-full resize-none bg-transparent text-sm outline-hidden placeholder:text-muted-foreground"
           rows={2}
           placeholder="Descreva brevemente a sua ação"
           onChange={(event) => {
@@ -400,7 +400,7 @@ export default function CreateAction({
             {/* Cor da ação */}
             {getInstagramFeed({ actions: [action] }).length > 0 && partner ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded outline-none ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
+                <DropdownMenuTrigger className="rounded outline-hidden ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
                   <div
                     className="size-8 rounded"
                     style={{
@@ -586,7 +586,7 @@ export default function CreateAction({
             </Popover>
 
             <button
-              className="relative flex items-center gap-2 rounded bg-gradient-to-b from-white via-black to-white/30 px-4 py-3 text-white outline-none ring-primary ring-offset-4 ring-offset-background focus:ring-2"
+              className="relative flex items-center gap-2 rounded bg-linear-to-b from-white via-black to-white/30 px-4 py-3 text-white outline-hidden ring-primary ring-offset-4 ring-offset-background focus:ring-2"
               onClick={() => {
                 if (action.title.length === 0) {
                   toast({
@@ -639,7 +639,7 @@ export default function CreateAction({
                 }
               }}
             >
-              <div className="absolute inset-[1px] z-0 rounded bg-gradient-to-b from-[#444] via-black to-black" />
+              <div className="absolute inset-[1px] z-0 rounded bg-linear-to-b from-[#444] via-black to-black" />
               <div className="z-10">Criar</div>
             </button>
           </div>

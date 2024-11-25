@@ -669,7 +669,7 @@ export const Content = ({
       <video
         src={files[0].preview}
         className={clsx(
-          `w-full object-cover ${aspect === "squared" ? "aspect-square" : aspect === "feed" ? "aspect-[4/5]" : ""}`,
+          `w-full object-cover ${aspect === "squared" ? "aspect-square" : aspect === "feed" ? "aspect-4/5" : ""}`,
           className,
         )}
         controls

@@ -428,7 +428,7 @@ const ActionlistReport = ({ action }: { action: Action }) => {
             ) : (
               <video
                 src={action.files[0]}
-                className="aspect-[9/16] w-full bg-black"
+                className="aspect-9/16 w-full bg-black"
                 controls
               />
             )} */}

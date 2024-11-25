@@ -138,7 +138,7 @@ export function ActionLine({
           <div>
             <div
               title={action.title}
-              className={`action relative cursor-pointer rounded outline-none ring-ring ring-offset-2 ring-offset-background focus-within:ring ${
+              className={`action relative cursor-pointer rounded outline-hidden ring-ring ring-offset-2 ring-offset-background focus-within:ring-3 ${
                 showDelay &&
                 isBefore(action.date, new Date()) &&
                 state.slug !== "finished"
@@ -170,7 +170,7 @@ export function ActionLine({
               />
               <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
 
-              <div className="absolute bottom-1.5 left-2 right-2 flex justify-between text-xs font-semibold text-white drop-shadow-sm">
+              <div className="absolute bottom-1.5 left-2 right-2 flex justify-between text-xs font-semibold text-white drop-shadow-xs">
                 <Icons id={action.category} className="size-4" />
                 {/* {action.partners.length > 1 && (
                     <HeartHandshakeIcon className="size-4" />
@@ -336,7 +336,7 @@ export function ActionLine({
                   type="text"
                   name="title"
                   defaultValue={action.title}
-                  className="w-full bg-transparent outline-none"
+                  className="w-full bg-transparent outline-hidden"
                   onKeyDown={(event) => {
                     if (event.key === "Escape") {
                       flushSync(() => {
@@ -376,7 +376,7 @@ export function ActionLine({
               ) : (
                 <button
                   ref={buttonRef}
-                  className={`relative w-full cursor-text select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                  className={`relative w-full cursor-text select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-hidden`}
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -390,7 +390,7 @@ export function ActionLine({
                 >
                   {action.title}
                   {/* <div
-                    className={`absolute right-0 top-0 rounded-sm bg-gradient-to-l from-secondary via-secondary pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
+                    className={`absolute right-0 top-0 rounded-sm bg-linear-to-l from-secondary via-secondary pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
                   >
                     <Edit3Icon className="size-4" />
                   </div> */}
@@ -568,7 +568,7 @@ export function ActionBlock({
                 ref={inputRef}
                 type="text"
                 defaultValue={action.title}
-                className={`w-full overflow-hidden bg-transparent outline-none`}
+                className={`w-full overflow-hidden bg-transparent outline-hidden`}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") {
                     flushSync(() => {
@@ -608,7 +608,7 @@ export function ActionBlock({
             ) : (
               <button
                 ref={buttonRef}
-                className={`relative flex w-full cursor-text items-center overflow-hidden text-ellipsis text-nowrap text-left outline-none`}
+                className={`relative flex w-full cursor-text items-center overflow-hidden text-ellipsis text-nowrap text-left outline-hidden`}
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();

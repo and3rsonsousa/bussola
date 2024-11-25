@@ -32,7 +32,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     >
       <div className="flex h-full flex-col overflow-hidden">{children}</div>
       <div
-        className={`${isTransitioning ? "opacity-100" : "pointer-events-none opacity-0"} absolute inset-0 z-[9999] grid place-content-center bg-background/25 backdrop-blur-lg transition`}
+        className={`${isTransitioning ? "opacity-100" : "pointer-events-none opacity-0"} absolute inset-0 z-9999 grid place-content-center bg-background/25 backdrop-blur-lg transition`}
       >
         <Loader />
       </div>

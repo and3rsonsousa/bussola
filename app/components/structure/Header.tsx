@@ -81,7 +81,7 @@ export default function Header({
     >
       {/* Handle */}
       {isActionPage && (
-        <div className="left-1/2 mx-auto mb-4 h-1.5 w-32 rounded-full bg-foreground/15 transition group-hover:opacity-0"></div>
+        <div className="bg-foreground/15 left-1/2 mx-auto mb-4 h-1.5 w-32 rounded-full transition group-hover:opacity-0"></div>
       )}
       <header
         className={`glass z-10 flex items-center justify-between gap-2 rounded-[28px] p-2`}
@@ -101,7 +101,7 @@ export default function Header({
         <Link
           to="/dashboard"
           viewTransition
-          className="rounded-lg p-4 outline-none ring-ring ring-offset-background focus:ring-2"
+          className="ring-ring ring-offset-background rounded-lg p-4 outline-hidden focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
           <Bussola className="hidden md:block" size="xs" />
@@ -111,7 +111,7 @@ export default function Header({
           <Link
             viewTransition
             to={`/dashboard/${partner ? partner.slug.concat("/") : ""}late/`}
-            className="-ml-2 grid size-5 place-content-center rounded-full bg-error-600 text-xs font-bold text-white"
+            className="-ml-2 grid size-5 place-content-center rounded-full bg-rose-600 text-xs font-bold text-white"
           >
             {lateActions.length}
           </Link>
@@ -242,7 +242,7 @@ export default function Header({
                 />
                 {(navigation.state !== "idle" ||
                   fetchers.filter((f) => f.formData).length > 0) && (
-                  <div className="absolute right-0 top-0">
+                  <div className="absolute top-0 right-0">
                     <Loader size="lgs" />
                   </div>
                 )}

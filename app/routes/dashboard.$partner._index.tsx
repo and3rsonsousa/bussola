@@ -289,7 +289,7 @@ export default function Partner() {
               <div className="mr-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    className="capitalize outline-none"
+                    className="capitalize outline-hidden"
                     asChild
                   >
                     <Button variant={"ghost"} className="text-xl font-bold">
