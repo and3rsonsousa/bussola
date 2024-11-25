@@ -17,7 +17,7 @@ export default function Badge({
     <div
       title={title}
       className={cn(
-        `absolute top-0 right-0 grid translate-x-[calc(100%+8px)] place-content-center rounded-full p-1.5 py-0 text-center text-sm font-bold ${
+        `grid h-6 place-content-center items-start rounded-full px-2 text-center text-sm font-bold ${
           isDynamic
             ? value > average
               ? "bg-rose-600 text-rose-200"
