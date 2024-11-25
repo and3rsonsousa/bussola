@@ -657,7 +657,7 @@ function Partners({ actions }: { actions?: Action[] }) {
                   ).length
                 }
                 isDynamic
-                className="border-background -translate-y-1 translate-x-2 border-2"
+                className="border-background absolute -top-2 translate-x-full border-2"
               />
             </Link>
           ))}
