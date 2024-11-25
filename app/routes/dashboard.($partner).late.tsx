@@ -32,7 +32,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .from("actions")
         .select("*")
         .is("archived", false)
-        .like("partner", partner_slug || "%")
+
         .contains("responsibles", person?.admin ? [] : [user.id])
         .neq("state", "finished")
         .lte("date", format(new Date(), "yyyy-MM-dd HH:mm:ss"))
@@ -42,7 +42,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .from("actions")
         .select("state, date")
         .is("archived", false)
-        .like("partner", partner_slug || "%")
         .contains("responsibles", person?.admin ? [] : [user.id])
         .neq("state", "finished")
         .lte("date", format(new Date(), "yyyy-MM-dd HH:mm:ss"))

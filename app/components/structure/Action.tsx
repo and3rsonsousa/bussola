@@ -1123,6 +1123,7 @@ export function ContextMenuItems({
 
   // const partner = partners.find((p) => p.slug === action.partners[0]);
   const state = states.find((state) => state.slug === action.state);
+  const _partners = getPartners(action.partners);
 
   return (
     <ContextMenuContent className="glass">
@@ -1400,7 +1401,7 @@ export function ContextMenuItems({
           <div
             className={`flex items-center ${action.partners.length === 1 ? "gap-2" : "-space-x-1"}`}
           >
-            {getPartners(action.partners).map((partner) => (
+            {_partners.map((partner) => (
               <Fragment key={partner.id}>
                 <Avatar
                   item={{
