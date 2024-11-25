@@ -70,7 +70,7 @@ export function ShortText({
   return (
     <div
       className={cn(
-        `text-center text-[10px] font-bold uppercase leading-none tracking-wide`,
+        `text-center text-[10px] leading-none font-bold tracking-wide uppercase`,
         className,
       )}
     >
@@ -169,10 +169,10 @@ export function Avatar({
                 : "size-16",
         group
           ? size === "xl"
-            ? "border-2 border-background"
+            ? "border-background border-2"
             : size === "md" || size === "lg"
-              ? "border-2 border-background"
-              : "border border-background"
+              ? "border-background border-2"
+              : "border-background border"
           : "",
         "block",
         className,
@@ -370,16 +370,16 @@ export const Icons = ({
   ) : (
     <div className="relative">
       <SignalIcon
-        className={cn(["absolute left-0 top-0 z-0 opacity-30", className])}
+        className={cn(["absolute top-0 left-0 z-0 opacity-30", className])}
       />
       <View
         className={cn([
           "isolate",
           id === "low"
-            ? "text-success-500"
+            ? "text-lime-500"
             : id === "mid"
-              ? "text-alert-500"
-              : "text-error-600",
+              ? "text-amber-500"
+              : "text-rose-600",
           className,
         ])}
       />
@@ -698,7 +698,7 @@ export const Post = ({
   return (
     <div
       className={clsx(
-        `grid aspect-square place-content-center overflow-hidden transition-opacity @container`,
+        `@container grid aspect-square place-content-center overflow-hidden transition-opacity`,
         className,
       )}
       style={{
@@ -711,7 +711,7 @@ export const Post = ({
             : undefined,
       }}
     >
-      <div className="p-2 text-center text-[10px] font-semibold leading-none @[120px]:text-[12px] @[200px]:p-4 @[200px]:text-[20px] @[200px]:tracking-tighter @[300px]:p-8 @[300px]:text-[24px]">
+      <div className="p-2 text-center text-[10px] leading-none font-semibold @[120px]:text-[12px] @[200px]:p-4 @[200px]:text-[20px] @[200px]:tracking-tighter @[300px]:p-8 @[300px]:text-[24px]">
         {action.title}
       </div>
     </div>
@@ -768,7 +768,7 @@ export const ReportReview = ({ partner }: { partner: Partner }) => {
           onSelect={(range) => setRange(range)}
         />
         {range?.from && range.to ? (
-          <div className="border-t border-accent/50 py-4">
+          <div className="border-accent/50 border-t py-4">
             <div className="pb-4 text-center text-sm">
               {range.from && range.to
                 ? `${format(range.from, "d/M/yy")} a ${format(range.to, "d/M/yy")}`

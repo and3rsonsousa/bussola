@@ -664,7 +664,7 @@ function Partners({ actions }: { actions?: Action[] }) {
         </div>
       ) : (
         <div className="grid place-content-center p-4 text-center">
-          <div className="text-error-600 mb-2 text-4xl font-semibold tracking-tighter">
+          <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
             Nenhum <span className="font-bold">PARCEIRO</span> está designado
             para você.
           </div>
@@ -902,7 +902,7 @@ function Sprint() {
           </Toggle>
           {actions.length > 0 && (
             <div
-              className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold whitespace-nowrap text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-rose-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-alert-500" : "bg-lime-500"}`}
+              className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold whitespace-nowrap text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-rose-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-amber-500" : "bg-lime-500"}`}
             >
               <TimerIcon className="size-4 opacity-75" />
               <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>

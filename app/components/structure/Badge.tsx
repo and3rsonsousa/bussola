@@ -20,8 +20,8 @@ export default function Badge({
         `absolute top-0 right-0 grid translate-x-[calc(100%+8px)] place-content-center rounded-full p-1.5 py-0 text-center text-sm font-bold ${
           isDynamic
             ? value > average
-              ? "text-error-200 bg-rose-600"
-              : "bg-alert-500 text-alert-100"
+              ? "bg-rose-600 text-rose-200"
+              : "bg-amber-500 text-amber-100"
             : "bg-accent text-accent-foreground"
         }`,
         className,

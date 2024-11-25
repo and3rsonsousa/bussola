@@ -243,7 +243,7 @@ export default function AdminPartners() {
                       }
                     />
                     <div
-                      className={`rounded-full ring-ring ring-offset-2 ring-offset-background peer-checked:ring-2`}
+                      className={`ring-ring ring-offset-background rounded-full ring-offset-2 peer-checked:ring-2`}
                     >
                       <Avatar
                         item={{
@@ -322,7 +322,7 @@ export default function AdminPartners() {
                 </div>
               </div>
               <div>
-                <div className="absolute right-4 top-4 w-96">
+                <div className="absolute top-4 right-4 w-96">
                   <h2 className="mb-4 text-2xl font-bold">Exemplo de texto</h2>
                   <div
                     className="leading-relaxed"
@@ -412,7 +412,7 @@ function Voice({
               className="-rotate-90"
             >
               <circle
-                className={`timer-circle transition-colors duration-500 ${alert === 1 ? "stroke-alert-500" : alert === 2 ? "stroke-error-500" : "stroke-primary"}`}
+                className={`timer-circle transition-colors duration-500 ${alert === 1 ? "stroke-alert-500" : alert === 2 ? "stroke-rose-500" : "stroke-primary"}`}
                 cx="8"
                 cy="8"
                 r="7"
@@ -426,7 +426,7 @@ function Voice({
       </div>
 
       {viewDescription && (
-        <div className="my-4 rounded bg-card p-4">{voice.description}</div>
+        <div className="bg-card my-4 rounded p-4">{voice.description}</div>
       )}
       <div className="flex justify-between py-2 text-center text-sm">
         {[-3, -2, -1, 1, 2, 3].map((value) => (
@@ -436,7 +436,7 @@ function Voice({
 
       <div>
         <Slider
-          className="text-error-500"
+          className="text-rose-500"
           onValueChange={(value) => {
             setValue(value);
             onChange(value);

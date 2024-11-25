@@ -138,7 +138,7 @@ export function ActionLine({
           <div>
             <div
               title={action.title}
-              className={`action relative cursor-pointer rounded outline-hidden ring-ring ring-offset-2 ring-offset-background focus-within:ring-3 ${
+              className={`action ring-ring ring-offset-background relative cursor-pointer rounded ring-offset-2 outline-hidden focus-within:ring-3 ${
                 showDelay &&
                 isBefore(action.date, new Date()) &&
                 state.slug !== "finished"
@@ -168,9 +168,9 @@ export function ActionLine({
                 aspect="squared"
                 className={`the-action-content aspect-square overflow-hidden rounded hover:opacity-75`}
               />
-              <div className="late-border absolute inset-0 hidden rounded border-2 border-error-600"></div>
+              <div className="late-border absolute inset-0 hidden rounded border-2 border-rose-600"></div>
 
-              <div className="absolute bottom-1.5 left-2 right-2 flex justify-between text-xs font-semibold text-white drop-shadow-xs">
+              <div className="absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold text-white drop-shadow-xs">
                 <Icons id={action.category} className="size-4" />
                 {/* {action.partners.length > 1 && (
                     <HeartHandshakeIcon className="size-4" />
@@ -200,7 +200,7 @@ export function ActionLine({
 
               <div className="absolute -top-3 right-2 flex gap-2">
                 {isSprint(action.id, sprints) && (
-                  <div className="grid size-6 place-content-center rounded border-2 border-background bg-primary text-primary-foreground">
+                  <div className="border-background bg-primary text-primary-foreground grid size-6 place-content-center rounded border-2">
                     <RabbitIcon className="size-4" />
                   </div>
                 )}
@@ -219,14 +219,14 @@ export function ActionLine({
 
                 {state.slug !== "finished" ? (
                   <div
-                    className={`rounded border-2 border-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white`}
+                    className={`border-background rounded border-2 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase`}
                     style={{ backgroundColor: state.color }}
                   >
                     <span>{state.title}</span>
                   </div>
                 ) : (
                   <div
-                    className="mt-1 grid size-4 place-content-center rounded border-2 border-background text-black"
+                    className="border-background mt-1 grid size-4 place-content-center rounded border-2 text-black"
                     style={{ backgroundColor: state.color }}
                   >
                     <CheckIcon className="size-3" />
@@ -239,7 +239,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "rounded-[4px] px-2 py-1" : long ? "rounded-sm px-4 py-3" : "rounded-sm p-3"} overflow-hidden text-sm font-medium @container md:text-xs ${
+            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "rounded-[4px] px-2 py-1" : long ? "rounded-sm px-4 py-3" : "rounded-sm p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -267,7 +267,7 @@ export function ActionLine({
             }}
           >
             <div
-              className="absolute left-0 top-0 h-full w-1"
+              className="absolute top-0 left-0 h-full w-1"
               style={{ backgroundColor: state.color }}
             ></div>
             {/* Atalhos */}
@@ -376,7 +376,7 @@ export function ActionLine({
               ) : (
                 <button
                   ref={buttonRef}
-                  className={`relative w-full cursor-text select-none items-center overflow-hidden text-ellipsis text-nowrap text-left outline-hidden`}
+                  className={`relative w-full cursor-text items-center overflow-hidden text-left text-nowrap text-ellipsis outline-hidden select-none`}
                   onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -455,7 +455,7 @@ export function ActionLine({
             </div>
 
             {long ? (
-              <div className="hidden w-72 overflow-x-hidden whitespace-nowrap text-right text-sm opacity-50 @[150px]:block md:text-[10px]">
+              <div className="hidden w-72 overflow-x-hidden text-right text-sm whitespace-nowrap opacity-50 md:text-[10px] @[150px]:block">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 4,
@@ -464,7 +464,7 @@ export function ActionLine({
               </div>
             ) : (
               date && (
-                <div className="ml-1 hidden shrink grow-0 whitespace-nowrap text-right text-xs opacity-50 @[130px]:block md:text-[10px]">
+                <div className="ml-1 hidden shrink grow-0 text-right text-xs whitespace-nowrap opacity-50 md:text-[10px] @[130px]:block">
                   {formatActionDatetime({
                     date: action.date,
                     dateFormat: date.dateFormat,
@@ -475,7 +475,7 @@ export function ActionLine({
             )}
 
             {isSprint(action.id, sprints) && (
-              <div className="absolute -top-1 right-2 size-2 rounded bg-primary"></div>
+              <div className="bg-primary absolute -top-1 right-2 size-2 rounded"></div>
             )}
           </div>
         )}
@@ -540,7 +540,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item cursor-pointer flex-col justify-between gap-2 rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm @container`}
+          className={`action group/action action-item @container cursor-pointer flex-col justify-between gap-2 rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
@@ -608,7 +608,7 @@ export function ActionBlock({
             ) : (
               <button
                 ref={buttonRef}
-                className={`relative flex w-full cursor-text items-center overflow-hidden text-ellipsis text-nowrap text-left outline-hidden`}
+                className={`relative flex w-full cursor-text items-center overflow-hidden text-left text-nowrap text-ellipsis outline-hidden`}
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -625,7 +625,7 @@ export function ActionBlock({
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-4 overflow-x-hidden text-muted-foreground">
+          <div className="text-muted-foreground flex items-center justify-between gap-4 overflow-x-hidden">
             <div className="flex items-center gap-2">
               {/* Partners | Clientes  */}
               {/* {partner ? (
@@ -658,7 +658,7 @@ export function ActionBlock({
               {/* Responsibles -  Responsáveis */}
               <AvatarGroup people={getResponsibles(action.responsibles)} />
             </div>
-            <div className="flex items-center justify-end gap-1 overflow-hidden whitespace-nowrap text-right text-sm font-medium text-muted-foreground md:text-xs">
+            <div className="text-muted-foreground flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap md:text-xs">
               <span className="@[240px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
@@ -684,7 +684,7 @@ export function ActionBlock({
             </div>
           </div>
           {isSprint(action.id, sprints) && sprint && (
-            <div className="absolute -top-2 right-2 grid size-6 place-content-center gap-1 rounded border-2 border-background bg-primary text-primary-foreground">
+            <div className="border-background bg-primary text-primary-foreground absolute -top-2 right-2 grid size-6 place-content-center gap-1 rounded border-2">
               <RabbitIcon className="size-4" />
             </div>
           )}
@@ -744,7 +744,7 @@ export function ListOfActions({
               : columns === 3
                 ? "grid sm:grid-cols-2 md:grid-cols-3"
                 : "grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6"
-        } gap-x-4 gap-y-1 @container`}
+        } @container gap-x-4 gap-y-1`}
       >
         {actions
           ?.slice(0, fold)
@@ -768,7 +768,7 @@ export function ListOfActions({
             onPressedChange={(isPressed) => {
               setFold(isPressed ? undefined : foldCount);
             }}
-            className="inline-flex gap-2 text-xs uppercase tracking-wider"
+            className="inline-flex gap-2 text-xs tracking-wider uppercase"
           >
             {fold ? (
               <>
@@ -1349,7 +1349,7 @@ export function ContextMenuItems({
               }}
             >
               <div className="flex flex-col">
-                <div className="text-[10px] uppercase tracking-wider">
+                <div className="text-[10px] tracking-wider uppercase">
                   {delay.day + delay.hour + delay.week > 0
                     ? "Data atual"
                     : "Confirmar adiamento para"}
@@ -1493,7 +1493,7 @@ export function ContextMenuItems({
                 }}
               >
                 <div
-                  className={`size-2 rounded-full text-muted`}
+                  className={`text-muted size-2 rounded-full`}
                   style={{ backgroundColor: state.color }}
                 ></div>
                 <span>{state.title}</span>
@@ -1528,7 +1528,7 @@ export function ContextMenuItems({
             {areas.map((area, i) => (
               <ContextMenuGroup key={area.id}>
                 {i > 0 && <ContextMenuSeparator />}
-                <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
+                <h4 className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase">
                   {area.title}
                 </h4>
                 {categories.map((category) =>

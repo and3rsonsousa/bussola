@@ -251,7 +251,7 @@ export default function Search({
                   {item.obs ? (
                     <div className="flex items-center gap-2">
                       {item.obs.priority.slug === PRIORITIES.high ? (
-                        <Icons id="high" className="text-error-500" />
+                        <Icons id="high" className="text-rose-500" />
                       ) : null}
                       <div className="flex">
                         {item.obs.responsibles.map((responsible) => (
