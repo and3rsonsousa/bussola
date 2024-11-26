@@ -138,11 +138,11 @@ export function ActionLine({
           <div>
             <div
               title={action.title}
-              className={`action ring-ring ring-offset-background relative cursor-pointer rounded ring-offset-2 outline-hidden focus-within:ring-3 ${
+              className={`action ring-ring ring-offset-background relative cursor-pointer rounded-md ring-offset-2 outline-hidden focus-within:ring-3 ${
                 showDelay &&
                 isBefore(action.date, new Date()) &&
                 state.slug !== "finished"
-                  ? "action-content-delayed rounded"
+                  ? "action-content-delayed rounded-md"
                   : " "
               }`}
               onClick={() => {
@@ -166,9 +166,9 @@ export function ActionLine({
                 action={action}
                 partner={partner!}
                 aspect="squared"
-                className={`the-action-content aspect-square overflow-hidden rounded hover:opacity-75`}
+                className={`the-action-content aspect-square overflow-hidden rounded-md hover:opacity-75`}
               />
-              <div className="late-border absolute inset-0 hidden rounded border-2 border-rose-600"></div>
+              <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600"></div>
 
               <div className="absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold text-white drop-shadow-xs">
                 <Icons id={action.category} className="size-4" />
@@ -200,7 +200,7 @@ export function ActionLine({
 
               <div className="absolute -top-3 right-2 flex gap-2">
                 {isSprint(action.id, sprints) && (
-                  <div className="border-background bg-primary text-primary-foreground grid size-6 place-content-center rounded border-2">
+                  <div className="border-background bg-primary text-primary-foreground grid size-6 place-content-center rounded-md border-2">
                     <RabbitIcon className="size-4" />
                   </div>
                 )}
@@ -219,14 +219,14 @@ export function ActionLine({
 
                 {state.slug !== "finished" ? (
                   <div
-                    className={`border-background rounded border-2 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase`}
+                    className={`border-background rounded-md border-2 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase`}
                     style={{ backgroundColor: state.color }}
                   >
                     <span>{state.title}</span>
                   </div>
                 ) : (
                   <div
-                    className="border-background mt-1 grid size-4 place-content-center rounded border-2 text-black"
+                    className="border-background mt-1 grid size-4 place-content-center rounded-md border-2 text-black"
                     style={{ backgroundColor: state.color }}
                   >
                     <CheckIcon className="size-3" />
@@ -239,7 +239,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${long ? "gap-2" : ""} ${short ? "rounded-[4px] px-2 py-1" : long ? "rounded-sm px-4 py-3" : "rounded-sm p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
+            className={`action group/action action-item items-center ${short ? "rounded px-2 py-1" : long ? "gap-2 rounded-sm px-4 py-3" : "rounded p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
