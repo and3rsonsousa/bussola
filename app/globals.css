@@ -100,6 +100,7 @@
   --radius-xs: calc(var(--radius) - 8px); /*  4 */
   --radius-sm: calc(var(--radius) - 4px); /*  8 */
   --radius-md: calc(var(--radius) + 2px); /* 14 */
+  --radius-default: var(--radius); /* 12 */
   --radius-lg: calc(var(--radius) + 4); /* 16  */
   --radius-xl: calc(var(--radius) + 8px); /* 20 */
 
@@ -126,10 +127,10 @@
     }
   }
 }
-/* 
-.border {
-  border-color: #e4e5e9;
-} */
+
+.rounded {
+  border-radius: var(--radius);
+}
 
 button {
   cursor: pointer;
