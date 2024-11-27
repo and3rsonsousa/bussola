@@ -138,7 +138,7 @@ button {
 
 @layer base {
   body {
-    @apply bg-background text-foreground font-light antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
