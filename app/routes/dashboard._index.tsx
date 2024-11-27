@@ -709,9 +709,10 @@ function CategoriesView({ actions }: { actions: Action[] }) {
 const ActionsProgress = () => {
   const matches = useMatches();
 
-  const { states, categories } = matches[1].data as DashboardRootType;
-  const { actions, actionsChart } = matches[2].data as DashboardIndexType;
+  const { states } = matches[1].data as DashboardRootType;
+  const { actions } = matches[2].data as DashboardIndexType;
 
+  const todayActions = actions?.filter((action) => isToday(action.date));
   const thisWeekActions = actions?.filter(
     (action) =>
       isAfter(action.date, startOfWeek(new Date())) &&
@@ -724,35 +725,6 @@ const ActionsProgress = () => {
     isSameMonth(action.date, addMonths(new Date(), 1)),
   );
 
-  const year = eachMonthOfInterval({
-    start: startOfYear(new Date()),
-    end: endOfYear(new Date()),
-  });
-
-  // const lineConfig = categories.reduce(
-  //   (acc, curr) => ({
-  //     ...acc,
-  //     [curr.slug]: { label: curr.title, color: curr.color },
-  //   }),
-  //   {},
-  // );
-
-  const dataLineChart = year.map((month) => ({
-    month: format(month, "MMM", { locale: ptBR }),
-    todas: actionsChart.filter((action) => isSameMonth(action.date, month))
-      .length,
-    ...categories.reduce(
-      (acc, curr) => ({
-        ...acc,
-        [curr.slug]: actionsChart.filter(
-          (action) =>
-            isSameMonth(month, action.date) && curr.slug === action.category,
-        ).length,
-      }),
-      {},
-    ),
-  }));
-
   return (
     <div>
       <h2 className="my-8 text-3xl leading-none font-semibold tracking-tight">
@@ -760,6 +732,50 @@ const ActionsProgress = () => {
         <span className="md:hidden">Progresso</span>
       </h2>
       <div className="gap-8 lg:flex">
+        <div>
+          <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
+            Dia mágico
+          </h3>
+          <div className="text-[140px] leading-[150px] font-bold tracking-tighter">
+            30
+          </div>
+        </div>
+        <div className="grid w-full grid-cols-3 gap-2 select-none">
+          <div>
+            <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
+              Hoje
+            </h3>
+            <div className="flex gap-4">
+              <div className="w-full">
+                <ChartContainer
+                  config={{}}
+                  className="aspect-square max-h-40 w-full"
+                >
+                  <PieChart>
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent />}
+                    />
+                    <Pie
+                      dataKey={"actions"}
+                      nameKey={"state"}
+                      innerRadius={"60%"}
+                      data={states.map((state) => {
+                        return {
+                          state: state.title,
+                          actions: todayActions.filter(
+                            (action) => action.state === state.slug,
+                          ).length,
+                          fill: state.color,
+                        };
+                      })}
+                    />
+                  </PieChart>
+                </ChartContainer>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="grid w-full grid-cols-3 gap-2 select-none">
           {[
             {
@@ -811,7 +827,7 @@ const ActionsProgress = () => {
             </div>
           ))}
         </div>
-        <div className="w-full">
+        {/* <div className="w-full">
           <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap">
             Durante o ano
           </h3>
@@ -819,7 +835,7 @@ const ActionsProgress = () => {
             <LineChart data={dataLineChart} margin={{ left: 12, right: 12 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey={"month"} />
-              {/* <ChartTooltip cursor={false} content={<ChartTooltipContent />} /> */}
+              
 
               {categories.map((category) => (
                 <Line
@@ -832,7 +848,7 @@ const ActionsProgress = () => {
               ))}
             </LineChart>
           </ChartContainer>
-        </div>
+        </div> */}
       </div>
     </div>
   );
