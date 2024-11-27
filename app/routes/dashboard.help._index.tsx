@@ -144,7 +144,7 @@ export default function Index() {
 
   return (
     <div className="scrollbars">
-      <div className="container mt-16 max-w-xl px-8 pb-16">
+      <div className="container mx-auto mt-16 max-w-xl px-8 pb-16">
         <div className="mb-16">
           <h2 className="text-4xl font-bold tracking-tighter">Atalhos</h2>
           <div className="mb-4 text-sm opacity-50">
@@ -154,7 +154,7 @@ export default function Index() {
             {areas.map((area, i) => (
               <div key={i}>
                 <div className="mb-2 flex justify-between gap-8 text-right">
-                  <div className="text-lg font-bold uppercase tracking-wider">
+                  <div className="text-lg font-bold tracking-wider uppercase">
                     {area.title}
                   </div>
                   <div className="mb-4 text-xs opacity-50">
@@ -166,7 +166,7 @@ export default function Index() {
                     key={i}
                     className="mb-2 grid grid-cols-4 items-center gap-2"
                   >
-                    <div className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold">
+                    <div className="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap">
                       {s.title}
                     </div>
                     <div className="col-span-2 overflow-hidden text-sm opacity-75">

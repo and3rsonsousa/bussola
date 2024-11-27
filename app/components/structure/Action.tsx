@@ -107,9 +107,6 @@ export function ActionLine({
   const responsibles = getResponsibles(action.responsibles);
   const action_partners = getPartners(action.partners);
 
-  // <div className="grid size-6 place-content-center rounded-full bg-background">
-  //                   <HeartHandshakeIcon className="size-4" />
-  //                 </div>
   function handleActions(data: {
     [key: string]: string | number | null | string[] | boolean;
   }) {
@@ -138,7 +135,7 @@ export function ActionLine({
           <div>
             <div
               title={action.title}
-              className={`action ring-ring ring-offset-background relative cursor-pointer rounded-md ring-offset-2 outline-hidden focus-within:ring-3 ${
+              className={`action ring-ring ring-offset-background relative cursor-pointer rounded ring-offset-2 outline-hidden focus-within:ring-3 ${
                 showDelay &&
                 isBefore(action.date, new Date()) &&
                 state.slug !== "finished"
@@ -239,7 +236,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${short ? "rounded px-2 py-1" : long ? "gap-2 rounded-sm px-4 py-3" : "rounded p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
+            className={`action group/action action-item items-center ${short ? "rounded-sm px-2 py-1" : long ? "gap-2 rounded-sm px-4 py-3" : "rounded-xs p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"

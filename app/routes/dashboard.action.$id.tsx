@@ -266,7 +266,7 @@ export default function ActionPage() {
   }, [data]);
 
   return (
-    <div className="container flex h-full max-w-5xl flex-col p-0 lg:overflow-hidden">
+    <div className="container mx-auto flex h-full max-w-5xl flex-col p-0 lg:overflow-hidden">
       <div className="gap-4 overflow-y-auto px-4 pt-4 md:px-8 lg:flex lg:h-full lg:overflow-hidden">
         <div
           className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category) || action.category === "stories" ? "lg:w-3/5" : ""}`}
@@ -294,7 +294,7 @@ export default function ActionPage() {
                 </Link>
               </div>
             </div>
-            <div className="text-xs text-secondary-foreground">
+            <div className="text-secondary-foreground text-xs">
               {format(
                 parseISO(baseAction?.updated_at as string),
                 "yyyy-MM-dd HH:mm:ss",
@@ -351,8 +351,8 @@ export default function ActionPage() {
 
           {/* Descrição */}
           <div className="flex shrink grow flex-col overflow-hidden lg:mb-0">
-            <div className="mb-2 flex shrink-0 items-center justify-between gap-4 pr-1 pt-1">
-              <div className="text-xs font-bold uppercase tracking-wider">
+            <div className="mb-2 flex shrink-0 items-center justify-between gap-4 pt-1 pr-1">
+              <div className="text-xs font-bold tracking-wider uppercase">
                 Descrição
               </div>
 
@@ -604,7 +604,7 @@ export default function ActionPage() {
                       <input {...getInputProps()} name="files" multiple />
 
                       {isDragActive ? (
-                        <div className="grid h-full w-full place-content-center bg-linear-to-b from-background/80">
+                        <div className="from-background/80 grid h-full w-full place-content-center bg-linear-to-b">
                           <ImageIcon className="size-12 opacity-75" />
                         </div>
                       ) : (
@@ -649,10 +649,10 @@ export default function ActionPage() {
             )}
             {/* Legenda */}
             <div className="flex items-center justify-between">
-              <div className="text-xs font-bold uppercase tracking-wider">
+              <div className="text-xs font-bold tracking-wider uppercase">
                 {action.category === "stories" ? "Sequência" : "Legenda"}
               </div>
-              <div className="flex gap-2 pb-1 pr-1">
+              <div className="flex gap-2 pr-1 pb-1">
                 {/* <Button size="sm" variant={"ghost"}>
                   <ZapIcon className="size-4" />
                 </Button> */}
@@ -917,7 +917,7 @@ export default function ActionPage() {
                   caption: event.target.value,
                 }))
               }
-              className={`scrollbars scrollbars-thin min-h-20 w-full bg-background font-normal leading-tight outline-hidden lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full leading-tight font-normal outline-hidden lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
               value={action.caption ? action.caption : undefined}
@@ -982,14 +982,14 @@ export default function ActionPage() {
           {/* Categoria */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded border-none p-2 outline-hidden ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+            <DropdownMenuTrigger className="ring-ring ring-offset-background hover:bg-secondary rounded border-none p-2 ring-offset-2 outline-hidden focus:ring-2">
               <Icons id={category.slug} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
               {areas.map((area, i) => (
                 <DropdownMenuGroup key={area.id}>
                   {i > 0 && <DropdownMenuSeparator />}
-                  <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                  <h4 className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase opacity-50">
                     {area.title}
                   </h4>
                   {categories.map((category) =>
@@ -1023,7 +1023,7 @@ export default function ActionPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`flex items-center rounded border-2 px-3 py-1 text-xs font-semibold outline-hidden ring-ring ring-offset-2 ring-offset-background focus:ring-2 lg:text-sm`}
+              className={`ring-ring ring-offset-background flex items-center rounded border-2 px-3 py-1 text-xs font-semibold ring-offset-2 outline-hidden focus:ring-2 lg:text-sm`}
               style={{ borderColor: state.color }}
             >
               {state.title}
@@ -1056,7 +1056,7 @@ export default function ActionPage() {
           {/* Prioridade */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded border-none p-2 outline-hidden ring-ring ring-offset-2 ring-offset-background hover:bg-secondary focus:ring-2">
+            <DropdownMenuTrigger className="ring-ring ring-offset-background hover:bg-secondary rounded border-none p-2 ring-offset-2 outline-hidden focus:ring-2">
               <Icons id={priority.slug} type="priority" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1088,7 +1088,7 @@ export default function ActionPage() {
           {/* Responsáveis */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex -space-x-1 rounded-full border-none outline-hidden ring-ring ring-offset-2 ring-offset-background focus:ring-2">
+            <DropdownMenuTrigger className="ring-ring ring-offset-background flex -space-x-1 rounded-full border-none ring-offset-2 outline-hidden focus:ring-2">
               {responsibles.map((person, i) => (
                 <Avatar
                   item={{
@@ -1142,7 +1142,7 @@ export default function ActionPage() {
           {getInstagramFeed({ actions: [action] }).length > 0 ? (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded outline-hidden ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
+                <DropdownMenuTrigger className="ring-primary ring-offset-background rounded ring-offset-4 outline-hidden focus-within:ring-2">
                   <div
                     className="size-8 rounded border"
                     style={{
@@ -1255,7 +1255,7 @@ export default function ActionPage() {
                 <div className="flex shrink-0">
                   <Input
                     value={parseISO(action.date).getHours().toString()}
-                    className="w-1/2 rounded-r-none border border-r-0 border-border text-right focus:z-10"
+                    className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
                     type="number"
                     min={0}
                     max={23}
@@ -1270,7 +1270,7 @@ export default function ActionPage() {
                   />
                   <Input
                     value={parseISO(action.date).getMinutes().toString()}
-                    className="w-1/2 rounded-l-none border border-l-0 border-border text-left"
+                    className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
                     type="number"
                     min={0}
                     max={59}
@@ -1350,7 +1350,7 @@ export default function ActionPage() {
                     setAction({ ...action, time: Number(value) });
                   }}
                 >
-                  <SelectTrigger className="w-full border border-border bg-input">
+                  <SelectTrigger className="border-border bg-input w-full border">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -1451,7 +1451,7 @@ export default function ActionPage() {
               disabled={isWorking}
             >
               {isWorking ? (
-                <div className="size-4 animate-spin rounded-full border-2 border-background border-b-transparent"></div>
+                <div className="border-background size-4 animate-spin rounded-full border-2 border-b-transparent"></div>
               ) : (
                 <>
                   <SaveIcon className="size-4" />
