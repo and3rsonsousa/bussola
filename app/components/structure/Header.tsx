@@ -101,7 +101,7 @@ export default function Header({
         <Link
           to="/dashboard"
           viewTransition
-          className="ring-ring ring-offset-background rounded-lg p-4 outline-hidden focus:ring-2"
+          className="ring-ring ring-offset-background rounded p-4 outline-hidden focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
           <Bussola className="hidden md:block" size="xs" />
