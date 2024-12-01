@@ -8,15 +8,6 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
 
 @layer base {
   :root {
@@ -36,7 +27,7 @@
     --muted-foreground: 220 10% 60%;
     --accent-foreground: 260 15% 20%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 10% 80%;
+    --border: 220 10% 90%;
     --input: 240 10% 96%;
     --ring: 230 100% 65%;
     --radius: 12px;
@@ -63,9 +54,13 @@
     --muted-foreground: 210 10% 50%;
     --accent-foreground: 210 15% 90%;
     --destructive-foreground: 250 20% 98%;
-    --border: 220 10% 30%;
+    --border: 220 10% 20%;
     --input: 220 10% 10%;
     --ring: 230 80% 50%;
+  }
+
+  * {
+    @apply border-border;
   }
 }
 
