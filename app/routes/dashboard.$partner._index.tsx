@@ -428,7 +428,7 @@ export default function Partner() {
                       setStateFilter(undefined);
                     }}
                   >
-                    <div className={`size-2 rounded-full bg-foreground`}></div>
+                    <div className={`bg-foreground size-2 rounded-full`}></div>
                     <div>Todos os Status</div>
                   </DropdownMenuItem>
                   {states.map((state) => (
@@ -553,7 +553,7 @@ export default function Partner() {
             id="calendar-full"
           >
             <div
-              className={`grid min-w-[1200px] grid-cols-7 border-b border-t px-0 py-2 text-center text-xs font-bold uppercase tracking-wider`}
+              className={`grid min-w-[1200px] grid-cols-7 border-t border-b px-0 py-2 text-center text-xs font-bold tracking-wider uppercase`}
             >
               {eachDayOfInterval({
                 start: startOfWeek(new Date()),
@@ -598,7 +598,7 @@ export default function Partner() {
         {/* Instagram Grid */}
         {showFeed && (
           <div
-            className="w-full min-w-96 max-w-[600px] py-4 pb-20"
+            className="w-full max-w-[600px] min-w-96 py-4 pb-20"
             id="instagram-grid"
           >
             <GridOfActions
@@ -634,7 +634,7 @@ export const CalendarDay = ({
   const { categories } = matches[1].data as DashboardRootType;
 
   return (
-    <div>
+    <div className="py-2">
       <div
         id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
         className={`item-container group/day relative flex h-full flex-col rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
@@ -656,21 +656,21 @@ export const CalendarDay = ({
         }}
       >
         {/* Date */}
-        <div className="my-2 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between">
           <div
             className={`grid size-8 place-content-center rounded-full text-xl ${
               isToday(parseISO(day.date))
-                ? "bg-primary font-bold text-primary-foreground"
+                ? "bg-primary text-primary-foreground font-bold"
                 : `${!isSameMonth(parseISO(day.date), currentDate) ? "text-muted" : ""} -ml-2 font-light`
             }`}
           >
             {parseISO(day.date).getDate()}
           </div>
-          <div className="scale-50 opacity-0 focus-within:scale-100 focus-within:opacity-100 group-hover/day:scale-100 group-hover/day:opacity-100">
+          <div className="scale-50 opacity-0 group-hover/day:scale-100 group-hover/day:opacity-100 focus-within:scale-100 focus-within:opacity-100">
             <CreateAction mode="day" date={day.date} />
           </div>
         </div>
-        {/* Actions */}
+        {/* Actions and Celebration */}
         <div className="flex h-full flex-col justify-between">
           <div className="relative flex h-full grow flex-col gap-3">
             {showContent
@@ -760,7 +760,7 @@ function CategoryActions({
   return actions && actions.length > 0 ? (
     <div key={category.slug} className="flex flex-col gap-3">
       {!(showContent && isInstagramFeed(category.slug)) && (
-        <div className="mt-2 flex items-center gap-1 text-[8px] font-bold uppercase tracking-widest">
+        <div className="mt-2 flex items-center gap-1 text-[8px] font-bold tracking-widest uppercase">
           <div
             className={`size-1.5 rounded-full`}
             style={{ backgroundColor: category.color }}
@@ -768,7 +768,7 @@ function CategoryActions({
           <div>{category.title}</div>
         </div>
       )}
-      <div className={`flex flex-col ${showContent ? "gap-3" : "gap-1"}`}>
+      <div className={`flex flex-col gap-1`}>
         {actions?.map((action) => (
           <ActionLine
             showContent={showContent}
