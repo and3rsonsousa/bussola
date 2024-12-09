@@ -316,7 +316,7 @@ export default function ActionPage() {
           <div className="flex gap-4">
             <textarea
               value={action.title}
-              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold outline-hidden ${action.title.length > 50 ? "md:text-4xl" : "md:text-5xl"}`}
+              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold tracking-tighter outline-hidden ${action.title.length > 50 ? "md:text-4xl" : "md:text-6xl"}`}
               rows={1}
               // @ts-ignore
               style={{ fieldSizing: "content", resize: "none" }}
@@ -917,7 +917,7 @@ export default function ActionPage() {
                   caption: event.target.value,
                 }))
               }
-              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full leading-tight font-normal outline-hidden lg:text-sm ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full leading-relaxed font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
               value={action.caption ? action.caption : undefined}
