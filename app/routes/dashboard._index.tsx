@@ -119,26 +119,38 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   let start = startOfWeek(startOfMonth(new Date()));
   let end = endOfDay(endOfWeek(endOfMonth(addMonths(new Date(), 1))));
-  const [{ data: actions }, { data: actionsChart }] = await Promise.all([
-    supabase
-      .from("actions")
-      .select("*")
-      .is("archived", false)
-      .contains("responsibles", person.admin ? [] : [user.id])
-      .containedBy("partners", partners.map((p) => p.slug)!)
-      .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
-      .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
-      .returns<Action[]>(),
-    supabase
-      .from("actions")
-      .select("category, state, date")
-      .is("archived", false)
-      .contains("responsibles", person?.admin ? [] : [user.id])
-      .containedBy("partners", partners.map((p) => p.slug)!)
-      .returns<{ state: string; date: string }[]>(),
-  ]);
+  const [{ data: actions }, { data: actionsChart }, { data: lateActions }] =
+    await Promise.all([
+      supabase
+        .from("actions")
+        .select("*")
+        .is("archived", false)
+        .contains("responsibles", person.admin ? [] : [user.id])
+        .containedBy("partners", partners.map((p) => p.slug)!)
+        .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
+        .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
+        .returns<Action[]>(),
+      supabase
+        .from("actions")
+        .select("category, state, date")
+        .is("archived", false)
+        .contains("responsibles", person?.admin ? [] : [user.id])
+        .containedBy("partners", partners.map((p) => p.slug)!)
+        .returns<{ state: string; date: string }[]>(),
+      supabase
+        .from("actions")
+        .select("*")
+        .is("archived", false)
+        .neq("state", "finished")
+        .contains("responsibles", person.admin ? [] : [user.id])
+        .containedBy("partners", partners.map((p) => p.slug)!)
+        .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
+        .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
+        .returns<Action[]>(),
+    ]);
 
-  return json({ actions, actionsChart }, { headers });
+  // return json({ actions, actionsChart }, { headers });
+  return { actions, actionsChart };
 };
 
 export const meta: MetaFunction = () => {
@@ -617,64 +629,66 @@ function Partners({ actions }: { actions?: Action[] }) {
   actions = actions || [];
 
   return (
-    <div className="mx-auto my-8 w-auto rounded p-2 md:p-8">
-      <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
-      {partners.length > 0 ? (
-        <div className="mx-auto flex w-auto flex-wrap justify-center gap-8">
-          {partners.map((partner) => (
-            <Link
-              tabIndex={0}
-              to={`/dashboard/${partner.slug}`}
-              key={partner.slug}
-              className="group/avatar relative cursor-pointer rounded-full outline-hidden"
-            >
-              {/* ring-ring ring-offset-2 ring-offset-background focus:ring-2 */}
-              <CircularProgress
-                actions={actions.filter(
-                  (action) =>
-                    action.partners[0] === partner.slug &&
-                    new Date(action.date).getTime() >=
-                      startOfWeek(new Date()).getTime() &&
-                    new Date(action.date).getTime() <=
-                      endOfDay(endOfWeek(new Date())).getTime(),
-                )}
-                size="md"
-                className="scale-50 transition duration-500 group-hover/avatar:scale-100 group-focus/avatar:scale-100"
-              />
-              <Avatar
-                item={{
-                  short: partner.short,
-                  bg: partner.colors[0],
-                  fg: partner.colors[1],
-                }}
-                size="lg"
-                className="mx-auto"
-              />
-              <Badge
-                value={
-                  lateActions.filter((action) =>
-                    action.partners.find((p) => p === partner.slug),
-                  ).length
-                }
-                isDynamic
-                className="border-background absolute -top-2 translate-x-full border-2"
-              />
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="grid place-content-center p-4 text-center">
-          <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
-            Nenhum <span className="font-bold">PARCEIRO</span> está designado
-            para você.
+    <div className="flex justify-center">
+      <div className="mx-auto my-8 rounded p-2 md:p-8">
+        <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
+        {partners.length > 0 ? (
+          <div className="mx-auto grid w-auto grid-cols-8 justify-center gap-8">
+            {partners.map((partner) => (
+              <Link
+                tabIndex={0}
+                to={`/dashboard/${partner.slug}`}
+                key={partner.slug}
+                className="group/avatar relative cursor-pointer rounded-full outline-hidden"
+              >
+                {/* ring-ring ring-offset-2 ring-offset-background focus:ring-2 */}
+                <CircularProgress
+                  actions={actions.filter(
+                    (action) =>
+                      action.partners[0] === partner.slug &&
+                      new Date(action.date).getTime() >=
+                        startOfWeek(new Date()).getTime() &&
+                      new Date(action.date).getTime() <=
+                        endOfDay(endOfWeek(new Date())).getTime(),
+                  )}
+                  size="md"
+                  className="scale-50 transition duration-500 group-hover/avatar:scale-100 group-focus/avatar:scale-100"
+                />
+                <Avatar
+                  item={{
+                    short: partner.short,
+                    bg: partner.colors[0],
+                    fg: partner.colors[1],
+                  }}
+                  size="xl"
+                  className="mx-auto"
+                />
+                <Badge
+                  value={
+                    lateActions.filter((action) =>
+                      action.partners.find((p) => p === partner.slug),
+                    ).length
+                  }
+                  isDynamic
+                  className="border-background absolute -top-2 translate-x-full border-2"
+                />
+              </Link>
+            ))}
           </div>
-          <div className="text-lg tracking-tight">
-            Fale com o seu Head para viabilizar o seu acesso
-            <br />
-            aos parceiros da empresa que você deve ter acesso.
+        ) : (
+          <div className="grid place-content-center p-4 text-center">
+            <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
+              Nenhum <span className="font-bold">PARCEIRO</span> está designado
+              para você.
+            </div>
+            <div className="text-lg tracking-tight">
+              Fale com o seu Head para viabilizar o seu acesso
+              <br />
+              aos parceiros da empresa que você deve ter acesso.
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -727,23 +741,64 @@ const ActionsProgress = () => {
 
   return (
     <div>
-      <h2 className="my-8 text-3xl leading-none font-semibold tracking-tight">
+      <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
         <span className="hidden md:block">Acompanhamento do progresso</span>
         <span className="md:hidden">Progresso</span>
       </h2>
-      <div className="gap-8 lg:flex">
+
+      <div className="grid w-full grid-cols-4 justify-center gap-2 select-none">
         <div>
           <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
-            Dia mágico
+            Hoje
           </h3>
-          <div className="text-[140px] leading-[150px] font-bold tracking-tighter">
-            30
+          <div className="flex gap-4">
+            <div className="w-full">
+              <ChartContainer
+                config={{}}
+                className="aspect-square max-h-40 w-full"
+              >
+                <PieChart>
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent />}
+                  />
+                  <Pie
+                    dataKey={"actions"}
+                    nameKey={"state"}
+                    innerRadius={"60%"}
+                    data={states.map((state) => {
+                      return {
+                        state: state.title,
+                        actions: todayActions.filter(
+                          (action) => action.state === state.slug,
+                        ).length,
+                        fill: state.color,
+                      };
+                    })}
+                  />
+                </PieChart>
+              </ChartContainer>
+            </div>
           </div>
         </div>
-        <div className="grid w-full grid-cols-3 gap-2 select-none">
-          <div>
+
+        {[
+          {
+            title: "Semana",
+            actions: thisWeekActions,
+          },
+          {
+            title: format(new Date(), "MMMM", { locale: ptBR }),
+            actions: thisMonthActions,
+          },
+          {
+            title: format(addMonths(new Date(), 1), "MMMM", { locale: ptBR }),
+            actions: nextMonthActions,
+          },
+        ].map(({ actions, title }, i) => (
+          <div key={i}>
             <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
-              Hoje
+              {title}
             </h3>
             <div className="flex gap-4">
               <div className="w-full">
@@ -763,7 +818,7 @@ const ActionsProgress = () => {
                       data={states.map((state) => {
                         return {
                           state: state.title,
-                          actions: todayActions.filter(
+                          actions: actions.filter(
                             (action) => action.state === state.slug,
                           ).length,
                           fill: state.color,
@@ -775,59 +830,9 @@ const ActionsProgress = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="grid w-full grid-cols-3 gap-2 select-none">
-          {[
-            {
-              title: "Semana",
-              actions: thisWeekActions,
-            },
-            {
-              title: format(new Date(), "MMMM", { locale: ptBR }),
-              actions: thisMonthActions,
-            },
-            {
-              title: format(addMonths(new Date(), 1), "MMMM", { locale: ptBR }),
-              actions: nextMonthActions,
-            },
-          ].map(({ actions, title }, i) => (
-            <div key={i}>
-              <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
-                {title}
-              </h3>
-              <div className="flex gap-4">
-                <div className="w-full">
-                  <ChartContainer
-                    config={{}}
-                    className="aspect-square max-h-40 w-full"
-                  >
-                    <PieChart>
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent />}
-                      />
-                      <Pie
-                        dataKey={"actions"}
-                        nameKey={"state"}
-                        innerRadius={"60%"}
-                        data={states.map((state) => {
-                          return {
-                            state: state.title,
-                            actions: actions.filter(
-                              (action) => action.state === state.slug,
-                            ).length,
-                            fill: state.color,
-                          };
-                        })}
-                      />
-                    </PieChart>
-                  </ChartContainer>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* <div className="w-full">
+        ))}
+      </div>
+      {/* <div className="w-full">
           <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap">
             Durante o ano
           </h3>
@@ -849,7 +854,6 @@ const ActionsProgress = () => {
             </LineChart>
           </ChartContainer>
         </div> */}
-      </div>
     </div>
   );
 };

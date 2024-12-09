@@ -64,6 +64,167 @@
   }
 }
 
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Black.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-BlackSlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-BlackSlanted.woff") format("woff");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Bold.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Light.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans Slanted";
+  src:
+    url("/object-sans/subset-PPObjectSans-BoldSlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-BoldSlanted.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-HeavySlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-HeavySlanted.woff") format("woff");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Heavy.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Heavy.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-LightSlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-LightSlanted.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Medium.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Thin.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Thin.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Regular.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-Semibold.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Semibold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-MediumSlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-MediumSlanted.woff") format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-SemiboldSlanted.woff2")
+      format("woff2"),
+    url("/object-sans/subset-PPObjectSans-SemiboldSlanted.woff") format("woff");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans";
+  src:
+    url("/object-sans/subset-PPObjectSans-ThinSlanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-ThinSlanted.woff") format("woff");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Object Sans Slanted";
+  src:
+    url("/object-sans/subset-PPObjectSans-Slanted.woff2") format("woff2"),
+    url("/object-sans/subset-PPObjectSans-Slanted.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -102,6 +263,9 @@
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
+  --font-sans: "PP Object Sans", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -123,18 +287,16 @@
   }
 }
 
+body {
+  @apply bg-background text-foreground antialiased;
+}
+
 .rounded {
   border-radius: var(--radius);
 }
 
 button {
   cursor: pointer;
-}
-
-@layer base {
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
 }
 
 .ProseMirror {
@@ -144,14 +306,6 @@ button {
     "ss03" 1,
     "cv11" 1,
     "calt" 1 !important; /* fix for Chrome */
-}
-
-body {
-  font-feature-settings:
-    "ss01" 1,
-    "cv05" 1,
-    "ss03" 1,
-    "cv11" 1;
 }
 
 .glass {
