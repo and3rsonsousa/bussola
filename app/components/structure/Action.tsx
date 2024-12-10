@@ -236,7 +236,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${short ? "rounded-sm px-2 py-1" : long ? "gap-2 rounded px-4 py-3" : "rounded-xs p-3"} @container text-sm font-medium md:text-xs ${
+            className={`action group/action action-item items-center ${short ? "px-2 py-1" : long ? "gap-2 px-4 py-3" : "p-3"} @container text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -262,7 +262,7 @@ export function ActionLine({
             onDragEnd={() => {
               if (onDrag) onDrag(action);
             }}
-            style={{ borderColor: state.color }}
+            style={{ borderLeftColor: state.color }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
@@ -532,7 +532,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item @container cursor-pointer flex-col justify-between gap-2 rounded-l-[4px] rounded-r border-l-4 px-4 py-2 text-sm`}
+          className={`action group/action action-item @container cursor-pointer flex-col justify-between gap-2 rounded border-l-4 px-4 py-2 text-sm`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
