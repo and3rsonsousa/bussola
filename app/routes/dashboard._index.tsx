@@ -741,14 +741,21 @@ const ActionsProgress = () => {
 
   return (
     <div>
-      <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
+      {/* <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
         <span className="hidden md:block">Acompanhamento do progresso</span>
+        <span className="md:hidden">Progresso</span>
+      </h2> */}
+
+      <h2 className="col-span-2 py-8 text-5xl leading-none font-bold tracking-tight">
+        <span className="hidden uppercase md:block">
+          Acompanhamento <br /> do progresso
+        </span>
         <span className="md:hidden">Progresso</span>
       </h2>
 
-      <div className="grid w-full grid-cols-4 justify-center gap-2 select-none">
-        <div>
-          <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
+      <div className="grid w-full grid-cols-2 justify-center gap-2 border select-none md:grid-cols-4">
+        {/* <div>
+          <h3 className="overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
             Hoje
           </h3>
           <div className="flex gap-4">
@@ -780,9 +787,13 @@ const ActionsProgress = () => {
               </ChartContainer>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {[
+          {
+            title: "Hoje",
+            actions: todayActions,
+          },
           {
             title: "Semana",
             actions: thisWeekActions,
@@ -796,10 +807,13 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <div key={i}>
-            <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
+          <div key={i} className="border-l">
+            <h3 className="mt-4 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
               {title}
             </h3>
+            <div className="text-muted-foreground text-center text-xs tracking-wide uppercase">
+              {actions.length} ações
+            </div>
             <div className="flex gap-4">
               <div className="w-full">
                 <ChartContainer
@@ -832,6 +846,7 @@ const ActionsProgress = () => {
           </div>
         ))}
       </div>
+
       {/* <div className="w-full">
           <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap">
             Durante o ano
