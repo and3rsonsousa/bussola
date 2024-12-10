@@ -123,7 +123,7 @@ export function AvatarGroup({
   return (
     <div
       className={cn(
-        `flex ${["sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : size === "lg" ? "-space-x-4" : "space-x-1"}`,
+        `flex ${["sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : size === "lg" ? "-space-x-4" : "-space-x-1"}`,
         className,
       )}
     >
@@ -167,13 +167,7 @@ export function Avatar({
               : size === "lg"
                 ? "size-12"
                 : "size-16",
-        group
-          ? size === "xl"
-            ? "border-background border-2"
-            : size === "md" || size === "lg"
-              ? "border-background border-2"
-              : "border-background border"
-          : "",
+        group ? "ring-background ring-2" : "",
         "block",
         className,
       ])}

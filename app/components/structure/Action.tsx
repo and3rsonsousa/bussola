@@ -236,7 +236,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${short ? "rounded-sm px-2 py-1" : long ? "gap-2 rounded-sm px-4 py-3" : "rounded-xs p-3"} @container overflow-hidden text-sm font-medium md:text-xs ${
+            className={`action group/action action-item items-center ${short ? "rounded-sm px-2 py-1" : long ? "gap-2 rounded px-4 py-3" : "rounded-xs p-3"} @container text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -262,11 +262,8 @@ export function ActionLine({
             onDragEnd={() => {
               if (onDrag) onDrag(action);
             }}
+            style={{ borderColor: state.color }}
           >
-            <div
-              className="absolute top-0 left-0 h-full w-1"
-              style={{ backgroundColor: state.color }}
-            ></div>
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
@@ -277,24 +274,27 @@ export function ActionLine({
                   .map((partner) => partner.title)
                   .join(" • ")}
               >
-                <AvatarGroup
-                  size={long ? "sm" : "xs"}
-                  avatars={getPartners(action.partners).map((partner) => ({
-                    item: {
+                {getPartners(action.partners).length === 1 ? (
+                  <Avatar
+                    item={{
                       short: partner.short,
                       bg: partner.colors[0],
                       fg: partner.colors[1],
-                    },
-                  }))}
-                />
-                {/* <Avatar
-                  size={long ? "sm" : "xs"}
-                  item={{
-                    short: partner.short,
-                    bg: partner.colors[0],
-                    fg: partner.colors[1],
-                  }}
-                /> */}
+                    }}
+                    size={long ? "sm" : "xs"}
+                  />
+                ) : (
+                  <AvatarGroup
+                    size={long ? "sm" : "xs"}
+                    avatars={getPartners(action.partners).map((partner) => ({
+                      item: {
+                        short: partner.short,
+                        bg: partner.colors[0],
+                        fg: partner.colors[1],
+                      },
+                    }))}
+                  />
+                )}
               </div>
             ) : (
               action.partners.length > 1 && (
@@ -386,11 +386,6 @@ export function ActionLine({
                   }}
                 >
                   {action.title}
-                  {/* <div
-                    className={`absolute right-0 top-0 rounded-sm bg-linear-to-l from-secondary via-secondary pl-6 text-muted-foreground opacity-0 ${isShift ? "group-hover/text:opacity-100" : ""}`}
-                  >
-                    <Edit3Icon className="size-4" />
-                  </div> */}
                 </button>
               )}
             </div>
@@ -419,7 +414,7 @@ export function ActionLine({
             {/* Responsibles */}
 
             <div
-              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} justify-end ${long && "w-32"}`}
+              className={` ${!allUsers || long ? "hidden @[200px]:block" : "flex"} justify-end ${long && "w-32"}`}
             >
               {allUsers || long
                 ? people
