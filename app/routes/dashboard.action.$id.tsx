@@ -917,7 +917,7 @@ export default function ActionPage() {
                   caption: event.target.value,
                 }))
               }
-              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full leading-relaxed font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full text-sm leading-tight font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
               style={{ fieldSizing: "content" }}
               value={action.caption ? action.caption : undefined}
