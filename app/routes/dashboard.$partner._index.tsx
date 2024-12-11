@@ -637,7 +637,7 @@ export const CalendarDay = ({
     <div className="py-2">
       <div
         id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
-        className={`item-container group/day relative flex h-full flex-col rounded border border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
+        className={`item-container group/day relative flex h-full flex-col rounded border-2 border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
         data-date={format(parseISO(day.date), "yyyy-MM-dd")}
         onDragOver={(e) => {
           e.stopPropagation();
