@@ -804,8 +804,7 @@ const ActionsProgress = () => {
         ].map(({ actions, title }, i) => (
           <motion.div
             key={i}
-            className="hover:bg-secondary rounded-xl px-4 py-8 text-center"
-            whileHover={{ scale: 1.05 }}
+            className="hover:border-primary rounded-xl border-2 border-white px-4 py-8 text-center transition"
           >
             <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}

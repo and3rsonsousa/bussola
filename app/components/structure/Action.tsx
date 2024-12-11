@@ -262,10 +262,15 @@ export function ActionLine({
             onDragEnd={() => {
               if (onDrag) onDrag(action);
             }}
-            style={{ borderLeftColor: state.color }}
+            // style={{ borderLeftColor: state.color }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
+
+            <div
+              className="absolute -top-1 right-2 z-10 size-2 rounded-full"
+              style={{ backgroundColor: state.color }}
+            ></div>
 
             {partner && showPartner ? (
               <div
