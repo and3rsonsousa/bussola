@@ -28,15 +28,16 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`relative mx-auto flex h-[100dvh] flex-col bg-background lg:overflow-hidden`}
+      className={`bg-background relative mx-auto flex h-[100dvh] flex-col lg:overflow-hidden`}
     >
+      <Header open={open} setOpen={setOpen} />
       <div className="flex h-full flex-col overflow-hidden">{children}</div>
       <div
-        className={`${isTransitioning ? "opacity-100" : "pointer-events-none opacity-0"} absolute inset-0 z-9999 grid place-content-center bg-background/25 backdrop-blur-lg transition`}
+        className={`${isTransitioning ? "opacity-100" : "pointer-events-none opacity-0"} bg-background/25 absolute inset-0 z-9999 grid place-content-center backdrop-blur-lg transition`}
       >
         <Loader />
       </div>
-      <Header open={open} setOpen={setOpen} />
+
       <Search search={{ open, setOpen }} />
       <Toaster />
     </div>

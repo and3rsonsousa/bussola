@@ -633,15 +633,14 @@ function Partners({ actions }: { actions?: Action[] }) {
       <div className="mx-auto my-8 rounded p-2 md:p-8">
         <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
         {partners.length > 0 ? (
-          <div className="mx-auto grid w-auto grid-cols-8 justify-center gap-8">
+          <div className="mx-auto grid w-auto justify-center gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
             {partners.map((partner) => (
               <Link
                 tabIndex={0}
                 to={`/dashboard/${partner.slug}`}
                 key={partner.slug}
-                className="group/avatar relative cursor-pointer rounded-full outline-hidden"
+                className="group/avatar relative flex cursor-pointer"
               >
-                {/* ring-ring ring-offset-2 ring-offset-background focus:ring-2 */}
                 <CircularProgress
                   actions={actions.filter(
                     (action) =>
@@ -652,26 +651,28 @@ function Partners({ actions }: { actions?: Action[] }) {
                         endOfDay(endOfWeek(new Date())).getTime(),
                   )}
                   size="md"
-                  className="scale-50 transition duration-500 group-hover/avatar:scale-100 group-focus/avatar:scale-100"
+                  className="scale-125"
                 />
-                <Avatar
-                  item={{
-                    short: partner.short,
-                    bg: partner.colors[0],
-                    fg: partner.colors[1],
-                  }}
-                  size="xl"
-                  className="mx-auto"
-                />
-                <Badge
-                  value={
-                    lateActions.filter((action) =>
-                      action.partners.find((p) => p === partner.slug),
-                    ).length
-                  }
-                  isDynamic
-                  className="border-background absolute -top-2 translate-x-full border-2"
-                />
+                <div>
+                  <Avatar
+                    item={{
+                      short: partner.short,
+                      bg: partner.colors[0],
+                      fg: partner.colors[1],
+                    }}
+                    size="xl"
+                    className="mx-auto"
+                  />
+                  <Badge
+                    value={
+                      lateActions.filter((action) =>
+                        action.partners.find((p) => p === partner.slug),
+                      ).length
+                    }
+                    isDynamic
+                    className="border-background absolute -top-2 right-0 border-2"
+                  />
+                </div>
               </Link>
             ))}
           </div>
@@ -740,7 +741,7 @@ const ActionsProgress = () => {
   );
 
   return (
-    <div>
+    <div className="border-b pb-8">
       {/* <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
         <span className="hidden md:block">Acompanhamento do progresso</span>
         <span className="md:hidden">Progresso</span>
@@ -753,7 +754,7 @@ const ActionsProgress = () => {
         <span className="md:hidden">Progresso</span>
       </h2>
 
-      <div className="grid w-full grid-cols-2 justify-center gap-2 border select-none md:grid-cols-4">
+      <div className="bg-background grid w-full grid-cols-2 justify-center gap-2 rounded select-none md:grid-cols-4">
         {/* <div>
           <h3 className="overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
             Hoje
@@ -807,7 +808,7 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <div key={i} className="border-l">
+          <div key={i} className="">
             <h3 className="mt-4 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
               {title}
             </h3>

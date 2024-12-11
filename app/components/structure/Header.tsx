@@ -76,46 +76,75 @@ export default function Header({
   const isActionPage = /\/dashboard\/action\//.test(location.pathname);
 
   return (
-    <div
-      className={`group fixed bottom-0 left-1/2 z-50 block -translate-x-1/2 pb-6 ${isActionPage ? "translate-y-[90px] transition-transform duration-500 focus-within:translate-y-0 hover:translate-y-0" : ""}`}
+    <header
+      className={`flex items-center justify-between gap-4 border-b px-6 py-4`}
     >
-      {/* Handle */}
-      {isActionPage && (
-        <div className="bg-foreground/15 left-1/2 mx-auto mb-4 h-1.5 w-32 rounded-full transition group-hover:opacity-0"></div>
-      )}
-      <header
-        className={`glass z-10 flex items-center justify-between gap-2 rounded-[28px] p-2`}
+      {/* Voltar */}
+      {/* <Button
+        size="icon"
+        variant={"ghost"}
+        className="-mr-4"
+        onClick={() => {
+          navigate(-1);
+        }}
       >
-        {/* Voltar */}
-        <Button
-          size="icon"
-          variant={"ghost"}
-          className="-mr-4"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          <ArrowLeftIcon className="size-4" />
-        </Button>
-        {/* Logo */}
+        <ArrowLeftIcon className="size-4" />
+      </Button> */}
+      {/* Logo */}
+      <div className="flex items-center gap-1">
         <Link
           to="/dashboard"
           viewTransition
           className="ring-ring ring-offset-background rounded p-4 outline-hidden focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
-          <Bussola className="hidden md:block" size="xs" />
+          <Bussola className="hidden md:block" size="sm" />
         </Link>
         {/* Atrasados */}
         {lateActions.length > 0 && (
           <Link
             viewTransition
             to={`/dashboard/${partner ? partner.slug.concat("/") : ""}late/`}
-            className="-ml-2 grid size-5 place-content-center rounded-full bg-rose-600 text-xs font-bold text-white"
+            className="grid place-content-center rounded bg-rose-600 p-1 text-xs font-semibold text-white"
           >
             {lateActions.length}
           </Link>
         )}
+      </div>
+      <div className="flex items-center gap-1 md:gap-4">
+        {/* Revisão e Instagram */}
+        <div className="flex items-center gap-1">
+          {partner ? (
+            <>
+              <ReportReview partner={partner} />
+              <Button
+                variant={showFeed ? "default" : "ghost"}
+                onClick={() => {
+                  setShowFeed((value) => !value);
+                }}
+                size={"icon"}
+              >
+                <Grid3x3Icon className="size-6" />
+              </Button>
+            </>
+          ) : null}
+
+          {/* Busca Search */}
+
+          <Button
+            variant={"ghost"}
+            onClick={() => {
+              setOpen((value) => !value);
+            }}
+            size={"icon"}
+          >
+            <SearchIcon className="size-6" />
+          </Button>
+        </div>
+
+        {/* Botão de criar ação */}
+
+        <CreateAction mode="plus" shortcut />
 
         {/* parceiros         */}
 
@@ -124,22 +153,32 @@ export default function Header({
             <Button
               variant={"ghost"}
               className={
-                partner ? "rounded-full p-1" : `text-ellipsis whitespace-nowrap`
+                partner
+                  ? "rounded-full px-4 py-2"
+                  : `text-ellipsis whitespace-nowrap`
               }
             >
               {partner ? (
-                <div className="relative" tabIndex={-1}>
-                  <Avatar
-                    item={{
-                      bg: partner.colors[0],
-                      fg: partner.colors[1],
-                      short: partner.short,
-                    }}
-                    size="md"
-                  />
-                  <CircularProgress actions={actions} />
-                </div>
+                <>
+                  <span className="hidden text-2xl font-bold tracking-tight md:block">
+                    {partner.title}
+                  </span>
+                  <span className="text-lg font-bold tracking-wide uppercase md:hidden">
+                    {partner.short}
+                  </span>
+                </>
               ) : (
+                // <div className="relative" tabIndex={-1}>
+                //   <Avatar
+                //     item={{
+                //       bg: partner.colors[0],
+                //       fg: partner.colors[1],
+                //       short: partner.short,
+                //     }}
+                //     size="md"
+                //   />
+                //   <CircularProgress actions={actions} />
+                // </div>
                 "Parceiros"
               )}
             </Button>
@@ -196,38 +235,6 @@ export default function Header({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Revisão e Instagram */}
-
-        {partner ? (
-          <>
-            <ReportReview partner={partner} />
-            <Button
-              variant={showFeed ? "default" : "ghost"}
-              onClick={() => {
-                setShowFeed((value) => !value);
-              }}
-              size={"icon"}
-            >
-              <Grid3x3Icon className="size-6" />
-            </Button>
-          </>
-        ) : null}
-
-        {/* Busca Search */}
-
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOpen((value) => !value);
-          }}
-          size={"icon"}
-        >
-          <SearchIcon className="size-6" />
-        </Button>
-
-        {/* Botão de criar ação */}
-
-        <CreateAction mode="plus" shortcut />
         {/* menu de ações */}
         {person && (
           <DropdownMenu>
@@ -336,57 +343,7 @@ export default function Header({
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </header>
-    </div>
+      </div>
+    </header>
   );
 }
-
-// function PartnerCombobox({partner, }) {
-//   const [open, setOpen] = useState(false)
-//   return <Popover open={open} onOpenChange={setOpen}>
-//   <PopoverTrigger asChild>
-//     <Button
-//       variant={"ghost"}
-//       className={
-//         partner ? "rounded-full p-1" : `text-ellipsis whitespace-nowrap`
-//       }
-//     >
-//       {partner ? (
-//         <div className="relative" tabIndex={-1}>
-//           <Avatar
-//             item={{
-//               bg: partner.colors[0],
-//               fg: partner.colors[1],
-//               short: partner.short,
-//             }}
-//             size="md"
-//           />
-//           <CircularProgress actions={actions} />
-//         </div>
-//       ) : (
-//         "Parceiros"
-//       )}
-//     </Button>
-//   </PopoverTrigger>
-//   <PopoverContent className="glass p-0">
-//     <Command>
-//       <CommandInput placeholder="Selecione um parceiro" />
-//       <CommandList className="scrollbars scrollbars-thin">
-//         {partnersSOW.map((sow) => (
-//           <CommandGroup key={sow.sow.sow} heading={sow.sow.title}>
-//             {sow.partners.map((partner) => (
-//               <CommandItem
-//                 key={partner.id}
-//                 className="px-4"
-//                 onSelect={() => { navigate(`/dashboard/${partner.slug}`)}}
-//               >
-//                 {partner.title}
-//               </CommandItem>
-//             ))}
-//           </CommandGroup>
-//         ))}
-//       </CommandList>
-//     </Command>
-//   </PopoverContent>
-// </Popover>
-// }

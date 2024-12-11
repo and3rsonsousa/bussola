@@ -11,7 +11,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 220 20% 100%;
     --card: 230 20% 96%;
     --popover: 0 100% 100%;
     --primary: 240 100% 55%;
@@ -19,7 +19,7 @@
     --muted: 220 15% 80%;
     --accent: 220 12% 94%;
     --destructive: 355 85% 60%;
-    --foreground: 220 20% 15%;
+    --foreground: 220 20% 5%;
     --card-foreground: 224 20% 35%;
     --popover-foreground: 224 20% 35%;
     --primary-foreground: 210 20% 98%;
@@ -308,13 +308,13 @@ button {
     "calt" 1 !important; /* fix for Chrome */
 }
 
-.glass {
+/* .glass {
   @apply bg-popover/75 border border-white/50 ring-1 ring-black/10 backdrop-blur-lg;
 }
 
 .dark .glass {
   @apply border-border ring-background border;
-}
+} */
 
 .action-item {
   @apply bg-card text-secondary-foreground ring-ring ring-offset-background hover:bg-secondary relative flex w-full rounded-[4px] border-l-4 ring-offset-2 outline-hidden transition select-none focus-within:ring-2 focus:ring-2;
