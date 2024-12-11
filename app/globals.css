@@ -16,7 +16,7 @@
     --popover: 0 100% 100%;
     --primary: 220 20% 5%;
     /* --primary: 240 100% 55%; */
-    --secondary: 220 15% 92%;
+    --secondary: 220 5% 92%;
     --muted: 220 15% 80%;
     --accent: 220 12% 94%;
     --destructive: 355 85% 60%;
@@ -311,6 +311,10 @@ button {
     "calt" 1 !important; /* fix for Chrome */
 }
 
+.glass {
+  @apply bg-background border-foreground rounded-xl border-2;
+}
+
 /* .glass {
   @apply bg-popover/75 border border-white/50 ring-1 ring-black/10 backdrop-blur-lg;
 }
@@ -406,11 +410,11 @@ button {
   @apply flex gap-2 px-4 text-xl font-semibold tracking-tighter;
 }
 .bg-item {
-  @apply flex gap-2 px-4;
+  @apply flex gap-2 rounded-md px-4;
 }
 
 .bg-select-item {
-  @apply pr-4 pl-8;
+  @apply rounded-md pr-4 pl-8;
 }
 
 .debug-1 {

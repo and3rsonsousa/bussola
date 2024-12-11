@@ -6,20 +6,14 @@ import {
   useOutletContext,
   useSubmit,
 } from "@remix-run/react";
-import {
-  json,
-  type LoaderFunctionArgs,
-  type MetaFunction,
-} from "@vercel/remix";
+import { type LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import {
   addDays,
   addMonths,
   eachDayOfInterval,
-  eachMonthOfInterval,
   endOfDay,
   endOfMonth,
   endOfWeek,
-  endOfYear,
   format,
   formatRelative,
   isAfter,
@@ -29,7 +23,6 @@ import {
   isToday,
   startOfMonth,
   startOfWeek,
-  startOfYear,
   subDays,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -49,8 +42,9 @@ import {
   TimerIcon,
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
-import { CartesianGrid, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
+import { Pie, PieChart } from "recharts";
 import invariant from "tiny-invariant";
+import { motion } from "motion/react";
 
 import {
   ActionLine,
@@ -741,20 +735,20 @@ const ActionsProgress = () => {
   );
 
   return (
-    <div className="border-b pb-8">
+    <div className="pb-8">
       {/* <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
         <span className="hidden md:block">Acompanhamento do progresso</span>
         <span className="md:hidden">Progresso</span>
       </h2> */}
 
-      <h2 className="col-span-2 py-8 text-5xl leading-none font-bold tracking-tight">
+      <h2 className="py-8 text-5xl leading-none font-bold tracking-tight">
         <span className="hidden uppercase md:block">
           Acompanhamento <br /> do progresso
         </span>
         <span className="md:hidden">Progresso</span>
       </h2>
 
-      <div className="bg-background grid w-full grid-cols-2 justify-center gap-2 rounded select-none md:grid-cols-4">
+      <div className="grid w-full grid-cols-2 justify-center gap-4 rounded select-none md:grid-cols-4">
         {/* <div>
           <h3 className="overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
             Hoje
@@ -808,11 +802,15 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <div key={i} className="">
-            <h3 className="mt-4 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
+          <motion.div
+            key={i}
+            className="hover:bg-secondary rounded-xl px-4 py-8 text-center"
+            whileHover={{ scale: 1.05 }}
+          >
+            <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}
             </h3>
-            <div className="text-muted-foreground text-center text-xs tracking-wide uppercase">
+            <div className="text-xs font-medium tracking-wide uppercase opacity-75">
               {actions.length} ações
             </div>
             <div className="flex gap-4">
@@ -844,7 +842,7 @@ const ActionsProgress = () => {
                 </ChartContainer>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 

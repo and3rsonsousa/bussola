@@ -187,16 +187,16 @@ export default function CreateAction({
             <PlusIcon className="z-10 size-6" />
           </ButtonCNVT>
         ) : (
-          <ButtonCNVT className="fixed bottom-3 right-2 rounded-full" rounded>
+          <ButtonCNVT className="fixed right-2 bottom-3 rounded-full" rounded>
             <PlusIcon className="z-10 w-8" />
           </ButtonCNVT>
         )}
       </PopoverTrigger>
-      <PopoverContent className="mr-4 w-[90dvw] bg-background shadow-2xl md:max-w-[500px] md:px-6">
+      <PopoverContent className="glass mr-4 w-[90dvw] shadow-2xl md:max-w-[500px] md:px-6">
         {/* Título */}
         <textarea
           defaultValue={action.title}
-          className="mb-1 w-full resize-none bg-transparent text-2xl font-semibold tracking-tighter text-foreground outline-hidden placeholder:text-muted-foreground"
+          className="text-foreground placeholder:text-muted-foreground mb-1 w-full resize-none bg-transparent text-2xl font-semibold tracking-tighter outline-hidden"
           rows={1}
           onChange={(event) => {
             setAction({ ...action, title: event.target.value });
@@ -207,7 +207,7 @@ export default function CreateAction({
         />
         <textarea
           defaultValue={action.description}
-          className="font-regular relative w-full resize-none bg-transparent text-sm outline-hidden placeholder:text-muted-foreground"
+          className="font-regular placeholder:text-muted-foreground relative w-full resize-none bg-transparent text-sm outline-hidden"
           rows={2}
           placeholder="Descreva brevemente a sua ação"
           onChange={(event) => {
@@ -220,7 +220,7 @@ export default function CreateAction({
           style={{ fieldSizing: "content" }}
         />
 
-        <hr className="-mx-4 mb-4 mt-2 border-t md:-mx-6" />
+        <hr className="-mx-4 mt-2 mb-4 border-t md:-mx-6" />
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             {/* Partners */}
@@ -281,7 +281,7 @@ export default function CreateAction({
                 {areas.map((area, i) => (
                   <DropdownMenuGroup key={area.id}>
                     {i > 0 && <DropdownMenuSeparator />}
-                    <h4 className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-50">
+                    <h4 className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase opacity-50">
                       {area.title}
                     </h4>
                     {categories.map((category) =>
@@ -400,7 +400,7 @@ export default function CreateAction({
             {/* Cor da ação */}
             {getInstagramFeed({ actions: [action] }).length > 0 && partner ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded outline-hidden ring-primary ring-offset-4 ring-offset-background focus-within:ring-2">
+                <DropdownMenuTrigger className="ring-primary ring-offset-background rounded ring-offset-4 outline-hidden focus-within:ring-2">
                   <div
                     className="size-8 rounded"
                     style={{
@@ -475,7 +475,7 @@ export default function CreateAction({
                   <div className="flex shrink-0">
                     <Input
                       value={action.date.getHours().toString()}
-                      className="w-1/2 rounded-r-none border border-r-0 border-border text-right focus:z-10"
+                      className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
                       type="number"
                       min={0}
                       max={23}
@@ -490,7 +490,7 @@ export default function CreateAction({
                     />
                     <Input
                       value={action.date.getMinutes().toString()}
-                      className="w-1/2 rounded-l-none border border-l-0 border-border text-left"
+                      className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
                       type="number"
                       min={0}
                       max={59}
@@ -570,7 +570,7 @@ export default function CreateAction({
                       setAction({ ...action, time: Number(value) });
                     }}
                   >
-                    <SelectTrigger className="w-full border border-border bg-input">
+                    <SelectTrigger className="border-border bg-input w-full border">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -586,7 +586,7 @@ export default function CreateAction({
             </Popover>
 
             <button
-              className="relative flex items-center gap-2 rounded bg-linear-to-b from-white via-black to-white/30 px-4 py-3 text-white outline-hidden ring-primary ring-offset-4 ring-offset-background focus:ring-2"
+              className="ring-primary ring-offset-background relative flex items-center gap-2 rounded bg-linear-to-b from-white via-black to-white/30 px-4 py-3 text-white ring-offset-4 outline-hidden focus:ring-2"
               onClick={() => {
                 if (action.title.length === 0) {
                   toast({

@@ -196,8 +196,16 @@ export default function Search({
                 }))
               : [];
 
-            s[1].items = actions;
-            setSections(() => s);
+            setSections([
+              {
+                name: "Ações",
+                items: actions,
+              },
+              ...startSections,
+            ]);
+
+            console.log(sections);
+
             setLoading(false);
           });
       }

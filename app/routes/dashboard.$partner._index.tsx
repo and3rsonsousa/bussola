@@ -413,7 +413,7 @@ export default function Partner() {
                       stateFilter.title
                     ) : (
                       <>
-                        <span className="mr-1 hidden md:inline">
+                        <span className="-mr-1 hidden font-normal md:inline">
                           Filtrar pelo
                         </span>
                         Status
@@ -428,7 +428,7 @@ export default function Partner() {
                       setStateFilter(undefined);
                     }}
                   >
-                    <div className={`bg-foreground size-2 rounded-full`}></div>
+                    <div className={`size-2 rounded-full bg-gray-500`}></div>
                     <div>Todos os Status</div>
                   </DropdownMenuItem>
                   {states.map((state) => (
@@ -463,7 +463,7 @@ export default function Partner() {
                       </>
                     ) : (
                       <>
-                        <span className="mr-1 hidden md:inline">
+                        <span className="-mr-1 hidden font-normal md:inline">
                           Filtrar pela
                         </span>
                         Categoria
