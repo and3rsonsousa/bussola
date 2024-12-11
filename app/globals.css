@@ -14,7 +14,8 @@
     --background: 220 20% 100%;
     --card: 230 20% 96%;
     --popover: 0 100% 100%;
-    --primary: 240 100% 55%;
+    --primary: 220 20% 5%;
+    /* --primary: 240 100% 55%; */
     --secondary: 220 15% 92%;
     --muted: 220 15% 80%;
     --accent: 220 12% 94%;
@@ -22,14 +23,16 @@
     --foreground: 220 20% 5%;
     --card-foreground: 224 20% 35%;
     --popover-foreground: 224 20% 35%;
-    --primary-foreground: 210 20% 98%;
+    --primary-foreground: 220 20% 100%;
+    /* --primary-foreground: 210 20% 98%; */
     --secondary-foreground: 220 10% 35%;
     --muted-foreground: 220 10% 60%;
     --accent-foreground: 260 15% 20%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 10% 90%;
     --input: 240 10% 96%;
-    --ring: 230 100% 65%;
+    --ring: 220 20% 5%;
+    /* --ring: 230 100% 65%; */
     --radius: 12px;
 
     --success: theme(--color-lime-500);
@@ -528,7 +531,11 @@ input::-webkit-inner-spin-button {
 }
 
 .button-trigger {
-  @apply ring-ring ring-offset-background hover:bg-secondary rounded border-none p-2 text-sm font-medium ring-offset-2 outline-hidden focus:ring-2;
+  @apply ring-ring ring-offset-background hover:bg-secondary rounded-md border-none px-3 py-2 text-sm font-medium ring-offset-2 outline-hidden focus:ring-2;
+}
+
+.button-trigger__squared {
+  @apply px-2;
 }
 
 .timer-circle {

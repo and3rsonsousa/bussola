@@ -316,7 +316,7 @@ export default function ActionPage() {
           <div className="flex gap-4">
             <textarea
               value={action.title}
-              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold tracking-tighter outline-hidden ${action.title.length > 50 ? "md:text-4xl" : "md:text-6xl"}`}
+              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold tracking-tighter outline-hidden ${action.title.length > 30 ? "md:text-5xl" : "md:text-6xl"}`}
               rows={1}
               // @ts-ignore
               style={{ fieldSizing: "content", resize: "none" }}
@@ -982,7 +982,7 @@ export default function ActionPage() {
           {/* Categoria */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="ring-ring ring-offset-background hover:bg-secondary rounded border-none p-2 ring-offset-2 outline-hidden focus:ring-2">
+            <DropdownMenuTrigger className="button-trigger button-trigger__squared">
               <Icons id={category.slug} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1023,9 +1023,13 @@ export default function ActionPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`ring-ring ring-offset-background flex items-center rounded border-2 px-3 py-1 text-xs font-semibold ring-offset-2 outline-hidden focus:ring-2 lg:text-sm`}
-              style={{ borderColor: state.color }}
+              className={`button-trigger flex items-center gap-2`}
             >
+              <div
+                className="size-2 rounded-2xl"
+                style={{ backgroundColor: state.color }}
+              ></div>
+
               {state.title}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1056,7 +1060,7 @@ export default function ActionPage() {
           {/* Prioridade */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="ring-ring ring-offset-background hover:bg-secondary rounded border-none p-2 ring-offset-2 outline-hidden focus:ring-2">
+            <DropdownMenuTrigger className="button-trigger button-trigger__squared">
               <Icons id={priority.slug} type="priority" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
@@ -1088,17 +1092,13 @@ export default function ActionPage() {
           {/* Responsáveis */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="ring-ring ring-offset-background flex -space-x-1 rounded-full border-none ring-offset-2 outline-hidden focus:ring-2">
-              {responsibles.map((person, i) => (
-                <Avatar
-                  item={{
-                    image: person.image,
-                    short: person.initials!,
-                  }}
-                  key={person.id}
-                  size="md"
-                />
-              ))}
+            <DropdownMenuTrigger className="button-trigger">
+              <AvatarGroup
+                avatars={responsibles.map((person) => ({
+                  item: { image: person.image, short: person.short },
+                }))}
+                size="md"
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="glass">
               {people.map((person) => (
@@ -1142,9 +1142,9 @@ export default function ActionPage() {
           {getInstagramFeed({ actions: [action] }).length > 0 ? (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger className="ring-primary ring-offset-background rounded ring-offset-4 outline-hidden focus-within:ring-2">
+                <DropdownMenuTrigger className="button-trigger button-trigger__squared">
                   <div
-                    className="size-8 rounded border"
+                    className="size-6 rounded-[8px] border"
                     style={{
                       backgroundColor: action.color
                         ? action.color
@@ -1163,7 +1163,7 @@ export default function ActionPage() {
                           }}
                         >
                           <div
-                            className="h-4 w-full rounded-[4px]"
+                            className="h-4 w-full rounded-[4px] border"
                             style={{ backgroundColor: color }}
                           ></div>
                         </DropdownMenuItem>
@@ -1196,6 +1196,7 @@ export default function ActionPage() {
                     console.log(e);
                   }
                 }}
+                className="button-trigger"
               >
                 <Link2Icon className="size-6" />
               </Button>
@@ -1206,7 +1207,7 @@ export default function ActionPage() {
         <div className="mt-4 flex items-center justify-between gap-2 md:my-0">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant={"ghost"} className="-ml-4 gap-2">
+              <Button variant={"ghost"} className="button-trigger">
                 <CalendarIcon className="size-4" />
                 <span className="lg:hidden">
                   {format(
@@ -1422,6 +1423,7 @@ export default function ActionPage() {
           <div className="flex items-center gap-2">
             <Button
               variant={"ghost"}
+              className="button-trigger__squared button-trigger"
               onClick={() => {
                 if (
                   confirm(

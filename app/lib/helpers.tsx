@@ -132,7 +132,7 @@ export function AvatarGroup({
           key={i}
           item={item}
           className={className}
-          group
+          group={avatars.length > 1}
           size={size}
           style={style}
         />

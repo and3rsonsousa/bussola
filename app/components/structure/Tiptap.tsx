@@ -1,7 +1,7 @@
 import BulletList from "@tiptap/extension-bullet-list";
 import Highlight from "@tiptap/extension-highlight";
-import Superscrit from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
+import Superscrit from "@tiptap/extension-superscript";
 import {
   BubbleMenu,
   EditorProvider,
@@ -16,8 +16,6 @@ import {
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
-  Heading4Icon,
-  Heading5Icon,
   HighlighterIcon,
   ItalicIcon,
   ListIcon,
@@ -25,8 +23,8 @@ import {
   SubscriptIcon,
   SuperscriptIcon,
 } from "lucide-react";
-import { Button } from "../ui/button";
 import { useEffect } from "react";
+import { Button } from "../ui/button";
 
 export default function Tiptap({
   content,
@@ -44,7 +42,7 @@ export default function Tiptap({
   ];
 
   return (
-    <div className="editor-tiptap font-inter rounded bg-input p-4">
+    <div className="editor-tiptap font-inter bg-input rounded p-4">
       <EditorProvider
         immediatelyRender={false}
         onBlur={({ editor }) => onBlur(editor.getHTML())}
@@ -77,7 +75,10 @@ const SetContent = ({ content }: { content: Content }) => {
 const TiptapFloatingMenu = () => {
   const { editor } = useCurrentEditor();
   return (
-    <FloatingMenu editor={editor} className="glass ml-4 rounded-lg p-1">
+    <FloatingMenu
+      editor={editor}
+      className="bg-background ml-4 rounded border p-1"
+    >
       <Menu type={2} />
     </FloatingMenu>
   );
@@ -91,7 +92,7 @@ export const Menu = ({ type }: { type: 1 | 2 | 3 }) => {
 
   return (
     <div
-      className={`flex flex-wrap gap-2 ${type === 1 ? "-ml-2 -mt-2 mb-2 border-b pb-2" : ""}`}
+      className={`flex flex-wrap gap-2 ${type === 1 ? "-mt-2 mb-2 -ml-2 border-b pb-2" : ""}`}
     >
       {/* Formating */}
       {type !== 2 && (
