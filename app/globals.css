@@ -44,10 +44,10 @@
 
   .dark {
     --background: 220 30% 2%;
-    --card: 220 25% 10%;
+    --card: 220 25% 12%;
     --popover: 220 12% 13%;
-    /* --primary: 240 100% 45%; */
-    --secondary: 220 20% 25%;
+    --primary: 80 90% 50%;
+    --secondary: 210 15% 20%;
     --muted: 220 10% 25%;
     --accent: 220 12% 22%;
     --destructive: 350 75% 45%;
@@ -61,7 +61,8 @@
     --destructive-foreground: 250 20% 98%;
     --border: 220 10% 20%;
     --input: 220 10% 10%;
-    --ring: 230 80% 50%;
+    --ring: 80 90% 50%;
+    /* --ring: 210 12% 98%; */
   }
 
   * {
@@ -499,11 +500,12 @@ ol {
 }
 
 .dragover {
-  @apply border-primary bg-primary/10;
+  /* @apply border-primary bg-primary/10; */
+  @apply bg-primary/75;
 }
-.dark .dragover {
-  @apply border-primary bg-primary/20;
-}
+/* .dark .dragover { 
+   @apply border-primary bg-primary/20;
+ } */
 
 #calendar > * {
   @apply border-b;

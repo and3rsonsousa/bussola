@@ -660,7 +660,7 @@ export const CalendarDay = ({
           <div
             className={`grid size-8 place-content-center rounded-full text-xl ${
               isToday(parseISO(day.date))
-                ? "bg-primary text-primary-foreground font-bold"
+                ? "bg-primary text-primary-foreground font-medium"
                 : `${!isSameMonth(parseISO(day.date), currentDate) ? "text-muted" : ""} -ml-2 font-light`
             }`}
           >

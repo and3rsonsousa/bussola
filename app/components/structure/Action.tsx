@@ -540,7 +540,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) ? "action-sprint" : ""}`}
+          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) && sprint ? "action-sprint" : ""}`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
@@ -691,7 +691,7 @@ export function ActionBlock({
             </div>
           </div>
           {/* {isSprint(action.id, sprints) && sprint && (
-            <div className="border-background bg-primary text-primary-foreground absolute -top-2 right-2 grid size-6 place-content-center gap-1 rounded border-2">
+            <div className="ring-background bg-primary text-primary-foreground absolute -top-2 right-2 grid size-6 place-content-center rounded-full ring-2">
               <RabbitIcon className="size-4" />
             </div>
           )} */}
