@@ -249,7 +249,7 @@ export default function Search({
                   }}
                   className="flex justify-between gap-8 overflow-hidden"
                 >
-                  <div className="line-clamp-1 font-bold tracking-tight">
+                  <div className="line-clamp-1 text-xl font-medium tracking-tight">
                     {item.title}
                   </div>
                   {item.obs ? (

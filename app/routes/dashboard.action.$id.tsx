@@ -1453,7 +1453,7 @@ export default function ActionPage() {
               disabled={isWorking}
             >
               {isWorking ? (
-                <div className="border-background size-4 animate-spin rounded-full border-2 border-b-transparent"></div>
+                <div className="border-foreground size-4 animate-spin rounded-full border-2 border-b-transparent"></div>
               ) : (
                 <>
                   <SaveIcon className="size-4" />
