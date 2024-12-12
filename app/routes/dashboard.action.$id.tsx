@@ -564,7 +564,7 @@ export default function ActionPage() {
 
         {/* Arquivos e Legenda */}
         {isInstagramFeed(action.category) || action.category === "stories" ? (
-          <div className="lg:scrollbars flex flex-col lg:w-2/5">
+          <div className="scrollbars scrollbars-thin flex h-full flex-col lg:w-2/5">
             {/* Arquivo */}
             {action.category !== "stories" && (
               <div>
@@ -917,15 +917,15 @@ export default function ActionPage() {
                   caption: event.target.value,
                 }))
               }
-              className={`scrollbars scrollbars-thin bg-background min-h-20 w-full text-sm leading-tight font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+              className={`bg-background min-h-full w-full resize-none overflow-y-hidden text-sm leading-tight font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
               //@ts-ignore
-              style={{ fieldSizing: "content" }}
+
               value={action.caption ? action.caption : undefined}
             ></textarea>
           </div>
         ) : null}
       </div>
-
+      {/* Lower bar */}
       <div className="items-center justify-between border-t p-4 md:flex md:px-8 lg:border-none">
         {/* Parceiros Categorias States Prioridade Responsável Cores */}
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 lg:gap-4">
