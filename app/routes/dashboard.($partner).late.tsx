@@ -1,14 +1,15 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import { json, LoaderFunctionArgs, redirect } from "@remix-run/server-runtime";
+import { LoaderFunctionArgs, redirect } from "@remix-run/server-runtime";
 import { MetaFunction } from "@vercel/remix";
 import { format } from "date-fns";
+import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
 import { createClient } from "~/lib/supabase";
 
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   const partner_slug = params["partner"];
 
@@ -20,11 +21,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect("/login");
   }
 
-  const { data: person } = await supabase
-    .from("people")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+  const [{ data: person }, { data: partners }] = await Promise.all([
+    supabase.from("people").select("*").eq("user_id", user.id).single(),
+    supabase.from("partners").select("slug").eq("archived", false),
+  ]);
+
+  invariant(person);
+  invariant(partners);
 
   const [{ data: actions }, { data: actionsChart }, { data: partner }] =
     await Promise.all([
@@ -34,6 +37,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .is("archived", false)
 
         .contains("responsibles", person?.admin ? [] : [user.id])
+        .containedBy("partners", partners.map((p) => p.slug)!)
         .neq("state", "finished")
         .lte("date", format(new Date(), "yyyy-MM-dd HH:mm:ss"))
         .returns<Action[]>(),
@@ -53,7 +57,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .single(),
     ]);
 
-  return json({ actions, actionsChart, partner }, { headers });
+  return { actions, actionsChart, partner };
 };
 
 export const meta: MetaFunction = () => {

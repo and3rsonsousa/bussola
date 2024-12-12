@@ -77,7 +77,7 @@ export default function Header({
 
   return (
     <header
-      className={`border-foreground flex items-center justify-between gap-4 border-b-2 px-6 py-4`}
+      className={`flex items-center justify-between gap-4 border-b px-6 py-2`}
     >
       {/* Voltar */}
       {/* <Button
@@ -95,7 +95,7 @@ export default function Header({
         <Link
           to="/dashboard"
           viewTransition
-          className="ring-ring ring-offset-background rounded p-4 outline-hidden focus:ring-2"
+          className="ring-ring ring-offset-background rounded px-4 py-2 outline-hidden focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
           <Bussola className="hidden md:block" size="sm" />
@@ -105,7 +105,7 @@ export default function Header({
           <Link
             viewTransition
             to={`/dashboard/${partner ? partner.slug.concat("/") : ""}late/`}
-            className="-ml-4 grid -translate-y-4 place-content-center rounded bg-rose-600 px-1.5 py-0.5 text-xs font-semibold text-white"
+            className="-ml-4 grid -translate-y-2 place-content-center rounded bg-rose-600 px-1.5 py-0.5 text-xs font-semibold text-white"
           >
             {lateActions.length}
           </Link>
