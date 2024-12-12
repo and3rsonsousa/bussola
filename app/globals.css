@@ -332,6 +332,10 @@ button {
 .action-item-block {
   @apply bg-card text-foreground rounded-lg px-6 py-4;
 }
+
+.action-sprint {
+  @apply bg-primary text-primary-foreground hover:bg-primary/75;
+}
 /* .action-item {
   @apply bg-primary text-primary-foreground ring-ring ring-offset-background hover:bg-secondary relative flex w-full rounded-l-sm rounded-r-sm ring-offset-2 outline-hidden transition select-none focus-within:ring-2 focus:ring-2;
 } */

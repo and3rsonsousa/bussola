@@ -236,13 +236,13 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center ${short ? "px-2 py-1" : long ? "gap-2 px-4 py-3" : "p-3"} @container text-sm font-medium md:text-xs ${
+            className={`action group/action action-item items-center gap-2 ${short ? "px-2 py-1" : long ? "px-4 py-3" : "p-3"} @container text-sm font-medium md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
                 ? "action-delayed"
                 : ""
-            }`}
+            } ${isSprint(action.id, sprints) ? "action-sprint" : ""}`}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -270,12 +270,10 @@ export function ActionLine({
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
-            <div className="absolute top-0 bottom-0 left-0 z-10 w-2 overflow-hidden rounded-l-[8px]">
-              <div
-                className="h-full w-1"
-                style={{ backgroundColor: state.color }}
-              ></div>
-            </div>
+            <div
+              className="size-2 shrink-0 rounded-full"
+              style={{ backgroundColor: state.color }}
+            ></div>
 
             {partner && showPartner ? (
               <div
@@ -476,9 +474,9 @@ export function ActionLine({
               )
             )}
 
-            {isSprint(action.id, sprints) && (
-              <div className="bg-primary absolute -top-1 right-2 size-2 rounded"></div>
-            )}
+            {/* {isSprint(action.id, sprints) && (
+              <div className="ring-primary absolute inset-0 rounded border-0 ring-2"></div>
+            )} */}
           </div>
         )}
       </ContextMenuTrigger>
@@ -542,7 +540,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm`}
+          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) ? "action-sprint" : ""}`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
@@ -567,7 +565,7 @@ export function ActionBlock({
         >
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
           {/* Title */}
-          <div className="leading-tighter relative text-lg font-semibold">
+          <div className="leading-tighter relative overflow-hidden text-2xl font-semibold tracking-tighter">
             {edit ? (
               <input
                 ref={inputRef}
@@ -613,7 +611,7 @@ export function ActionBlock({
             ) : (
               <button
                 ref={buttonRef}
-                className={`relative flex w-full cursor-text items-center overflow-hidden text-left text-nowrap text-ellipsis outline-hidden`}
+                className={`relative block max-w-full cursor-text items-center overflow-hidden text-left text-ellipsis whitespace-nowrap outline-hidden`}
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -630,8 +628,12 @@ export function ActionBlock({
             )}
           </div>
 
-          <div className="text-muted-foreground flex items-center justify-between gap-4 overflow-x-hidden">
+          <div className="text-foreground/75 flex items-center justify-between gap-4 overflow-x-hidden">
             <div className="flex items-center gap-2">
+              <div
+                className="size-2 shrink-0 rounded-full"
+                style={{ backgroundColor: state.color }}
+              ></div>
               {/* Partners | Clientes  */}
               {/* {partner ? (
                 <Avatar
@@ -663,7 +665,7 @@ export function ActionBlock({
               {/* Responsibles -  Responsáveis */}
               <AvatarGroup people={getResponsibles(action.responsibles)} />
             </div>
-            <div className="text-muted-foreground flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap md:text-xs">
+            <div className="flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap md:text-xs">
               <span className="@[240px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
@@ -688,11 +690,11 @@ export function ActionBlock({
               •<div>{action.time.toString().concat("m")}</div>
             </div>
           </div>
-          {isSprint(action.id, sprints) && sprint && (
+          {/* {isSprint(action.id, sprints) && sprint && (
             <div className="border-background bg-primary text-primary-foreground absolute -top-2 right-2 grid size-6 place-content-center gap-1 rounded border-2">
               <RabbitIcon className="size-4" />
             </div>
-          )}
+          )} */}
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />
