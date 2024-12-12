@@ -1,12 +1,6 @@
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useLocation, useMatches, useSubmit } from "@remix-run/react";
-import {
-  format,
-  formatDistance,
-  formatDuration,
-  isToday,
-  parseISO,
-} from "date-fns";
+import { format, formatDuration, isToday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -30,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Input } from "../ui/input";
 import { Popover, PopoverContent } from "../ui/popover";
 import {
   Select,
@@ -39,8 +34,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
-import { Input } from "../ui/input";
-import colors from "tailwindcss/colors";
 
 export default function CreateAction({
   date,
@@ -183,9 +176,9 @@ export default function CreateAction({
             <PlusIcon className="ml-2 w-8" />
           </Button>
         ) : mode === "plus" ? (
-          <ButtonCNVT className="rounded-full p-2" rounded>
+          <Button variant="default" size="icon" className="rounded-full p-2">
             <PlusIcon className="z-10 size-6" />
-          </ButtonCNVT>
+          </Button>
         ) : (
           <ButtonCNVT className="fixed right-2 bottom-3 rounded-full" rounded>
             <PlusIcon className="z-10 w-8" />
@@ -503,66 +496,6 @@ export default function CreateAction({
                         });
                       }}
                     />
-                    {/* <Select
-                    value={
-                      action.date ? action.date.getHours().toString() : "11"
-                    }
-                    onValueChange={(value) => {
-                      if (action.date) {
-                        const date = action.date;
-                        date.setHours(Number(value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-1/4">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(24)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select> */}
-                    {/* <Select
-                    value={
-                      action.date ? action.date.getMinutes().toString() : "12"
-                    }
-                    onValueChange={(value) => {
-                      if (action.date) {
-                        const date = action.date;
-                        date.setMinutes(Number(value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-1/4">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(60)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select> */}
                   </div>
                   <Select
                     value={action.time.toString()}

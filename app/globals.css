@@ -14,7 +14,8 @@
     --background: 220 20% 100%;
     --card: 230 20% 96%;
     --popover: 0 100% 100%;
-    --primary: 220 20% 5%;
+    --primary: 80 100% 55%;
+    /* --primary: 220 20% 5%; */
     /* --primary: 240 100% 55%; */
     --secondary: 220 5% 92%;
     --muted: 220 15% 80%;
@@ -23,7 +24,8 @@
     --foreground: 220 20% 5%;
     --card-foreground: 224 20% 35%;
     --popover-foreground: 224 20% 35%;
-    --primary-foreground: 220 20% 100%;
+    --primary-foreground: 220 20% 5%;
+    /* --primary-foreground: 220 20% 100%; */
     /* --primary-foreground: 210 20% 98%; */
     --secondary-foreground: 220 10% 35%;
     --muted-foreground: 220 10% 60%;
@@ -44,12 +46,12 @@
     --background: 220 30% 2%;
     --card: 220 25% 10%;
     --popover: 220 12% 13%;
-    --primary: 240 100% 45%;
+    /* --primary: 240 100% 45%; */
     --secondary: 220 20% 25%;
     --muted: 220 10% 25%;
     --accent: 220 12% 22%;
     --destructive: 350 75% 45%;
-    --primary-foreground: 0 0 100%;
+    /* --primary-foreground: 0 0 100%; */
     --foreground: 210 12% 98%;
     --card-foreground: 210 15% 90%;
     --popover-foreground: 210 15% 90%;
@@ -410,7 +412,7 @@ button {
 
 .scrollbars-horizontal::-webkit-scrollbar-thumb,
 .scrollbars::-webkit-scrollbar-thumb {
-  @apply bg-foreground/20 hover:bg-foreground/35;
+  @apply bg-foreground hover:bg-primary;
 }
 
 .bg-label {

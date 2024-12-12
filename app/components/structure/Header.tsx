@@ -77,7 +77,7 @@ export default function Header({
 
   return (
     <header
-      className={`flex items-center justify-between gap-4 border-b px-6 py-4`}
+      className={`border-foreground flex items-center justify-between gap-4 border-b-2 px-6 py-4`}
     >
       {/* Voltar */}
       {/* <Button
@@ -105,7 +105,7 @@ export default function Header({
           <Link
             viewTransition
             to={`/dashboard/${partner ? partner.slug.concat("/") : ""}late/`}
-            className="grid place-content-center rounded bg-rose-600 p-1 text-xs font-semibold text-white"
+            className="-ml-4 grid -translate-y-4 place-content-center rounded bg-rose-600 px-1.5 py-0.5 text-xs font-semibold text-white"
           >
             {lateActions.length}
           </Link>

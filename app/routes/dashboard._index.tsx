@@ -251,7 +251,12 @@ export default function DashboardIndex() {
     <div className="scrollbars">
       <div className="px-2 md:px-8">
         <ActionsProgress />
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
         <Sprint />
+      </div>
+      <div className="px-2 md:px-8">
         {/* Ações em Atraso */}
         {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
         {/* Parceiros */}
@@ -626,7 +631,7 @@ function Partners({ actions }: { actions?: Action[] }) {
       <div className="mx-auto my-8 rounded p-2 md:p-8">
         <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
         {partners.length > 0 ? (
-          <div className="mx-auto grid w-auto justify-center gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="mx-auto flex w-auto flex-wrap justify-center gap-8">
             {partners.map((partner) => (
               <Link
                 tabIndex={0}
@@ -803,10 +808,7 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <motion.div
-            key={i}
-            className="hover:border-primary rounded-xl border-2 border-white px-4 py-8 text-center transition"
-          >
+          <motion.div key={i} className="text-center">
             <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}
             </h3>

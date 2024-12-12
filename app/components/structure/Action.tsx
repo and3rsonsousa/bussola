@@ -424,7 +424,7 @@ export function ActionLine({
             {/* Responsibles */}
 
             <div
-              className={` ${!allUsers || long ? "hidden @[200px]:block" : "flex"} justify-end ${long && "w-32"}`}
+              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} justify-end ${long && "w-32"}`}
             >
               {allUsers || long
                 ? people
