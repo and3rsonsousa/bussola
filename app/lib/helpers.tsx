@@ -745,7 +745,9 @@ export const Post = ({
             : undefined,
       }}
     >
-      <div className="p-2 text-center text-[10px] leading-none font-semibold @[120px]:text-[12px] @[200px]:p-4 @[200px]:text-[20px] @[200px]:tracking-tighter @[300px]:p-8 @[300px]:text-[24px]">
+      <div
+        className={`overflow-hidden p-2 text-center text-[10px] leading-none font-medium tracking-tight text-ellipsis ${action.title.length > 50 ? "@[120px]:text-[12px] @[200px]:text-[20px] @[300px]:text-[24px]" : "@[120px]:text-[18px] @[200px]:text-[32px] @[300px]:text-[24px]"} :tracking-tighter @[200px]:p-4 @[300px]:p-8`}
+      >
         {action.title}
       </div>
     </div>

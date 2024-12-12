@@ -116,8 +116,6 @@ export default function Search({
                 title: category.title,
 
                 click: () => {
-                  console.log([category, categoryFilter]);
-
                   setCategoryFilter([category, ...categoryFilter]);
                 },
                 options: [
@@ -168,32 +166,44 @@ export default function Search({
           .contains("responsibles", person?.admin ? [] : [person.user_id])
           .textSearch("title", query)
           .then((value) => {
-            const s = sections;
             const actions = value.data
-              ? value.data.map((action: Action) => ({
-                  id: action.id,
-                  title: action.title,
-                  href: `/dashboard/action/${action.id}`,
-                  options: [action.title, action.id],
-                  obs: {
-                    state: states.find((state) => state.slug === action.state)!,
-                    category: categories.find(
-                      (category) => category.slug === action.category,
-                    )!,
-                    partner: partners.find(
-                      (partner) => partner.slug === action.partners[0],
-                    )!,
-                    priority: priorities.find(
-                      (priority) => priority.slug === action.priority,
-                    )!,
-                    responsibles: people.filter(
-                      (person) =>
-                        action.responsibles.findIndex(
-                          (responsible_id) => responsible_id === person.user_id,
-                        ) >= 0,
-                    ),
-                  },
-                }))
+              ? value.data
+                  .map((action: Action) => {
+                    if (
+                      partners.find((partner) => {
+                        return partner.slug === action.partners[0];
+                      })
+                    ) {
+                      return {
+                        id: action.id,
+                        title: action.title,
+                        href: `/dashboard/action/${action.id}`,
+                        options: [action.title, action.id],
+                        obs: {
+                          state: states.find(
+                            (state) => state.slug === action.state,
+                          )!,
+                          category: categories.find(
+                            (category) => category.slug === action.category,
+                          )!,
+                          partner: partners.find((partner) => {
+                            return partner.slug === action.partners[0];
+                          })!,
+                          priority: priorities.find(
+                            (priority) => priority.slug === action.priority,
+                          )!,
+                          responsibles: people.filter(
+                            (person) =>
+                              action.responsibles.findIndex(
+                                (responsible_id) =>
+                                  responsible_id === person.user_id,
+                              ) >= 0,
+                          ),
+                        },
+                      };
+                    }
+                  })
+                  .filter((i) => i !== undefined)
               : [];
 
             setSections([
@@ -203,8 +213,6 @@ export default function Search({
               },
               ...startSections,
             ]);
-
-            console.log(sections);
 
             setLoading(false);
           });
@@ -240,7 +248,7 @@ export default function Search({
           </CommandLoading>
         )}
         {sections.map((section, i) =>
-          section.items.length > 0 && (i === 0 ? value.length > 1 : true) ? (
+          section.items.length > 0 ? (
             <CommandGroup key={section.name} heading={section.name}>
               {section.items.map((item, i) => (
                 <CommandItem

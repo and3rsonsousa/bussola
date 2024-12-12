@@ -601,7 +601,6 @@ function DelayedActions({ actions }: { actions: Action[] }) {
           actions={actions}
           showCategory={true}
           columns={6}
-          date={{ dateFormat: 1 }}
           descending
           orderBy={order}
           showPartner
@@ -741,11 +740,13 @@ const ActionsProgress = () => {
         <span className="md:hidden">Progresso</span>
       </h2> */}
 
-      <h2 className="py-8 text-5xl leading-none font-bold tracking-tight">
-        <span className="hidden uppercase md:block">
-          Acompanhamento <br /> do progresso
+      <h2 className="flex items-center justify-center gap-2 py-8 text-center text-5xl leading-none font-bold tracking-tight">
+        {/* <span className="animate-spin font-serif text-7xl">✳</span> */}
+        <span className="hidden uppercase md:inline-block">
+          Acompanhamento do progresso
         </span>
         <span className="md:hidden">Progresso</span>
+        {/* <span className="font-serif text-7xl">✳</span> */}
       </h2>
 
       <div className="grid w-full grid-cols-2 justify-center gap-4 rounded select-none md:grid-cols-4">

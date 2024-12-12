@@ -265,15 +265,17 @@ export function ActionLine({
             onDragEnd={() => {
               if (onDrag) onDrag(action);
             }}
-            style={{ borderLeftColor: state.color }}
+            // style={{ backgroundColor: state.color }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
-            {/* <div
-              className="absolute -top-1 right-2 z-10 size-2 rounded-full"
-              style={{ backgroundColor: state.color }}
-            ></div> */}
+            <div className="absolute top-0 bottom-0 left-0 z-10 w-2 overflow-hidden rounded-l-[8px]">
+              <div
+                className="h-full w-1"
+                style={{ backgroundColor: state.color }}
+              ></div>
+            </div>
 
             {partner && showPartner ? (
               <div
@@ -540,7 +542,7 @@ export function ActionBlock({
       <ContextMenuTrigger>
         <div
           title={action.title}
-          className={`action group/action action-item @container cursor-pointer flex-col justify-between gap-2 rounded border-l-4 px-4 py-2 text-sm`}
+          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm`}
           style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
