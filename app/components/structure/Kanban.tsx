@@ -39,8 +39,8 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 
   return (
     <div className="overflow-hidden pb-4">
-      <div className="scrollbars-horizontal">
-        <div className="flex w-full gap-4">
+      <div className="scrollbars-horizontal scrollbars-horizontal-thin">
+        <div className="flex w-full gap-2">
           {states.map((state) => {
             const stateActions = actions.filter(
               (action) => action.state === state.slug,

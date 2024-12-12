@@ -73,7 +73,6 @@ export default function Header({
       : partner;
 
   const lateActions = getDelayedActions({ actions: actionsChart });
-  console.log(lateActions);
 
   // const isActionPage = /\/dashboard\/action\//.test(location.pathname);
 
@@ -100,7 +99,7 @@ export default function Header({
           className="ring-ring ring-offset-background rounded px-4 py-2 outline-hidden focus:ring-2"
         >
           <Bussola className="md:hidden" size="md" short />
-          <Bussola className="hidden md:block" size="sm" />
+          <Bussola className="hidden md:block" size="xs" />
         </Link>
         {/* Atrasados */}
         {lateActions.length > 0 && (
