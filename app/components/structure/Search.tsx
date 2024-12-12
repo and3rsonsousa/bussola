@@ -164,46 +164,34 @@ export default function Search({
           .select("*")
           .is("archived", false)
           .contains("responsibles", person?.admin ? [] : [person.user_id])
+          .containedBy("partners", partners.map((p) => p.slug)!)
           .textSearch("title", query)
           .then((value) => {
             const actions = value.data
-              ? value.data
-                  .map((action: Action) => {
-                    if (
-                      partners.find((partner) => {
-                        return partner.slug === action.partners[0];
-                      })
-                    ) {
-                      return {
-                        id: action.id,
-                        title: action.title,
-                        href: `/dashboard/action/${action.id}`,
-                        options: [action.title, action.id],
-                        obs: {
-                          state: states.find(
-                            (state) => state.slug === action.state,
-                          )!,
-                          category: categories.find(
-                            (category) => category.slug === action.category,
-                          )!,
-                          partner: partners.find((partner) => {
-                            return partner.slug === action.partners[0];
-                          })!,
-                          priority: priorities.find(
-                            (priority) => priority.slug === action.priority,
-                          )!,
-                          responsibles: people.filter(
-                            (person) =>
-                              action.responsibles.findIndex(
-                                (responsible_id) =>
-                                  responsible_id === person.user_id,
-                              ) >= 0,
-                          ),
-                        },
-                      };
-                    }
-                  })
-                  .filter((i) => i !== undefined)
+              ? value.data.map((action: Action) => ({
+                  id: action.id,
+                  title: action.title,
+                  href: `/dashboard/action/${action.id}`,
+                  options: [action.title, action.id],
+                  obs: {
+                    state: states.find((state) => state.slug === action.state)!,
+                    category: categories.find(
+                      (category) => category.slug === action.category,
+                    )!,
+                    partner: partners.find((partner) => {
+                      return partner.slug === action.partners[0];
+                    })!,
+                    priority: priorities.find(
+                      (priority) => priority.slug === action.priority,
+                    )!,
+                    responsibles: people.filter(
+                      (person) =>
+                        action.responsibles.findIndex(
+                          (responsible_id) => responsible_id === person.user_id,
+                        ) >= 0,
+                    ),
+                  },
+                }))
               : [];
 
             setSections([
