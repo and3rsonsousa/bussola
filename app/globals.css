@@ -312,7 +312,7 @@ button {
 }
 
 .glass {
-  @apply bg-background border-foreground rounded-xl border-2;
+  @apply bg-background border-border rounded-xl border;
 }
 
 /* .glass {
