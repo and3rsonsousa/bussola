@@ -44,6 +44,7 @@ declare global {
 
   type DashboardIndexType = {
     actions: Action[];
+    lateActions: Action[];
     actionsChart: ActionChart[];
   };
 

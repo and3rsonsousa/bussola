@@ -113,37 +113,25 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   let start = startOfWeek(startOfMonth(new Date()));
   let end = endOfDay(endOfWeek(endOfMonth(addMonths(new Date(), 1))));
-  const [{ data: actions }, { data: actionsChart }, { data: lateActions }] =
-    await Promise.all([
-      supabase
-        .from("actions")
-        .select("*")
-        .is("archived", false)
-        .contains("responsibles", person.admin ? [] : [user.id])
-        .containedBy("partners", partners.map((p) => p.slug)!)
-        .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
-        .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
-        .returns<Action[]>(),
-      supabase
-        .from("actions")
-        .select("category, state, date")
-        .is("archived", false)
-        .contains("responsibles", person?.admin ? [] : [user.id])
-        .containedBy("partners", partners.map((p) => p.slug)!)
-        .returns<{ state: string; date: string }[]>(),
-      supabase
-        .from("actions")
-        .select("*")
-        .is("archived", false)
-        .neq("state", "finished")
-        .contains("responsibles", person.admin ? [] : [user.id])
-        .containedBy("partners", partners.map((p) => p.slug)!)
-        .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
-        .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
-        .returns<Action[]>(),
-    ]);
+  const [{ data: actions }, { data: actionsChart }] = await Promise.all([
+    supabase
+      .from("actions")
+      .select("*")
+      .is("archived", false)
+      .contains("responsibles", person.admin ? [] : [user.id])
+      .containedBy("partners", partners.map((p) => p.slug)!)
+      .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
+      .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
+      .returns<Action[]>(),
+    supabase
+      .from("actions")
+      .select("category, state, date")
+      .is("archived", false)
+      .contains("responsibles", person?.admin ? [] : [user.id])
+      .containedBy("partners", partners.map((p) => p.slug)!)
+      .returns<{ state: string; date: string }[]>(),
+  ]);
 
-  // return json({ actions, actionsChart }, { headers });
   return { actions, actionsChart };
 };
 

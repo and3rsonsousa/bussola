@@ -73,7 +73,9 @@ export default function Header({
       : partner;
 
   const lateActions = getDelayedActions({ actions: actionsChart });
-  const isActionPage = /\/dashboard\/action\//.test(location.pathname);
+  console.log(lateActions);
+
+  // const isActionPage = /\/dashboard\/action\//.test(location.pathname);
 
   return (
     <header
