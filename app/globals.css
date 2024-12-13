@@ -15,6 +15,7 @@
     --card: 230 20% 96%;
     --popover: 0 100% 100%;
     --primary: 80 100% 55%;
+    --primary-hover: 80 100% 65%;
     /* --primary: 220 20% 5%; */
     /* --primary: 240 100% 55%; */
     --secondary: 220 5% 92%;
@@ -239,6 +240,7 @@
   --color-foreground: hsl(var(--foreground));
 
   --color-primary: hsl(var(--primary));
+  --color-primary-hover: hsl(var(--primary-hover));
   --color-primary-foreground: hsl(var(--primary-foreground));
 
   --color-secondary: hsl(var(--secondary));
@@ -339,7 +341,7 @@ button {
 }
 
 .action-sprint {
-  @apply bg-primary text-primary-foreground hover:bg-primary/75;
+  @apply bg-primary text-primary-foreground hover:bg-primary-hover;
 }
 /* .action-item {
   @apply bg-primary text-primary-foreground ring-ring ring-offset-background hover:bg-secondary relative flex w-full rounded-l-sm rounded-r-sm ring-offset-2 outline-hidden transition select-none focus-within:ring-2 focus:ring-2;
