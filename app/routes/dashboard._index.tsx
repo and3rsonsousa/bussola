@@ -248,8 +248,7 @@ export default function DashboardIndex() {
       <div className="px-2 md:px-8">
         {/* Ações em Atraso */}
         {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
-        {/* Parceiros */}
-        <Partners actions={actions as Action[]} />
+
         {/* Ações de Hoje */}
         {currentActions?.length ? (
           <div className="mb-8">
@@ -377,8 +376,12 @@ export default function DashboardIndex() {
             )}
           </div>
         ) : null}
+
+        {/* Parceiros */}
+        <Partners actions={actions as Action[]} />
+
         {/* Ações de Amanhã */}
-        {tomorrowActions?.length ? (
+        {/* {tomorrowActions?.length ? (
           <div className="mb-8">
             <div className="relative inline-flex pb-4">
               <h2 className="text-3xl font-semibold tracking-tight">Amanhã</h2>
@@ -387,7 +390,7 @@ export default function DashboardIndex() {
 
             <BlockOfActions actions={tomorrowActions} sprint />
           </div>
-        ) : null}
+        ) : null} */}
         {/* Ações da Semana */}
         {weekActions.reduce(
           (acc, currentValue) => acc + currentValue.actions.length,
@@ -431,7 +434,7 @@ export function WeekView({
       <div className="pb-4">
         <h2 className="text-3xl font-semibold tracking-tight">Semana</h2>
       </div>
-      <div className="scrollbars-horizontal mb-8 flex max-h-[50dvh] flex-nowrap overflow-x-auto overflow-y-hidden">
+      <div className="scrollbars-horizontal scrollbars-horizontal-thin mb-8 flex max-h-[50dvh] flex-nowrap overflow-x-auto overflow-y-hidden">
         {weekActions.map(({ date, actions }) => (
           <div
             className="group flex max-h-full w-full min-w-72 flex-col overflow-hidden"
@@ -621,9 +624,9 @@ function Partners({ actions }: { actions?: Action[] }) {
         Parceiros
       </h4>
       {partners.length > 0 ? (
-        <div className="grid w-full grid-cols-2 border md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
+        <div className="grid w-full grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
           {partners.map((partner) => (
-            <div key={partner.id} className="flex gap-4 border px-8 py-6">
+            <div key={partner.id} className="flex gap-4">
               <div>
                 <Link
                   tabIndex={0}

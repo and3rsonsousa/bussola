@@ -567,7 +567,7 @@ export default function ActionPage() {
 
         {/* Arquivos e Legenda */}
         {isInstagramFeed(action.category) || action.category === "stories" ? (
-          <div className="scrollbars scrollbars-thin flex h-full flex-col lg:w-2/5">
+          <div className="relative flex h-full flex-col overflow-hidden lg:w-2/5">
             {/* Arquivo */}
             {action.category !== "stories" && (
               <div>
@@ -908,23 +908,24 @@ export default function ActionPage() {
                 )}
               </div>
             </div>
+            <div className="bg-background bottom-0 h-full w-full focus-within:absolute focus-within:h-[70vh] focus-within:pt-8">
+              <textarea
+                placeholder="Escreva sua legenda aqui ou peça à βIA para criar no botão superior direito."
+                ref={caption}
+                key={`caption-${action.id}`}
+                name="caption"
+                onChange={(event) =>
+                  setAction((action) => ({
+                    ...action,
+                    caption: event.target.value,
+                  }))
+                }
+                className={`scrollbars scrollbars-thin w-full text-sm font-normal outline-hidden transition ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
+                //@ts-ignore
 
-            <textarea
-              placeholder="Escreva sua legenda aqui ou peça à βIA para criar no botão superior direito."
-              ref={caption}
-              key={`caption-${action.id}`}
-              name="caption"
-              onChange={(event) =>
-                setAction((action) => ({
-                  ...action,
-                  caption: event.target.value,
-                }))
-              }
-              className={`bg-background min-h-full w-full resize-none overflow-y-hidden text-sm leading-tight font-normal outline-hidden ${isInstagramFeed(action.category) ? "border-0 focus-within:ring-0" : ""}`}
-              //@ts-ignore
-
-              value={action.caption ? action.caption : undefined}
-            ></textarea>
+                value={action.caption ? action.caption : undefined}
+              ></textarea>
+            </div>
           </div>
         ) : null}
       </div>

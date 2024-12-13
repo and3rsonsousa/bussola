@@ -236,7 +236,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center gap-2 ${short ? "px-2 py-1" : long ? "px-4 py-3" : "p-3"} font-base @container text-sm md:text-xs ${
+            className={`action group/action action-item items-center gap-2 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container text-sm md:text-xs ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
