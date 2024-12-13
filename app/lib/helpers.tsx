@@ -181,6 +181,7 @@ export function Avatar({
             backgroundColor: item.bg || "#778",
             color: item.fg || "#bbc",
           }}
+          className="border"
         >
           <ShortText
             text={size === "xs" ? item.short[0] : item.short}

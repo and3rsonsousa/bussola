@@ -616,31 +616,21 @@ function Partners({ actions }: { actions?: Action[] }) {
   actions = actions || [];
 
   return (
-    <div className="flex justify-center">
-      <div className="mx-auto my-8 rounded p-2 md:p-8">
-        <h4 className="mb-4 text-center text-xl font-bold">Parceiros</h4>
-        {partners.length > 0 ? (
-          <div className="mx-auto flex w-auto flex-wrap justify-center gap-8">
-            {partners.map((partner) => (
-              <Link
-                tabIndex={0}
-                to={`/dashboard/${partner.slug}`}
-                key={partner.slug}
-                className="group/avatar relative flex cursor-pointer"
-              >
-                <CircularProgress
-                  actions={actions.filter(
-                    (action) =>
-                      action.partners[0] === partner.slug &&
-                      new Date(action.date).getTime() >=
-                        startOfWeek(new Date()).getTime() &&
-                      new Date(action.date).getTime() <=
-                        endOfDay(endOfWeek(new Date())).getTime(),
-                  )}
-                  size="md"
-                  className="scale-125"
-                />
-                <div>
+    <div className="my-16">
+      <h4 className="mb-8 text-center text-5xl font-bold uppercase">
+        Parceiros
+      </h4>
+      {partners.length > 0 ? (
+        <div className="grid w-full grid-cols-2 border md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
+          {partners.map((partner) => (
+            <div key={partner.id} className="flex gap-4 border px-8 py-6">
+              <div>
+                <Link
+                  tabIndex={0}
+                  to={`/dashboard/${partner.slug}`}
+                  key={partner.slug}
+                  className="group/avatar relative flex cursor-pointer"
+                >
                   <Avatar
                     item={{
                       short: partner.short,
@@ -648,35 +638,101 @@ function Partners({ actions }: { actions?: Action[] }) {
                       fg: partner.colors[1],
                     }}
                     size="xl"
-                    className="mx-auto"
                   />
-                  <Badge
-                    value={
-                      lateActions.filter((action) =>
+                </Link>
+              </div>
+              <div className="overflow-hidden pt-1">
+                <div className="mb-1 w-full overflow-hidden leading-none font-semibold tracking-tight text-ellipsis whitespace-nowrap md:text-xl">
+                  <Link
+                    tabIndex={0}
+                    to={`/dashboard/${partner.slug}`}
+                    key={partner.slug}
+                  >
+                    {partner.title}
+                  </Link>
+                </div>
+                <div className="text-muted-foreground text-xs leading-none">
+                  <div>
+                    {
+                      actions.filter((action) =>
                         action.partners.find((p) => p === partner.slug),
                       ).length
-                    }
-                    isDynamic
-                    className="border-background absolute -top-2 right-0 border-2"
-                  />
+                    }{" "}
+                    ações no período
+                  </div>
+                  {lateActions.filter((action) =>
+                    action.partners.find((p) => p === partner.slug),
+                  ).length > 0 ? (
+                    <div className="text-error">
+                      {
+                        lateActions.filter((action) =>
+                          action.partners.find((p) => p === partner.slug),
+                        ).length
+                      }{" "}
+                      em atraso
+                    </div>
+                  ) : null}
                 </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="grid place-content-center p-4 text-center">
-            <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
-              Nenhum <span className="font-bold">PARCEIRO</span> está designado
-              para você.
+              </div>
             </div>
-            <div className="text-lg tracking-tight">
-              Fale com o seu Head para viabilizar o seu acesso
-              <br />
-              aos parceiros da empresa que você deve ter acesso.
-            </div>
+          ))}
+        </div>
+      ) : (
+        // <div className="mx-auto flex w-auto flex-wrap justify-center gap-8">
+        //   {partners.map((partner) => (
+        //     <Link
+        //       tabIndex={0}
+        //       to={`/dashboard/${partner.slug}`}
+        //       key={partner.slug}
+        //       className="group/avatar relative flex cursor-pointer"
+        //     >
+        //       <CircularProgress
+        //         actions={actions.filter(
+        //           (action) =>
+        //             action.partners[0] === partner.slug &&
+        //             new Date(action.date).getTime() >=
+        //               startOfWeek(new Date()).getTime() &&
+        //             new Date(action.date).getTime() <=
+        //               endOfDay(endOfWeek(new Date())).getTime(),
+        //         )}
+        //         size="md"
+        //         className="scale-125"
+        //       />
+        //       <div>
+        //         <Avatar
+        //           item={{
+        //             short: partner.short,
+        //             bg: partner.colors[0],
+        //             fg: partner.colors[1],
+        //           }}
+        //           size="xl"
+        //           className="mx-auto"
+        //         />
+        //         <Badge
+        //           value={
+        //             lateActions.filter((action) =>
+        //               action.partners.find((p) => p === partner.slug),
+        //             ).length
+        //           }
+        //           isDynamic
+        //           className="border-background absolute -top-2 right-0 border-2"
+        //         />
+        //       </div>
+        //     </Link>
+        //   ))}
+        // </div>
+        <div className="grid place-content-center p-4 text-center">
+          <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
+            Nenhum <span className="font-bold">PARCEIRO</span> está designado
+            para você.
           </div>
-        )}
-      </div>
+          <div className="text-lg tracking-tight">
+            Fale com o seu Head para viabilizar o seu acesso
+            <br />
+            aos parceiros da empresa que você deve ter acesso.
+          </div>
+        </div>
+      )}
     </div>
   );
 }

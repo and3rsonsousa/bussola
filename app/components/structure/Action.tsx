@@ -628,7 +628,7 @@ export function ActionBlock({
             )}
           </div>
 
-          <div className="text-foreground/75 flex items-center justify-between gap-4 overflow-x-hidden">
+          <div className="flex items-center justify-between gap-4 overflow-x-hidden">
             <div className="flex items-center gap-2">
               <div
                 className="size-2 shrink-0 rounded-full"
@@ -646,7 +646,7 @@ export function ActionBlock({
               ) : null} */}
               <AvatarGroup partners={actionPartners} />
               {/* Category - Categoria */}
-              <div>
+              <div className="opacity-50">
                 <Icons
                   id={
                     categories.find(
@@ -665,7 +665,7 @@ export function ActionBlock({
               {/* Responsibles -  Responsáveis */}
               <AvatarGroup people={getResponsibles(action.responsibles)} />
             </div>
-            <div className="flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap md:text-xs">
+            <div className="flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap opacity-50 md:text-xs">
               <span className="@[240px]:hidden">
                 {formatActionDatetime({
                   date: action.date,
@@ -701,6 +701,7 @@ export function ActionBlock({
     </ContextMenu>
   );
 }
+
 export function ListOfActions({
   actions,
   showCategory,

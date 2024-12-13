@@ -37,9 +37,9 @@
     /* --ring: 230 100% 65%; */
     --radius: 12px;
 
-    --success: theme(--color-lime-500);
-    --alert: theme(--color-yellow-500);
-    --error: theme(--color-rose-500);
+    --success: theme(--color-lime-700);
+    --alert: theme(--color-yellow-800);
+    --error: theme(--color-rose-600);
   }
 
   .dark {
@@ -258,6 +258,10 @@
 
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-success: var(--success);
+  --color-alert: var(--alert);
+  --color-error: var(--error);
 
   --radius-xs: calc(var(--radius) - 8px); /*  4 */
   --radius-sm: calc(var(--radius) - 4px); /*  8 */
