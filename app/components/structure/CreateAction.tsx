@@ -2,7 +2,7 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useLocation, useMatches, useSubmit } from "@remix-run/react";
 import { format, formatDuration, isToday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { PlusIcon } from "lucide-react";
+import { PlusCircleIcon, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BASE_COLOR, INTENTS, TIMES } from "~/lib/constants";
 import {
@@ -306,39 +306,20 @@ export default function CreateAction({
             </DropdownMenu>
 
             {/* States */}
-            <Select
-              value={action.state.toString()}
-              onValueChange={(value) =>
-                setAction({
-                  ...action,
-                  state: value,
-                })
-              }
-            >
-              <SelectTrigger
-                className={`h-7 w-auto rounded border-2 text-xs font-bold ring-offset-1`}
-                style={{ borderColor: state.color }}
-              >
-                {state.title}
-              </SelectTrigger>
-              <SelectContent className="glass">
-                {states.map((state) => (
-                  <SelectItem
-                    value={state.slug.toString()}
-                    key={state.slug}
-                    className="bg-select-item"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`h-2 w-2 rounded-full`}
-                        style={{ borderLeftColor: state.color }}
-                      ></div>
-                      <div>{state.title}</div>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <StateSelect
+              state={action.state}
+              onValueChange={(state) => {
+                if (state !== action.state) {
+                  console.log(state);
+
+                  setAction({
+                    ...action,
+                    state,
+                  });
+                }
+              }}
+            />
+
             {/* Responsáveis */}
             <DropdownMenu>
               <DropdownMenuTrigger className="button-trigger">
@@ -393,7 +374,7 @@ export default function CreateAction({
             {/* Cor da ação */}
             {getInstagramFeed({ actions: [action] }).length > 0 && partner ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className="ring-primary ring-offset-background rounded ring-offset-4 outline-hidden focus-within:ring-2">
+                <DropdownMenuTrigger className="button-trigger">
                   <div
                     className="size-8 rounded"
                     style={{
@@ -518,8 +499,7 @@ export default function CreateAction({
               </PopoverContent>
             </Popover>
 
-            <button
-              className="ring-primary ring-offset-background relative flex items-center gap-2 rounded bg-linear-to-b from-white via-black to-white/30 px-4 py-3 text-white ring-offset-4 outline-hidden focus:ring-2"
+            <Button
               onClick={() => {
                 if (action.title.length === 0) {
                   toast({
@@ -572,9 +552,9 @@ export default function CreateAction({
                 }
               }}
             >
-              <div className="absolute inset-[1px] z-0 rounded bg-linear-to-b from-[#444] via-black to-black" />
-              <div className="z-10">Criar</div>
-            </button>
+              Criar
+              <PlusCircleIcon className="size-4" />
+            </Button>
           </div>
         </div>
       </PopoverContent>
@@ -589,5 +569,72 @@ export function formatActionTime(i: number) {
       hours: i >= 60 ? Math.floor(i / 60) : 0,
     },
     { locale: ptBR, delimiter: " e " },
+  );
+}
+
+export function StateSelect({
+  state,
+  onValueChange,
+}: {
+  state: string;
+  onValueChange: (state: string) => void;
+}) {
+  const matches = useMatches();
+  const { states } = matches[1].data as DashboardRootType;
+  const _state = states.find((s) => s.slug === state) as State;
+
+  return (
+    <Select value={state} onValueChange={(value) => onValueChange(value)}>
+      <SelectTrigger className={`button-trigger inline-flex w-auto gap-2`}>
+        <div
+          className={`size-2 rounded-full`}
+          style={{ backgroundColor: _state.color }}
+        ></div>
+        {_state.title}
+      </SelectTrigger>
+      <SelectContent className="glass">
+        {states.map((state) => (
+          <SelectItem
+            value={state.slug.toString()}
+            key={state.slug}
+            className="bg-select-item"
+          >
+            <div className="flex items-center gap-2">
+              <div
+                className={`size-2 rounded-full`}
+                style={{ backgroundColor: state.color }}
+              ></div>
+              <div>{state.title}</div>
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+    // <DropdownMenu>
+    //   <DropdownMenuTrigger className={`button-trigger flex items-center gap-2`}>
+    //     <div
+    //       className="size-2 rounded-2xl"
+    //       style={{ backgroundColor: _state.color }}
+    //     ></div>
+
+    //     {_state.title}
+    //   </DropdownMenuTrigger>
+    //   <DropdownMenuContent className="glass">
+    //     {states.map((state) => (
+    //       <DropdownMenuItem
+    //         key={state.slug}
+    //         className="bg-item flex items-center gap-2"
+    //         textValue={state.title}
+    //         onSelect={() => onSelect(state)}
+    //       >
+    //         <div
+    //           className={`my-1 size-2 rounded-full`}
+    //           style={{ backgroundColor: state.color }}
+    //         ></div>
+    //         <span>{state.title}</span>
+    //       </DropdownMenuItem>
+    //     ))}
+    //   </DropdownMenuContent>
+    // </DropdownMenu>
   );
 }

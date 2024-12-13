@@ -21,6 +21,7 @@ import {
   isSameDay,
   isSameMonth,
   isToday,
+  isTomorrow,
   startOfMonth,
   startOfWeek,
   subDays,
@@ -714,6 +715,7 @@ const ActionsProgress = () => {
   const { actions } = matches[2].data as DashboardIndexType;
 
   const todayActions = actions?.filter((action) => isToday(action.date));
+  const tomorrowActions = actions?.filter((action) => isTomorrow(action.date));
   const thisWeekActions = actions?.filter(
     (action) =>
       isAfter(action.date, startOfWeek(new Date())) &&
@@ -742,46 +744,15 @@ const ActionsProgress = () => {
         {/* <span className="font-serif text-7xl">✳</span> */}
       </h2>
 
-      <div className="grid w-full grid-cols-2 justify-center gap-4 rounded select-none md:grid-cols-4">
-        {/* <div>
-          <h3 className="overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap capitalize">
-            Hoje
-          </h3>
-          <div className="flex gap-4">
-            <div className="w-full">
-              <ChartContainer
-                config={{}}
-                className="aspect-square max-h-40 w-full"
-              >
-                <PieChart>
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent />}
-                  />
-                  <Pie
-                    dataKey={"actions"}
-                    nameKey={"state"}
-                    innerRadius={"60%"}
-                    data={states.map((state) => {
-                      return {
-                        state: state.title,
-                        actions: todayActions.filter(
-                          (action) => action.state === state.slug,
-                        ).length,
-                        fill: state.color,
-                      };
-                    })}
-                  />
-                </PieChart>
-              </ChartContainer>
-            </div>
-          </div>
-        </div> */}
-
+      <div className="grid w-full grid-cols-12 justify-center gap-4 rounded select-none">
         {[
           {
             title: "Hoje",
             actions: todayActions,
+          },
+          {
+            title: "Amanhã",
+            actions: tomorrowActions,
           },
           {
             title: "Semana",
@@ -796,7 +767,10 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <motion.div key={i} className="text-center">
+          <div
+            key={i}
+            className={`text-center ${i <= 1 ? "col-span-6 lg:col-span-3" : "col-span-4 lg:col-span-2"}`}
+          >
             <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}
             </h3>
@@ -832,7 +806,7 @@ const ActionsProgress = () => {
                 </ChartContainer>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 

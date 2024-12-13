@@ -42,7 +42,10 @@ import invariant from "tiny-invariant";
 import Tiptap from "~/components/structure/Tiptap";
 
 import ButtonCNVT from "~/components/structure/Button";
-import { formatActionTime } from "~/components/structure/CreateAction";
+import {
+  formatActionTime,
+  StateSelect,
+} from "~/components/structure/CreateAction";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import {
@@ -1021,41 +1024,17 @@ export default function ActionPage() {
 
           {/* States */}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={`button-trigger flex items-center gap-2`}
-            >
-              <div
-                className="size-2 rounded-2xl"
-                style={{ backgroundColor: state.color }}
-              ></div>
-
-              {state.title}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="glass">
-              {states.map((state) => (
-                <DropdownMenuItem
-                  key={state.slug}
-                  className="bg-item flex items-center gap-2"
-                  textValue={state.title}
-                  onSelect={async () => {
-                    if (state.slug !== action.state) {
-                      setAction({
-                        ...action,
-                        state: state.slug,
-                      });
-                    }
-                  }}
-                >
-                  <div
-                    className={`my-1 size-2 rounded-full`}
-                    style={{ backgroundColor: state.color }}
-                  ></div>
-                  <span>{state.title}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <StateSelect
+            state={action.state}
+            onValueChange={(state) => {
+              if (state !== action.state) {
+                setAction({
+                  ...action,
+                  state,
+                });
+              }
+            }}
+          />
 
           {/* Prioridade */}
 
