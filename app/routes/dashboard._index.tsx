@@ -404,18 +404,18 @@ export default function DashboardIndex() {
         ) : null}
         {/* Próximas ações */}
         <div className="py-4">
-          <div className="relative inline-flex pb-4">
-            <h2 className="text-3xl font-semibold tracking-tight">
+          <div className="relative text-center">
+            <Heading className="flex justify-center gap-2">
               Próximas Ações
-            </h2>
-            <Badge value={nextActions?.length || 0} />
+              <Badge value={nextActions?.length || 0} />
+            </Heading>
           </div>
           <ListOfActions
             actions={nextActions}
             columns={person.role > 1 ? 1 : 3}
             isFoldable={person.role === 1}
-            long
             orderBy="time"
+            date={{ dateFormat: 2 }}
           />
         </div>
       </div>
@@ -621,9 +621,8 @@ function Partners({ actions }: { actions?: Action[] }) {
 
   return (
     <div className="my-16">
-      <h4 className="mb-8 text-center text-5xl font-bold uppercase">
-        Parceiros
-      </h4>
+      <Heading className="text-center">Parceiros</Heading>
+
       {partners.length > 0 ? (
         <div className="grid w-full grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
           {partners.map((partner) => (
@@ -643,6 +642,15 @@ function Partners({ actions }: { actions?: Action[] }) {
                     }}
                     size="xl"
                   />
+                  <Badge
+                    value={
+                      lateActions.filter((action) =>
+                        action.partners.find((p) => p === partner.slug),
+                      ).length
+                    }
+                    isDynamic
+                    className="z-10 -mt-2 -ml-4"
+                  />
                 </Link>
               </div>
               <div className="overflow-hidden pt-1">
@@ -655,16 +663,16 @@ function Partners({ actions }: { actions?: Action[] }) {
                     {partner.title}
                   </Link>
                 </div>
-                <div className="text-muted-foreground text-xs leading-none">
+                <div className="text-muted-foreground text-sm leading-none">
                   <div>
                     {
                       actions.filter((action) =>
                         action.partners.find((p) => p === partner.slug),
                       ).length
                     }{" "}
-                    ações no período
+                    ações
                   </div>
-                  {lateActions.filter((action) =>
+                  {/* {lateActions.filter((action) =>
                     action.partners.find((p) => p === partner.slug),
                   ).length > 0 ? (
                     <div className="text-error">
@@ -675,7 +683,7 @@ function Partners({ actions }: { actions?: Action[] }) {
                       }{" "}
                       em atraso
                     </div>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
             </div>

@@ -61,6 +61,7 @@ import {
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
+import { useDraggable } from "@dnd-kit/core";
 
 export function ActionLine({
   action,
@@ -128,11 +129,26 @@ export function ActionLine({
     );
   }, [isMobile]);
 
+  const { attributes, listeners, transform, setNodeRef } = useDraggable({
+    id: action.id,
+    data: { date: action.date },
+  });
+
+  const style = transform
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0px)` }
+    : undefined;
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         {isInstagramFeed(action.category) && showContent ? (
-          <div>
+          <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
+            style={style}
+            className="relative z-10"
+          >
             <div
               title={action.title}
               className={`action ring-ring ring-offset-background relative cursor-pointer rounded ring-offset-2 outline-hidden focus-within:ring-3 ${
@@ -145,12 +161,10 @@ export function ActionLine({
               onClick={() => {
                 navigate(`/dashboard/action/${action.id}`);
               }}
-              role="button"
-              tabIndex={0}
-              draggable={!!onDrag && !isMobile}
-              onDragEnd={() => {
-                if (onDrag) onDrag(action);
-              }}
+              // draggable={!!onDrag && !isMobile}
+              // onDragEnd={() => {
+              //   if (onDrag) onDrag(action);
+              // }}
               onMouseEnter={() => {
                 setHover(true);
               }}
@@ -236,6 +250,10 @@ export function ActionLine({
           </div>
         ) : (
           <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
+            style={style}
             title={action.title}
             className={`action group/action action-item items-center gap-2 [&>*]:border-red-500 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container md:text-sm ${
               showDelay &&
@@ -259,13 +277,13 @@ export function ActionLine({
             }}
             role="button"
             tabIndex={0}
-            draggable={!!onDrag && !isMobile}
-            onDragStart={(e) => {
-              e.dataTransfer.effectAllowed = "move";
-            }}
-            onDragEnd={() => {
-              if (onDrag) onDrag(action);
-            }}
+            // draggable={!!onDrag && !isMobile}
+            // onDragStart={(e) => {
+            //   e.dataTransfer.effectAllowed = "move";
+            // }}
+            // onDragEnd={() => {
+            //   if (onDrag) onDrag(action);
+            // }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}

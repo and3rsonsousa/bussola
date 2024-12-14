@@ -15,7 +15,12 @@ export default function Badge({
 }) {
   return value > 0 ? (
     <div
-      title={title}
+      title={
+        title ||
+        value
+          .toString()
+          .concat(` ${value === 1 ? "ação atrasada" : "ações atrasadas"}`)
+      }
       className={cn(
         `grid h-6 place-content-center items-start rounded-full px-2 text-center text-sm font-bold ${
           isDynamic

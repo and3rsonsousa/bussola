@@ -73,6 +73,12 @@ export default function Header({
       : partner;
 
   const lateActions = getDelayedActions({ actions: actionsChart });
+  const setTheme = function (theme: string) {
+    document
+      .querySelector("html")
+      ?.classList.remove("base", "fuchsia", "indigo", "carmin");
+    document.querySelector("html")?.classList.add(theme);
+  };
 
   // const isActionPage = /\/dashboard\/action\//.test(location.pathname);
 
@@ -263,6 +269,41 @@ export default function Header({
                 className="bg-item"
                 hasText
               />
+
+              <div className="flex justify-between gap-2 p-2">
+                <button
+                  className="button-trigger"
+                  onClick={() => {
+                    setTheme("base");
+                  }}
+                >
+                  <div className="size-6 rounded bg-lime-300"></div>
+                </button>
+                <button
+                  className="button-trigger"
+                  onClick={() => {
+                    setTheme("fuchsia");
+                  }}
+                >
+                  <div className="size-6 rounded bg-fuchsia-500"></div>
+                </button>
+                <button
+                  className="button-trigger"
+                  onClick={() => {
+                    setTheme("indigo");
+                  }}
+                >
+                  <div className="size-6 rounded bg-blue-600"></div>
+                </button>
+                <button
+                  className="button-trigger"
+                  onClick={() => {
+                    setTheme("carmin");
+                  }}
+                >
+                  <div className="size-6 rounded bg-red-600"></div>
+                </button>
+              </div>
 
               <DropdownMenuSeparator />
 

@@ -13,7 +13,7 @@ export function Heading({
   return (
     <h1
       className={cn([
-        "inline-block py-8 text-5xl font-bold tracking-tighter uppercase",
+        "py-8 text-5xl font-bold tracking-tighter uppercase",
         className,
       ])}
     >

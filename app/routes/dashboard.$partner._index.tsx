@@ -65,6 +65,7 @@ import {
   usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 
 export const config = { runtime: "edge" };
 
@@ -205,32 +206,32 @@ export default function Partner() {
     };
   });
 
-  useEffect(() => {
-    if (draggedAction) {
-      const day = document.querySelector(".dragover") as HTMLElement;
-      const date = day?.getAttribute("data-date") as string;
+  // useEffect(() => {
+  //   if (draggedAction) {
+  //     const day = document.querySelector(".dragover") as HTMLElement;
+  //     const date = day?.getAttribute("data-date") as string;
 
-      if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
-        //
+  //     if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
+  //       //
 
-        submit(
-          {
-            ...draggedAction,
-            date: date?.concat(` ${format(draggedAction.date, "HH:mm:ss")}`),
-            intent: INTENTS.updateAction,
-          },
-          {
-            action: "/handle-actions",
-            method: "POST",
-            navigate: false,
-            fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-          },
-        );
-        //reset
-        setDraggedAction(undefined);
-      }
-    }
-  }, [draggedAction, submit]);
+  //       submit(
+  //         {
+  //           ...draggedAction,
+  //           date: date?.concat(` ${format(draggedAction.date, "HH:mm:ss")}`),
+  //           intent: INTENTS.updateAction,
+  //         },
+  //         {
+  //           action: "/handle-actions",
+  //           method: "POST",
+  //           navigate: false,
+  //           fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
+  //         },
+  //       );
+  //       //reset
+  //       setDraggedAction(undefined);
+  //     }
+  //   }
+  // }, [draggedAction, submit]);
 
   useEffect(() => {
     // Scroll into the day
@@ -271,6 +272,31 @@ export default function Partner() {
 
     return () => document.removeEventListener("keydown", keyDown);
   }, []);
+
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const date = over?.id as string;
+    const actionDate = active.data.current?.date as string;
+    const draggedAction = actions?.find((action) => action.id === active.id)!;
+
+    if (date !== format(actionDate, "yyyy-MM-dd")) {
+      submit(
+        {
+          ...draggedAction,
+          date: date?.concat(` ${format(actionDate, "HH:mm:ss")}`),
+          intent: INTENTS.updateAction,
+        },
+        {
+          action: "/handle-actions",
+          method: "POST",
+          navigate: false,
+          fetcherKey: `action:${active.id}:update:move:calendar`,
+        },
+      );
+
+      //reset
+      setDraggedAction(undefined);
+    }
+  };
 
   return (
     <div className="flex flex-col overflow-hidden">
@@ -547,53 +573,54 @@ export default function Partner() {
               </DropdownMenu>
             </div>
           </div>
-
-          <div
-            className="scrollbars-horizontal main-container h-full overflow-y-auto px-4 md:px-8"
-            id="calendar-full"
-          >
+          <DndContext onDragEnd={handleDragEnd}>
             <div
-              className={`grid min-w-[1200px] grid-cols-7 border-t border-b px-0 py-2 text-center text-xs font-bold tracking-wider uppercase`}
+              className="scrollbars-horizontal main-container h-full overflow-y-auto px-4 md:px-8"
+              id="calendar-full"
             >
-              {eachDayOfInterval({
-                start: startOfWeek(new Date()),
-                end: endOfWeek(new Date()),
-              }).map((day, j) => {
-                return (
-                  <div
-                    key={j}
-                    className={
-                      day.getDay() === new Date().getDay()
-                        ? ""
-                        : "text-muted-foreground"
-                    }
-                  >
-                    {format(day, "EEE", {
-                      locale: ptBR,
-                    })}
-                  </div>
-                );
-              })}
+              <div
+                className={`grid min-w-[1200px] grid-cols-7 border-t border-b px-0 py-2 text-center text-xs font-bold tracking-wider uppercase`}
+              >
+                {eachDayOfInterval({
+                  start: startOfWeek(new Date()),
+                  end: endOfWeek(new Date()),
+                }).map((day, j) => {
+                  return (
+                    <div
+                      key={j}
+                      className={
+                        day.getDay() === new Date().getDay()
+                          ? ""
+                          : "text-muted-foreground"
+                      }
+                    >
+                      {format(day, "EEE", {
+                        locale: ptBR,
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+              <div
+                id="calendar"
+                className={`scrollbars scrollbars-thin grid min-w-[1200px] grid-cols-7 pb-32`}
+              >
+                {calendar.map((day, i) => (
+                  <CalendarDay
+                    currentDate={currentDate}
+                    day={day}
+                    setDraggedAction={setDraggedAction}
+                    person={person}
+                    short={short}
+                    allUsers={allUsers}
+                    showContent={showContent}
+                    key={i}
+                    index={i}
+                  />
+                ))}
+              </div>
             </div>
-            <div
-              id="calendar"
-              className={`scrollbars scrollbars-thin grid min-w-[1200px] grid-cols-7 pb-32`}
-            >
-              {calendar.map((day, i) => (
-                <CalendarDay
-                  currentDate={currentDate}
-                  day={day}
-                  setDraggedAction={setDraggedAction}
-                  person={person}
-                  short={short}
-                  allUsers={allUsers}
-                  showContent={showContent}
-                  key={i}
-                  index={i}
-                />
-              ))}
-            </div>
-          </div>
+          </DndContext>
         </div>
         {/* Instagram Grid */}
         {showFeed && (
@@ -633,27 +660,32 @@ export const CalendarDay = ({
   const matches = useMatches();
   const { categories } = matches[1].data as DashboardRootType;
 
+  const { setNodeRef, isOver } = useDroppable({
+    id: `${format(parseISO(day.date), "yyyy-MM-dd")}`,
+  });
+
   return (
     <div className="py-2">
       <div
+        ref={setNodeRef}
         id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
-        className={`item-container group/day relative flex h-full flex-col rounded border-2 border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"}`}
+        className={`item-container group/day relative flex h-full flex-col rounded border-2 border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"} ${isOver ? "dragover" : ""}`}
         data-date={format(parseISO(day.date), "yyyy-MM-dd")}
-        onDragOver={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          document
-            .querySelectorAll(".dragover")
-            .forEach((e) => e.classList.remove("dragover"));
-          e.currentTarget.classList.add("dragover");
-        }}
-        onDragEnd={() => {
-          setTimeout(() => {
-            document
-              .querySelectorAll(".dragover")
-              .forEach((e) => e.classList.remove("dragover"));
-          }, 500);
-        }}
+        // onDragOver={(e) => {
+        //   e.stopPropagation();
+        //   e.preventDefault();
+        //   document
+        //     .querySelectorAll(".dragover")
+        //     .forEach((e) => e.classList.remove("dragover"));
+        //   e.currentTarget.classList.add("dragover");
+        // }}
+        // onDragEnd={() => {
+        //   setTimeout(() => {
+        //     document
+        //       .querySelectorAll(".dragover")
+        //       .forEach((e) => e.classList.remove("dragover"));
+        //   }, 500);
+        // }}
       >
         {/* Date */}
         <div className="mb-2 flex items-center justify-between">

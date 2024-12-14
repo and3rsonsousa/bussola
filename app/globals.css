@@ -66,6 +66,23 @@
     /* --ring: 210 12% 98%; */
   }
 
+  .fuchsia {
+    --primary: 300 100% 50%;
+    --primary-hover: 300 100% 65%;
+  }
+
+  .indigo {
+    --primary: 230 100% 55%;
+    --primary-hover: 250 100% 65%;
+    --primary-foreground: 0 0% 100%;
+  }
+
+  .carmin {
+    --primary: 350 100% 55%;
+    --primary-hover: 350 100% 65%;
+    --primary-foreground: 0 0% 100%;
+  }
+
   * {
     @apply border-border;
   }
