@@ -4,6 +4,7 @@ import { MetaFunction } from "@vercel/remix";
 import { format } from "date-fns";
 import invariant from "tiny-invariant";
 import { ListOfActions } from "~/components/structure/Action";
+import { Heading } from "~/components/structure/Headings";
 import { createClient } from "~/lib/supabase";
 
 export const config = { runtime: "edge" };
@@ -76,9 +77,7 @@ export default function LatePage() {
   return (
     <div className="scrollbars">
       <div className="px-4 md:px-8">
-        <h2 className="py-4 text-3xl font-bold tracking-tighter">
-          <Link to={"/dashboard/admin/users"}>Ações em atraso</Link>
-        </h2>
+        <Heading>Ações em atraso</Heading>
         <div className="mx-auto pb-32">
           <ListOfActions
             actions={actions}

@@ -237,7 +237,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center gap-2 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container md:text-sm ${
+            className={`action group/action action-item items-center gap-2 [&>*]:border-red-500 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container md:text-sm ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -367,11 +367,12 @@ export function ActionLine({
 
             {/* parceiro */}
 
-            {partner && showPartner ? (
+            {partner && (showPartner || long) ? (
               <div
                 title={getPartners(action.partners)
                   .map((partner) => partner.title)
                   .join(" • ")}
+                className={long ? "flex w-32 shrink-0 justify-center" : ""}
               >
                 {getPartners(action.partners).length === 1 ? (
                   <Avatar
@@ -445,7 +446,7 @@ export function ActionLine({
 
             {/* Responsibles */}
             {allUsers || long ? (
-              <div>
+              <div className="flex w-24 shrink-0 justify-center">
                 <AvatarGroup
                   avatars={people
                     .filter(
@@ -480,7 +481,7 @@ export function ActionLine({
             )}
 
             {long ? (
-              <div className="hidden w-72 overflow-x-hidden text-right text-sm whitespace-nowrap opacity-50 md:text-[10px] @[150px]:block">
+              <div className="hidden w-56 shrink-0 overflow-x-hidden text-right text-sm whitespace-nowrap opacity-50 md:text-xs @[150px]:block">
                 {formatActionDatetime({
                   date: action.date,
                   dateFormat: 4,

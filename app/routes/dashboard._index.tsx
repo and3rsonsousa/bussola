@@ -83,6 +83,7 @@ import {
   usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
+import { Heading } from "~/components/structure/Headings";
 
 export const config = { runtime: "edge" };
 // const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -793,15 +794,16 @@ const ActionsProgress = () => {
         <span className="hidden md:block">Acompanhamento do progresso</span>
         <span className="md:hidden">Progresso</span>
       </h2> */}
-
-      <h2 className="flex items-center justify-center gap-2 py-8 text-center text-5xl leading-none font-bold tracking-tight">
-        {/* <span className="animate-spin font-serif text-7xl">✳</span> */}
-        <span className="hidden uppercase md:inline-block">
-          Acompanhamento do progresso
-        </span>
-        <span className="md:hidden">Progresso</span>
-        {/* <span className="font-serif text-7xl">✳</span> */}
-      </h2>
+      <div className="text-center">
+        <Heading>
+          {/* <span className="animate-spin font-serif text-7xl">✳</span> */}
+          <span className="hidden uppercase md:inline-block">
+            Acompanhamento do progresso
+          </span>
+          <span className="md:hidden">Progresso</span>
+          {/* <span className="font-serif text-7xl">✳</span> */}
+        </Heading>
+      </div>
 
       <div className="grid w-full grid-cols-6 justify-center gap-4 rounded select-none lg:grid-cols-5">
         {[
