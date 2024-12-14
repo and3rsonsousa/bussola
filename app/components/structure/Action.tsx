@@ -180,6 +180,7 @@ export function ActionLine({
                         short: partner.short,
                         bg: partner.colors[0],
                         fg: partner.colors[1],
+                        title: partner.title,
                       },
                       className: "border-2",
                     }))}
@@ -208,8 +209,8 @@ export function ActionLine({
                       item: {
                         short: responsible.initials,
                         image: responsible.image,
+                        title: responsible.name,
                       },
-                      className: "border-2",
                     }))}
                   />
                 )}
@@ -236,7 +237,7 @@ export function ActionLine({
         ) : (
           <div
             title={action.title}
-            className={`action group/action action-item items-center gap-2 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container text-sm md:text-xs ${
+            className={`action group/action action-item items-center gap-2 ${short ? "px-3 py-2" : long ? "px-4 py-3" : "p-3"} font-base @container md:text-sm ${
               showDelay &&
               isBefore(action.date, new Date()) &&
               state.slug !== "finished"
@@ -265,70 +266,15 @@ export function ActionLine({
             onDragEnd={() => {
               if (onDrag) onDrag(action);
             }}
-            // style={{ backgroundColor: state.color }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
 
+            {/* State */}
             <div
               className="size-2 shrink-0 rounded-full"
               style={{ backgroundColor: state.color }}
             ></div>
-
-            {partner && showPartner ? (
-              <div
-                className="mr-2"
-                title={getPartners(action.partners)
-                  .map((partner) => partner.title)
-                  .join(" • ")}
-              >
-                {getPartners(action.partners).length === 1 ? (
-                  <Avatar
-                    item={{
-                      short: partner.short,
-                      bg: partner.colors[0],
-                      fg: partner.colors[1],
-                    }}
-                    size={long ? "sm" : "xs"}
-                  />
-                ) : (
-                  <AvatarGroup
-                    size={long ? "sm" : "xs"}
-                    avatars={getPartners(action.partners).map((partner) => ({
-                      item: {
-                        short: partner.short,
-                        bg: partner.colors[0],
-                        fg: partner.colors[1],
-                      },
-                    }))}
-                  />
-                )}
-              </div>
-            ) : (
-              action.partners.length > 1 && (
-                <div
-                  className="mr-1"
-                  title={getPartners(action.partners)
-                    .map((partner) => partner.title)
-                    .join(" • ")}
-                >
-                  <HeartHandshakeIcon className={long ? "size-6" : "size-4"} />
-                </div>
-              )
-            )}
-
-            {showCategory && (
-              <div className="mr-1">
-                <Icons
-                  id={
-                    categories.find(
-                      (category) => category.slug === action.category,
-                    )?.slug
-                  }
-                  className={`hidden shrink-0 opacity-50 @[200px]:block ${long ? "size-4" : "size-3"}`}
-                />
-              </div>
-            )}
 
             {/* Title */}
 
@@ -398,61 +344,140 @@ export function ActionLine({
               )}
             </div>
 
+            {/* Categoria */}
+
+            {showCategory && (
+              <div
+                title={
+                  categories.find(
+                    (category) => category.slug === action.category,
+                  )?.title
+                }
+              >
+                <Icons
+                  id={
+                    categories.find(
+                      (category) => category.slug === action.category,
+                    )?.slug
+                  }
+                  className={`hidden shrink-0 opacity-25 @[200px]:block ${long ? "size-6" : "size-4"}`}
+                />
+              </div>
+            )}
+
+            {/* parceiro */}
+
+            {partner && showPartner ? (
+              <div
+                title={getPartners(action.partners)
+                  .map((partner) => partner.title)
+                  .join(" • ")}
+              >
+                {getPartners(action.partners).length === 1 ? (
+                  <Avatar
+                    item={{
+                      short: partner.short,
+                      bg: partner.colors[0],
+                      fg: partner.colors[1],
+                    }}
+                    size={long ? "sm" : "xs"}
+                  />
+                ) : (
+                  <AvatarGroup
+                    size={long ? "sm" : "xs"}
+                    ringColor={
+                      isSprint(action.id, sprints)
+                        ? "ring-primary"
+                        : "ring-card"
+                    }
+                    avatars={getPartners(action.partners).map((partner) => ({
+                      item: {
+                        short: partner.short,
+                        bg: partner.colors[0],
+                        fg: partner.colors[1],
+                        title: partner.title,
+                      },
+                    }))}
+                  />
+                )}
+              </div>
+            ) : (
+              action.partners.length > 1 && (
+                <div
+                  className="opacity-25"
+                  title={getPartners(action.partners)
+                    .map((partner) => partner.title)
+                    .join(" • ")}
+                >
+                  <HeartHandshakeIcon className={long ? "size-6" : "size-4"} />
+                </div>
+              )
+            )}
+
             {/* priority */}
 
             {long ? (
-              <Icons
-                id={
+              <div
+                title={`Prioridade ${
                   priorities.find(
                     (priority) => priority.slug === action.priority,
-                  )?.slug
-                }
-                className={long ? "size-5" : "size-3"}
-                type="priority"
-              />
+                  )?.title
+                }`}
+              >
+                <Icons
+                  id={
+                    priorities.find(
+                      (priority) => priority.slug === action.priority,
+                    )?.slug
+                  }
+                  className={`${long ? "size-6" : "size-5"} shrink-0`}
+                  type="priority"
+                />
+              </div>
             ) : (
               action.priority === PRIORITIES.high && (
                 <Icons
                   id="high"
-                  className={`ml-1 text-red-500 ${long ? "size-5" : "size-3"}`}
+                  className={`text-red-500 ${long ? "size-6" : "size-5"} shrink-0`}
                 />
               )
             )}
 
             {/* Responsibles */}
-
-            <div
-              className={` ${!allUsers || long ? "hidden @[200px]:flex" : "flex"} justify-end ${long && "w-32"}`}
-            >
-              {allUsers || long
-                ? people
+            {allUsers || long ? (
+              <div>
+                <AvatarGroup
+                  avatars={people
                     .filter(
                       (person) =>
                         action.responsibles.filter(
                           (responsible_id) => responsible_id === person.user_id,
                         ).length > 0,
                     )
-                    .map((person) => (
-                      <Avatar
-                        key={person.id}
-                        item={{
-                          image: person.image,
-                          short: person.initials!,
-                        }}
-                        size={long ? "sm" : "xs"}
-                        group
-                      />
-                    ))
-                : amIResponsible(action.responsibles, person.user_id) && (
-                    <Avatar
-                      item={{
+                    .map((person) => ({
+                      item: {
                         image: person.image,
                         short: person.initials!,
-                      }}
-                      size={long ? "sm" : "xs"}
-                    />
-                  )}
-            </div>
+                        title: person.name,
+                      },
+                    }))}
+                  size={long ? "sm" : "xs"}
+                  ringColor="ring-card"
+                />
+              </div>
+            ) : (
+              amIResponsible(action.responsibles, person.user_id) && (
+                <div title={`${person.name} é a pessoa responsável pela ação`}>
+                  <Avatar
+                    item={{
+                      image: person.image,
+                      short: person.initials!,
+                    }}
+                    size={long ? "sm" : "xs"}
+                  />
+                </div>
+              )
+            )}
 
             {long ? (
               <div className="hidden w-72 overflow-x-hidden text-right text-sm whitespace-nowrap opacity-50 md:text-[10px] @[150px]:block">
@@ -464,7 +489,7 @@ export function ActionLine({
               </div>
             ) : (
               date && (
-                <div className="ml-1 hidden shrink grow-0 text-right text-xs whitespace-nowrap opacity-50 md:text-[10px] @[130px]:block">
+                <div className="hidden shrink grow-0 text-right text-xs whitespace-nowrap opacity-50 md:text-[10px] @[130px]:block">
                   {formatActionDatetime({
                     date: action.date,
                     dateFormat: date.dateFormat,
@@ -506,9 +531,6 @@ export function ActionBlock({
 
   const { categories, states, partners, sprints } = matches[1]
     .data as DashboardRootType;
-  // const partner = partners.find(
-  //   (partner) => partner.slug === action.partners[0],
-  // ) as Partner;
 
   const actionPartners = getPartners(action.partners);
 
@@ -635,16 +657,7 @@ export function ActionBlock({
                 style={{ backgroundColor: state.color }}
               ></div>
               {/* Partners | Clientes  */}
-              {/* {partner ? (
-                <Avatar
-                  item={{
-                    short: partner.short,
-                    bg: partner.colors[0],
-                    fg: partner.colors[1],
-                  }}
-                />
-              ) : null} */}
-              <AvatarGroup partners={actionPartners} />
+              <AvatarGroup partners={actionPartners} ringColor="ring-card" />
               {/* Category - Categoria */}
               <div className="opacity-50">
                 <Icons

@@ -92,9 +92,16 @@ export function AvatarGroup({
   partners,
   size = "sm",
   className,
+  ringColor,
 }: {
   avatars?: {
-    item: { image?: string | null; bg?: string; fg?: string; short: string };
+    item: {
+      image?: string | null;
+      bg?: string;
+      fg?: string;
+      short: string;
+      title: string;
+    };
 
     style?: CSSProperties;
     className?: string;
@@ -103,10 +110,11 @@ export function AvatarGroup({
   partners?: Partner[];
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
+  ringColor?: string;
 }) {
   if (people) {
     avatars = people.map((person) => ({
-      item: { short: person.initials, image: person.image },
+      item: { short: person.initials, image: person.image, title: person.name },
     }));
   } else if (partners) {
     avatars = partners.map((partner) => ({
@@ -114,6 +122,7 @@ export function AvatarGroup({
         short: partner.short,
         bg: partner.colors[0],
         fg: partner.colors[1],
+        title: partner.title,
       },
     }));
   }
@@ -123,15 +132,16 @@ export function AvatarGroup({
   return (
     <div
       className={cn(
-        `flex ${["sm"].find((s) => s === size) ? "-space-x-1" : ["md", "lg"].find((s) => s === size) ? "-space-x-2" : size === "lg" ? "-space-x-4" : "-space-x-1"}`,
+        `flex ${["sm", "xs"].find((s) => s === size) ? "-space-x-0.5" : ["md", "lg"].find((s) => s === size) ? "-space-x-1" : size === "lg" ? "-space-x-2" : "-space-x-1"}`,
         className,
       )}
+      title={avatars.map((avatar) => avatar.item.title).join(" • ")}
     >
       {avatars.map(({ item, className, style }, i) => (
         <Avatar
           key={i}
           item={item}
-          className={className}
+          className={`${className} ${ringColor}`}
           group={avatars.length > 1}
           size={size}
           style={style}
@@ -167,7 +177,7 @@ export function Avatar({
               : size === "lg"
                 ? "size-12"
                 : "size-16",
-        group ? "ring-background ring-2" : "",
+        group ? "ring-card ring-4" : "",
         "block",
         className,
       ])}
@@ -181,7 +191,6 @@ export function Avatar({
             backgroundColor: item.bg || "#778",
             color: item.fg || "#bbc",
           }}
-          className="border"
         >
           <ShortText
             text={size === "xs" ? item.short[0] : item.short}
@@ -191,9 +200,9 @@ export function Avatar({
                 : size === "lg"
                   ? "scale-[1.3]"
                   : size === "sm"
-                    ? "scale-[0.6]"
+                    ? "scale-[0.75]"
                     : size === "md"
-                      ? "scale-[0.8]"
+                      ? "scale-[0.85]"
                       : ""
             }
           />

@@ -803,7 +803,7 @@ const ActionsProgress = () => {
         {/* <span className="font-serif text-7xl">✳</span> */}
       </h2>
 
-      <div className="grid w-full grid-cols-12 justify-center gap-4 rounded select-none">
+      <div className="grid w-full grid-cols-6 justify-center gap-4 rounded select-none lg:grid-cols-5">
         {[
           {
             title: "Hoje",
@@ -828,7 +828,7 @@ const ActionsProgress = () => {
         ].map(({ actions, title }, i) => (
           <div
             key={i}
-            className={`text-center ${i <= 1 ? "col-span-6 lg:col-span-3" : "col-span-4 lg:col-span-2"}`}
+            className={`w-full text-center ${i <= 1 ? "col-span-3" : "col-span-2"} lg:col-span-1`}
           >
             <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}
