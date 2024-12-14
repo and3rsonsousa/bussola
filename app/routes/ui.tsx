@@ -125,35 +125,35 @@ export default function UI() {
       <div>
         <h1 className="text-3xl font-bold">Cores</h1>
         <div className="mt-4 grid grid-cols-3 gap-2">
-          <div className="grid place-content-center rounded-lg border bg-background p-4 text-foreground">
+          <div className="bg-background text-foreground grid place-content-center rounded-lg border p-4">
             <div>.bg-background</div>
             <div>.text-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-card p-4 text-card-foreground">
+          <div className="bg-card text-card-foreground grid place-content-center rounded-lg border p-4">
             <div>.bg-card</div>
             <div>.text-card-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg border bg-popover p-4 text-popover-foreground">
+          <div className="bg-popover text-popover-foreground grid place-content-center rounded-lg border p-4">
             <div>.bg-popover</div>
             <div>.text-popover-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg bg-primary p-4 text-primary-foreground">
+          <div className="bg-primary text-primary-foreground grid place-content-center rounded-lg p-4">
             <div>.bg-primary</div>
             <div>.text-primary-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg bg-secondary p-4 text-secondary-foreground">
+          <div className="bg-secondary text-secondary-foreground grid place-content-center rounded-lg p-4">
             <div>.bg-secondary</div>
             <div>.text-secondary-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg bg-muted p-4 text-muted-foreground">
+          <div className="bg-muted text-muted-foreground grid place-content-center rounded-lg p-4">
             <div>.bg-muted</div>
             <div>.text-muted-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg bg-accent p-4 text-accent-foreground">
+          <div className="bg-accent text-accent-foreground grid place-content-center rounded-lg p-4">
             <div>.bg-accent</div>
             <div>.text-accent-foreground</div>
           </div>
-          <div className="grid place-content-center rounded-lg bg-destructive p-4 text-destructive-foreground">
+          <div className="bg-destructive text-destructive-foreground grid place-content-center rounded-lg p-4">
             <div>.bg-destructive</div>
             <div>.text-destructive-foreground</div>
           </div>
@@ -168,10 +168,10 @@ export default function UI() {
           <Avatar item={{ short: "smart" }} size="xs" />
           <AvatarGroup
             avatars={[
-              { item: { short: "cnvt" } },
-              { item: { short: "brenda" } },
-              { item: { short: "arc" } },
-              { item: { short: "smart" } },
+              { item: { title: "cnvt", short: "cnvt" } },
+              { item: { title: "brenda", short: "brenda" } },
+              { item: { title: "arc", short: "arc" } },
+              { item: { title: "smart", short: "smart" } },
             ]}
             size="xs"
           />
@@ -184,10 +184,10 @@ export default function UI() {
           <Avatar item={{ short: "smart" }} />
           <AvatarGroup
             avatars={[
-              { item: { short: "cnvt" } },
-              { item: { short: "brenda" } },
-              { item: { short: "arc" } },
-              { item: { short: "smart" } },
+              { item: { title: "cnvt", short: "cnvt" } },
+              { item: { title: "brenda", short: "brenda" } },
+              { item: { title: "arc", short: "arc" } },
+              { item: { title: "smart", short: "smart" } },
             ]}
           />
         </div>
@@ -199,10 +199,10 @@ export default function UI() {
           <Avatar item={{ short: "smart" }} size="md" />
           <AvatarGroup
             avatars={[
-              { item: { short: "cnvt" } },
-              { item: { short: "brenda" } },
-              { item: { short: "arc" } },
-              { item: { short: "smart" } },
+              { item: { title: "cnvt", short: "cnvt" } },
+              { item: { title: "brenda", short: "brenda" } },
+              { item: { title: "arc", short: "arc" } },
+              { item: { title: "smart", short: "smart" } },
             ]}
             size="md"
           />
@@ -216,10 +216,10 @@ export default function UI() {
 
           <AvatarGroup
             avatars={[
-              { item: { short: "cnvt" } },
-              { item: { short: "brenda" } },
-              { item: { short: "arc" } },
-              { item: { short: "smart" } },
+              { item: { title: "cnvt", short: "cnvt" } },
+              { item: { title: "brenda", short: "brenda" } },
+              { item: { title: "arc", short: "arc" } },
+              { item: { title: "smart", short: "smart" } },
             ]}
             size="lg"
           />

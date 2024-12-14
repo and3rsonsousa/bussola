@@ -49,7 +49,7 @@ export default function AdminPartners() {
           {partners?.map((partner: Partner) => (
             <Link
               to={`/dashboard/admin/partners/${partner.slug}`}
-              className="group relative flex justify-between overflow-hidden rounded-xl bg-card p-6 tracking-tight ring-ring transition-colors duration-500 focus-within:ring-2 hover:bg-secondary"
+              className="group bg-card ring-ring hover:bg-secondary relative flex justify-between overflow-hidden rounded-xl p-6 tracking-tight transition-colors duration-500 focus-within:ring-2"
               key={partner.slug}
               tabIndex={-1}
             >
@@ -63,7 +63,7 @@ export default function AdminPartners() {
                   size="lg"
                 />
                 <div className="w-full overflow-hidden">
-                  <div className="mb-1 flex w-[90%] gap-2 overflow-hidden text-2xl font-bold leading-none outline-hidden">
+                  <div className="mb-1 flex w-[90%] gap-2 overflow-hidden text-2xl leading-none font-bold outline-hidden">
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                       {partner.title}
                     </div>
@@ -81,12 +81,13 @@ export default function AdminPartners() {
                             item: {
                               image: r.image,
                               short: r.initials!,
+                              title: r.name,
                             },
                           }),
                         )}
                       />
                     </div>
-                    <div className="flex items-center justify-end gap-1 text-[10px] font-bold uppercase tracking-wide opacity-50">
+                    <div className="flex items-center justify-end gap-1 text-[10px] font-bold tracking-wide uppercase opacity-50">
                       {partner.sow === "marketing"
                         ? "Consultoria de Marketing 360"
                         : partner.sow === "socialmedia"
@@ -96,7 +97,7 @@ export default function AdminPartners() {
                   </div>
                 </div>
               </div>
-              <Form className="absolute right-4 top-4">
+              <Form className="absolute top-4 right-4">
                 <input name="id" value={partner.id} type="hidden" />
                 <button className="translate-x-12 transition-transform duration-500 group-hover:translate-x-0">
                   <Trash2Icon className="h-6 w-6 opacity-75" />

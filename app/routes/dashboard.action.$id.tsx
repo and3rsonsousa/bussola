@@ -944,6 +944,7 @@ export default function ActionPage() {
                       short: partner.short,
                       bg: partner.colors[0],
                       fg: partner.colors[1],
+                      title: partner.title,
                     },
                   }))}
                 />
@@ -1075,7 +1076,11 @@ export default function ActionPage() {
             <DropdownMenuTrigger className="button-trigger">
               <AvatarGroup
                 avatars={responsibles.map((person) => ({
-                  item: { image: person.image, short: person.short },
+                  item: {
+                    image: person.image,
+                    short: person.short,
+                    title: person.name,
+                  },
                 }))}
                 size="md"
               />

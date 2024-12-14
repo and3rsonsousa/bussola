@@ -226,6 +226,7 @@ export default function CreateAction({
                         short: partner.short,
                         bg: partner.colors[0],
                         fg: partner.colors[1],
+                        title: partner.title,
                       },
                     }))}
                   />
@@ -310,8 +311,6 @@ export default function CreateAction({
               state={action.state}
               onValueChange={(state) => {
                 if (state !== action.state) {
-                  console.log(state);
-
                   setAction({
                     ...action,
                     state,
@@ -328,6 +327,7 @@ export default function CreateAction({
                     item: {
                       image: person.image,
                       short: person.initials!,
+                      title: person.name,
                     },
                   }))}
                 />

@@ -158,7 +158,13 @@ export function Avatar({
   style,
   className,
 }: {
-  item: { image?: string | null; bg?: string; fg?: string; short: string };
+  item: {
+    image?: string | null;
+    bg?: string;
+    fg?: string;
+    short: string;
+    title?: string;
+  };
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   style?: CSSProperties;
   className?: string;
@@ -166,6 +172,7 @@ export function Avatar({
 }) {
   return (
     <AvatarShad
+      title={item.title}
       tabIndex={-1}
       className={cn([
         size === "xs"
