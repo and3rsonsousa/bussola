@@ -151,7 +151,7 @@ export const meta: MetaFunction = () => {
 export default function DashboardIndex() {
   let { actions } = useLoaderData<typeof loader>();
   const matches = useMatches();
-  const submit = useSubmit();
+
   const { setTransitioning } = useOutletContext() as ContextType;
   const [draggedAction, setDraggedAction] = useState<Action>();
   const [todayView, setTodayView] = useState<
@@ -207,31 +207,31 @@ export default function DashboardIndex() {
   }));
   const nextActions = actions?.filter((action) => action.state != "finished");
 
-  useEffect(() => {
-    if (draggedAction) {
-      const day = document.querySelector(".dragover") as HTMLElement;
-      const date = day?.getAttribute("data-date") as string;
+  // useEffect(() => {
+  //   if (draggedAction) {
+  //     const day = document.querySelector(".dragover") as HTMLElement;
+  //     const date = day?.getAttribute("data-date") as string;
 
-      if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
-        //
-        submit(
-          {
-            id: draggedAction.id,
-            date: date?.concat(`T${format(draggedAction.date, "HH:mm:ss")}`),
-            intent: INTENTS.updateAction,
-          },
-          {
-            action: "/handle-actions",
-            method: "POST",
-            navigate: false,
-            fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-          },
-        );
-      }
-      //reset
-      setDraggedAction(undefined);
-    }
-  }, [draggedAction, submit]);
+  //     if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
+  //       //
+  //       submit(
+  //         {
+  //           id: draggedAction.id,
+  //           date: date?.concat(`T${format(draggedAction.date, "HH:mm:ss")}`),
+  //           intent: INTENTS.updateAction,
+  //         },
+  //         {
+  //           action: "/handle-actions",
+  //           method: "POST",
+  //           navigate: false,
+  //           fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
+  //         },
+  //       );
+  //     }
+  //     //reset
+  //     setDraggedAction(undefined);
+  //   }
+  // }, [draggedAction, submit]);
 
   useEffect(() => {
     setTransitioning(false);
@@ -246,14 +246,17 @@ export default function DashboardIndex() {
       <div className="px-2 md:px-8">
         <Sprint />
       </div>
+      <div className="border-b"></div>
       <div className="px-2 md:px-8">
         {/* Ações em Atraso */}
         {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
-
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
         {/* Ações de Hoje */}
         {currentActions?.length ? (
-          <div className="mb-8">
-            <div className="flex justify-between py-8">
+          <div className="py-8 lg:py-24">
+            <div className="flex justify-between pb-8">
               <div className="flex">
                 <div className="relative flex">
                   <h2 className="text-3xl font-semibold tracking-tight capitalize">
@@ -377,33 +380,26 @@ export default function DashboardIndex() {
             )}
           </div>
         ) : null}
-
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
         {/* Parceiros */}
         <Partners actions={actions as Action[]} />
-
-        {/* Ações de Amanhã */}
-        {/* {tomorrowActions?.length ? (
-          <div className="mb-8">
-            <div className="relative inline-flex pb-4">
-              <h2 className="text-3xl font-semibold tracking-tight">Amanhã</h2>
-              <Badge value={tomorrowActions?.length} />
-            </div>
-
-            <BlockOfActions actions={tomorrowActions} sprint />
-          </div>
-        ) : null} */}
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
         {/* Ações da Semana */}
         {weekActions.reduce(
           (acc, currentValue) => acc + currentValue.actions.length,
           0,
         ) ? (
-          <WeekView
-            weekActions={weekActions}
-            setDraggedAction={setDraggedAction}
-          />
+          <WeekView weekActions={weekActions} />
         ) : null}
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
         {/* Próximas ações */}
-        <div className="py-4">
+        <div className="py-8 lg:py-24">
           <div className="relative text-center">
             <Heading className="flex justify-center gap-2">
               Próximas Ações
@@ -425,14 +421,12 @@ export default function DashboardIndex() {
 
 export function WeekView({
   weekActions,
-  setDraggedAction,
 }: {
   weekActions: { date: Date; actions: Action[] }[];
-  setDraggedAction: React.Dispatch<SetStateAction<Action | undefined>>;
 }) {
   return (
-    <div className="py-4">
-      <div className="pb-4">
+    <div className="py-8 lg:py-24">
+      <div className="pb-8">
         <h2 className="text-3xl font-semibold tracking-tight">Semana</h2>
       </div>
       <div className="scrollbars-horizontal scrollbars-horizontal-thin mb-8 flex max-h-[50dvh] flex-nowrap overflow-x-auto overflow-y-hidden">
@@ -522,8 +516,8 @@ function DelayedActions({ actions }: { actions: Action[] }) {
   const [view, setView] = useState<"list" | "category">("list");
 
   return (
-    <div className="mb-4">
-      <div className="flex justify-between py-8">
+    <div className="py-8 lg:py-24">
+      <div className="flex justify-between pb-8">
         <div className="relative flex">
           <h2 className="text-3xl font-semibold tracking-tight">Atrasados</h2>
           <Badge value={actions.length} />
@@ -604,7 +598,7 @@ function Partners({ actions }: { actions?: Action[] }) {
   actions = actions || [];
 
   return (
-    <div className="my-16">
+    <div className="py-8 lg:py-24">
       <Heading className="text-center">Parceiros</Heading>
 
       {partners.length > 0 ? (
@@ -781,11 +775,7 @@ const ActionsProgress = () => {
   );
 
   return (
-    <div className="pb-8">
-      {/* <h2 className="my-8 text-center text-3xl leading-none font-semibold tracking-tight">
-        <span className="hidden md:block">Acompanhamento do progresso</span>
-        <span className="md:hidden">Progresso</span>
-      </h2> */}
+    <div className="py-8 lg:py-24">
       <div className="text-center">
         <Heading>
           {/* <span className="animate-spin font-serif text-7xl">✳</span> */}
@@ -920,8 +910,8 @@ function Sprint() {
   actions = actions?.filter((a) => ids.has(a.id)) || [];
 
   return (
-    <div className="mb-4">
-      <div className="flex items-start justify-between py-8">
+    <div className="py-8 lg:py-24">
+      <div className="flex items-start justify-between pb-8">
         <div className="relative flex">
           <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
         </div>
