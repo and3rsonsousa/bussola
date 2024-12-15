@@ -66,7 +66,6 @@ import { useDraggable } from "@dnd-kit/core";
 export function ActionLine({
   action,
   date,
-  onDrag,
   short,
   long,
   allUsers,
@@ -77,7 +76,6 @@ export function ActionLine({
 }: {
   action: Action;
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
-  onDrag?: (action: Action) => void;
   short?: boolean;
   long?: boolean;
   allUsers?: boolean;
@@ -131,7 +129,7 @@ export function ActionLine({
 
   const { attributes, listeners, transform, setNodeRef } = useDraggable({
     id: action.id,
-    data: { date: action.date },
+    data: { ...action },
   });
 
   const style = transform
@@ -161,10 +159,6 @@ export function ActionLine({
               onClick={() => {
                 navigate(`/dashboard/action/${action.id}`);
               }}
-              // draggable={!!onDrag && !isMobile}
-              // onDragEnd={() => {
-              //   if (onDrag) onDrag(action);
-              // }}
               onMouseEnter={() => {
                 setHover(true);
               }}
@@ -277,13 +271,6 @@ export function ActionLine({
             }}
             role="button"
             tabIndex={0}
-            // draggable={!!onDrag && !isMobile}
-            // onDragStart={(e) => {
-            //   e.dataTransfer.effectAllowed = "move";
-            // }}
-            // onDragEnd={() => {
-            //   if (onDrag) onDrag(action);
-            // }}
           >
             {/* Atalhos */}
             {isHover && !edit ? <ShortcutActions action={action} /> : null}
@@ -531,11 +518,11 @@ export function ActionLine({
 
 export function ActionBlock({
   action,
-  onDrag,
+
   sprint,
 }: {
   action: Action;
-  onDrag?: (action: Action) => void;
+
   sprint?: Boolean;
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -576,13 +563,25 @@ export function ActionBlock({
     );
   }, [isMobile]);
 
+  const { attributes, listeners, transform, setNodeRef } = useDraggable({
+    id: action.id,
+    data: { ...action },
+  });
+
+  const style = transform
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0px)` }
+    : undefined;
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <div
+          ref={setNodeRef}
+          {...attributes}
+          {...listeners}
+          style={style}
           title={action.title}
           className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) && sprint ? "action-sprint" : ""}`}
-          style={{ borderLeftColor: state.color }}
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -595,13 +594,6 @@ export function ActionBlock({
           }}
           onMouseLeave={() => {
             setHover(false);
-          }}
-          draggable={!!onDrag && !isMobile}
-          onDragStart={(e) => {
-            e.dataTransfer.effectAllowed = "move";
-          }}
-          onDragEnd={() => {
-            if (onDrag) onDrag(action);
           }}
         >
           {isHover && !edit ? <ShortcutActions action={action} /> : null}
@@ -740,7 +732,6 @@ export function ListOfActions({
   showPartner,
   date,
   columns = 1,
-  onDrag,
   isFoldable,
   descending = false,
   orderBy = "state",
@@ -752,7 +743,6 @@ export function ListOfActions({
   showPartner?: boolean;
   date?: { dateFormat?: 0 | 1 | 2 | 3 | 4; timeFormat?: 0 | 1 };
   columns?: 1 | 2 | 3 | 6;
-  onDrag?: (action: Action) => void;
   isFoldable?: boolean;
   descending?: boolean;
   orderBy?: "state" | "priority" | "time";
@@ -796,7 +786,6 @@ export function ListOfActions({
               showCategory={showCategory}
               showPartner={showPartner}
               date={date}
-              onDrag={onDrag}
             />
           ))}
       </div>
@@ -830,14 +819,12 @@ export function ListOfActions({
 export function BlockOfActions({
   actions,
   max,
-  onDrag,
   orderBy = "state",
   descending = false,
   sprint,
 }: {
   actions?: Action[] | null;
   max?: 1 | 2;
-  onDrag?: (action: Action) => void;
   orderBy?: "state" | "priority" | "time";
   descending?: boolean;
   sprint?: Boolean;
@@ -865,12 +852,7 @@ export function BlockOfActions({
         } gap-2`}
       >
         {actions?.map((action) => (
-          <ActionBlock
-            onDrag={onDrag}
-            action={action}
-            key={action.id}
-            sprint={sprint}
-          />
+          <ActionBlock action={action} key={action.id} sprint={sprint} />
         ))}
       </div>
     </div>

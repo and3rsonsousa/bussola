@@ -354,7 +354,7 @@ button {
 }
 
 .action-item-block {
-  @apply bg-card text-foreground rounded-lg px-6 py-4;
+  @apply bg-card text-foreground isolate rounded-lg px-6 py-4;
 }
 
 .action-sprint {
@@ -524,7 +524,7 @@ ol {
 
 .dragover {
   /* @apply border-primary bg-primary/10; */
-  @apply bg-primary/75;
+  @apply bg-primary/75 z-0;
 }
 /* .dark .dragover { 
    @apply border-primary bg-primary/20;

@@ -144,8 +144,6 @@ export default function Partner() {
   const matches = useMatches();
   const submit = useSubmit();
 
-  const [draggedAction, setDraggedAction] = useState<Action>();
-
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
   const [showContent, setShowContent] = useState(true);
@@ -206,33 +204,6 @@ export default function Partner() {
     };
   });
 
-  // useEffect(() => {
-  //   if (draggedAction) {
-  //     const day = document.querySelector(".dragover") as HTMLElement;
-  //     const date = day?.getAttribute("data-date") as string;
-
-  //     if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
-  //       //
-
-  //       submit(
-  //         {
-  //           ...draggedAction,
-  //           date: date?.concat(` ${format(draggedAction.date, "HH:mm:ss")}`),
-  //           intent: INTENTS.updateAction,
-  //         },
-  //         {
-  //           action: "/handle-actions",
-  //           method: "POST",
-  //           navigate: false,
-  //           fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-  //         },
-  //       );
-  //       //reset
-  //       setDraggedAction(undefined);
-  //     }
-  //   }
-  // }, [draggedAction, submit]);
-
   useEffect(() => {
     // Scroll into the day
     let date = params.get("date");
@@ -292,9 +263,6 @@ export default function Partner() {
           fetcherKey: `action:${active.id}:update:move:calendar`,
         },
       );
-
-      //reset
-      setDraggedAction(undefined);
     }
   };
 
@@ -609,7 +577,6 @@ export default function Partner() {
                   <CalendarDay
                     currentDate={currentDate}
                     day={day}
-                    setDraggedAction={setDraggedAction}
                     person={person}
                     short={short}
                     allUsers={allUsers}
@@ -642,7 +609,6 @@ export default function Partner() {
 export const CalendarDay = ({
   day,
   currentDate,
-  setDraggedAction,
   short,
   allUsers,
   showContent,
@@ -650,7 +616,6 @@ export const CalendarDay = ({
 }: {
   day: { date: string; actions?: Action[]; celebrations?: Celebration[] };
   currentDate: Date | string;
-  setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
   person: Person;
   short?: boolean;
   allUsers?: boolean;
@@ -671,21 +636,6 @@ export const CalendarDay = ({
         id={`day_${format(parseISO(day.date), "yyyy-MM-dd")}`}
         className={`item-container group/day relative flex h-full flex-col rounded border-2 border-transparent px-2 pb-4 ${Math.floor(Number(index) / 7) % 2 === 0 ? "item-even" : "item-odd"} ${isOver ? "dragover" : ""}`}
         data-date={format(parseISO(day.date), "yyyy-MM-dd")}
-        // onDragOver={(e) => {
-        //   e.stopPropagation();
-        //   e.preventDefault();
-        //   document
-        //     .querySelectorAll(".dragover")
-        //     .forEach((e) => e.classList.remove("dragover"));
-        //   e.currentTarget.classList.add("dragover");
-        // }}
-        // onDragEnd={() => {
-        //   setTimeout(() => {
-        //     document
-        //       .querySelectorAll(".dragover")
-        //       .forEach((e) => e.classList.remove("dragover"));
-        //   }, 500);
-        // }}
       >
         {/* Date */}
         <div className="mb-2 flex items-center justify-between">
@@ -728,7 +678,6 @@ export const CalendarDay = ({
                         <CategoryActions
                           allUsers={allUsers}
                           category={category}
-                          setDraggedAction={setDraggedAction}
                           actions={actions}
                           short={short}
                           showContent
@@ -751,7 +700,6 @@ export const CalendarDay = ({
                         <CategoryActions
                           allUsers={allUsers}
                           category={category}
-                          setDraggedAction={setDraggedAction}
                           actions={actions}
                           short={short}
                           key={category.id}
@@ -780,14 +728,12 @@ function CategoryActions({
   showContent,
   short,
   allUsers,
-  setDraggedAction,
 }: {
   category: Category;
   actions?: Action[];
   showContent?: boolean;
   short?: boolean;
   allUsers?: boolean;
-  setDraggedAction: React.Dispatch<React.SetStateAction<Action | undefined>>;
 }) {
   return actions && actions.length > 0 ? (
     <div key={category.slug} className="flex flex-col gap-3">
@@ -812,7 +758,6 @@ function CategoryActions({
             date={{
               timeFormat: 1,
             }}
-            onDrag={setDraggedAction}
           />
         ))}
       </div>

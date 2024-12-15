@@ -441,21 +441,6 @@ export function WeekView({
             className="group flex max-h-full w-full min-w-72 flex-col overflow-hidden"
             key={date.getDate()}
             data-date={format(date, "yyyy-MM-dd")}
-            onDragOver={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              document
-                .querySelectorAll(".dragover")
-                .forEach((e) => e.classList.remove("dragover"));
-              e.currentTarget.classList.add("dragover");
-            }}
-            onDragEnd={(e) => {
-              setTimeout(() => {
-                document
-                  .querySelectorAll(".dragover")
-                  .forEach((e) => e.classList.remove("dragover"));
-              }, 500);
-            }}
           >
             {/* Dia */}
             <div className="flex shrink-0 items-center justify-between">
@@ -479,7 +464,6 @@ export function WeekView({
                 actions={actions}
                 date={{ timeFormat: 1 }}
                 showCategory={true}
-                onDrag={setDraggedAction}
                 short
               />
             </div>

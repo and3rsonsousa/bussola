@@ -782,7 +782,7 @@ export const Post = ({
       }}
     >
       <div
-        className={`overflow-hidden p-2 text-center text-[10px] leading-none font-medium tracking-tight text-ellipsis ${action.title.length > 50 ? "@[120px]:text-[12px] @[200px]:text-[20px] @[300px]:text-[24px]" : "@[120px]:text-[18px] @[200px]:text-[32px] @[300px]:text-[24px]"} :tracking-tighter @[200px]:p-4 @[300px]:p-8`}
+        className={`overflow-hidden p-2 text-center text-[10px] leading-none font-medium tracking-tight text-ellipsis ${action.title.length > 50 ? "@[120px]:text-[12px] @[200px]:text-[20px] @[300px]:text-[24px]" : "@[120px]:text-[18px] @[200px]:text-[24px] @[300px]:text-[32px]"} :tracking-tighter @[200px]:p-4 @[300px]:p-8`}
       >
         {action.title}
       </div>

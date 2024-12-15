@@ -2,6 +2,8 @@ import { useMatches, useSubmit } from "@remix-run/react";
 import { BlockOfActions } from "./Action";
 import { useEffect, useState } from "react";
 import { INTENTS } from "~/lib/constants";
+import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
+import { format } from "date-fns";
 
 export default function Kanban({ actions }: { actions: Action[] }) {
   const matches = useMatches();
@@ -9,86 +11,67 @@ export default function Kanban({ actions }: { actions: Action[] }) {
 
   const { states } = matches[1].data as DashboardRootType;
 
-  const [draggedAction, onDrag] = useState<Action | undefined>();
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const state = over?.id as string;
+    const actionState = active.data.current?.state as string;
+    const draggedAction = actions?.find((action) => action.id === active.id)!;
 
-  // useEffect(() => {
-  //   if (draggedAction) {
-  //     const ele = document.querySelector(".dragover") as HTMLElement;
-  //     const state = ele?.getAttribute("data-state") as string;
-
-  //     if (state !== draggedAction.state) {
-  //       //
-  //       submit(
-  //         {
-  //           ...draggedAction,
-  //           state: state,
-  //           intent: INTENTS.updateAction,
-  //         },
-  //         {
-  //           action: "/handle-actions",
-  //           method: "POST",
-  //           navigate: false,
-  //           fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-  //         },
-  //       );
-  //     }
-  //     //reset
-  //     onDrag(undefined);
-  //   }
-  // }, [draggedAction, submit]);
+    if (state !== actionState) {
+      submit(
+        {
+          ...draggedAction,
+          state,
+          intent: INTENTS.updateAction,
+        },
+        {
+          action: "/handle-actions",
+          method: "POST",
+          navigate: false,
+          fetcherKey: `action:${active.id}:update:move:kanban`,
+        },
+      );
+    }
+  };
 
   return (
     <div className="overflow-hidden pb-4">
       <div className="scrollbars-horizontal scrollbars-horizontal-thin">
         <div className="flex w-full gap-2">
-          {states.map((state) => {
-            const stateActions = actions.filter(
-              (action) => action.state === state.slug,
-            );
-            return (
-              <div
-                className={`flex max-h-[60vh] shrink-0 ${stateActions.length > 0 ? "min-w-72 grow" : "w-auto 2xl:min-w-72 2xl:grow"} flex-col overflow-hidden`}
-                key={state.slug}
-                // data-state={state.slug}
-                // onDragOver={(e) => {
-                //   e.stopPropagation();
-                //   e.preventDefault();
-                //   document
-                //     .querySelectorAll(".dragover")
-                //     .forEach((e) => e.classList.remove("dragover"));
-                //   e.currentTarget.classList.add("dragover");
-                // }}
-                // onDragEnd={(e) => {
-                //   setTimeout(() => {
-                //     document
-                //       .querySelectorAll(".dragover")
-                //       .forEach((e) => e.classList.remove("dragover"));
-                //   }, 500);
-                // }}
-              >
-                <div className="mb-2 flex items-center">
-                  <div
-                    className={`tracking-tigh flex items-center gap-2 rounded-full font-bold`}
-                  >
-                    <div
-                      className="size-2 rounded-full"
-                      style={{ backgroundColor: state.color }}
-                    ></div>
-                    {state.title}
-                  </div>
-                </div>
-                <div className="scrollbars scrollbars-thin p-2">
-                  <BlockOfActions
-                    onDrag={onDrag}
-                    max={1}
-                    actions={stateActions}
-                    sprint
-                  />
-                </div>
-              </div>
-            );
-          })}
+          <DndContext onDragEnd={handleDragEnd}>
+            {states.map((state) => {
+              const stateActions = actions.filter(
+                (action) => action.state === state.slug,
+              );
+              return <KanbanColumn state={state} actions={stateActions} />;
+            })}
+          </DndContext>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function KanbanColumn({ state, actions }: { state: State; actions: Action[] }) {
+  const { setNodeRef, isOver } = useDroppable({ id: state.slug });
+  return (
+    <div
+      ref={setNodeRef}
+      className={`flex max-h-[60vh] shrink-0 ${actions.length > 0 ? "min-w-72 grow" : "w-auto 2xl:min-w-72 2xl:grow"} flex-col overflow-hidden ${isOver ? "dragover" : ""}`}
+      key={state.slug}
+    >
+      <div className="mb-2 flex items-center">
+        <div
+          className={`tracking-tigh flex items-center gap-2 rounded-full font-bold`}
+        >
+          <div
+            className="size-2 rounded-full"
+            style={{ backgroundColor: state.color }}
+          ></div>
+          {state.title}
+        </div>
+      </div>
+      <div className="scrollbars scrollbars-thin p-2">
+        <BlockOfActions max={1} actions={actions} sprint />
       </div>
     </div>
   );
