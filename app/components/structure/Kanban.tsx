@@ -42,7 +42,13 @@ export default function Kanban({ actions }: { actions: Action[] }) {
               const stateActions = actions.filter(
                 (action) => action.state === state.slug,
               );
-              return <KanbanColumn state={state} actions={stateActions} />;
+              return (
+                <KanbanColumn
+                  key={state.id}
+                  state={state}
+                  actions={stateActions}
+                />
+              );
             })}
           </DndContext>
         </div>
