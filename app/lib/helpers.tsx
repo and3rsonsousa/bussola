@@ -768,7 +768,7 @@ export const Post = ({
   return (
     <div
       className={clsx(
-        `@container grid aspect-square place-content-center overflow-hidden transition-opacity`,
+        `@container grid aspect-square place-content-center overflow-hidden inset-ring inset-ring-black/5 transition-opacity`,
         className,
       )}
       style={{

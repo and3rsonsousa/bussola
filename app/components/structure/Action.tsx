@@ -141,11 +141,13 @@ export function ActionLine({
       <ContextMenuTrigger>
         {isInstagramFeed(action.category) && showContent ? (
           <div
+            onClick={() => {
+              navigate(`/dashboard/action/${action.id}`);
+            }}
             ref={setNodeRef}
             {...listeners}
             {...attributes}
             style={style}
-            className="relative z-10"
           >
             <div
               title={action.title}
@@ -156,9 +158,6 @@ export function ActionLine({
                   ? "action-content-delayed rounded-md"
                   : " "
               }`}
-              onClick={() => {
-                navigate(`/dashboard/action/${action.id}`);
-              }}
               onMouseEnter={() => {
                 setHover(true);
               }}

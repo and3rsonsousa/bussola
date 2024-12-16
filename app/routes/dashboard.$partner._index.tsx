@@ -65,7 +65,14 @@ import {
   usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 
 export const config = { runtime: "edge" };
 
@@ -265,6 +272,14 @@ export default function Partner() {
       );
     }
   };
+
+  const sensor = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
 
   return (
     <div className="flex flex-col overflow-hidden">
@@ -541,7 +556,7 @@ export default function Partner() {
               </DropdownMenu>
             </div>
           </div>
-          <DndContext onDragEnd={handleDragEnd}>
+          <DndContext onDragEnd={handleDragEnd} sensors={sensor}>
             <div
               className="scrollbars-horizontal main-container h-full overflow-y-auto px-4 md:px-8"
               id="calendar-full"
