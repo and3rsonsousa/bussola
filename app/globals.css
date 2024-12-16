@@ -69,18 +69,21 @@
   .fuchsia {
     --primary: 300 100% 50%;
     --primary-hover: 300 100% 65%;
+    --ring: 300 100% 50%;
   }
 
   .indigo {
-    --primary: 230 100% 55%;
-    --primary-hover: 250 100% 65%;
+    --primary: 250 100% 55%;
+    --primary-hover: 250 100% 45%;
     --primary-foreground: 0 0% 100%;
+    --ring: 250 100% 55%;
   }
 
   .carmin {
     --primary: 350 100% 55%;
-    --primary-hover: 350 100% 65%;
+    --primary-hover: 345 100% 45%;
     --primary-foreground: 0 0% 100%;
+    --ring: 350 100% 55%;
   }
 
   * {
