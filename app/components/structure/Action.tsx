@@ -175,7 +175,14 @@ export function ActionLine({
               />
               <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600"></div>
 
-              <div className="absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold text-white drop-shadow-xs">
+              <div
+                className={`absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold ${action.files?.length ? "drop-shadow-sm" : ""}`}
+                style={{
+                  color: action.files?.length
+                    ? "white"
+                    : getTextColor(action.color),
+                }}
+              >
                 <Icons id={action.category} className="size-4" />
                 {/* {action.partners.length > 1 && (
                     <HeartHandshakeIcon className="size-4" />
@@ -195,14 +202,7 @@ export function ActionLine({
                   />
                 )}
 
-                <div
-                  className={action.files?.length ? "drop-shadow-sm" : ""}
-                  style={{
-                    color: action.files?.length
-                      ? "white"
-                      : getTextColor(action.color),
-                  }}
-                >
+                <div>
                   {formatActionDatetime({
                     date: action.date,
                     dateFormat: date?.dateFormat,

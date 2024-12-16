@@ -329,7 +329,7 @@ export default function ActionPage() {
             <Button
               className={`mr-1 h-12 w-12 rounded p-1 ${isWorking && fetcher.formData?.get("intent") === "title" && "animate-colors"}`}
               variant="ghost"
-              title="Gerar legenda"
+              title="Gerar título"
               onClick={async () => {
                 fetcher.submit(
                   {
@@ -906,7 +906,7 @@ export default function ActionPage() {
                 )}
               </div>
             </div>
-            <div className="bg-background bottom-0 h-full w-full focus-within:absolute focus-within:h-[70vh] focus-within:pt-8">
+            <div className="h-full w-full">
               <textarea
                 placeholder="Escreva sua legenda aqui ou peça à βIA para criar no botão superior direito."
                 ref={caption}

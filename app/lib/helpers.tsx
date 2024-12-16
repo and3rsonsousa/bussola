@@ -93,6 +93,7 @@ export function AvatarGroup({
   size = "sm",
   className,
   ringColor,
+  ring,
 }: {
   avatars?: {
     item: {
@@ -111,6 +112,7 @@ export function AvatarGroup({
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
   ringColor?: string;
+  ring?: boolean;
 }) {
   if (people) {
     avatars = people.map((person) => ({
@@ -142,7 +144,8 @@ export function AvatarGroup({
           key={i}
           item={item}
           className={`${className} ${ringColor}`}
-          group={avatars.length > 1}
+          // ring={avatars.length > 1 || ring}
+          ring={true}
           size={size}
           style={style}
         />
@@ -153,7 +156,7 @@ export function AvatarGroup({
 
 export function Avatar({
   item,
-  group,
+  ring,
   size = "sm",
   style,
   className,
@@ -168,7 +171,7 @@ export function Avatar({
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   style?: CSSProperties;
   className?: string;
-  group?: boolean;
+  ring?: boolean;
 }) {
   return (
     <AvatarShad
@@ -184,7 +187,8 @@ export function Avatar({
               : size === "lg"
                 ? "size-12"
                 : "size-16",
-        group ? "ring-card ring-4" : "",
+        ring ? "ring-background ring-2" : "",
+        // "ring-card ring-3",
         "block",
         className,
       ])}

@@ -591,3 +591,8 @@ input::-webkit-inner-spin-button {
     stroke-dashoffset: 0;
   }
 }
+
+.animate-height {
+  interpolate-size: allow-keywords;
+  transition: height 1s;
+}
