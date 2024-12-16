@@ -30,6 +30,7 @@ import { ptBR } from "date-fns/locale";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  BlocksIcon,
   CalendarClock,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -39,8 +40,12 @@ import {
   ListIcon,
   ListTodoIcon,
   RabbitIcon,
+  Rows3Icon,
+  Rows4Icon,
+  SearchIcon,
   SignalIcon,
   TimerIcon,
+  XIcon,
 } from "lucide-react";
 import { useEffect, useState, type SetStateAction } from "react";
 import { Pie, PieChart } from "recharts";
@@ -84,6 +89,7 @@ import {
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 import { Heading } from "~/components/structure/Headings";
+import { Input } from "~/components/ui/input";
 
 export const config = { runtime: "edge" };
 // const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -153,10 +159,10 @@ export default function DashboardIndex() {
   const matches = useMatches();
 
   const { setTransitioning } = useOutletContext() as ContextType;
-  const [draggedAction, setDraggedAction] = useState<Action>();
   const [todayView, setTodayView] = useState<
     "kanban" | "hours" | "categories" | "feed"
   >("kanban");
+  const [list, setList] = useState(false);
   const [currentDay, setCurrentDay] = useState(new Date());
 
   if (!actions) {
@@ -188,13 +194,6 @@ export default function DashboardIndex() {
     actions: actions as Action[],
   }) as Action[];
   const currentActions = getActionsForThisDay({ actions, date: currentDay });
-  const tomorrowActions = getActionsByState(
-    getActionsForThisDay({
-      actions,
-      date: addDays(new Date(), 1),
-    }),
-    states,
-  );
 
   const weekActions = eachDayOfInterval({
     start: startOfWeek(new Date()),
@@ -206,32 +205,6 @@ export default function DashboardIndex() {
     ) as Action[],
   }));
   const nextActions = actions?.filter((action) => action.state != "finished");
-
-  // useEffect(() => {
-  //   if (draggedAction) {
-  //     const day = document.querySelector(".dragover") as HTMLElement;
-  //     const date = day?.getAttribute("data-date") as string;
-
-  //     if (date !== format(draggedAction.date, "yyyy-MM-dd")) {
-  //       //
-  //       submit(
-  //         {
-  //           id: draggedAction.id,
-  //           date: date?.concat(`T${format(draggedAction.date, "HH:mm:ss")}`),
-  //           intent: INTENTS.updateAction,
-  //         },
-  //         {
-  //           action: "/handle-actions",
-  //           method: "POST",
-  //           navigate: false,
-  //           fetcherKey: `action:${draggedAction.id}:update:move:calendar`,
-  //         },
-  //       );
-  //     }
-  //     //reset
-  //     setDraggedAction(undefined);
-  //   }
-  // }, [draggedAction, submit]);
 
   useEffect(() => {
     setTransitioning(false);
@@ -287,6 +260,26 @@ export default function DashboardIndex() {
               </div>
 
               <div className="flex gap-2">
+                {todayView === "kanban" && (
+                  <div>
+                    <Toggle
+                      variant={"outline"}
+                      onPressedChange={(pressed) => setList(pressed)}
+                      pressed={list}
+                      title={
+                        list
+                          ? "Modo de visualização de Lista"
+                          : "Modo de visualização de bloco"
+                      }
+                    >
+                      {list ? (
+                        <Rows3Icon className="size-4" />
+                      ) : (
+                        <Rows4Icon className="size-4" />
+                      )}
+                    </Toggle>
+                  </div>
+                )}
                 {[
                   {
                     id: "kanban",
@@ -333,7 +326,7 @@ export default function DashboardIndex() {
             </div>
 
             {todayView === "kanban" ? (
-              <Kanban actions={currentActions} />
+              <Kanban actions={currentActions} list={list} />
             ) : todayView === "hours" ? (
               <HoursView actions={currentActions} />
             ) : todayView === "feed" ? (
@@ -514,6 +507,18 @@ export function HoursView({ actions }: { actions: Action[] }) {
 function DelayedActions({ actions }: { actions: Action[] }) {
   const [order, setOrder] = useState<"state" | "priority" | "time">("state");
   const [view, setView] = useState<"list" | "category">("list");
+  const [showSearch, setShowSearch] = useState(false);
+  const [query, setQuery] = useState("");
+  const [filteredActions, setFiltered] = useState(actions);
+
+  useEffect(() => {
+    if (query.length >= 1) {
+      const regex = new RegExp(query, "gi");
+      setFiltered(() => actions.filter((action) => regex.test(action.title)));
+    } else {
+      setFiltered(() => actions);
+    }
+  }, [query]);
 
   return (
     <div className="py-8 lg:py-24">
@@ -522,7 +527,32 @@ function DelayedActions({ actions }: { actions: Action[] }) {
           <h2 className="text-3xl font-semibold tracking-tight">Atrasados</h2>
           <Badge value={actions.length} />
         </div>
+
         <div className="flex items-center gap-4">
+          <div className="flex gap-2">
+            {showSearch && (
+              <div className="relative">
+                <Input
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                  }}
+                  className="pr-12"
+                />
+                <SearchIcon
+                  className={`size-4 ${showSearch ? "absolute top-3 right-4" : ""}`}
+                />
+              </div>
+            )}
+
+            <Button variant={"outline"} onClick={() => setShowSearch(true)}>
+              {showSearch ? (
+                <XIcon className={"size-4"} />
+              ) : (
+                <SearchIcon className={`size-4`} />
+              )}
+            </Button>
+          </div>
           <div className="flex items-center gap-2">
             <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
               Ordenar por
@@ -574,7 +604,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
 
       {view === "list" ? (
         <ListOfActions
-          actions={actions}
+          actions={filteredActions}
           showCategory={true}
           columns={6}
           descending
@@ -582,7 +612,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
           showPartner
         />
       ) : (
-        <CategoriesView actions={actions} />
+        <CategoriesView actions={filteredActions} />
       )}
     </div>
   );
@@ -931,8 +961,8 @@ function Sprint() {
             </SelectContent>
           </Select>
           <Toggle
-            variant={"outline"}
             pressed={descending}
+            variant={"outline"}
             onPressedChange={(pressed) => setDescending(pressed)}
           >
             {descending ? (
