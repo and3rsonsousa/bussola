@@ -1441,7 +1441,7 @@ export function ContextMenuItems({
                   }}
                   size="sm"
                   key={partner.id}
-                  group
+                  ring
                 />
                 {action.partners.length === 1 ? partner.title : null}
               </Fragment>
@@ -1605,7 +1605,7 @@ export function ContextMenuItems({
                   }}
                   size="sm"
                   key={person.id}
-                  group
+                  ring
                 />
                 {action.responsibles.length === 1 ? person.name : null}
               </Fragment>

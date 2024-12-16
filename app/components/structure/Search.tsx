@@ -269,7 +269,7 @@ export default function Search({
                               short: responsible.initials!,
                             }}
                             key={responsible.id}
-                            group
+                            ring
                           />
                         ))}
                       </div>
