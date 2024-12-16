@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import { useMatches, useNavigate, useOutletContext } from "@remix-run/react";
-import { useDebounce } from "use-debounce";
 import { createBrowserClient } from "@supabase/ssr";
 import { CommandLoading } from "cmdk";
 import React, { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { PRIORITIES } from "~/lib/constants";
 import { Avatar, Icons } from "~/lib/helpers";
 import {
@@ -164,7 +164,10 @@ export default function Search({
           .select("*")
           .is("archived", false)
           .contains("responsibles", person?.admin ? [] : [person.user_id])
-          .containedBy("partners", partners.map((p) => p.slug)!)
+          .containedBy(
+            "partners",
+            partner ? [partner.slug] : partners.map((p) => p.slug)!,
+          )
           .textSearch("title", query)
           .then((value) => {
             const actions = value.data

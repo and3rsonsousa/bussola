@@ -319,10 +319,8 @@ export default function ActionPage() {
           <div className="flex gap-4">
             <textarea
               value={action.title}
-              className={`w-full overflow-hidden border-none bg-transparent p-0 py-2 text-3xl font-bold tracking-tighter outline-hidden ${action.title.length > 30 ? "md:text-5xl" : "md:text-6xl"}`}
+              className={`field-sizing-content w-full resize-none overflow-hidden border-none bg-transparent p-0 py-2 text-3xl leading-[85%] font-bold tracking-tighter outline-hidden ${action.title.length > 30 ? "md:text-5xl" : "md:text-6xl"}`}
               rows={1}
-              // @ts-ignore
-              style={{ fieldSizing: "content", resize: "none" }}
               onChange={(event) =>
                 setAction({ ...action, title: event.target.value })
               }
