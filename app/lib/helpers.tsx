@@ -773,12 +773,7 @@ export const Post = ({
       )}
       style={{
         backgroundColor: bgColor,
-        color:
-          bgColor !== BASE_COLOR
-            ? Color(bgColor).contrast(Color("white")) > 2
-              ? "white"
-              : Color(bgColor).darken(0.5).desaturate(0.5)
-            : undefined,
+        color: getTextColor(bgColor),
       }}
     >
       <div
@@ -921,4 +916,12 @@ export function LikeFooter({
       </div>
     </div>
   );
+}
+
+export function getTextColor(bgColor: string) {
+  return bgColor !== BASE_COLOR
+    ? Color(bgColor).contrast(Color("white")) > 2
+      ? "white"
+      : Color(bgColor).darken(0.5).desaturate(0.5)
+    : undefined;
 }

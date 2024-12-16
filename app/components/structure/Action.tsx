@@ -54,6 +54,7 @@ import {
   getActionsByTime,
   getPartners,
   getResponsibles,
+  getTextColor,
   Icons,
   isInstagramFeed,
   isSprint,
@@ -194,7 +195,14 @@ export function ActionLine({
                   />
                 )}
 
-                <div>
+                <div
+                  className={action.files?.length ? "drop-shadow-sm" : ""}
+                  style={{
+                    color: action.files?.length
+                      ? "white"
+                      : getTextColor(action.color),
+                  }}
+                >
                   {formatActionDatetime({
                     date: action.date,
                     dateFormat: date?.dateFormat,
@@ -450,7 +458,9 @@ export function ActionLine({
 
             {/* Responsibles */}
             {allUsers || long ? (
-              <div className="flex w-24 shrink-0 justify-center">
+              <div
+                className={`flex shrink-0 justify-center ${long ? "w-24" : ""}`}
+              >
                 <AvatarGroup
                   avatars={people
                     .filter(
