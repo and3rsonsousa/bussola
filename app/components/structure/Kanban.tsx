@@ -2,7 +2,14 @@ import { useMatches, useSubmit } from "@remix-run/react";
 import { BlockOfActions } from "./Action";
 import { useEffect, useState } from "react";
 import { INTENTS } from "~/lib/constants";
-import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { format } from "date-fns";
 
 export default function Kanban({ actions }: { actions: Action[] }) {
@@ -33,11 +40,19 @@ export default function Kanban({ actions }: { actions: Action[] }) {
     }
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
+
   return (
     <div className="overflow-hidden pb-4">
       <div className="scrollbars-horizontal scrollbars-horizontal-thin">
         <div className="flex w-full gap-2">
-          <DndContext onDragEnd={handleDragEnd}>
+          <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
             {states.map((state) => {
               const stateActions = actions.filter(
                 (action) => action.state === state.slug,

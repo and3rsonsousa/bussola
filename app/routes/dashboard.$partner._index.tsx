@@ -273,7 +273,7 @@ export default function Partner() {
     }
   };
 
-  const sensor = useSensors(
+  const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 5,
@@ -556,7 +556,7 @@ export default function Partner() {
               </DropdownMenu>
             </div>
           </div>
-          <DndContext onDragEnd={handleDragEnd} sensors={sensor}>
+          <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
             <div
               className="scrollbars-horizontal main-container h-full overflow-y-auto px-4 md:px-8"
               id="calendar-full"
