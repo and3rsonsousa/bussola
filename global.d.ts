@@ -91,4 +91,6 @@ declare global {
     setStateFilter: React.Dispatch<React.SetStateAction<State | undefined>>;
     setCategoryFilter: React.Dispatch<React.SetStateAction<Category[]>>;
   };
+
+  type Size = "xs" | "sm" | "md" | "lg" | "xl";
 }

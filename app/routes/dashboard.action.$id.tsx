@@ -44,6 +44,7 @@ import Tiptap from "~/components/structure/Tiptap";
 import ButtonCNVT from "~/components/structure/Button";
 import {
   formatActionTime,
+  ResponsibleForAction,
   StateSelect,
 } from "~/components/structure/CreateAction";
 import { Button } from "~/components/ui/button";
@@ -928,7 +929,7 @@ export default function ActionPage() {
         ) : null}
       </div>
       {/* Lower bar */}
-      <div className="items-center justify-between border-t p-4 md:flex md:px-8 lg:border-none">
+      <div className="items-center justify-between overflow-hidden border-t p-4 md:flex md:px-8 lg:border-none">
         {/* Parceiros Categorias States Prioridade Responsável Cores */}
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 lg:gap-4">
           {/* Partners */}
@@ -1070,57 +1071,13 @@ export default function ActionPage() {
 
           {/* Responsáveis */}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="button-trigger">
-              <AvatarGroup
-                avatars={responsibles.map((person) => ({
-                  item: {
-                    image: person.image,
-                    short: person.short,
-                    title: person.name,
-                  },
-                }))}
-                size="md"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="glass">
-              {people.map((person) => (
-                <DropdownMenuCheckboxItem
-                  key={person.id}
-                  className="bg-select-item flex items-center gap-2"
-                  textValue={person.name}
-                  checked={action.responsibles.includes(person.user_id)}
-                  onCheckedChange={async (checked) => {
-                    if (!checked && action.responsibles.length < 2) {
-                      alert(
-                        "É necessário ter pelo menos um responsável pala ação",
-                      );
-                      return false;
-                    }
-                    const tempResponsibles = checked
-                      ? [...action.responsibles, person.user_id]
-                      : action.responsibles.filter(
-                          (id) => id !== person.user_id,
-                        );
-
-                    setAction({
-                      ...action,
-                      responsibles: tempResponsibles,
-                    });
-                  }}
-                >
-                  <Avatar
-                    item={{
-                      image: person.image,
-                      short: person.initials!,
-                    }}
-                    size="md"
-                  />
-                  <span>{`${person.name} ${person.surname}`}</span>
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ResponsibleForAction
+            size="md"
+            action={action}
+            onCheckedChange={(responsibles) => {
+              setAction({ ...action, responsibles });
+            }}
+          />
 
           {getInstagramFeed({ actions: [action] }).length > 0 ? (
             <>
@@ -1187,12 +1144,15 @@ export default function ActionPage() {
           ) : null}
         </div>
         {/* Data / Deletar / Atualizar */}
-        <div className="mt-4 flex items-center justify-between gap-2 md:my-0">
+        <div className="mt-4 flex items-center justify-between gap-2 overflow-hidden p-1 md:my-0">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant={"ghost"} className="button-trigger">
+              <Button
+                variant={"ghost"}
+                className="button-trigger overflow-hidden"
+              >
                 <CalendarIcon className="size-4" />
-                <span className="lg:hidden">
+                <span className="overflow-hidden text-ellipsis whitespace-nowrap lg:hidden">
                   {format(
                     date,
                     "d/MM/yyyy 'às' H'h'".concat(
@@ -1203,7 +1163,7 @@ export default function ActionPage() {
                     },
                   )}
                 </span>
-                <span className="hidden lg:block">
+                <span className="hidden overflow-hidden text-ellipsis whitespace-nowrap lg:block">
                   {format(
                     date,
                     "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(

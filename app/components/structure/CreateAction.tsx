@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import invariant from "tiny-invariant";
 
 export default function CreateAction({
   date,
@@ -44,7 +45,7 @@ export default function CreateAction({
   mode: "fixed" | "day" | "button" | "plus";
   shortcut?: boolean;
 }) {
-  const { categories, states, partners, people, user, areas } = useMatches()[1]
+  const { categories, partners, user, areas } = useMatches()[1]
     .data as DashboardRootType;
   const matches = useMatches()[3];
   const location = useLocation();
@@ -75,8 +76,8 @@ export default function CreateAction({
     partner: partner ? partner.slug : undefined,
     date: newDate,
     description: "",
-    responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
-    // responsibles: [user.id],
+    // responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
+    responsibles: [user.id],
     partners: partner ? [partner.slug] : [],
     state: "idea",
     title: "",
@@ -91,13 +92,7 @@ export default function CreateAction({
     (category) => category.slug === action.category,
   ) as Category;
 
-  const state = states.find((state) => state.slug === action.state) as State;
-  const responsibles: Person[] = [];
-  action.responsibles.filter((user_id) =>
-    responsibles.push(
-      people.find((person) => person.user_id === user_id) as Person,
-    ),
-  );
+  // const state = states.find((state) => state.slug === action.state) as State;
 
   const actionPartners = getPartners(action.partners);
 
@@ -320,56 +315,12 @@ export default function CreateAction({
             />
 
             {/* Responsáveis */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="button-trigger">
-                <AvatarGroup
-                  avatars={responsibles.map((person) => ({
-                    item: {
-                      image: person.image,
-                      short: person.initials!,
-                      title: person.name,
-                    },
-                  }))}
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="glass">
-                {people.map((person) => (
-                  <DropdownMenuCheckboxItem
-                    key={person.id}
-                    className="bg-select-item"
-                    checked={action.responsibles.includes(person.user_id)}
-                    onCheckedChange={(checked) => {
-                      if (!checked && action.responsibles.length < 2) {
-                        alert(
-                          "É necessário ter pelo menos um responsável pela ação",
-                        );
-                        return false;
-                      }
-                      const tempResponsibles = checked
-                        ? [...action.responsibles, person.user_id]
-                        : action.responsibles.filter(
-                            (id) => id !== person.user_id,
-                          );
-
-                      setAction({
-                        ...action,
-                        responsibles: tempResponsibles,
-                      });
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        item={{
-                          image: person.image,
-                          short: person.initials!,
-                        }}
-                      />
-                      <div>{person.name}</div>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ResponsibleForAction
+              action={action}
+              onCheckedChange={(responsibles) => {
+                setAction({ ...action, responsibles });
+              }}
+            />
 
             {/* Cor da ação */}
             {getInstagramFeed({ actions: [action] }).length > 0 && partner ? (
@@ -610,31 +561,95 @@ export function StateSelect({
         ))}
       </SelectContent>
     </Select>
-    // <DropdownMenu>
-    //   <DropdownMenuTrigger className={`button-trigger flex items-center gap-2`}>
-    //     <div
-    //       className="size-2 rounded-2xl"
-    //       style={{ backgroundColor: _state.color }}
-    //     ></div>
-
-    //     {_state.title}
-    //   </DropdownMenuTrigger>
-    //   <DropdownMenuContent className="glass">
-    //     {states.map((state) => (
-    //       <DropdownMenuItem
-    //         key={state.slug}
-    //         className="bg-item flex items-center gap-2"
-    //         textValue={state.title}
-    //         onSelect={() => onSelect(state)}
-    //       >
-    //         <div
-    //           className={`my-1 size-2 rounded-full`}
-    //           style={{ backgroundColor: state.color }}
-    //         ></div>
-    //         <span>{state.title}</span>
-    //       </DropdownMenuItem>
-    //     ))}
-    //   </DropdownMenuContent>
-    // </DropdownMenu>
   );
+}
+
+export function ResponsibleForAction({
+  size,
+  action,
+  onCheckedChange,
+}: {
+  size?: Size;
+  action: Action | RawAction;
+  onCheckedChange: (responsibles: string[]) => void;
+}) {
+  const { people } = useMatches()[1].data as DashboardRootType;
+
+  const responsibles: Person[] = [];
+  action.responsibles.filter((user_id) =>
+    responsibles.push(
+      people.find((person) => person.user_id === user_id) as Person,
+    ),
+  );
+
+  //getResponsibleForArea(action.category);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="button-trigger">
+        <AvatarGroup
+          size={size}
+          avatars={responsibles.map((person) => ({
+            item: {
+              image: person.image,
+              short: person.initials!,
+              title: person.name,
+            },
+          }))}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="glass">
+        {people.map((person) => (
+          <DropdownMenuCheckboxItem
+            key={person.id}
+            className="bg-select-item"
+            checked={action.responsibles.includes(person.user_id)}
+            onCheckedChange={(checked) => {
+              if (!checked && action.responsibles.length < 2) {
+                alert("É necessário ter pelo menos um responsável pela ação");
+                return false;
+              }
+              const tempResponsibles = checked
+                ? [...action.responsibles, person.user_id]
+                : action.responsibles.filter((id) => id !== person.user_id);
+
+              onCheckedChange(tempResponsibles);
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <Avatar
+                item={{
+                  image: person.image,
+                  short: person.initials!,
+                }}
+              />
+              <div>{person.name}</div>
+            </div>
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function getResponsibleForArea(category: string) {
+  const { categories, areas, people } = useMatches()[1]
+    .data as DashboardRootType;
+
+  const _category = categories.find((c) => c.slug === category);
+
+  invariant(_category, "O valor de category deve estar errado.");
+
+  const _area = areas.find((a) => a.slug === _category.area);
+
+  invariant(
+    _area,
+    "A área não pode ser encontrada, verifique novamente o valor de category",
+  );
+
+  const responsibles = people.filter((person) =>
+    person.areas?.find((a) => a === _area.slug),
+  );
+
+  return responsibles;
 }

@@ -167,7 +167,7 @@ export function Avatar({
     short: string;
     title?: string;
   };
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: Size;
   style?: CSSProperties;
   className?: string;
   ring?: boolean;
@@ -531,7 +531,7 @@ export function Bussola({
   short,
   className,
 }: {
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: Size;
   short?: boolean;
   className?: string;
 }) {
@@ -547,7 +547,7 @@ export function Bussola({
             strokeMiterlimit: 2,
           }}
           fill="currentColor"
-          className={` ${{ xs: "h-4 min-h-4", sm: "h-6 min-h-6", md: "h-8 min-h-8", lg: "h-12 min-h-12" }[size]} `}
+          className={getBussolaSize(size)}
           xmlSpace="preserve"
         >
           <g transform="translate(-7439 -16159)">
@@ -565,7 +565,7 @@ export function Bussola({
             strokeMiterlimit: 2,
           }}
           fill="currentColor"
-          className={` ${{ xs: "h-4 min-h-4", sm: "h-6 min-h-6", md: "h-8 min-h-8", lg: "h-12 min-h-12" }[size]} `}
+          className={getBussolaSize(size)}
           viewBox="0 0 2124 302"
           xmlSpace="preserve"
         >
@@ -927,4 +927,14 @@ export function getTextColor(bgColor: string) {
       ? "white"
       : Color(bgColor).darken(0.5).desaturate(0.5)
     : undefined;
+}
+
+function getBussolaSize(size: string) {
+  return {
+    xs: "h-4 min-h-4",
+    sm: "h-6 min-h-6",
+    md: "h-8 min-h-8",
+    lg: "h-12 min-h-12",
+    xl: "h-16 min-h-16",
+  }[size];
 }

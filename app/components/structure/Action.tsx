@@ -173,7 +173,7 @@ export function ActionLine({
                 aspect="squared"
                 className={`the-action-content aspect-square overflow-hidden rounded-md hover:opacity-75`}
               />
-              <div className="late-border absolute inset-0 hidden rounded-md border-4 border-rose-600"></div>
+              <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600 bg-rose-500/50"></div>
 
               <div
                 className={`absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold ${action.files?.length ? "drop-shadow-sm" : ""}`}

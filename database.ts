@@ -254,6 +254,7 @@ export type Database = {
       people: {
         Row: {
           admin: boolean
+          areas: string[]
           created_at: string
           email: string | null
           id: string
@@ -267,6 +268,7 @@ export type Database = {
         }
         Insert: {
           admin?: boolean
+          areas: string[]
           created_at?: string
           email?: string | null
           id?: string
@@ -280,6 +282,7 @@ export type Database = {
         }
         Update: {
           admin?: boolean
+          areas?: string[]
           created_at?: string
           email?: string | null
           id?: string
