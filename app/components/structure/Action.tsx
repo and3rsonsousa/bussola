@@ -173,7 +173,7 @@ export function ActionLine({
                 aspect="squared"
                 className={`the-action-content aspect-square overflow-hidden rounded-md hover:opacity-75`}
               />
-              <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600"></div>
+              <div className="late-border absolute inset-0 hidden rounded-md border-4 border-rose-600"></div>
 
               <div
                 className={`absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold ${action.files?.length ? "drop-shadow-sm" : ""}`}
@@ -197,7 +197,6 @@ export function ActionLine({
                         fg: partner.colors[1],
                         title: partner.title,
                       },
-                      className: "border-2",
                     }))}
                   />
                 )}
@@ -527,7 +526,6 @@ export function ActionLine({
 
 export function ActionBlock({
   action,
-
   sprint,
 }: {
   action: Action;
@@ -584,150 +582,148 @@ export function ActionBlock({
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <div
-          ref={setNodeRef}
-          {...attributes}
-          {...listeners}
-          style={style}
-          title={action.title}
-          className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) && sprint ? "action-sprint" : ""}`}
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (!edit) {
-              navigate(`/dashboard/action/${action.id}`);
-            }
-          }}
-          onMouseEnter={() => {
-            setHover(true);
-          }}
-          onMouseLeave={() => {
-            setHover(false);
-          }}
-        >
-          {isHover && !edit ? <ShortcutActions action={action} /> : null}
-          {/* Title */}
-          <div className="leading-tighter relative overflow-hidden text-2xl font-semibold tracking-tighter">
-            {edit ? (
-              <input
-                ref={inputRef}
-                type="text"
-                defaultValue={action.title}
-                className={`w-full overflow-hidden bg-transparent outline-hidden`}
-                onKeyDown={(event) => {
-                  if (event.key === "Escape") {
-                    flushSync(() => {
-                      setEdit(() => false);
-                    });
-                    buttonRef.current?.focus();
-                  } else if (event.key === "Enter") {
-                    event.preventDefault();
-                    if (inputRef.current?.value !== action.title) {
+        <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+          <div
+            title={action.title}
+            className={`action group/action action-item action-item-block @container cursor-pointer flex-col justify-between gap-2 text-sm ${isSprint(action.id, sprints) && sprint ? "action-sprint" : ""}`}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!edit) {
+                navigate(`/dashboard/action/${action.id}`);
+              }
+            }}
+            onMouseEnter={() => {
+              setHover(true);
+            }}
+            onMouseLeave={() => {
+              setHover(false);
+            }}
+          >
+            {isHover && !edit ? <ShortcutActions action={action} /> : null}
+            {/* Title */}
+            <div className="leading-tighter relative overflow-hidden text-2xl font-semibold tracking-tighter">
+              {edit ? (
+                <input
+                  ref={inputRef}
+                  type="text"
+                  defaultValue={action.title}
+                  className={`w-full overflow-hidden bg-transparent outline-hidden`}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") {
                       flushSync(() => {
-                        handleActions({
-                          intent: INTENTS.updateAction,
-                          ...action,
-                          title: String(inputRef.current?.value),
+                        setEdit(() => false);
+                      });
+                      buttonRef.current?.focus();
+                    } else if (event.key === "Enter") {
+                      event.preventDefault();
+                      if (inputRef.current?.value !== action.title) {
+                        flushSync(() => {
+                          handleActions({
+                            intent: INTENTS.updateAction,
+                            ...action,
+                            title: String(inputRef.current?.value),
+                          });
                         });
+
+                        buttonRef.current?.focus();
+                      }
+                      setEdit(() => false);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (
+                      inputRef.current?.value !== undefined &&
+                      inputRef.current?.value !== action.title
+                    )
+                      handleActions({
+                        intent: INTENTS.updateAction,
+                        ...action,
+                        title: inputRef.current?.value,
                       });
 
-                      buttonRef.current?.focus();
-                    }
                     setEdit(() => false);
-                  }
-                }}
-                onBlur={() => {
-                  if (
-                    inputRef.current?.value !== undefined &&
-                    inputRef.current?.value !== action.title
-                  )
-                    handleActions({
-                      intent: INTENTS.updateAction,
-                      ...action,
-                      title: inputRef.current?.value,
-                    });
-
-                  setEdit(() => false);
-                }}
-              />
-            ) : (
-              <button
-                ref={buttonRef}
-                className={`relative block max-w-full cursor-text items-center overflow-hidden text-left text-ellipsis whitespace-nowrap outline-hidden`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  if (!edit) {
-                    flushSync(() => {
-                      setEdit(true);
-                    });
-                    inputRef.current?.focus();
-                  }
-                }}
-              >
-                {action.title}
-              </button>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between gap-4 overflow-x-hidden">
-            <div className="flex items-center gap-2">
-              <div
-                className="size-2 shrink-0 rounded-full"
-                style={{ backgroundColor: state.color }}
-              ></div>
-              {/* Partners | Clientes  */}
-              <AvatarGroup partners={actionPartners} ringColor="ring-card" />
-              {/* Category - Categoria */}
-              <div className="opacity-50">
-                <Icons
-                  id={
-                    categories.find(
-                      (category) => category.slug === action.category,
-                    )?.slug
-                  }
-                  className="w-4"
+                  }}
                 />
-              </div>
-              {/* Priority - Prioridade */}
-              {action.priority === PRIORITIES.high ? (
-                <div>
-                  <Icons id={"high"} className="w-4" type="priority" />
+              ) : (
+                <button
+                  ref={buttonRef}
+                  className={`relative block max-w-full cursor-text items-center overflow-hidden text-left text-ellipsis whitespace-nowrap outline-hidden`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!edit) {
+                      flushSync(() => {
+                        setEdit(true);
+                      });
+                      inputRef.current?.focus();
+                    }
+                  }}
+                >
+                  {action.title}
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-4 overflow-x-hidden">
+              <div className="flex items-center gap-2">
+                <div
+                  className="size-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: state.color }}
+                ></div>
+                {/* Partners | Clientes  */}
+                <AvatarGroup partners={actionPartners} ringColor="ring-card" />
+                {/* Category - Categoria */}
+                <div className="opacity-50">
+                  <Icons
+                    id={
+                      categories.find(
+                        (category) => category.slug === action.category,
+                      )?.slug
+                    }
+                    className="w-4"
+                  />
                 </div>
-              ) : null}
-              {/* Responsibles -  Responsáveis */}
-              <AvatarGroup people={getResponsibles(action.responsibles)} />
+                {/* Priority - Prioridade */}
+                {action.priority === PRIORITIES.high ? (
+                  <div>
+                    <Icons id={"high"} className="w-4" type="priority" />
+                  </div>
+                ) : null}
+                {/* Responsibles -  Responsáveis */}
+                <AvatarGroup people={getResponsibles(action.responsibles)} />
+              </div>
+              <div className="flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap opacity-50 md:text-xs">
+                <span className="@[240px]:hidden">
+                  {formatActionDatetime({
+                    date: action.date,
+                    dateFormat: 2,
+                    timeFormat: 1,
+                  })}
+                </span>
+                <span className="hidden @[240px]:block @[360px]:hidden">
+                  {formatActionDatetime({
+                    date: action.date,
+                    dateFormat: 3,
+                    timeFormat: 1,
+                  })}
+                </span>
+                <span className="hidden @[360px]:block">
+                  {formatActionDatetime({
+                    date: action.date,
+                    dateFormat: 4,
+                    timeFormat: 1,
+                  })}
+                </span>
+                •<div>{action.time.toString().concat("m")}</div>
+              </div>
             </div>
-            <div className="flex items-center justify-end gap-1 overflow-hidden text-right text-sm font-medium whitespace-nowrap opacity-50 md:text-xs">
-              <span className="@[240px]:hidden">
-                {formatActionDatetime({
-                  date: action.date,
-                  dateFormat: 2,
-                  timeFormat: 1,
-                })}
-              </span>
-              <span className="hidden @[240px]:block @[360px]:hidden">
-                {formatActionDatetime({
-                  date: action.date,
-                  dateFormat: 3,
-                  timeFormat: 1,
-                })}
-              </span>
-              <span className="hidden @[360px]:block">
-                {formatActionDatetime({
-                  date: action.date,
-                  dateFormat: 4,
-                  timeFormat: 1,
-                })}
-              </span>
-              •<div>{action.time.toString().concat("m")}</div>
-            </div>
-          </div>
-          {/* {isSprint(action.id, sprints) && sprint && (
+            {/* {isSprint(action.id, sprints) && sprint && (
             <div className="ring-background bg-primary text-primary-foreground absolute -top-2 right-2 grid size-6 place-content-center rounded-full ring-2">
               <RabbitIcon className="size-4" />
             </div>
           )} */}
+          </div>
         </div>
       </ContextMenuTrigger>
       <ContextMenuItems action={action} handleActions={handleActions} />

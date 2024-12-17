@@ -144,7 +144,6 @@ export function AvatarGroup({
           key={i}
           item={item}
           className={`${className} ${ringColor}`}
-          // ring={avatars.length > 1 || ring}
           ring={true}
           size={size}
           style={style}

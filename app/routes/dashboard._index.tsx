@@ -545,7 +545,14 @@ function DelayedActions({ actions }: { actions: Action[] }) {
               </div>
             )}
 
-            <Button variant={"outline"} onClick={() => setShowSearch(true)}>
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                setShowSearch(!showSearch);
+                setFiltered(actions);
+                setQuery("");
+              }}
+            >
               {showSearch ? (
                 <XIcon className={"size-4"} />
               ) : (

@@ -382,13 +382,13 @@ button {
   @apply block;
 }
 
-.action-content-delayed {
+/* .action-content-delayed {
   @apply bg-rose-500;
 }
 
 .action-content-delayed .the-action-content {
   @apply opacity-50;
-}
+} */
 
 .scrollbars {
   @apply mr-1 h-full overflow-hidden overflow-y-auto px-1;

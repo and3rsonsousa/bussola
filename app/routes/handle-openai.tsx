@@ -26,8 +26,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // Se for legenda
   if (intent === "shrink") {
+    template = "você é um copywritter experiente.";
     content = `Reduza o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
   } else if (intent === "expand") {
+    template = "você é um copywritter experiente.";
     content = `Aumente o TEXTO em 25% sem alterar o sentido ou mudar o tom de voz. TEXTO: ${description}.`;
   } else if (intent === "develop") {
     template = "Pesquisar sobre o assunto.";
@@ -75,7 +77,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   } else if (intent === "caption") {
     template =
-      "Texto da legenda e keywords SEO, após um parágrafo no formato 'TAGS: keyword1, keyword2,keyword3...'. Não use Hashtags";
+      "Texto da legenda e hashtags SEO, use de 3 a 5 hashtags bem focadas no nicho da DESCRIÇÃO.";
 
     if (model === "aida") {
       template = `Texto da legenda seguindo o modelo AIDA bem criativo, usando técnicas de Storytelling e reforçando o CONTEXTO. Use as keywords relevantes ao CONTEXTO e encerre a legenda com 9 keywords SEO que falem tanto da DESCRIÇÃO, quanto do CONTEXTO. Siga esse modelo de AIDA: Atenção - Use emojis, perguntas diretas ou estatísticas chocantes Interesse - Faça o público se identificar com o problema ou a situação Desejo - Gere expectativa sobre a solução. Ação - Finalize com um convite claro e uma CTA estratégica.`;
@@ -88,7 +90,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         "Texto da legenda com até 200 caracteres bem criativo e reforçando o CONTEXTO e com um CTA no final. Caso não haja nenhuma especificação no CONTEXTO, indique a pessoa a ir ao link da bio de modo que concorde com o CONTEXTO.";
     } else if (model === "medium") {
       template =
-        "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use de 2 a 3 parágrafos curtos. Finalize com 9 keywords SEO que falem tanto da EMPRESA, quanto do CONTEXTO";
+        "Texto da legenda com até 400 caracteres usando o CONTEXTO como base, pode ter cunho explicativo ou de reforço. Use 3 parágrafos curtos. Use de 3 a 5 hashtags bem focadas no nicho da DESCRIÇÃO.";
     } else if (model === "long") {
       template = `Texto da legenda explicando o CONTEXTO com até 800 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
     1 - Reforce o problema apresentado do CONTEXTO em 120 caracteres.
@@ -96,14 +98,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     3 - Aqui você usar uma lista de itens com emojis para facilitar a leitura apresentando os problemas que o usuário enfrenta, reforçando o parágrafo 2.
     4 - Apresente a solução do problema de acordo com o CONTEXTO.
     5 - Conclua com um CTA do CONTEXTO, se não houver indicação, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
-    6 - Finalize a legenda com 9 keywords SEO que falem tanto da EMPRESA, quanto do CONTEXTO"
+    6 - Finalize a legenda com 3 a 5 hashtags bem focadas no nicho da DESCRIÇÃO."
     `;
     }
 
-    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. Use o gatilho mental da: ${trigger}. Não use Hashtags. Divida as keywords em 6 para o CONTEXTO e 3 para a EMPRESA. Use esse formato: 
+    content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. Use o gatilho mental da: ${trigger}. Use esse formato: 
     TEXTO DA LEGENDA 
-    
-    TAGS: keywordCONTEXTO1, keywordCONTEXTO2, keywordCONTEXTO3, keywordCONTEXTO5, keywordLOCALIZAÇÃO, keywordEMPRESA1,keywordEMPRESA2, keywordEMPRESA3'. 
+
+    HASHTAGS'. 
     
   REGRAS: Retorne apenas o texto sem nenhuma observação. Texto somente com parágrafos e sem tags html. 
   TEMPLATE: ${template}.
