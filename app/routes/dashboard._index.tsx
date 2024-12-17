@@ -518,7 +518,7 @@ function DelayedActions({ actions }: { actions: Action[] }) {
     } else {
       setFiltered(() => actions);
     }
-  }, [query]);
+  }, [query, actions]);
 
   return (
     <div className="py-8 lg:py-24">

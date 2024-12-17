@@ -270,7 +270,7 @@ export function ActionLine({
               }
             }}
             onMouseEnter={() => {
-              setHover(true);
+              setHover(() => true);
             }}
             onMouseLeave={() => {
               setHover(false);
