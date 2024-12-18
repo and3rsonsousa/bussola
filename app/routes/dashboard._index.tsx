@@ -215,10 +215,9 @@ export default function DashboardIndex() {
       <div className="px-2 md:px-8">
         <ActionsProgress />
       </div>
-      <div className="border-b"></div>
-      <div className="px-2 md:px-8">
-        <Sprint />
-      </div>
+
+      <Sprint />
+
       <div className="border-b"></div>
       <div className="px-2 md:px-8">
         {/* Ações em Atraso */}
@@ -946,61 +945,65 @@ function Sprint() {
 
   actions = actions?.filter((a) => ids.has(a.id)) || [];
 
-  return (
-    <div className="py-8 lg:py-24">
-      <div className="flex items-start justify-between pb-8">
-        <div className="relative flex">
-          <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
-        </div>
+  return sprints.length > 0 ? (
+    <>
+      <div className="border-b"></div>
 
-        <div className="flex items-center gap-2">
-          <Select
-            value={order}
-            onValueChange={(value) => setOrder(value as ORDER)}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="glass">
-              <SelectItem value="state">Status</SelectItem>
-              <SelectItem value="priority">Prioridade</SelectItem>
-              <SelectItem value="time">Data</SelectItem>
-            </SelectContent>
-          </Select>
-          <Toggle
-            pressed={descending}
-            variant={"outline"}
-            onPressedChange={(pressed) => setDescending(pressed)}
-          >
-            {descending ? (
-              <ArrowDownIcon className="size-4" />
-            ) : (
-              <ArrowUpIcon className="size-4" />
-            )}
-          </Toggle>
-          {actions.length > 0 && (
-            <div
-              className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold whitespace-nowrap text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-rose-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-amber-500" : "bg-lime-500"}`}
+      <div className="px-2 py-8 md:px-8 lg:py-24">
+        <div className="flex items-start justify-between pb-8">
+          <div className="relative flex">
+            <h2 className="text-3xl font-semibold tracking-tight">Sprints</h2>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Select
+              value={order}
+              onValueChange={(value) => setOrder(value as ORDER)}
             >
-              <TimerIcon className="size-4 opacity-75" />
-              <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>
-            </div>
-          )}
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="glass">
+                <SelectItem value="state">Status</SelectItem>
+                <SelectItem value="priority">Prioridade</SelectItem>
+                <SelectItem value="time">Data</SelectItem>
+              </SelectContent>
+            </Select>
+            <Toggle
+              pressed={descending}
+              variant={"outline"}
+              onPressedChange={(pressed) => setDescending(pressed)}
+            >
+              {descending ? (
+                <ArrowDownIcon className="size-4" />
+              ) : (
+                <ArrowUpIcon className="size-4" />
+              )}
+            </Toggle>
+            {actions.length > 0 && (
+              <div
+                className={`flex items-center gap-1 rounded p-1 px-4 text-sm font-semibold whitespace-nowrap text-white ${actions.reduce((a, b) => a + b.time, 0) > 70 ? "bg-rose-500" : actions.reduce((a, b) => a + b.time, 0) > 30 ? "bg-amber-500" : "bg-lime-500"}`}
+              >
+                <TimerIcon className="size-4 opacity-75" />
+                <span>{actions.reduce((a, b) => a + b.time, 0)} minutos</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {actions?.length > 0 ? (
-        <BlockOfActions
-          actions={actions}
-          orderBy={order}
-          descending={descending}
-        />
-      ) : (
-        <div className="flex items-center gap-2">
-          <RabbitIcon className="size-8 opacity-25" />
-          <span>Nenhuma ação no sprint atual</span>
-        </div>
-      )}
-    </div>
-  );
+        {actions?.length > 0 ? (
+          <BlockOfActions
+            actions={actions}
+            orderBy={order}
+            descending={descending}
+          />
+        ) : (
+          <div className="flex items-center gap-2">
+            <RabbitIcon className="size-8 opacity-25" />
+            <span>Nenhuma ação no sprint atual</span>
+          </div>
+        )}
+      </div>
+    </>
+  ) : null;
 }
