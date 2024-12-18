@@ -776,11 +776,18 @@ export const Post = ({
       )}
       style={{
         backgroundColor: bgColor,
-        color: getTextColor(bgColor),
+
+        // color: getTextColor(bgColor),
       }}
     >
       <div
-        className={`overflow-hidden p-2 text-center text-[10px] leading-none font-medium tracking-tight text-ellipsis ${action.title.length > 50 ? "@[120px]:text-[12px] @[200px]:text-[20px] @[300px]:text-[24px]" : "@[120px]:text-[18px] @[200px]:text-[24px] @[300px]:text-[32px]"} :tracking-tighter @[200px]:p-4 @[300px]:p-8`}
+        className={`overflow-hidden p-2 text-center text-[10px] leading-none font-medium tracking-tight text-ellipsis ${action.title.length > 50 ? "@[120px]:text-[12px] @[200px]:text-[20px] @[300px]:text-[24px]" : "@[120px]:text-[18px] @[200px]:text-[24px] @[300px]:text-[32px]"} :tracking-tighter bg-gradient-to-br from-[--tw-gradient-from] to-[--tw-gradient-to] bg-clip-text text-transparent @[200px]:p-4 @[300px]:p-8`}
+        style={
+          {
+            "--tw-gradient-from": getTextColor(bgColor),
+            "--tw-gradient-to": getTextColor(bgColor, 0.5),
+          } as CSSProperties
+        }
       >
         {action.title}
       </div>
@@ -921,12 +928,15 @@ export function LikeFooter({
   );
 }
 
-export function getTextColor(bgColor: string) {
-  return bgColor !== BASE_COLOR
-    ? Color(bgColor).contrast(Color("white")) > 2
-      ? "white"
-      : Color(bgColor).darken(0.5).desaturate(0.5)
-    : undefined;
+export function getTextColor(bgColor: string, opacity = 0) {
+  const color: string =
+    bgColor !== BASE_COLOR
+      ? Color(bgColor).contrast(Color("white")) > 2
+        ? Color("white").fade(opacity)
+        : Color(bgColor).darken(0.5).desaturate(0.5).fade(opacity)
+      : Color("white").fade(opacity);
+
+  return opacity ? color : color;
 }
 
 function getBussolaSize(size: string) {
