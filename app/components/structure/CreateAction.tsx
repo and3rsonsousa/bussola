@@ -77,7 +77,7 @@ export default function CreateAction({
     category: "post",
     partner: partner ? partner.slug : undefined,
     date: newDate,
-    instagram_date: addHours(newDate, 1),
+    instagram_date: newDate,
     description: "",
     responsibles: [user.id],
     partners: partner ? [partner.slug] : [],
@@ -739,8 +739,8 @@ export function DateTimeAndInstagramDate({
                           action.instagram_date.getMinutes() !== 0 ? "m" : "",
                         ),
                       { locale: ptBR },
-                    ).concat(" por " + formatActionTime(action.time))
-                  : "Ação sem data"}
+                    )
+                  : "Ação sem data de instagram"}
               </div>
             </Button>
           </PopoverTrigger>
