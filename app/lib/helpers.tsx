@@ -340,7 +340,11 @@ export function getInstagramFeed({
   return actions
     ? actions
         .filter((action) => isInstagramFeed(action.category))
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort(
+          (a, b) =>
+            new Date(b.instagram_date).getTime() -
+            new Date(a.instagram_date).getTime(),
+        )
     : [];
 }
 
@@ -450,7 +454,7 @@ export function usePendingData(): { actions: Action[]; sprints: Sprint[] } {
           description: String(fetcher.formData?.get("description")),
           user_id: String(fetcher.formData?.get("user_id")),
           date: String(fetcher.formData?.get("date")),
-          instagram_date: String(fetcher.formData?.get("date")),
+          instagram_date: String(fetcher.formData?.get("instagram_date")),
           responsibles: String(fetcher.formData?.getAll("responsibles")).split(
             ",",
           ),
@@ -795,8 +799,10 @@ export const Post = ({
   );
 };
 
-export function isInstagramFeed(category: string) {
-  return ["post", "reels", "carousel"].includes(category);
+export function isInstagramFeed(category: string, stories = false) {
+  return ["post", "reels", "carousel", stories ? "stories" : null].includes(
+    category,
+  );
 }
 
 export const Heart = ({ className }: { className?: string }) => (

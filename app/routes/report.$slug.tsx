@@ -191,7 +191,7 @@ export default function ReportPage() {
               size="xl"
             />
             <div>
-              <h2 className="text-2xl font-semibold leading-none tracking-tighter text-gray-950">
+              <h2 className="text-2xl leading-none font-semibold tracking-tighter text-gray-950">
                 {partner.title}
               </h2>
               <div>@{partner.slug}</div>
@@ -205,7 +205,7 @@ export default function ReportPage() {
                   📅
                   {` ${format(range[0], "d".concat(!isSameMonth(range[0], range[1]) ? " 'de' MMMM".concat(!isSameYear(range[0], range[1]) ? " 'de' yyyy" : "") : ""), { locale: ptBR })} a
 ${format(range[1], "d 'de' MMMM 'de' yyyy", { locale: ptBR })}`}{" "}
-                  <div className="flex gap-2 text-[10px] font-medium uppercase tracking-wider">
+                  <div className="flex gap-2 text-[10px] font-medium tracking-wider uppercase">
                     <Link
                       className="hover:underline"
                       to={`/report/${partner.slug}?range=${format(startOfWeek(new Date()), "yyyy-MM-dd")}---${format(endOfWeek(new Date()), "yyyy-MM-dd")}`}
@@ -372,16 +372,16 @@ const ActionlistReport = ({ action }: { action: Action }) => {
             locale: ptBR,
           })}
         </div>
-        <div className="flex items-center text-xs font-bold uppercase tracking-wider text-white">
+        <div className="flex items-center text-xs font-bold tracking-wider text-white uppercase">
           <div
-            className={`rounded-l py-1 pl-3 pr-2`}
+            className={`rounded-l py-1 pr-2 pl-3`}
             style={{ backgroundColor: category?.color }}
           >
             {category?.title}
           </div>
           <div>
             <div
-              className={`rounded-r py-1 pl-2 pr-3 text-xs font-bold uppercase`}
+              className={`rounded-r py-1 pr-3 pl-2 text-xs font-bold uppercase`}
               style={{ backgroundColor: state?.color }}
             >
               {state?.title}
@@ -394,13 +394,13 @@ const ActionlistReport = ({ action }: { action: Action }) => {
           <Content action={action as Action} aspect="full" partner={partner} />
         </div>
         <div className="w-full">
-          <div className="mb-4 text-2xl font-bold leading-none tracking-tighter text-gray-950">
+          <div className="mb-4 text-2xl leading-none font-bold tracking-tighter text-gray-950">
             {action.title}
           </div>
 
           {action.caption && (
             <>
-              <h5 className="mt-4 text-sm font-bold uppercase tracking-normal text-gray-950">
+              <h5 className="mt-4 text-sm font-bold tracking-normal text-gray-950 uppercase">
                 Legenda
               </h5>
 

@@ -9,7 +9,7 @@ installGlobals();
 
 export default defineConfig({
   plugins: [
-    remix({ presets: [vercelPreset()] }),
+    remix({ presets: [vercelPreset()], future: { v3_singleFetch: true } }),
     tsconfigPaths(),
     tailwindcss(),
   ],

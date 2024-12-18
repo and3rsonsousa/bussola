@@ -1,9 +1,11 @@
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useLocation, useMatches, useSubmit } from "@remix-run/react";
-import { format, formatDuration, isToday, parseISO } from "date-fns";
+import { addHours, format, formatDuration, isToday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CheckCircle2Icon, PlusCircleIcon, PlusIcon } from "lucide-react";
+import { SiInstagram } from "@icons-pack/react-simple-icons";
+import { act, useEffect, useState } from "react";
+import invariant from "tiny-invariant";
 import { BASE_COLOR, INTENTS, TIMES } from "~/lib/constants";
 import {
   Avatar,
@@ -11,6 +13,7 @@ import {
   getInstagramFeed,
   getPartners,
   Icons,
+  isInstagramFeed,
 } from "~/lib/helpers";
 import ButtonCNVT from "../structure/Button";
 import { Button } from "../ui/button";
@@ -34,7 +37,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
-import invariant from "tiny-invariant";
 
 export default function CreateAction({
   date,
@@ -75,8 +77,8 @@ export default function CreateAction({
     category: "post",
     partner: partner ? partner.slug : undefined,
     date: newDate,
+    instagram_date: addHours(newDate, 1),
     description: "",
-    // responsibles: ["b4f1f8f7-e8bb-4726-8693-76e217472674"],
     responsibles: [user.id],
     partners: partner ? [partner.slug] : [],
     state: "idea",
@@ -194,8 +196,8 @@ export default function CreateAction({
           placeholder="Qual o nome da sua ação?"
         />
         <textarea
-          defaultValue={action.description}
-          className="font-regular placeholder:text-muted-foreground relative w-full resize-none bg-transparent text-sm outline-hidden"
+          defaultValue={action.description || ""}
+          className="font-regular placeholder:text-muted-foreground relative field-sizing-content w-full resize-none bg-transparent text-sm outline-hidden"
           rows={2}
           placeholder="Descreva brevemente a sua ação"
           onChange={(event) => {
@@ -204,12 +206,10 @@ export default function CreateAction({
               description: event.target.value,
             });
           }}
-          // @ts-ignore
-          style={{ fieldSizing: "content" }}
         />
 
-        <hr className="-mx-4 mt-2 mb-4 border-t md:-mx-6" />
-        <div className="flex flex-col gap-2">
+        <hr className="-mx-4 my-2 border-t p-1 md:-mx-6" />
+        <div className="flex flex-col">
           <div className="flex items-center gap-2">
             {/* Partners */}
             <DropdownMenu>
@@ -354,101 +354,15 @@ export default function CreateAction({
               </DropdownMenu>
             ) : null}
           </div>
-          <div className="flex w-full items-center justify-between gap-2">
-            {/* Data e Hora */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs focus-visible:ring-offset-0"
-                >
-                  {action.date
-                    ? format(
-                        action.date,
-                        "d/M"
-                          .concat(
-                            action.date.getFullYear() !==
-                              new Date().getFullYear()
-                              ? " 'de' y"
-                              : "",
-                          )
-                          .concat(" 'às' H'h'")
-                          .concat(action.date.getMinutes() !== 0 ? "m" : ""),
-                        { locale: ptBR },
-                      ).concat(" por " + formatActionTime(action.time))
-                    : ""}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="glass">
-                <Calendar
-                  mode="single"
-                  selected={action.date}
-                  onSelect={(date) => {
-                    if (date) {
-                      if (action.date) {
-                        date?.setHours(
-                          action.date.getHours(),
-                          action.date.getMinutes(),
-                        );
-                        setAction({ ...action, date });
-                      }
-                    }
-                  }}
-                />
-                <div className="mx-auto flex gap-2">
-                  <div className="flex shrink-0">
-                    <Input
-                      value={action.date.getHours().toString()}
-                      className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
-                      type="number"
-                      min={0}
-                      max={23}
-                      onChange={(event) => {
-                        const date = action.date;
-                        date.setHours(Number(event.target.value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }}
-                    />
-                    <Input
-                      value={action.date.getMinutes().toString()}
-                      className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
-                      type="number"
-                      min={0}
-                      max={59}
-                      onChange={(event) => {
-                        const date = action.date;
-                        date.setMinutes(Number(event.target.value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }}
-                    />
-                  </div>
-                  <Select
-                    value={action.time.toString()}
-                    onValueChange={(value) => {
-                      setAction({ ...action, time: Number(value) });
-                    }}
-                  >
-                    <SelectTrigger className="border-border bg-input w-full border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[5, 10, 15, 20, 30, 45, 60, 90, 120].map((i) => (
-                        <SelectItem value={i.toString()} key={i}>
-                          {formatActionTime(i)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </PopoverContent>
-            </Popover>
+          <div className="flex w-full items-center justify-between gap-2 overflow-hidden p-1">
+            <DateTimeAndInstagramDate
+              action={action}
+              onChange={({ date, instagram_date, time }) => {
+                if (date) setAction({ ...action, date });
+                if (instagram_date) setAction({ ...action, instagram_date });
+                if (time) setAction({ ...action, time });
+              }}
+            />
 
             <Button
               onClick={() => {
@@ -485,6 +399,13 @@ export default function CreateAction({
                       date: format(action.date, "y-MM-dd HH:mm:ss", {
                         locale: ptBR,
                       }),
+                      instagram_date: format(
+                        action.instagram_date,
+                        "y-MM-dd HH:mm:ss",
+                        {
+                          locale: ptBR,
+                        },
+                      ),
                       created_at: format(Date.now(), "y-MM-dd HH:mm:ss", {
                         locale: ptBR,
                       }),
@@ -629,6 +550,257 @@ export function ResponsibleForAction({
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function DateTimeAndInstagramDate({
+  action,
+  onChange,
+}: {
+  action: RawAction;
+  onChange: ({
+    date,
+    instagram_date,
+    time,
+  }: {
+    date?: Date;
+    instagram_date?: Date;
+    time?: number;
+  }) => void;
+}) {
+  return (
+    <>
+      {/* Data e Hora */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            title={
+              action.date
+                ? format(
+                    action.date,
+                    "d/M"
+                      .concat(
+                        action.date.getFullYear() !== new Date().getFullYear()
+                          ? " 'de' y"
+                          : "",
+                      )
+                      .concat(" 'às' H'h'")
+                      .concat(action.date.getMinutes() !== 0 ? "m" : ""),
+                    { locale: ptBR },
+                  ).concat(" por " + formatActionTime(action.time))
+                : "Ação sem data"
+            }
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2 overflow-hidden text-xs focus-visible:ring-offset-0"
+          >
+            <CheckCircle2Icon className="size-4" />
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+              {action.date
+                ? format(
+                    action.date,
+                    "d/M"
+                      .concat(
+                        action.date.getFullYear() !== new Date().getFullYear()
+                          ? " 'de' y"
+                          : "",
+                      )
+                      .concat(" 'às' H'h'")
+                      .concat(action.date.getMinutes() !== 0 ? "m" : ""),
+                    { locale: ptBR },
+                  ).concat(" por " + formatActionTime(action.time))
+                : "Ação sem data"}
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="glass">
+          <Calendar
+            mode="single"
+            selected={action.date}
+            onSelect={(date) => {
+              if (date) {
+                if (action.date) {
+                  date?.setHours(
+                    action.date.getHours(),
+                    action.date.getMinutes(),
+                  );
+
+                  onChange({ date });
+                  // if(setRawAction){
+                  //   setRawAction({ ...action, date });
+
+                  // }
+
+                  // if(setAction)
+                  //   setAction({ ...action, date: format(date, "yyyy-MM") });
+                }
+              }
+            }}
+          />
+          <div className="mx-auto flex gap-2">
+            <div className="flex shrink-0">
+              <Input
+                value={action.date.getHours().toString()}
+                className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
+                type="number"
+                min={0}
+                max={23}
+                onChange={(event) => {
+                  const date = action.date;
+                  date.setHours(Number(event.target.value));
+                  // if(setRawAction){
+                  //   setRawAction({ ...action, date });
+
+                  // }
+                  onChange({ date });
+                }}
+              />
+              <Input
+                value={action.date.getMinutes().toString()}
+                className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
+                type="number"
+                min={0}
+                max={59}
+                onChange={(event) => {
+                  const date = action.date;
+                  date.setMinutes(Number(event.target.value));
+                  // setAction({
+                  //   ...action,
+                  //   date: date,
+                  // });
+                  onChange({ date });
+                }}
+              />
+            </div>
+            <Select
+              value={action.time.toString()}
+              onValueChange={(value) => {
+                onChange({ time: Number(value) });
+                // setAction({ ...action, time: Number(value) });
+                // onChange(Number(value));
+              }}
+            >
+              <SelectTrigger className="border-border bg-input w-full border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 10, 15, 20, 30, 45, 60, 90, 120].map((i) => (
+                  <SelectItem value={i.toString()} key={i}>
+                    {formatActionTime(i)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </PopoverContent>
+      </Popover>
+      {/* Data e Hora do Instagram  */}
+      {isInstagramFeed(action.category, true) ? (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              title={
+                action.instagram_date
+                  ? format(
+                      action.instagram_date,
+                      "d/M"
+                        .concat(
+                          action.instagram_date.getFullYear() !==
+                            new Date().getFullYear()
+                            ? " 'de' y"
+                            : "",
+                        )
+                        .concat(" 'às' H'h'")
+                        .concat(
+                          action.instagram_date.getMinutes() !== 0 ? "m" : "",
+                        ),
+                      { locale: ptBR },
+                    )
+                  : "Ação não tem data do Instagram"
+              }
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2 overflow-hidden text-xs focus-visible:ring-offset-0"
+            >
+              <SiInstagram className="size-4" />
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                {action.instagram_date
+                  ? format(
+                      action.instagram_date,
+                      "d/M"
+                        .concat(
+                          action.instagram_date.getFullYear() !==
+                            new Date().getFullYear()
+                            ? " 'de' y"
+                            : "",
+                        )
+                        .concat(" 'às' H'h'")
+                        .concat(
+                          action.instagram_date.getMinutes() !== 0 ? "m" : "",
+                        ),
+                      { locale: ptBR },
+                    ).concat(" por " + formatActionTime(action.time))
+                  : "Ação sem data"}
+              </div>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="glass">
+            <Calendar
+              mode="single"
+              selected={action.instagram_date}
+              onSelect={(instagram_date) => {
+                if (instagram_date) {
+                  if (action.instagram_date) {
+                    instagram_date?.setHours(
+                      action.instagram_date.getHours(),
+                      action.instagram_date.getMinutes(),
+                    );
+                    // setAction({ ...action, instagram_date });
+                    onChange({ instagram_date });
+                  }
+                }
+              }}
+            />
+            <div className="mx-auto flex gap-2">
+              <div className="flex shrink-0">
+                <Input
+                  value={action.instagram_date.getHours().toString()}
+                  className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
+                  type="number"
+                  min={0}
+                  max={23}
+                  onChange={(event) => {
+                    const instagram_date = action.instagram_date;
+                    instagram_date.setHours(Number(event.target.value));
+                    // setAction({
+                    //   ...action,
+                    //   instagram_date,
+                    // });
+                    onChange({ instagram_date });
+                  }}
+                />
+                <Input
+                  value={action.instagram_date.getMinutes().toString()}
+                  className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
+                  type="number"
+                  min={0}
+                  max={59}
+                  onChange={(event) => {
+                    const instagram_date = action.instagram_date;
+                    instagram_date.setMinutes(Number(event.target.value));
+                    onChange({ instagram_date });
+                    // setAction({
+                    //   ...action,
+                    //   instagram_date,
+                    // });
+                  }}
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      ) : null}
+    </>
   );
 }
 

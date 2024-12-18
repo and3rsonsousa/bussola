@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       priority: PRIORITIES.medium,
       date: values["date"].toString(),
-      instagram_date: values["date"].toString(),
+      instagram_date: values["instagram_date"].toString(),
       time:
         Number(values["time"]) || (TIMES as any)[values["category"].toString()],
 
@@ -52,7 +52,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // delete values.state;
     // delete values.partner;
     // delete values.slug;
-    delete values.instagram_date;
     delete values.archived;
 
     if (values.color === "" || values.color === null) delete values.color;

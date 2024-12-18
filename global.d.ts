@@ -56,11 +56,12 @@ declare global {
 
   type RawAction = {
     title: string;
-    description: string;
+    description: string | null;
     partner?: string;
     category: string;
     state: string;
     date: Date;
+    instagram_date: Date;
     user_id: string;
     responsibles: string[];
     color: string;

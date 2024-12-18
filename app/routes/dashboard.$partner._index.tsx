@@ -73,6 +73,11 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import {
+  SiInsta360,
+  SiInstagram,
+  SiInstagramHex,
+} from "@icons-pack/react-simple-icons";
 
 export const config = { runtime: "edge" };
 
@@ -153,7 +158,7 @@ export default function Partner() {
 
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
-  const [showContent, setShowContent] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const [params] = useSearchParams();
   const {
     showFeed,
@@ -167,14 +172,17 @@ export default function Partner() {
   const { categories, states, person, celebrations } = matches[1]
     .data as DashboardRootType;
 
+  const [isInstagramDate, setInstagramDate] = useState(false);
+
   const currentDate = date;
+  const pendingActions = usePendingData().actions;
+  const deletingIDsActions = useIDsToRemove().actions;
+
+  // Calcs
 
   const actionsMap = new Map<string, Action>(
     actions?.map((action) => [action.id, action]),
   );
-
-  const pendingActions = usePendingData().actions;
-  const deletingIDsActions = useIDsToRemove().actions;
 
   for (const action of pendingActions) {
     if (action.partners[0] === partner.slug) actionsMap.set(action.id, action);
@@ -197,7 +205,12 @@ export default function Partner() {
       date: format(day, "yyyy-MM-dd"),
       actions: actions?.filter(
         (action) =>
-          isSameDay(parseISO(action.date), day) &&
+          isSameDay(
+            isInstagramDate
+              ? parseISO(action.instagram_date)
+              : parseISO(action.date),
+            day,
+          ) &&
           (categoryFilter.length > 0
             ? categoryFilter.find(
                 (category) => category.slug === action.category,
@@ -253,14 +266,18 @@ export default function Partner() {
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     const date = over?.id as string;
-    const actionDate = active.data.current?.date as string;
+    const actionDate = isInstagramDate
+      ? (active.data.current?.instagram_date as string)
+      : (active.data.current?.date as string);
     const draggedAction = actions?.find((action) => action.id === active.id)!;
 
     if (date !== format(actionDate, "yyyy-MM-dd")) {
       submit(
         {
           ...draggedAction,
-          date: date?.concat(` ${format(actionDate, "HH:mm:ss")}`),
+          [isInstagramDate ? "instagram_date" : "date"]: date?.concat(
+            ` ${format(actionDate, "HH:mm:ss")}`,
+          ),
           intent: INTENTS.updateAction,
         },
         {
@@ -360,7 +377,23 @@ export default function Partner() {
             <div className="flex items-center gap-1 pr-1 lg:gap-2">
               <Button
                 size={"sm"}
-                variant={showContent ? "secondary" : "ghost"}
+                variant={isInstagramDate ? "default" : "ghost"}
+                onClick={() => {
+                  if (isInstagramDate) {
+                    setInstagramDate(false);
+                    setShowContent(false);
+                  } else {
+                    setInstagramDate(true);
+                    setShowContent(true);
+                  }
+                }}
+                title={"Organizar ações pelas datas do Instagram"}
+              >
+                <SiInstagram className="size4" />
+              </Button>
+              <Button
+                size={"sm"}
+                variant={showContent ? "default" : "ghost"}
                 onClick={() => setShowContent((showContent) => !showContent)}
                 title={
                   showContent
@@ -376,7 +409,7 @@ export default function Partner() {
               </Button>
               <Button
                 size={"sm"}
-                variant={allUsers ? "secondary" : "ghost"}
+                variant={allUsers ? "default" : "ghost"}
                 onClick={() => setAllUsers((allUsers) => !allUsers)}
                 title={
                   allUsers
@@ -391,7 +424,7 @@ export default function Partner() {
                 )}
               </Button>
               <Button
-                variant={short ? "secondary" : "ghost"}
+                variant={short ? "default" : "ghost"}
                 size={"sm"}
                 onClick={() => setShort((short) => !short)}
                 title={

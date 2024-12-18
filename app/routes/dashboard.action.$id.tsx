@@ -12,6 +12,7 @@ import {
 } from "@remix-run/react";
 import {
   type ActionFunctionArgs,
+  data,
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
@@ -20,22 +21,16 @@ import { format, formatDistanceToNow, isSameMonth, parseISO } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
 import {
-  ArrowDownNarrowWideIcon,
-  ArrowUpNarrowWideIcon,
-  CalendarIcon,
   ChevronsDownUpIcon,
   ChevronsUpDownIcon,
   ImageIcon,
   Link2Icon,
-  MessageCircleIcon,
   SaveIcon,
-  SendIcon,
   SparklesIcon,
   Trash,
   Trash2Icon,
-  ZapIcon,
 } from "lucide-react";
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone-esm";
 import invariant from "tiny-invariant";
 
@@ -43,12 +38,11 @@ import Tiptap from "~/components/structure/Tiptap";
 
 import ButtonCNVT from "~/components/structure/Button";
 import {
-  formatActionTime,
+  DateTimeAndInstagramDate,
   ResponsibleForAction,
   StateSelect,
 } from "~/components/structure/CreateAction";
 import { Button } from "~/components/ui/button";
-import { Calendar } from "~/components/ui/calendar";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -58,12 +52,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -81,7 +69,6 @@ import {
   getInstagramFeed,
   getPartners,
   getTypeOfTheContent,
-  Heart,
   Icons,
   isInstagramFeed,
   LikeFooter,
@@ -107,7 +94,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   invariant(action);
 
-  return json({ headers, action });
+  return json({ action }, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -273,7 +260,7 @@ export default function ActionPage() {
     <div className="container mx-auto flex h-full max-w-5xl flex-col p-0 lg:overflow-hidden">
       <div className="gap-4 overflow-y-auto px-4 pt-4 md:px-8 lg:flex lg:h-full lg:overflow-hidden">
         <div
-          className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category) || action.category === "stories" ? "lg:w-3/5" : ""}`}
+          className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category, true) ? "lg:w-3/5" : ""}`}
         >
           {/* Header */}
           <div className="flex w-full shrink grow-0 items-center justify-between text-sm">
@@ -565,7 +552,7 @@ export default function ActionPage() {
         </div>
 
         {/* Arquivos e Legenda */}
-        {isInstagramFeed(action.category) || action.category === "stories" ? (
+        {isInstagramFeed(action.category, true) ? (
           <div className="relative flex h-full flex-col overflow-hidden lg:w-2/5">
             {/* Arquivo */}
             {action.category !== "stories" && (
@@ -1145,223 +1132,26 @@ export default function ActionPage() {
         </div>
         {/* Data / Deletar / Atualizar */}
         <div className="mt-4 flex items-center justify-between gap-2 overflow-hidden p-1 md:my-0">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"ghost"}
-                className="button-trigger overflow-hidden"
-              >
-                <CalendarIcon className="size-4" />
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap lg:hidden">
-                  {format(
-                    date,
-                    "d/MM/yyyy 'às' H'h'".concat(
-                      date.getMinutes() > 0 ? "m" : "",
-                    ),
-                    {
-                      locale: ptBR,
-                    },
-                  )}
-                </span>
-                <span className="hidden overflow-hidden text-ellipsis whitespace-nowrap lg:block">
-                  {format(
-                    date,
-                    "d 'de' MMMM 'de' yyyy 'às' H'h'".concat(
-                      date.getMinutes() > 0 ? "m" : "",
-                    ),
-                    {
-                      locale: ptBR,
-                    },
-                  )}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="shadow-xl">
-              <Calendar
-                mode="single"
-                selected={parseISO(action.date)}
-                locale={ptBR}
-                onSelect={(date) => {
-                  if (date) {
-                    date?.setHours(
-                      parseISO(action.date).getHours(),
-                      parseISO(action.date).getMinutes(),
-                    );
-
-                    setAction({
-                      ...action,
-                      date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                    });
-                  }
-                }}
-              />
-              <div className="mx-auto flex gap-2">
-                <div className="flex shrink-0">
-                  <Input
-                    value={parseISO(action.date).getHours().toString()}
-                    className="border-border w-1/2 rounded-r-none border border-r-0 text-right focus:z-10"
-                    type="number"
-                    min={0}
-                    max={23}
-                    onChange={(event) => {
-                      const date = parseISO(action.date);
-                      date.setHours(Number(event.target.value));
-                      setAction({
-                        ...action,
-                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                      });
-                    }}
-                  />
-                  <Input
-                    value={parseISO(action.date).getMinutes().toString()}
-                    className="border-border w-1/2 rounded-l-none border border-l-0 text-left"
-                    type="number"
-                    min={0}
-                    max={59}
-                    onChange={(event) => {
-                      const date = parseISO(action.date);
-                      date.setMinutes(Number(event.target.value));
-                      setAction({
-                        ...action,
-                        date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                      });
-                    }}
-                  />
-                  {/* <Select
-                    value={
-                      action.date ? action.date.getHours().toString() : "11"
-                    }
-                    onValueChange={(value) => {
-                      if (action.date) {
-                        const date = action.date;
-                        date.setHours(Number(value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-1/4">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(24)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select> */}
-                  {/* <Select
-                    value={
-                      action.date ? action.date.getMinutes().toString() : "12"
-                    }
-                    onValueChange={(value) => {
-                      if (action.date) {
-                        const date = action.date;
-                        date.setMinutes(Number(value));
-                        setAction({
-                          ...action,
-                          date: date,
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-1/4">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array(60)
-                        .fill(0)
-                        .map((i, j) => {
-                          return (
-                            <SelectItem value={j.toString()} key={j}>
-                              {j.toString()}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select> */}
-                </div>
-                <Select
-                  value={action.time.toString()}
-                  onValueChange={(value) => {
-                    setAction({ ...action, time: Number(value) });
-                  }}
-                >
-                  <SelectTrigger className="border-border bg-input w-full border">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[5, 10, 15, 20, 30, 45, 60, 90, 120].map((i) => (
-                      <SelectItem value={i.toString()} key={i}>
-                        {formatActionTime(i)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              {/* <div className="mx-auto flex w-40 gap-2">
-                <Select
-                  value={parseISO(action.date).getHours().toString()}
-                  onValueChange={(value) => {
-                    const date = parseISO(action.date);
-                    date.setHours(Number(value));
-                    setAction({
-                      ...action,
-                      date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                    });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array(24)
-                      .fill(0)
-                      .map((i, j) => {
-                        return (
-                          <SelectItem value={j.toString()} key={j}>
-                            {j.toString()}
-                          </SelectItem>
-                        );
-                      })}
-                  </SelectContent>
-                </Select>
-                <Select
-                  value={parseISO(action.date).getMinutes().toString()}
-                  onValueChange={(value) => {
-                    const date = parseISO(action.date);
-                    date.setMinutes(Number(value));
-                    setAction({
-                      ...action,
-                      date: format(date, "yyyy-MM-dd HH:mm:ss"),
-                    });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array(60)
-                      .fill(0)
-                      .map((i, j) => {
-                        return (
-                          <SelectItem value={j.toString()} key={j}>
-                            {j.toString()}
-                          </SelectItem>
-                        );
-                      })}
-                  </SelectContent>
-                </Select>
-              </div> */}
-            </PopoverContent>
-          </Popover>
+          <DateTimeAndInstagramDate
+            action={{
+              ...action,
+              date: parseISO(action.date),
+              instagram_date: parseISO(action.instagram_date),
+            }}
+            onChange={({ date, instagram_date, time }) => {
+              if (date)
+                setAction({
+                  ...action,
+                  date: format(date, "yyyy-MM-dd HH:mm:ss"),
+                });
+              if (instagram_date)
+                setAction({
+                  ...action,
+                  instagram_date: format(instagram_date, "yyyy-MM-dd HH:mm:ss"),
+                });
+              if (time) setAction({ ...action, time });
+            }}
+          />
 
           <div className="flex items-center gap-2">
             <Button
