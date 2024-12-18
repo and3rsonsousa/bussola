@@ -206,7 +206,7 @@ export default function Partner() {
       actions: actions?.filter(
         (action) =>
           isSameDay(
-            isInstagramDate
+            isInstagramDate && isInstagramFeed(action.category)
               ? parseISO(action.instagram_date)
               : parseISO(action.date),
             day,
