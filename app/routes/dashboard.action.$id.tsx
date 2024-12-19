@@ -94,7 +94,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   invariant(action);
 
-  return json({ action }, { headers });
+  return { action };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -124,7 +124,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     );
 
-    return json({ urls: urls.map((url) => url.downloadUrl) });
+    return { urls: urls.map((url) => url.downloadUrl) };
   } catch (error) {
     console.log(error);
   }

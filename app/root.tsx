@@ -28,18 +28,15 @@ export type LoaderData = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const themeSession = await getThemeSession(request);
 
-  return json(
-    {
-      theme: themeSession.getTheme(),
-      env: {
-        SUPABASE_URL: process.env.SUPABASE_URL!,
-        SUPABASE_KEY: process.env.SUPABASE_KEY!,
-        CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
-        CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET!,
-      },
+  return {
+    theme: themeSession.getTheme(),
+    env: {
+      SUPABASE_URL: process.env.SUPABASE_URL!,
+      SUPABASE_KEY: process.env.SUPABASE_KEY!,
+      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
+      CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET!,
     },
-    200,
-  );
+  };
 }
 
 export function App() {

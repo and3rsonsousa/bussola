@@ -142,7 +142,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   invariant(partner);
 
-  return json({ actions, actionsChart, partner, person, date }, { headers });
+  return { actions, actionsChart, partner, person, date };
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

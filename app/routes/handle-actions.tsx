@@ -43,7 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .single();
     if (error) console.log({ error });
 
-    return json({ data, error }, { headers });
+    return { data, error };
   } else if (intent === INTENTS.updateAction) {
     if (!id) throw new Error("No id was provided");
 

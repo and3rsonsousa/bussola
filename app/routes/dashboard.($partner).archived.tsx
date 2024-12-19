@@ -54,7 +54,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .single(),
     ]);
 
-  return json({ actions, actionsChart, partner }, { headers });
+  return { actions, actionsChart, partner };
 };
 
 export const meta: MetaFunction = () => {

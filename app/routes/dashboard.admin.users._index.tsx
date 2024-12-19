@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .select("*")
     .order("name", { ascending: true });
 
-  return json({ people, headers });
+  return { people };
 };
 
 export default function AdminPartners() {

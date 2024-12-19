@@ -47,23 +47,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const person = people?.find((person) => person.user_id === user.id) as Person;
   const url = new URL(request.url);
 
-  return json(
-    {
-      url,
-      partners,
-      people,
-      categories,
-      user,
-      states,
-      priorities,
-      person,
-      areas,
-      sprints,
-      celebrations,
-      voices,
-    } as DashboardRootType,
-    200,
-  );
+  return {
+    url,
+    partners,
+    people,
+    categories,
+    user,
+    states,
+    priorities,
+    person,
+    areas,
+    sprints,
+    celebrations,
+    voices,
+  } as DashboardRootType;
 }
 
 export default function Dashboard() {

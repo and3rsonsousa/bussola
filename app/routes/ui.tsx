@@ -43,18 +43,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const person = people?.find((person) => person.user_id === user.id) as Person;
 
-  return json(
-    {
-      partners,
-      people,
-      categories,
-      user,
-      states,
-      priorities,
-      person,
-    } as DashboardRootType,
-    200,
-  );
+  return {
+    partners,
+    people,
+    categories,
+    user,
+    states,
+    priorities,
+    person,
+  } as DashboardRootType;
 }
 
 export default function UI() {

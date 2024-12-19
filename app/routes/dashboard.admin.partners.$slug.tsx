@@ -59,7 +59,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   if (!partner) throw redirect("/dashboard/admin/partners");
 
-  return json({ partner, headers });
+  return { partner };
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

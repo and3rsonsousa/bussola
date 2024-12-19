@@ -75,13 +75,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       supabase.from("partners").select().match({ slug }).single(),
     ]);
 
-    return json(
-      {
-        partner,
-        action: post,
-      },
-      { headers },
-    );
+    return {
+      partner,
+      action: post,
+    };
   } else {
     let [start, end] = [
       format(
@@ -122,16 +119,13 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       supabase.from("states").select(),
     ]);
 
-    return json(
-      {
-        actions,
-        partner,
-        categories,
-        range: [range[0].replace(/-/g, "/"), range[1].replace(/-/g, "/")],
-        states,
-      },
-      { headers },
-    );
+    return {
+      actions,
+      partner,
+      categories,
+      range: [range[0].replace(/-/g, "/"), range[1].replace(/-/g, "/")],
+      states,
+    };
   }
 };
 

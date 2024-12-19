@@ -19,7 +19,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   if (error) console.log({ error });
 
-  return json({ partners, headers });
+  return { partners, headers };
 };
 
 export const meta: MetaFunction = () => {
