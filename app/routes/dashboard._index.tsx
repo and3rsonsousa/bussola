@@ -4,7 +4,6 @@ import {
   useLoaderData,
   useMatches,
   useOutletContext,
-  useSubmit,
 } from "@remix-run/react";
 import { type LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import {
@@ -30,7 +29,6 @@ import { ptBR } from "date-fns/locale";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  BlocksIcon,
   CalendarClock,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -47,10 +45,9 @@ import {
   TimerIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { Pie, PieChart } from "recharts";
 import invariant from "tiny-invariant";
-import { motion } from "motion/react";
 
 import {
   ActionLine,
@@ -59,14 +56,15 @@ import {
 } from "~/components/structure/Action";
 import Badge from "~/components/structure/Badge";
 import CreateAction from "~/components/structure/CreateAction";
+import { Heading } from "~/components/structure/Headings";
 import Kanban from "~/components/structure/Kanban";
-import { CircularProgress } from "~/components/structure/Progress";
 import { Button } from "~/components/ui/button";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -75,7 +73,6 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Toggle } from "~/components/ui/toggle";
-import { INTENTS } from "~/lib/constants";
 import {
   Avatar,
   Icons,
@@ -88,8 +85,6 @@ import {
   usePendingData,
 } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { Heading } from "~/components/structure/Headings";
-import { Input } from "~/components/ui/input";
 
 export const config = { runtime: "edge" };
 // const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
@@ -223,7 +218,7 @@ export default function DashboardIndex() {
       {/* Hoje */}
       {currentActions?.length > 0 && (
         <>
-          // <div className="border-b"></div>
+          <div className="border-b"></div>
           {/* Ações de Hoje */}
           <div className="px-2 py-8 md:px-8 lg:py-24">
             <div className="flex justify-between pb-8">
@@ -706,49 +701,6 @@ function Partners({ actions }: { actions?: Action[] }) {
           ))}
         </div>
       ) : (
-        // <div className="mx-auto flex w-auto flex-wrap justify-center gap-8">
-        //   {partners.map((partner) => (
-        //     <Link
-        //       tabIndex={0}
-        //       to={`/dashboard/${partner.slug}`}
-        //       key={partner.slug}
-        //       className="group/avatar relative flex cursor-pointer"
-        //     >
-        //       <CircularProgress
-        //         actions={actions.filter(
-        //           (action) =>
-        //             action.partners[0] === partner.slug &&
-        //             new Date(action.date).getTime() >=
-        //               startOfWeek(new Date()).getTime() &&
-        //             new Date(action.date).getTime() <=
-        //               endOfDay(endOfWeek(new Date())).getTime(),
-        //         )}
-        //         size="md"
-        //         className="scale-125"
-        //       />
-        //       <div>
-        //         <Avatar
-        //           item={{
-        //             short: partner.short,
-        //             bg: partner.colors[0],
-        //             fg: partner.colors[1],
-        //           }}
-        //           size="xl"
-        //           className="mx-auto"
-        //         />
-        //         <Badge
-        //           value={
-        //             lateActions.filter((action) =>
-        //               action.partners.find((p) => p === partner.slug),
-        //             ).length
-        //           }
-        //           isDynamic
-        //           className="border-background absolute -top-2 right-0 border-2"
-        //         />
-        //       </div>
-        //     </Link>
-        //   ))}
-        // </div>
         <div className="grid place-content-center p-4 text-center">
           <div className="mb-2 text-4xl font-semibold tracking-tighter text-rose-600">
             Nenhum <span className="font-bold">PARCEIRO</span> está designado

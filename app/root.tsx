@@ -60,8 +60,6 @@ export function App() {
         <link rel="icon" href="/favicon.ico" />
         <Meta />
 
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
