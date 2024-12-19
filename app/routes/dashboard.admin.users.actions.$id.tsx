@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-
 import { Link, useLoaderData } from "@remix-run/react";
 import { MetaFunction, redirect, type LoaderFunctionArgs } from "@vercel/remix";
 import { CheckCircleIcon } from "lucide-react";
@@ -13,7 +11,7 @@ import { createClient } from "~/lib/supabase";
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { supabase, headers } = await createClient(request);
+  const { supabase } = await createClient(request);
 
   const id = params["id"];
 

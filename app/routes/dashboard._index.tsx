@@ -212,20 +212,20 @@ export default function DashboardIndex() {
 
   return (
     <div className="scrollbars">
+      {/* Progresso  */}
       {person.admin && <ActionsProgress />}
 
+      {/* Sprint */}
       <Sprint />
 
-      <div className="border-b"></div>
-      <div className="px-2 md:px-8">
-        {/* Ações em Atraso */}
-        {lateActions?.length ? <DelayedActions actions={lateActions} /> : null}
-      </div>
-      <div className="border-b"></div>
-      <div className="px-2 md:px-8">
-        {/* Ações de Hoje */}
-        {currentActions?.length ? (
-          <div className="py-8 lg:py-24">
+      {/* Ações em Atraso */}
+      {lateActions?.length > 0 && <DelayedActions actions={lateActions} />}
+      {/* Hoje */}
+      {currentActions?.length > 0 && (
+        <>
+          // <div className="border-b"></div>
+          {/* Ações de Hoje */}
+          <div className="px-2 py-8 md:px-8 lg:py-24">
             <div className="flex justify-between pb-8">
               <div className="flex">
                 <div className="relative flex">
@@ -369,23 +369,9 @@ export default function DashboardIndex() {
               <CategoriesView actions={currentActions} />
             )}
           </div>
-        ) : null}
-      </div>
-      <div className="border-b"></div>
-      <div className="px-2 md:px-8">
-        {/* Parceiros */}
-        <Partners actions={actions as Action[]} />
-      </div>
-      <div className="border-b"></div>
-      <div className="px-2 md:px-8">
-        {/* Ações da Semana */}
-        {weekActions.reduce(
-          (acc, currentValue) => acc + currentValue.actions.length,
-          0,
-        ) ? (
-          <WeekView weekActions={weekActions} />
-        ) : null}
-      </div>
+        </>
+      )}
+
       <div className="border-b"></div>
       <div className="px-2 md:px-8">
         {/* Próximas ações */}
@@ -405,6 +391,21 @@ export default function DashboardIndex() {
           />
         </div>
       </div>
+      <div className="px-2 md:px-8">
+        {/* Parceiros */}
+        <Partners actions={actions as Action[]} />
+      </div>
+      <div className="border-b"></div>
+      <div className="px-2 md:px-8">
+        {/* Ações da Semana */}
+        {weekActions.reduce(
+          (acc, currentValue) => acc + currentValue.actions.length,
+          0,
+        ) ? (
+          <WeekView weekActions={weekActions} />
+        ) : null}
+      </div>
+      <div className="border-b"></div>
     </div>
   );
 }
@@ -518,107 +519,110 @@ function DelayedActions({ actions }: { actions: Action[] }) {
   }, [query, actions]);
 
   return (
-    <div className="py-8 lg:py-24">
-      <div className="flex justify-between pb-8">
-        <div className="relative flex">
-          <h2 className="text-3xl font-semibold tracking-tight">Atrasados</h2>
-          <Badge value={actions.length} />
-        </div>
+    <>
+      <div className="border-b"></div>
+      <div className="px-2 py-8 md:px-8 lg:py-24">
+        <div className="flex justify-between pb-8">
+          <div className="relative flex">
+            <h2 className="text-3xl font-semibold tracking-tight">Atrasados</h2>
+            <Badge value={actions.length} />
+          </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex gap-2">
-            {showSearch && (
-              <div className="relative">
-                <Input
-                  value={query}
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                  }}
-                  className="pr-12"
-                />
-                <SearchIcon
-                  className={`size-4 ${showSearch ? "absolute top-3 right-4" : ""}`}
-                />
-              </div>
-            )}
-
-            <Button
-              variant={"outline"}
-              onClick={() => {
-                setShowSearch(!showSearch);
-                setFiltered(actions);
-                setQuery("");
-              }}
-            >
-              {showSearch ? (
-                <XIcon className={"size-4"} />
-              ) : (
-                <SearchIcon className={`size-4`} />
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              {showSearch && (
+                <div className="relative">
+                  <Input
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                    }}
+                    className="pr-12"
+                  />
+                  <SearchIcon
+                    className={`size-4 ${showSearch ? "absolute top-3 right-4" : ""}`}
+                  />
+                </div>
               )}
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
-              Ordenar por
+
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  setShowSearch(!showSearch);
+                  setFiltered(actions);
+                  setQuery("");
+                }}
+              >
+                {showSearch ? (
+                  <XIcon className={"size-4"} />
+                ) : (
+                  <SearchIcon className={`size-4`} />
+                )}
+              </Button>
             </div>
-            <Button
-              size={"sm"}
-              variant={order === "state" ? "secondary" : "ghost"}
-              onClick={() => {
-                setOrder("state");
-              }}
-            >
-              <ListTodoIcon className="size-4" />
-            </Button>
-            <Button
-              size={"sm"}
-              variant={order === "priority" ? "secondary" : "ghost"}
-              onClick={() => {
-                setOrder("priority");
-              }}
-            >
-              <SignalIcon className="size-4" />
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
-              Categorizar por
+            <div className="flex items-center gap-2">
+              <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
+                Ordenar por
+              </div>
+              <Button
+                size={"sm"}
+                variant={order === "state" ? "secondary" : "ghost"}
+                onClick={() => {
+                  setOrder("state");
+                }}
+              >
+                <ListTodoIcon className="size-4" />
+              </Button>
+              <Button
+                size={"sm"}
+                variant={order === "priority" ? "secondary" : "ghost"}
+                onClick={() => {
+                  setOrder("priority");
+                }}
+              >
+                <SignalIcon className="size-4" />
+              </Button>
             </div>
-            <Button
-              size={"sm"}
-              variant={view === "list" ? "secondary" : "ghost"}
-              onClick={() => {
-                setView("list");
-              }}
-            >
-              <ListIcon className="size-4" />
-            </Button>
-            <Button
-              size={"sm"}
-              variant={view === "category" ? "secondary" : "ghost"}
-              onClick={() => {
-                setView("category");
-              }}
-            >
-              <ComponentIcon className="size-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <div className="text-muted-foreground hidden text-[10px] font-semibold tracking-widest uppercase md:block">
+                Categorizar por
+              </div>
+              <Button
+                size={"sm"}
+                variant={view === "list" ? "secondary" : "ghost"}
+                onClick={() => {
+                  setView("list");
+                }}
+              >
+                <ListIcon className="size-4" />
+              </Button>
+              <Button
+                size={"sm"}
+                variant={view === "category" ? "secondary" : "ghost"}
+                onClick={() => {
+                  setView("category");
+                }}
+              >
+                <ComponentIcon className="size-4" />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {view === "list" ? (
-        <ListOfActions
-          actions={filteredActions}
-          showCategory={true}
-          columns={6}
-          descending
-          orderBy={order}
-          showPartner
-        />
-      ) : (
-        <CategoriesView actions={filteredActions} />
-      )}
-    </div>
+        {view === "list" ? (
+          <ListOfActions
+            actions={filteredActions}
+            showCategory={true}
+            columns={6}
+            descending
+            orderBy={order}
+            showPartner
+          />
+        ) : (
+          <CategoriesView actions={filteredActions} />
+        )}
+      </div>
+    </>
   );
 }
 
@@ -886,29 +890,6 @@ const ActionsProgress = () => {
           </div>
         ))}
       </div>
-
-      {/* <div className="w-full">
-          <h3 className="mb-2 overflow-hidden text-center text-xl leading-none font-semibold text-ellipsis whitespace-nowrap">
-            Durante o ano
-          </h3>
-          <ChartContainer config={{}} className="max-h-40 min-h-20 w-full">
-            <LineChart data={dataLineChart} margin={{ left: 12, right: 12 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis dataKey={"month"} />
-              
-
-              {categories.map((category) => (
-                <Line
-                  key={category.slug}
-                  type={"monotone"}
-                  dataKey={category.slug}
-                  strokeWidth={2}
-                  stroke={category.color}
-                />
-              ))}
-            </LineChart>
-          </ChartContainer>
-        </div> */}
     </div>
   );
 };
