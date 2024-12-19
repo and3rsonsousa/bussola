@@ -642,10 +642,6 @@ export default function ActionPage() {
                 {action.category === "stories" ? "Sequência" : "Legenda"}
               </div>
               <div className="flex gap-2 pr-1 pb-1">
-                {/* <Button size="sm" variant={"ghost"}>
-                  <ZapIcon className="size-4" />
-                </Button> */}
-
                 <Triggers trigger={trigger} setTrigger={setTrigger} />
 
                 {action.category === "stories" ? (
@@ -887,6 +883,26 @@ export default function ActionPage() {
                           }}
                         >
                           Legenda Longa e explicativa
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={async () => {
+                            fetcher.submit(
+                              {
+                                title: action.title,
+                                description: action.description,
+                                intent: "caption",
+                                model: "long-tip",
+                                trigger: trigger,
+                                voice: partner.voice,
+                              },
+                              {
+                                action: "/handle-openai",
+                                method: "post",
+                              },
+                            );
+                          }}
+                        >
+                          Legenda Longa e com dicas.
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

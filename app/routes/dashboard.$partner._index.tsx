@@ -117,7 +117,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .from("actions")
         .select("*")
         .is("archived", false)
-        // .eq("partner", params["partner"]!)
         .contains("responsibles", person?.admin ? [] : [user.id])
         .contains("partners", [params["partner"]!])
         .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
@@ -136,6 +135,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .eq("slug", params["partner"]!)
         .single(),
     ]);
+
+  if (!partner || !actions || !actionsChart) {
+    console.log({ partner, actions, actionsChart });
+  }
 
   invariant(partner);
 

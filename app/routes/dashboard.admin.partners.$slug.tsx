@@ -322,7 +322,7 @@ export default function AdminPartners() {
                 </div>
               </div>
               <div>
-                <div className="absolute top-4 right-4 w-96">
+                <div className="absolute top-24 right-4 w-96">
                   <h2 className="mb-4 text-2xl font-bold">Exemplo de texto</h2>
                   <div
                     className="leading-relaxed"

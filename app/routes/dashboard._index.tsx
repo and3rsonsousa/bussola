@@ -212,9 +212,7 @@ export default function DashboardIndex() {
 
   return (
     <div className="scrollbars">
-      <div className="px-2 md:px-8">
-        <ActionsProgress />
-      </div>
+      {person.admin && <ActionsProgress />}
 
       <Sprint />
 
@@ -811,7 +809,7 @@ const ActionsProgress = () => {
   );
 
   return (
-    <div className="py-8 lg:py-24">
+    <div className="px-2 py-8 md:px-8 lg:py-24">
       <div className="text-center">
         <Heading>
           {/* <span className="animate-spin font-serif text-7xl">✳</span> */}

@@ -100,6 +100,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     5 - Conclua com um CTA do CONTEXTO, se não houver indicação, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
     6 - Finalize a legenda com 3 a 5 hashtags bem focadas no nicho da DESCRIÇÃO."
     `;
+    } else if (model === "long-tip") {
+      template = `Texto da legenda explicando o CONTEXTO com até 800 caracteres. Ainda que mais explicativa, o texto não pode ser cansativo e deve ser dinâmico. Cada parágrafo não deve ter mais de 30 palavras depois disso, crie novos parágrafos para manter o texto mais dinâmico. Importante separar bem a explicação Nesses parágrafos:
+    1 - Comece a problematizar o assunto ao jogar o contexto para o usuário gerando conexão em 120 caracteres.
+    2 - Comece a apresentar que tem uma solução e que no próximo parágrafo vai trazer as dicas. 
+    3 - Aqui você usar uma lista de itens com emojis para facilitar a leitura apresentando as soluções para os problemas que o usuário enfrenta, reforçando o parágrafo 2. Para cada item da lista, coloque uma breve explicação de até 20 palavras.
+    4 - Reforce que as dicas acima são ideias para lidar com o problema e caso haja mais necessidade deve buscar a empresa; atente-se ao CONTEXTO para que você não fuja da necessidade.
+    5 - Conclua com um CTA do CONTEXTO, se não houver indicação, peça para o usuário ir ao link da bio de uma forma mais criativa do que "agende/peça pelo link da bio.
+    6 - Finalize a legenda com 3 a 5 hashtags bem focadas no nicho da DESCRIÇÃO."
+    `;
     }
 
     content = `Você é um redator experiente. Crie uma legenda para uma postagem no instagram seguindo o CONTEXTO e levando em conta a descrição da empresa. Use o gatilho mental da: ${trigger}. Use esse formato: 
