@@ -1,11 +1,6 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import { Link, useLoaderData, useMatches, useSubmit } from "@remix-run/react";
-import {
-  json,
-  MetaFunction,
-  redirect,
-  type LoaderFunctionArgs,
-} from "@vercel/remix";
+import { MetaFunction, redirect, type LoaderFunctionArgs } from "@vercel/remix";
 import { useState } from "react";
 import { flushSync } from "react-dom";
 import invariant from "tiny-invariant";
@@ -33,7 +28,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   if (!person) throw redirect("/dashboard/admin/users");
 
-  return json({ person, headers });
+  return { person };
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -211,7 +206,7 @@ export default function AdminUsersId() {
                   }}
                 />
                 <div
-                  className={`rounded-full ring-ring ring-offset-2 ring-offset-background peer-checked:ring-2`}
+                  className={`ring-ring ring-offset-background rounded-full ring-offset-2 peer-checked:ring-2`}
                 >
                   <Avatar
                     item={{
@@ -223,7 +218,7 @@ export default function AdminUsersId() {
                   />
                 </div>
 
-                <div className="text-sm font-medium text-muted peer-checked:text-foreground">
+                <div className="text-muted peer-checked:text-foreground text-sm font-medium">
                   {partner.title}
                 </div>
               </label>

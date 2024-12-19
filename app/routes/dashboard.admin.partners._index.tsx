@@ -1,6 +1,7 @@
 import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
 import { json, MetaFunction, type LoaderFunctionArgs } from "@vercel/remix";
 import { ArchiveIcon, StarIcon, Trash2Icon } from "lucide-react";
+import { Heading } from "~/components/structure/Headings";
 import { SOW } from "~/lib/constants";
 import { Avatar, AvatarGroup, getResponsibles } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
@@ -41,10 +42,8 @@ export default function AdminPartners() {
 
   return (
     <div className="overflow-hidden">
-      <div className="scrollbars px-x lg:px-8">
-        <h1 className="gap-2 rounded py-8 text-3xl font-bold tracking-tight">
-          Parceiros
-        </h1>
+      <div className="scrollbars px-4 py-2 md:px-8">
+        <Heading>Parceiros</Heading>
         <div className="grid items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {partners?.map((partner: Partner) => (
             <Link
