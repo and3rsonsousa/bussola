@@ -41,14 +41,14 @@ export default function AdminPartners() {
   // const { people } = matches[1].data as DashboardRootType;
 
   return (
-    <div className="overflow-hidden">
-      <div className="scrollbars px-4 py-2 md:px-8">
+    <div className="px-4 py-4 lg:px-8">
+      <div className="scrollbars">
         <Heading>Parceiros</Heading>
-        <div className="grid items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid items-center gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {partners?.map((partner: Partner) => (
             <Link
               to={`/dashboard/admin/partners/${partner.slug}`}
-              className="group bg-card ring-ring hover:bg-secondary relative flex justify-between overflow-hidden rounded-xl p-6 tracking-tight transition-colors duration-500 focus-within:ring-2"
+              className="group bg-card ring-ring hover:bg-secondary relative flex justify-between overflow-hidden rounded-xl p-6 tracking-tight transition-colors duration-500 select-none focus-within:ring-2"
               key={partner.slug}
               tabIndex={-1}
             >
