@@ -1,12 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import { Link, useLoaderData } from "@remix-run/react";
-import {
-  MetaFunction,
-  json,
-  redirect,
-  type LoaderFunctionArgs,
-} from "@vercel/remix";
+import { MetaFunction, redirect, type LoaderFunctionArgs } from "@vercel/remix";
 import { CheckCircleIcon } from "lucide-react";
 import { useState } from "react";
 import invariant from "tiny-invariant";
@@ -36,7 +31,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   if (!person) throw redirect("/dashboard/admin/users");
 
-  return json({ person, actions, headers });
+  return { person, actions };
 };
 
 export const meta: MetaFunction = () => {
