@@ -137,7 +137,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     ]);
 
   if (!partner || !actions || !actionsChart) {
-    console.log({ partner, actions, actionsChart });
+    // console.log({ partner, actions, actionsChart });
   }
 
   invariant(partner);

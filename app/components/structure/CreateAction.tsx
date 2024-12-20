@@ -497,11 +497,11 @@ export function ResponsibleForAction({
   const { people } = useMatches()[1].data as DashboardRootType;
 
   const responsibles: Person[] = [];
-  action.responsibles.filter((user_id) =>
-    responsibles.push(
-      people.find((person) => person.user_id === user_id) as Person,
-    ),
-  );
+  action.responsibles.map((user_id) => {
+    const p = people.find((person) => person.user_id === user_id) as Person;
+    if (p) responsibles.push(p);
+  });
+  responsibles.filter((person) => person !== undefined);
 
   //getResponsibleForArea(action.category);
 
