@@ -90,7 +90,7 @@ export const config = { runtime: "edge" };
 // const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   // const result = await fetch("https://br.storage.bunnycdn.com/agencia-cnvt/", {
   //   method: "GET",

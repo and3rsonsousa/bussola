@@ -95,7 +95,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let start = startOfWeek(startOfMonth(date));
   let end = endOfDay(endOfWeek(endOfMonth(date)));
 
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   const {
     data: { user },

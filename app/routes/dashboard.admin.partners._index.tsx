@@ -1,15 +1,14 @@
-import { Form, Link, useLoaderData, useMatches } from "@remix-run/react";
-import { json, MetaFunction, type LoaderFunctionArgs } from "@vercel/remix";
-import { ArchiveIcon, StarIcon, Trash2Icon } from "lucide-react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { MetaFunction, type LoaderFunctionArgs } from "@vercel/remix";
+import { ArchiveIcon, Trash2Icon } from "lucide-react";
 import { Heading } from "~/components/structure/Headings";
-import { SOW } from "~/lib/constants";
 import { Avatar, AvatarGroup, getResponsibles } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
 
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { supabase, headers } = await createClient(request);
+  const { supabase } = await createClient(request);
 
   const { data: partners, error } = await supabase
     .from("partners")
@@ -19,7 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   if (error) console.log({ error });
 
-  return { partners, headers };
+  return { partners };
 };
 
 export const meta: MetaFunction = () => {

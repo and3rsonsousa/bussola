@@ -51,7 +51,7 @@ type loaderData = {
 };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   const searchParams = new URL(request.url).searchParams;
   const range =

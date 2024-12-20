@@ -8,7 +8,7 @@ import { createClient } from "~/lib/supabase";
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   const partner_slug = params["partner"];
 

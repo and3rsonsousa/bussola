@@ -79,7 +79,7 @@ export const config = { runtime: "edge" };
 const ACCESS_KEY = process.env.BUNNY_ACCESS_KEY;
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
   const { id } = params;
 
   if (!id) throw new Error("$id não foi definido");

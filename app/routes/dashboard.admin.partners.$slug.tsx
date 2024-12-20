@@ -6,12 +6,9 @@ import {
   useLoaderData,
   useMatches,
   useNavigation,
-  useSubmit,
 } from "@remix-run/react";
-import { createBrowserClient } from "@supabase/ssr";
 // @ts-ignore
 import {
-  json,
   MetaFunction,
   redirect,
   type ActionFunctionArgs,
@@ -19,11 +16,9 @@ import {
 } from "@vercel/remix";
 // @ts-ignore
 import Color from "color";
-import { Enums } from "database";
 import { InfoIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { useDebounce } from "use-debounce";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -40,12 +35,11 @@ import { Textarea } from "~/components/ui/textarea";
 import { archetypes } from "~/lib/constants";
 import { Avatar } from "~/lib/helpers";
 import { createClient } from "~/lib/supabase";
-import { cn } from "~/lib/utils";
 
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const { supabase, headers } = await createClient(request);
+  const { supabase } = await createClient(request);
 
   const slug = params["slug"];
 

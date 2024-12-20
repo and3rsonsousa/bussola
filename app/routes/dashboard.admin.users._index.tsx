@@ -1,6 +1,6 @@
-import { Form, Link, useLoaderData } from "@remix-run/react";
-import { json, type LoaderFunctionArgs } from "@vercel/remix";
-import { Edit3Icon, ListIcon, Trash2Icon } from "lucide-react";
+import { Link, useLoaderData } from "@remix-run/react";
+import { type LoaderFunctionArgs } from "@vercel/remix";
+import { Edit3Icon, ListIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Avatar } from "~/lib/helpers";
@@ -9,7 +9,7 @@ import { createClient } from "~/lib/supabase";
 export const config = { runtime: "edge" };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { supabase, headers } = await createClient(request);
+  const { supabase } = await createClient(request);
 
   const { data: people } = await supabase
     .from("people")

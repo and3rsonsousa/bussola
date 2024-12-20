@@ -5,7 +5,7 @@ import { createClient } from "~/lib/supabase";
 export const config = { runtime: "edge" };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { headers, supabase } = createClient(request);
+  const { supabase } = createClient(request);
 
   const formData = await request.formData();
   const { intent, id, ...values } = Object.fromEntries(formData.entries());
