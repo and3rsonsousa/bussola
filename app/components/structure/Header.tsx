@@ -1,15 +1,14 @@
 import {
   Link,
   useFetchers,
-  useLocation,
   useMatches,
   useNavigate,
   useNavigation,
   useOutletContext,
 } from "@remix-run/react";
+import { format } from "date-fns";
 import {
   ArchiveIcon,
-  ArrowLeftIcon,
   Grid3x3Icon,
   HandshakeIcon,
   HelpCircle,
@@ -24,6 +23,9 @@ import {
   Avatar,
   Bussola,
   getDelayedActions,
+  getMonthsActions,
+  getThisWeekActions,
+  getTodayActions,
   ReportReview,
 } from "~/lib/helpers";
 import { Button } from "../ui/button";
@@ -39,6 +41,8 @@ import CreateAction from "./CreateAction";
 import Loader from "./Loader";
 import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
+import { useState } from "react";
+import { ptBR } from "date-fns/locale";
 
 export default function Header({
   open,
@@ -49,10 +53,12 @@ export default function Header({
 }) {
   const matches = useMatches();
   const navigation = useNavigation();
-  const location = useLocation();
   const navigate = useNavigate();
   const fetchers = useFetchers();
   const { showFeed, setShowFeed } = useOutletContext() as ContextType;
+  const [progressView, setProgressView] = useState<"today" | "week" | "month">(
+    "today",
+  );
 
   const { partners, person } = matches[1].data as DashboardRootType;
   let { actions, actionsChart, partner } = (
@@ -155,6 +161,48 @@ export default function Header({
 
         {/* parceiros         */}
 
+        {partner && (
+          <div
+            className="relative flex cursor-pointer items-center gap-1"
+            role="button"
+            onClick={() =>
+              setProgressView((p) => {
+                if (p === "today") return "week";
+                if (p === "week") return "month";
+                return "today";
+              })
+            }
+          >
+            {progressView === "today" && (
+              <CircularProgress
+                actions={getTodayActions(actions)}
+                title="Hoje"
+              />
+            )}
+            {progressView === "week" && (
+              <CircularProgress
+                actions={getThisWeekActions(actions)}
+                title="Semana"
+              />
+            )}
+            {progressView === "month" && (
+              <CircularProgress
+                actions={getMonthsActions(actions)}
+                title={format(new Date(), "MMM")}
+              />
+            )}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-[10px] font-semibold uppercase">
+              {
+                {
+                  today: "Hoje",
+                  week: "Sem",
+                  month: format(new Date(), "MMM", { locale: ptBR }),
+                }[progressView]
+              }
+            </div>
+          </div>
+        )}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -175,17 +223,6 @@ export default function Header({
                   </span>
                 </>
               ) : (
-                // <div className="relative" tabIndex={-1}>
-                //   <Avatar
-                //     item={{
-                //       bg: partner.colors[0],
-                //       fg: partner.colors[1],
-                //       short: partner.short,
-                //     }}
-                //     size="md"
-                //   />
-                //   <CircularProgress actions={actions} />
-                // </div>
                 "Parceiros"
               )}
             </Button>

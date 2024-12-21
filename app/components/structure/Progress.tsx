@@ -23,7 +23,7 @@ export default function Progress({
     <div className={cn("h-1 overflow-hidden rounded-md", className)}>
       <div
         className={cn([
-          `${long ? "w-[calc(100%+40px)] -translate-x-[20px]" : "w-[calc(100%+20px)] -translate-x-[10px]"} mx-auto flex h-[1000px] -translate-y-1/2 overflow-hidden rounded-full bg-muted ${long ? "blur-[16px]" : "blur-[8px]"}`,
+          `${long ? "w-[calc(100%+40px)] -translate-x-[20px]" : "w-[calc(100%+20px)] -translate-x-[10px]"} bg-muted mx-auto flex h-[1000px] -translate-y-1/2 overflow-hidden rounded-full ${long ? "blur-[16px]" : "blur-[8px]"}`,
         ])}
       >
         {values.map((item) => {
@@ -34,7 +34,7 @@ export default function Progress({
               <div
                 key={item.id}
                 style={{ width: percentage + "%", backgroundColor: item.color }}
-                className={cn("h-full shrink grow-0 bg-primary")}
+                className={cn("bg-primary h-full shrink grow-0")}
               ></div>
             );
           } else return null;
@@ -48,19 +48,24 @@ export const CircularProgress = ({
   actions,
   size = "sm",
   className,
+  absolute,
+  title,
 }: {
   actions: Action[];
-  size?: "sm" | "md" | "lg";
+  size?: Size;
   className?: string;
+  absolute?: boolean;
+  title?: string;
 }) => {
   const matches = useMatches();
   const { states } = matches[1].data as DashboardRootType;
 
   return (
     <ChartContainer
+      title={title}
       config={{}}
       className={cn(
-        `absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 ${{ sm: "h-16 w-16", md: "h-[5.5rem] w-[5.5rem]", lg: "h-28 w-28" }[size]}`,
+        `aspect-square ${{ xs: "size-12", sm: "size-16", md: "size-24", lg: "size-28", xl: "size-36" }[size]} ${absolute ? "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" : ""}`,
         className,
       )}
       tabIndex={-1}
@@ -70,7 +75,9 @@ export const CircularProgress = ({
           tabIndex={-1}
           dataKey={"actions"}
           nameKey={"state"}
-          innerRadius={"70%"}
+          innerRadius={
+            { xs: "50%", sm: "55%", md: "62%", lg: "65%", xl: "65%" }[size]
+          }
           data={states.map((state) => {
             return {
               state: state.title,

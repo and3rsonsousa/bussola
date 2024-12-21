@@ -80,6 +80,10 @@ import {
   getActionsForThisDay,
   getDelayedActions,
   getInstagramFeed,
+  getMonthsActions,
+  getThisWeekActions,
+  getTodayActions,
+  getTomorrowActions,
   sortActions,
   useIDsToRemove,
   usePendingData,
@@ -750,19 +754,14 @@ const ActionsProgress = () => {
   const { states } = matches[1].data as DashboardRootType;
   const { actions } = matches[2].data as DashboardIndexType;
 
-  const todayActions = actions?.filter((action) => isToday(action.date));
-  const tomorrowActions = actions?.filter((action) => isTomorrow(action.date));
-  const thisWeekActions = actions?.filter(
-    (action) =>
-      isAfter(action.date, startOfWeek(new Date())) &&
-      isBefore(action.date, endOfWeek(new Date())),
-  );
-  const thisMonthActions = actions?.filter((action) =>
-    isSameMonth(action.date, new Date()),
-  );
-  const nextMonthActions = actions?.filter((action) =>
-    isSameMonth(action.date, addMonths(new Date(), 1)),
-  );
+  const todayActions = getTodayActions(actions);
+  const tomorrowActions = getTomorrowActions(actions);
+  const thisWeekActions = getThisWeekActions(actions);
+  const thisMonthActions = getMonthsActions(actions);
+  const nextMonthActions = getMonthsActions(actions, addMonths(new Date(), 1));
+  // actions?.filter((action) =>
+  //   isSameMonth(action.date, addMonths(new Date(), 1)),
+  // );
 
   return (
     <div className="px-2 py-8 md:px-8 lg:py-24">

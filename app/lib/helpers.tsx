@@ -9,6 +9,11 @@ import {
   isAfter,
   isBefore,
   isSameDay,
+  isSameMonth,
+  isThisMonth,
+  isThisWeek,
+  isToday,
+  isTomorrow,
   parseISO,
   startOfDay,
   startOfWeek,
@@ -953,4 +958,26 @@ function getBussolaSize(size: string) {
     lg: "h-12 min-h-12",
     xl: "h-16 min-h-16",
   }[size];
+}
+
+export function getTodayActions(actions: Action[]) {
+  return actions?.filter((action) => isToday(action.date)) as Action[];
+}
+export function getTomorrowActions(actions: Action[]) {
+  return actions?.filter((action) => isTomorrow(action.date)) as Action[];
+}
+
+export function getThisWeekActions(actions: Action[]) {
+  // actions?.filter(
+  //     (action) =>
+  //       isAfter(action.date, startOfWeek(new Date())) &&
+  //       isBefore(action.date, endOfWeek(new Date())),
+  //   );
+  return actions?.filter((action) => isThisWeek(action.date)) as Action[];
+}
+
+export function getMonthsActions(actions: Action[], date = new Date()) {
+  return actions?.filter((action) =>
+    isSameMonth(action.date, date),
+  ) as Action[];
 }
