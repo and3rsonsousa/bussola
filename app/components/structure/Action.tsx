@@ -1,4 +1,10 @@
-import { Link, useMatches, useNavigate, useSubmit } from "@remix-run/react";
+import {
+  Link,
+  useMatches,
+  useNavigate,
+  useSearchParams,
+  useSubmit,
+} from "@remix-run/react";
 import {
   addDays,
   addHours,
@@ -88,6 +94,9 @@ export function ActionLine({
   const navigate = useNavigate();
   const submit = useSubmit();
   const matches = useMatches();
+  const [searchParams] = useSearchParams();
+
+  // console.log(Array.from(searchParams).map((k) => k[0]));
 
   const [edit, setEdit] = useState(false);
   const [isHover, setHover] = useState(false);
@@ -173,7 +182,7 @@ export function ActionLine({
                 aspect="squared"
                 className={`the-action-content aspect-square overflow-hidden rounded-md hover:opacity-75`}
               />
-              <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600 bg-rose-500/50"></div>
+              <div className="late-border absolute inset-0 hidden rounded-md border-2 border-rose-600"></div>
 
               <div
                 className={`absolute right-2 bottom-1.5 left-2 flex justify-between text-xs font-semibold ${action.files?.length ? "drop-shadow-sm" : ""}`}

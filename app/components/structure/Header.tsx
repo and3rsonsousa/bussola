@@ -7,6 +7,7 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import {
   ArchiveIcon,
   Grid3x3Icon,
@@ -18,6 +19,7 @@ import {
   UserIcon,
   Users2Icon,
 } from "lucide-react";
+import { useState } from "react";
 import { SOW } from "~/lib/constants";
 import {
   Avatar,
@@ -41,8 +43,6 @@ import CreateAction from "./CreateAction";
 import Loader from "./Loader";
 import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
-import { useState } from "react";
-import { ptBR } from "date-fns/locale";
 
 export default function Header({
   open,
@@ -160,124 +160,127 @@ export default function Header({
         <CreateAction mode="plus" shortcut />
 
         {/* parceiros         */}
-
-        {partner && (
-          <div
-            className="relative flex cursor-pointer items-center gap-1"
-            role="button"
-            onClick={() =>
-              setProgressView((p) => {
-                if (p === "today") return "week";
-                if (p === "week") return "month";
-                return "today";
-              })
-            }
-          >
-            {progressView === "today" && (
-              <CircularProgress
-                actions={getTodayActions(actions)}
-                title="Hoje"
-              />
-            )}
-            {progressView === "week" && (
-              <CircularProgress
-                actions={getThisWeekActions(actions)}
-                title="Semana"
-              />
-            )}
-            {progressView === "month" && (
-              <CircularProgress
-                actions={getMonthsActions(actions)}
-                title={format(new Date(), "MMM")}
-              />
-            )}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-[10px] font-semibold uppercase">
-              {
-                {
-                  today: "Hoje",
-                  week: "Sem",
-                  month: format(new Date(), "MMM", { locale: ptBR }),
-                }[progressView]
-              }
-            </div>
-          </div>
-        )}
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={"ghost"}
-              className={
-                partner
-                  ? "rounded-full px-4 py-2"
-                  : `text-ellipsis whitespace-nowrap`
+        <div className="flex items-center gap-0">
+          {partner && (
+            <div
+              className="relative flex cursor-pointer items-center gap-1"
+              role="button"
+              onClick={() =>
+                setProgressView((p) => {
+                  if (p === "today") return "week";
+                  if (p === "week") return "month";
+                  return "today";
+                })
               }
             >
-              {partner ? (
-                <>
-                  <span className="hidden text-2xl font-bold tracking-tight md:block">
-                    {partner.title}
-                  </span>
-                  <span className="text-lg font-bold tracking-wide uppercase md:hidden">
-                    {partner.short}
-                  </span>
-                </>
-              ) : (
-                "Parceiros"
+              {progressView === "today" && (
+                <CircularProgress
+                  actions={getTodayActions(actions)}
+                  title="Hoje"
+                />
               )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="glass mr-8">
-            <DropdownMenuLabel className="bg-label">
-              Consultoria de Marketing
-            </DropdownMenuLabel>
-            {partners.map(
-              (partner) =>
-                partner.sow === SOW.marketing && (
-                  <DropdownMenuItem
-                    className="bg-item"
-                    onSelect={() => navigate(`/dashboard/${partner.slug}`)}
-                    key={partner.slug}
-                    id={partner.slug}
-                  >
-                    {partner.title}
-                  </DropdownMenuItem>
-                ),
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="bg-label">
-              Social Media
-            </DropdownMenuLabel>
-            {partners.map(
-              (partner) =>
-                partner.sow === SOW.socialmedia && (
-                  <DropdownMenuItem
-                    className="bg-item"
-                    onSelect={() => navigate(`/dashboard/${partner.slug}`)}
-                    key={partner.slug}
-                    id={partner.slug}
-                  >
-                    {partner.title}
-                  </DropdownMenuItem>
-                ),
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="bg-label">Demanda</DropdownMenuLabel>
-            {partners.map(
-              (partner) =>
-                partner.sow === SOW.demand && (
-                  <DropdownMenuItem
-                    className="bg-item"
-                    onSelect={() => navigate(`/dashboard/${partner.slug}`)}
-                    key={partner.slug}
-                    id={partner.slug}
-                  >
-                    {partner.title}
-                  </DropdownMenuItem>
-                ),
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {progressView === "week" && (
+                <CircularProgress
+                  actions={getThisWeekActions(actions)}
+                  title="Semana"
+                />
+              )}
+              {progressView === "month" && (
+                <CircularProgress
+                  actions={getMonthsActions(actions)}
+                  title={format(new Date(), "MMM")}
+                />
+              )}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-[10px] font-semibold uppercase">
+                {
+                  {
+                    today: "Hoje",
+                    week: "Sem",
+                    month: format(new Date(), "MMM", { locale: ptBR }),
+                  }[progressView]
+                }
+              </div>
+            </div>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className={
+                  partner
+                    ? "rounded-full px-4 py-2"
+                    : `text-ellipsis whitespace-nowrap`
+                }
+              >
+                {partner ? (
+                  <>
+                    <span className="hidden text-2xl font-bold tracking-tight md:block">
+                      {partner.title}
+                    </span>
+                    <span className="text-lg font-bold tracking-wide uppercase md:hidden">
+                      {partner.short}
+                    </span>
+                  </>
+                ) : (
+                  "Parceiros"
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="glass mr-8">
+              <DropdownMenuLabel className="bg-label">
+                Consultoria de Marketing
+              </DropdownMenuLabel>
+              {partners.map(
+                (partner) =>
+                  partner.sow === SOW.marketing && (
+                    <DropdownMenuItem
+                      className="bg-item"
+                      onSelect={() => navigate(`/dashboard/${partner.slug}`)}
+                      key={partner.slug}
+                      id={partner.slug}
+                    >
+                      {partner.title}
+                    </DropdownMenuItem>
+                  ),
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="bg-label">
+                Social Media
+              </DropdownMenuLabel>
+              {partners.map(
+                (partner) =>
+                  partner.sow === SOW.socialmedia && (
+                    <DropdownMenuItem
+                      className="bg-item"
+                      onSelect={() => navigate(`/dashboard/${partner.slug}`)}
+                      key={partner.slug}
+                      id={partner.slug}
+                    >
+                      {partner.title}
+                    </DropdownMenuItem>
+                  ),
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="bg-label">
+                Demanda
+              </DropdownMenuLabel>
+              {partners.map(
+                (partner) =>
+                  partner.sow === SOW.demand && (
+                    <DropdownMenuItem
+                      className="bg-item"
+                      onSelect={() => navigate(`/dashboard/${partner.slug}`)}
+                      key={partner.slug}
+                      id={partner.slug}
+                    >
+                      {partner.title}
+                    </DropdownMenuItem>
+                  ),
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         {/* menu de ações */}
         {person && (

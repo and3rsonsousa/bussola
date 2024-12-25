@@ -5,6 +5,7 @@ import {
   useLoaderData,
   useMatches,
   useOutletContext,
+  useParams,
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
@@ -175,7 +176,11 @@ export default function Partner() {
   const { categories, states, person, celebrations } = matches[1]
     .data as DashboardRootType;
 
-  const [isInstagramDate, setInstagramDate] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  console.log(searchParams);
+
+  const isInstagramDate = searchParams.get("instagram_date") === "true";
 
   const currentDate = date;
   const pendingActions = usePendingData().actions;
@@ -278,9 +283,9 @@ export default function Partner() {
       submit(
         {
           ...draggedAction,
-          [isInstagramDate ? "instagram_date" : "date"]: date?.concat(
-            ` ${format(actionDate, "HH:mm:ss")}`,
-          ),
+          [isInstagramDate && isInstagramFeed(active.data.current?.category)
+            ? "instagram_date"
+            : "date"]: date?.concat(` ${format(actionDate, "HH:mm:ss")}`),
           intent: INTENTS.updateAction,
         },
         {
@@ -383,10 +388,10 @@ export default function Partner() {
                 variant={isInstagramDate ? "default" : "ghost"}
                 onClick={() => {
                   if (isInstagramDate) {
-                    setInstagramDate(false);
+                    setSearchParams(undefined);
                     setShowContent(false);
                   } else {
-                    setInstagramDate(true);
+                    setSearchParams({ instagram_date: "true" });
                     setShowContent(true);
                   }
                 }}

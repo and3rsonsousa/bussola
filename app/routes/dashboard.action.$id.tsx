@@ -257,7 +257,7 @@ export default function ActionPage() {
   }, [data]);
 
   return (
-    <div className="container mx-auto flex h-full max-w-5xl flex-col p-0 lg:overflow-hidden">
+    <div className="container mx-auto flex h-full max-w-5xl flex-col px-0 pt-4 lg:overflow-hidden">
       <div className="gap-4 overflow-y-auto px-4 pt-4 md:px-8 lg:flex lg:h-full lg:overflow-hidden">
         <div
           className={`mb-4 flex w-full flex-col lg:h-full ${isInstagramFeed(action.category, true) ? "lg:w-3/5" : ""}`}

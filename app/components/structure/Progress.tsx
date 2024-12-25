@@ -76,7 +76,7 @@ export const CircularProgress = ({
           dataKey={"actions"}
           nameKey={"state"}
           innerRadius={
-            { xs: "50%", sm: "55%", md: "62%", lg: "65%", xl: "65%" }[size]
+            { xs: "60%", sm: "65%", md: "62%", lg: "65%", xl: "65%" }[size]
           }
           data={states.map((state) => {
             return {

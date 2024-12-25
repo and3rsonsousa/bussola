@@ -485,6 +485,65 @@ export function StateSelect({
   );
 }
 
+export function PartnersDropdon({
+  onSelect,
+  action,
+}: {
+  onSelect: (partner: Partner) => void;
+  action: Action;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="button-trigger">
+        {action.partners?.length > 0 ? (
+          <AvatarGroup
+            avatars={actionPartners.map((partner) => ({
+              item: {
+                short: partner.short,
+                bg: partner.colors[0],
+                fg: partner.colors[1],
+                title: partner.title,
+              },
+            }))}
+          />
+        ) : (
+          "Parceiros"
+        )}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="glass">
+        {partners.map((partner) => (
+          <DropdownMenuCheckboxItem
+            key={partner.id}
+            checked={action.partners.includes(partner.slug)}
+            className="bg-select-item"
+            onCheckedChange={(checked) => {
+              const tempPartners = checked
+                ? [...action.partners, partner.slug]
+                : action.partners.filter((p) => p !== partner.slug);
+
+              setAction({
+                ...action,
+                partners: tempPartners,
+              });
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <Avatar
+                item={{
+                  short: partner.short,
+                  bg: partner.colors[0],
+                  fg: partner.colors[1],
+                }}
+              />
+              <div>{partner.title}</div>
+            </div>
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function ResponsibleForAction({
   size,
   action,

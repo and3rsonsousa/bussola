@@ -169,7 +169,7 @@ export default function Search({
             partner ? [partner.slug] : partners.map((p) => p.slug)!,
           )
           .order("date", { ascending: false })
-          .textSearch("title", `%${query}%`)
+          .textSearch("title", `%${query}%`, { type: "websearch" })
           .then((value) => {
             const actions = value.data
               ? value.data.map((action: Action) => ({
