@@ -96,8 +96,6 @@ export default function CreateAction({
 
   // const state = states.find((state) => state.slug === action.state) as State;
 
-  const actionPartners = getPartners(action.partners);
-
   useEffect(() => {
     if (action.partner) {
       const newPartner = partners.find((p) => p.slug === action.partner);
@@ -211,8 +209,14 @@ export default function CreateAction({
         <hr className="-mx-4 my-2 border-t p-1 md:-mx-6" />
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
+            <PartnersDropdown
+              action={action}
+              onSelect={(partners) => {
+                setAction({ ...action, partners });
+              }}
+            />
             {/* Partners */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger className="button-trigger">
                 {action.partners?.length > 0 ? (
                   <AvatarGroup
@@ -259,7 +263,7 @@ export default function CreateAction({
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
 
             {/* Categoria */}
             <DropdownMenu>
@@ -485,13 +489,16 @@ export function StateSelect({
   );
 }
 
-export function PartnersDropdon({
+export function PartnersDropdown({
   onSelect,
   action,
 }: {
-  onSelect: (partner: Partner) => void;
-  action: Action;
+  onSelect: (partners: string[]) => void;
+  action: RawAction;
 }) {
+  const { partners } = useMatches()[1].data as DashboardRootType;
+  const actionPartners = getPartners(action.partners);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="button-trigger">
@@ -516,16 +523,24 @@ export function PartnersDropdon({
             key={partner.id}
             checked={action.partners.includes(partner.slug)}
             className="bg-select-item"
-            onCheckedChange={(checked) => {
-              const tempPartners = checked
-                ? [...action.partners, partner.slug]
-                : action.partners.filter((p) => p !== partner.slug);
+            onClick={(event) => {
+              if (event.shiftKey) {
+                onSelect([partner.slug]);
+              } else {
+                const checked = action.partners.includes(partner.slug);
+                const tempPartners = checked
+                  ? action.partners.filter((p) => p !== partner.slug)
+                  : [...action.partners, partner.slug];
 
-              setAction({
-                ...action,
-                partners: tempPartners,
-              });
+                onSelect(tempPartners);
+              }
             }}
+            // onCheckedChange={(checked) => {
+            // const tempPartners = checked
+            //   ? [...action.partners, partner.slug]
+            //   : action.partners.filter((p) => p !== partner.slug);
+            // onSelect(tempPartners);
+            // }}
           >
             <div className="flex items-center gap-2">
               <Avatar
