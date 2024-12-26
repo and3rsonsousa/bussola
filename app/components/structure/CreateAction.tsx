@@ -209,61 +209,13 @@ export default function CreateAction({
         <hr className="-mx-4 my-2 border-t p-1 md:-mx-6" />
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
+            {/* Partners */}
             <PartnersDropdown
-              action={action}
+              partners={action.partners}
               onSelect={(partners) => {
                 setAction({ ...action, partners });
               }}
             />
-            {/* Partners */}
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger className="button-trigger">
-                {action.partners?.length > 0 ? (
-                  <AvatarGroup
-                    avatars={actionPartners.map((partner) => ({
-                      item: {
-                        short: partner.short,
-                        bg: partner.colors[0],
-                        fg: partner.colors[1],
-                        title: partner.title,
-                      },
-                    }))}
-                  />
-                ) : (
-                  "Parceiros"
-                )}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="glass">
-                {partners.map((partner) => (
-                  <DropdownMenuCheckboxItem
-                    key={partner.id}
-                    checked={action.partners.includes(partner.slug)}
-                    className="bg-select-item"
-                    onCheckedChange={(checked) => {
-                      const tempPartners = checked
-                        ? [...action.partners, partner.slug]
-                        : action.partners.filter((p) => p !== partner.slug);
-
-                      setAction({
-                        ...action,
-                        partners: tempPartners,
-                      });
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        item={{
-                          short: partner.short,
-                          bg: partner.colors[0],
-                          fg: partner.colors[1],
-                        }}
-                      />
-                      <div>{partner.title}</div>
-                    </div>
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu> */}
 
             {/* Categoria */}
             <DropdownMenu>
@@ -320,7 +272,7 @@ export default function CreateAction({
 
             {/* Responsáveis */}
             <ResponsibleForAction
-              action={action}
+              responsibles={action.responsibles}
               onCheckedChange={(responsibles) => {
                 setAction({ ...action, responsibles });
               }}
@@ -491,18 +443,18 @@ export function StateSelect({
 
 export function PartnersDropdown({
   onSelect,
-  action,
+  partners,
 }: {
   onSelect: (partners: string[]) => void;
-  action: RawAction;
+  partners: string[];
 }) {
-  const { partners } = useMatches()[1].data as DashboardRootType;
-  const actionPartners = getPartners(action.partners);
+  const { partners: allPartners } = useMatches()[1].data as DashboardRootType;
+  const actionPartners = getPartners(partners);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="button-trigger">
-        {action.partners?.length > 0 ? (
+        {partners?.length > 0 ? (
           <AvatarGroup
             avatars={actionPartners.map((partner) => ({
               item: {
@@ -518,19 +470,19 @@ export function PartnersDropdown({
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="glass">
-        {partners.map((partner) => (
+        {allPartners.map((partner) => (
           <DropdownMenuCheckboxItem
             key={partner.id}
-            checked={action.partners.includes(partner.slug)}
+            checked={partners.includes(partner.slug)}
             className="bg-select-item"
             onClick={(event) => {
               if (event.shiftKey) {
                 onSelect([partner.slug]);
               } else {
-                const checked = action.partners.includes(partner.slug);
+                const checked = partners.includes(partner.slug);
                 const tempPartners = checked
-                  ? action.partners.filter((p) => p !== partner.slug)
-                  : [...action.partners, partner.slug];
+                  ? partners.filter((p) => p !== partner.slug)
+                  : [...partners, partner.slug];
 
                 onSelect(tempPartners);
               }
@@ -561,19 +513,19 @@ export function PartnersDropdown({
 
 export function ResponsibleForAction({
   size,
-  action,
+  responsibles,
   onCheckedChange,
 }: {
   size?: Size;
-  action: Action | RawAction;
+  responsibles: string[];
   onCheckedChange: (responsibles: string[]) => void;
 }) {
   const { people } = useMatches()[1].data as DashboardRootType;
 
-  const responsibles: Person[] = [];
-  action.responsibles.map((user_id) => {
+  const _responsibles: Person[] = [];
+  responsibles.map((user_id) => {
     const p = people.find((person) => person.user_id === user_id) as Person;
-    if (p) responsibles.push(p);
+    if (p) _responsibles.push(p);
   });
   responsibles.filter((person) => person !== undefined);
 
@@ -584,7 +536,7 @@ export function ResponsibleForAction({
       <DropdownMenuTrigger className="button-trigger">
         <AvatarGroup
           size={size}
-          avatars={responsibles.map((person) => ({
+          avatars={_responsibles.map((person) => ({
             item: {
               image: person.image,
               short: person.initials!,
@@ -598,17 +550,24 @@ export function ResponsibleForAction({
           <DropdownMenuCheckboxItem
             key={person.id}
             className="bg-select-item"
-            checked={action.responsibles.includes(person.user_id)}
-            onCheckedChange={(checked) => {
-              if (!checked && action.responsibles.length < 2) {
+            checked={responsibles.includes(person.user_id)}
+            onClick={(event) => {
+              const checked = responsibles.includes(person.user_id);
+
+              if (checked && responsibles.length < 2) {
                 alert("É necessário ter pelo menos um responsável pela ação");
                 return false;
               }
-              const tempResponsibles = checked
-                ? [...action.responsibles, person.user_id]
-                : action.responsibles.filter((id) => id !== person.user_id);
 
-              onCheckedChange(tempResponsibles);
+              if (event.shiftKey) {
+                onCheckedChange([person.user_id]);
+              } else {
+                const tempResponsibles = checked
+                  ? responsibles.filter((id) => id !== person.user_id)
+                  : [...responsibles, person.user_id];
+
+                onCheckedChange(tempResponsibles);
+              }
             }}
           >
             <div className="flex items-center gap-2">

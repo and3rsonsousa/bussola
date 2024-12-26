@@ -39,6 +39,7 @@ import Tiptap from "~/components/structure/Tiptap";
 import ButtonCNVT from "~/components/structure/Button";
 import {
   DateTimeAndInstagramDate,
+  PartnersDropdown,
   ResponsibleForAction,
   StateSelect,
 } from "~/components/structure/CreateAction";
@@ -936,7 +937,13 @@ export default function ActionPage() {
         {/* Parceiros Categorias States Prioridade Responsável Cores */}
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 lg:gap-4">
           {/* Partners */}
-          <DropdownMenu>
+          <PartnersDropdown
+            partners={action.partners}
+            onSelect={(partners) => {
+              setAction({ ...action, partners });
+            }}
+          />
+          {/* <DropdownMenu>
             <DropdownMenuTrigger className="button-trigger">
               {action.partners?.length > 0 ? (
                 <AvatarGroup
@@ -984,7 +991,7 @@ export default function ActionPage() {
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
 
           {/* Categoria */}
 
@@ -1076,7 +1083,7 @@ export default function ActionPage() {
 
           <ResponsibleForAction
             size="md"
-            action={action}
+            responsibles={action.responsibles}
             onCheckedChange={(responsibles) => {
               setAction({ ...action, responsibles });
             }}
