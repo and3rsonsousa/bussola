@@ -43,7 +43,11 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { ActionLine, GridOfActions } from "~/components/structure/Action";
+import {
+  ActionLine,
+  getNewDateValues,
+  GridOfActions,
+} from "~/components/structure/Action";
 import CreateAction from "~/components/structure/CreateAction";
 import { Button } from "~/components/ui/button";
 import {
@@ -91,10 +95,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       : _date
     : format(new Date(), "yyyy-MM-dd");
 
-  date = date?.replace(/\-01$/, "-02");
+  // date = date?.replace(/\-01$/, "-02");
 
-  let start = startOfWeek(startOfMonth(date));
-  let end = endOfDay(endOfWeek(endOfMonth(date)));
+  // let start = startOfWeek(startOfMonth(date));
+  // let end = endOfDay(endOfWeek(endOfMonth(date)));
 
   const { supabase } = createClient(request);
 
@@ -290,10 +294,17 @@ export default function Partner() {
       submit(
         {
           ...draggedAction,
+          intent: INTENTS.updateAction,
           [isInstagramDate && isInstagramFeed(active.data.current?.category)
             ? "instagram_date"
             : "date"]: date?.concat(` ${format(actionDate, "HH:mm:ss")}`),
-          intent: INTENTS.updateAction,
+          ...getNewDateValues(
+            draggedAction,
+            isInstagramDate,
+            0,
+            false,
+            new Date(date?.concat(` ${format(actionDate, "HH:mm:ss")}`)),
+          ),
         },
         {
           action: "/handle-actions",

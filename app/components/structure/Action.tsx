@@ -13,6 +13,7 @@ import {
   addWeeks,
   format,
   formatDistanceToNow,
+  isAfter,
   isBefore,
   isSameYear,
   parseISO,
@@ -1002,18 +1003,7 @@ function ShortcutActions({ action }: { action: Action }) {
           ...action,
           intent: INTENTS.updateAction,
 
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            isBefore(
-              isInstagramDate ? action.instagram_date : action.date,
-              new Date(),
-            )
-              ? addHours(new Date(), 1)
-              : addHours(
-                  isInstagramDate ? action.instagram_date : action.date,
-                  1,
-                ),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 60),
         });
       }
       //em duas horas
@@ -1021,18 +1011,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            isBefore(
-              isInstagramDate ? action.instagram_date : action.date,
-              new Date(),
-            )
-              ? addHours(new Date(), 2)
-              : addHours(
-                  isInstagramDate ? action.instagram_date : action.date,
-                  2,
-                ),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 2 * 60), // Em minutos
         });
       }
       //em três horas
@@ -1040,18 +1019,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            isBefore(
-              isInstagramDate ? action.instagram_date : action.date,
-              new Date(),
-            )
-              ? addHours(new Date(), 3)
-              : addHours(
-                  isInstagramDate ? action.instagram_date : action.date,
-                  3,
-                ),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 3 * 60), // Em minutos
         });
       }
       //Hoje
@@ -1059,10 +1027,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            addMinutes(new Date(), 30),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate),
         });
       }
       // Amanhã
@@ -1070,10 +1035,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            addDays(new Date(), 1),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 24 * 60),
         });
       }
 
@@ -1082,18 +1044,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            isBefore(
-              isInstagramDate ? action.instagram_date : action.date,
-              new Date(),
-            )
-              ? addWeeks(new Date(), 1)
-              : addWeeks(
-                  isInstagramDate ? action.instagram_date : action.date,
-                  1,
-                ),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 7 * 24 * 60, true),
         });
       }
       // Adiciona um mês
@@ -1101,18 +1052,7 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          [isInstagramDate ? "instagram_date" : "date"]: format(
-            isBefore(
-              isInstagramDate ? action.instagram_date : action.date,
-              new Date(),
-            )
-              ? addMonths(new Date(), 1)
-              : addMonths(
-                  isInstagramDate ? action.instagram_date : action.date,
-                  1,
-                ),
-            "yyyy-MM-dd HH:mm:ss",
-          ),
+          ...getNewDateValues(action, isInstagramDate, 30 * 24 * 60, true),
         });
       }
     };
@@ -1791,4 +1731,45 @@ export function ContextMenuItems({
       </ContextMenuSub>
     </ContextMenuContent>
   );
+}
+
+export function getNewDateValues(
+  action: Action,
+  isInstagramDate?: boolean,
+  minutes = 30,
+  isRelative = false,
+  absoluteDate?: Date,
+) {
+  let values = {};
+  let currentDate = isInstagramDate ? action.instagram_date : action.date;
+
+  // determina a nova data
+  // se for relativo, checa se a data da ação é anterior à data atual
+  // caso sim, usa uma nova data, se não usa a data da ação
+  // adiciona a quantidade de minutos na data base
+  const newDate =
+    absoluteDate ||
+    addMinutes(
+      isRelative
+        ? isBefore(currentDate, new Date())
+          ? new Date()
+          : currentDate
+        : new Date(),
+      minutes,
+    );
+  if (isInstagramDate) {
+    values = {
+      instagram_date: format(newDate, "yyyy-MM-dd HH:mm:ss"),
+    };
+  } else {
+    if (isAfter(newDate, action.instagram_date)) {
+      values = {
+        date: format(newDate, "yyyy-MM-dd HH:mm:ss"),
+        instagram_date: format(addHours(newDate, 1), "yyyy-MM-dd HH:mm:ss"),
+      };
+      console.log("Corrigindo", { values });
+    }
+  }
+
+  return values;
 }
