@@ -908,6 +908,8 @@ function ShortcutActions({ action }: { action: Action }) {
   const navigate = useNavigate();
   const submit = useSubmit();
   const matches = useMatches();
+  const [searchParams] = useSearchParams();
+  const isInstagramDate = !!searchParams.get("instagram_date");
 
   const { states, categories, priorities, person, sprints } = matches[1]
     .data as DashboardRootType;
@@ -946,6 +948,7 @@ function ShortcutActions({ action }: { action: Action }) {
         ) &&
         event.altKey
       ) {
+        // Set Category
         let category =
           categories.find(
             (category) => category.shortcut === code.toLowerCase().substring(3),
@@ -998,10 +1001,17 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(
-            isBefore(action.date, new Date())
+
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            isBefore(
+              isInstagramDate ? action.instagram_date : action.date,
+              new Date(),
+            )
               ? addHours(new Date(), 1)
-              : addHours(action.date, 1),
+              : addHours(
+                  isInstagramDate ? action.instagram_date : action.date,
+                  1,
+                ),
             "yyyy-MM-dd HH:mm:ss",
           ),
         });
@@ -1011,10 +1021,16 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(
-            isBefore(action.date, new Date())
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            isBefore(
+              isInstagramDate ? action.instagram_date : action.date,
+              new Date(),
+            )
               ? addHours(new Date(), 2)
-              : addHours(action.date, 2),
+              : addHours(
+                  isInstagramDate ? action.instagram_date : action.date,
+                  2,
+                ),
             "yyyy-MM-dd HH:mm:ss",
           ),
         });
@@ -1024,10 +1040,16 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(
-            isBefore(action.date, new Date())
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            isBefore(
+              isInstagramDate ? action.instagram_date : action.date,
+              new Date(),
+            )
               ? addHours(new Date(), 3)
-              : addHours(action.date, 3),
+              : addHours(
+                  isInstagramDate ? action.instagram_date : action.date,
+                  3,
+                ),
             "yyyy-MM-dd HH:mm:ss",
           ),
         });
@@ -1037,7 +1059,10 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(addMinutes(new Date(), 30), "yyyy-MM-dd HH:mm:ss"),
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            addMinutes(new Date(), 30),
+            "yyyy-MM-dd HH:mm:ss",
+          ),
         });
       }
       // Amanhã
@@ -1045,7 +1070,10 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(addDays(new Date(), 1), "yyyy-MM-dd HH:mm:ss"),
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            addDays(new Date(), 1),
+            "yyyy-MM-dd HH:mm:ss",
+          ),
         });
       }
 
@@ -1054,10 +1082,16 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(
-            isBefore(action.date, new Date())
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            isBefore(
+              isInstagramDate ? action.instagram_date : action.date,
+              new Date(),
+            )
               ? addWeeks(new Date(), 1)
-              : addWeeks(action.date, 1),
+              : addWeeks(
+                  isInstagramDate ? action.instagram_date : action.date,
+                  1,
+                ),
             "yyyy-MM-dd HH:mm:ss",
           ),
         });
@@ -1067,10 +1101,16 @@ function ShortcutActions({ action }: { action: Action }) {
         handleActions({
           ...action,
           intent: INTENTS.updateAction,
-          date: format(
-            isBefore(action.date, new Date())
+          [isInstagramDate ? "instagram_date" : "date"]: format(
+            isBefore(
+              isInstagramDate ? action.instagram_date : action.date,
+              new Date(),
+            )
               ? addMonths(new Date(), 1)
-              : addMonths(action.date, 1),
+              : addMonths(
+                  isInstagramDate ? action.instagram_date : action.date,
+                  1,
+                ),
             "yyyy-MM-dd HH:mm:ss",
           ),
         });
@@ -1630,28 +1670,38 @@ export function ContextMenuItems({
                 }
                 key={person.id}
                 className="bg-select-item flex items-center gap-2"
-                onCheckedChange={(e) => {
-                  let r = action.responsibles || [person.id];
-                  flushSync(() => {
-                    if (e) {
-                      r = action.responsibles
-                        ? [...action.responsibles, person.user_id]
-                        : [person.user_id];
-                    } else {
-                      r = action.responsibles
-                        ? action.responsibles.filter(
-                            (user_id) => user_id !== person.user_id,
-                          )
-                        : [person.user_id];
-                    }
-                  });
+                onClick={(event) => {
+                  const checked = action.responsibles.includes(person.user_id);
 
-                  handleActions({
-                    ...action,
-                    responsibles: r.join(","),
+                  if (checked && action.responsibles.length < 2) {
+                    alert(
+                      "É necessário ter pelo menos um responsável pela ação",
+                    );
+                    return false;
+                  }
 
-                    intent: INTENTS.updateAction,
-                  });
+                  if (event.shiftKey) {
+                    // onCheckedChange([person.user_id]);
+                    handleActions({
+                      ...action,
+                      responsibles: person.user_id,
+
+                      intent: INTENTS.updateAction,
+                    });
+                  } else {
+                    const tempResponsibles = checked
+                      ? action.responsibles.filter(
+                          (id) => id !== person.user_id,
+                        )
+                      : [...action.responsibles, person.user_id];
+                    handleActions({
+                      ...action,
+                      responsibles: tempResponsibles,
+
+                      intent: INTENTS.updateAction,
+                    });
+                    // onCheckedChange(tempResponsibles);
+                  }
                 }}
               >
                 <Avatar

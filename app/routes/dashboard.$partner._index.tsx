@@ -120,8 +120,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         .is("archived", false)
         .contains("responsibles", person?.admin ? [] : [user.id])
         .contains("partners", [params["partner"]!])
-        .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
-        .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
+        // .gte("date", format(start, "yyyy-MM-dd HH:mm:ss"))
+        // .lte("date", format(end, "yyyy-MM-dd HH:mm:ss"))
         .returns<Action[]>(),
       supabase
         .from("actions")
@@ -162,8 +162,7 @@ export default function Partner() {
 
   const [short, setShort] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
-  const [showContent, setShowContent] = useState(false);
-  const [params] = useSearchParams();
+
   const {
     showFeed,
     setShowFeed,
@@ -178,9 +177,14 @@ export default function Partner() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(searchParams);
+  let params = new URLSearchParams();
+
+  for (const [key, value] of searchParams.entries()) {
+    params.set(key, value);
+  }
 
   const isInstagramDate = searchParams.get("instagram_date") === "true";
+  const showContent = searchParams.get("show_content") === "true";
 
   const currentDate = date;
   const pendingActions = usePendingData().actions;
@@ -256,7 +260,10 @@ export default function Partner() {
         const code = event.code;
 
         if (code === "KeyC") {
-          setShowContent((value) => !value);
+          // setShowContent((value) => !value);
+          params.set("show_content", "");
+          setSearchParams(params);
+          // setShowContent((value) => !value);
         } else if (code === "KeyR") {
           setAllUsers((value) => !value);
         } else if (code === "KeyS") {
@@ -388,12 +395,13 @@ export default function Partner() {
                 variant={isInstagramDate ? "default" : "ghost"}
                 onClick={() => {
                   if (isInstagramDate) {
-                    setSearchParams(undefined);
-                    setShowContent(false);
+                    params.set("instagram_date", "");
+                    params.set("show_content", "");
                   } else {
-                    setSearchParams({ instagram_date: "true" });
-                    setShowContent(true);
+                    params.set("instagram_date", "true");
+                    params.set("show_content", "true");
                   }
+                  setSearchParams(params);
                 }}
                 title={"Organizar ações pelas datas do Instagram"}
               >
@@ -402,7 +410,14 @@ export default function Partner() {
               <Button
                 size={"sm"}
                 variant={showContent ? "default" : "ghost"}
-                onClick={() => setShowContent((showContent) => !showContent)}
+                onClick={() => {
+                  if (showContent) {
+                    params.set("show_content", "");
+                  } else {
+                    params.set("show_content", "true");
+                  }
+                  setSearchParams(params);
+                }}
                 title={
                   showContent
                     ? "Mostrar conteúdo das postagens"

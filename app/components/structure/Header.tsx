@@ -45,10 +45,8 @@ import { CircularProgress } from "./Progress";
 import { ThemeToggle } from "./ThemeToggle";
 
 export default function Header({
-  open,
   setOpen,
 }: {
-  open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const matches = useMatches();
@@ -73,12 +71,16 @@ export default function Header({
     ? (matches[2].data as DashboardIndexType).actionsChart
     : actionsChart;
 
+  actions = matches[2].data
+    ? (matches[2].data as DashboardIndexType).actions
+    : actions;
+
   partner =
     matches[2].data && !partner
       ? (matches[2].data as { partner: Partner }).partner
       : partner;
 
-  const lateActions = getDelayedActions({ actions: actionsChart });
+  const lateActions = getDelayedActions({ actions });
   const setTheme = function (theme: string) {
     document
       .querySelector("html")
@@ -86,23 +88,10 @@ export default function Header({
     document.querySelector("html")?.classList.add(theme);
   };
 
-  // const isActionPage = /\/dashboard\/action\//.test(location.pathname);
-
   return (
     <header
       className={`flex items-center justify-between gap-4 border-b px-6 py-2`}
     >
-      {/* Voltar */}
-      {/* <Button
-        size="icon"
-        variant={"ghost"}
-        className="-mr-4"
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        <ArrowLeftIcon className="size-4" />
-      </Button> */}
       {/* Logo */}
       <div className="flex items-center gap-1">
         <Link

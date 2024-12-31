@@ -759,9 +759,7 @@ const ActionsProgress = () => {
   const thisWeekActions = getThisWeekActions(actions);
   const thisMonthActions = getMonthsActions(actions);
   const nextMonthActions = getMonthsActions(actions, addMonths(new Date(), 1));
-  // actions?.filter((action) =>
-  //   isSameMonth(action.date, addMonths(new Date(), 1)),
-  // );
+  const lateActions = getDelayedActions({ actions });
 
   return (
     <div className="px-2 py-8 md:px-8 lg:py-24">
@@ -776,8 +774,12 @@ const ActionsProgress = () => {
         </Heading>
       </div>
 
-      <div className="grid w-full grid-cols-6 justify-center gap-4 rounded select-none lg:grid-cols-5">
+      <div className="grid w-full grid-cols-2 justify-center gap-4 rounded select-none md:grid-cols-3 lg:grid-cols-6">
         {[
+          {
+            title: "Atrasados",
+            actions: lateActions,
+          },
           {
             title: "Hoje",
             actions: todayActions,
@@ -799,10 +801,7 @@ const ActionsProgress = () => {
             actions: nextMonthActions,
           },
         ].map(({ actions, title }, i) => (
-          <div
-            key={i}
-            className={`w-full text-center ${i <= 1 ? "col-span-3" : "col-span-2"} lg:col-span-1`}
-          >
+          <div key={i} className={`w-full text-center`}>
             <h3 className="mb-1 text-xl leading-none font-semibold capitalize">
               {title}
             </h3>
